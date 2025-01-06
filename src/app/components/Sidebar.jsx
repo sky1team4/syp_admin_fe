@@ -11,7 +11,7 @@ const Sidebar = () => {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
-    <div className="relative flex w-screen h-auto">
+    <div className="relative flex w-64 h-auto">
       {/* Hamburger Button */}
       <button
         onClick={toggleSidebar}

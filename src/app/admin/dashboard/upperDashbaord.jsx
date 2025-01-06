@@ -1,7 +1,10 @@
 // Today'sSummary.jsx
+
 import React from "react";
 
 const TodaysSummary = () => {
+
+
   const data = [
     { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "👤" },
     { id: 2, label: "Subscribed User", value: "4,590", bgColor: "bg-red-100", icon: "📊" },
