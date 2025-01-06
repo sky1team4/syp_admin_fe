@@ -1,0 +1,53 @@
+"use client";
+import Image from "next/image";
+import React from "react";
+import Card from "./cardmanagement";
+
+const SettingContentArea = () => {
+  const cards = [
+    {
+      title: "Relationship Management",
+      Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
+      link: "#",
+    },
+    {
+      title: "Education Management",
+      Icon: () => <Image src="/setting_icon/EducationManagement.png" width={50} height={50} alt="Education Icon" />,
+      link: "#",
+    },
+    {
+      title: "Specialty Management",
+      Icon: () => <Image src="/setting_icon/SpecialtyManagement.png" width={50} height={50} alt="Specialty Icon" />,
+      link: "#",
+    },
+    {
+      title: "Profile Management",
+      Icon: () => <Image src="/setting_icon/profilemanagement.png" width={50} height={50} alt="Profile Icon" />,
+      link: "#",
+    },
+    {
+      title: "RSS Feed Category",
+      Icon: () => <Image src="/setting_icon/category.png" width={50} height={50} alt="Category Icon" />,
+      link: "#",
+    },
+    {
+      title: "FAQ",
+      Icon: () => <Image src="/setting_icon/FAQ.png" width={50} height={50} alt="FAQ Icon" />,
+      link: "#",
+    },
+  ];
+
+  return (
+    <div className="min-h-screen w-full bg-gray-100 p-4 rounded-xl">
+      <div className="flex flex-wrap w-full gap-4 items-center justify-start">
+        {cards.map((card, index) => (
+          <div className="w-full sm:w-1/4" key={index}>
+            <Card title={card.title} Icon={card.Icon} link={card.link} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default SettingContentArea;

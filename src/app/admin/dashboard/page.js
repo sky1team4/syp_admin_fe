@@ -11,7 +11,7 @@ function page() {
   return (
     <div className='flex gap-3 bg-gray-50'>
       <SideBar />
-      <div className='flex flex-col gap-3 w-screen '>
+      <div className='flex flex-col gap-3 w-full '>
         <Header />
         <div className='flex gap-3'>
           <div className=' flex flex-col gap-3'>
@@ -21,9 +21,7 @@ function page() {
           </div>
           <Left />
         </div>
-        {/* <div>
-         
-        </div> */}
+        
       </div>
     </div>
   )
