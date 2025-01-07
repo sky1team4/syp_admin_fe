@@ -51,9 +51,12 @@ const Sidebar = () => {
             height={30}
             alt="icon"
           />
-          <span className="ml-2 text-purple-600 text-sm font-medium">
-            Dashboard
-          </span>
+
+          <a href="/admin/dashboard">
+            <span className="ml-2 text-purple-600 text-sm font-medium">
+              Dashboard
+            </span>
+          </a>
         </div>
 
         {/* Menu Items */}
@@ -119,7 +122,7 @@ const Sidebar = () => {
               alt="icon"
               className="text-purple-500"
             />
-            <span className="text-sm">Settings</span>
+            <a href="/admin/setting"><span className="text-sm">Settings</span></a>
           </div>
 
           {/* Sign Out */}

@@ -9,10 +9,10 @@ import Left from './notification'
 
 const DashboardPage = () => {
   return (
-    <div className='flex gap-3 bg-gray-50'>
-      <Sidebar />
-      <div className='flex flex-col gap-3 w-full '>
-        <Header />
+    // <div className='flex gap-3 bg-gray-50'>
+    //   <Sidebar />
+    //   <div className='flex flex-col gap-3 w-full '>
+    //     <Header />
         <div className='flex gap-3'>
           <div className='flex flex-col gap-3'>
             <UpperSide />
@@ -20,9 +20,8 @@ const DashboardPage = () => {
           </div>
           <Left />
         </div>
-        
-      </div>
-    </div>
+      // </div>
+    // </div>
   )
 }
 
