@@ -21,13 +21,13 @@ const SettingContentArea = () => {
       title: "Specialty Management",
       Icon: "/setting_icon/SpecialtyManagement.png",
       // Icon: () => <Image src="/setting_icon/SpecialtyManagement.png" width={50} height={50} alt="Specialty Icon" />,
-      link: "#",
+      link: "/admin/education-management",
     },
     {
       title: "Profile Management",
       Icon: "/setting_icon/profilemanagement.png",
       // Icon: () => <Image src="/setting_icon/profilemanagement.png" width={50} height={50} alt="Profile Icon" />,
-      link: "#",
+      link: "/admin/profile-management",
     },
     {
       title: "RSS Feed Category",
