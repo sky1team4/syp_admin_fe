@@ -2,10 +2,11 @@ import Image from "next/image";
 
 const Card = ({ title, Icon, link }) => (
 
-  <div className="bg-white rounded-lg p-4 sm:p-6 flex flex-col justify-center items-center hover:shadow-lg transition-shadow duration-200">
+  <div className="bg-white rounded-2xl h-44 w-80 p-4 sm:p-6 flex flex-col justify-center items-center hover:shadow-lg transition-shadow duration-200">
     <div className="flex justify-between w-full items-center">
       <div className="text-purple-500 text-[50px]">
-        <Icon /> 
+        {/* <Icon />  */}
+        <Image src={Icon} alt="Illustration" width={60} height={60} priority className="max-w-full h-auto object-cover"  />
       </div>
       <a href={link} className="text-purple-500 text-xl" title="Go to page">
         <Image alt="arrow" src="/setting_icon/arrow.png" width={20} height={20} />

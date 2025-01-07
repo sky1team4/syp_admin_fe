@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import Card from "../setting/cardmanagement";
+import Card from "../../../components/Card";
 
 const SettingContentArea = () => {
   const cards = [
