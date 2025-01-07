@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 // UI Components
 import Input from '../../components/ui/input'
 import Button from '../../components/ui/button'
+import Dropdown from '../../components/ui/dropdown'
 import CustomCheckbox from '@/app/components/ui/customCheckbox';
 
 const currencies = ['USD', 'EUR', 'GBP', 'AUD', 'INR'];
@@ -21,7 +22,7 @@ const StripePaymentIntegration = () => {
       <p className="text-gray-500 mb-8">
         Configure your Stripe account settings below.
       </p>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-[81.5rem]">
         {/* Publishable Key and Secret Key */}
         <div className="flex gap-6 flex-wrap">
           <Input id="publishableKey" label="Publishable Key" placeholder="Enter your Publishable Key"/>
@@ -36,40 +37,8 @@ const StripePaymentIntegration = () => {
 
         {/* Default Currency and Allowed Currencies */}
         <div className="flex gap-6 flex-wrap">
-        {/* <Input id="webhookSigningSecret" label="Webhook Signing Secret" placeholder="Enter your Webhook Signing Secret"/> */}
-          <div className='flex flex-col gap-3'>
-            <label htmlFor="defaultCurrency" className="block text-sm font-medium text-gray-700">
-              Default Currency
-            </label>
-            <select
-              id="defaultCurrency"
-              className="block md:w-[40rem] border border-gray-300 text-gray-700 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm p-2.5"
-            >
-              <option value="">Select Below</option>
-              {currencies.map((currency) => (
-                <option key={currency} value={currency}>
-                  {currency}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className='flex flex-col gap-3'>
-            <label htmlFor="allowedCurrencies" className="block text-sm font-medium text-gray-700">
-              Allowed Currencies
-            </label>
-            <select
-              id="allowedCurrencies"
-              // multiple
-              className="md:w-[40rem] border border-gray-300 text-gray-700 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm p-2.5"
-            >
-              {currencies.map((currency) => (
-                <option key={currency} value={currency}>
-                  {currency}
-                </option>
-              ))}
-            </select>
-          </div>
+          <Dropdown id="defaultCurrency" label="Default Currency" array={currencies} seleted="Select Below"/>
+          <Dropdown id="allowedCurrencies" label="Allowed Currencies" array={currencies} seleted="Select Below"/>
         </div>
 
         {/* Enable Test Mode */}
@@ -79,11 +48,6 @@ const StripePaymentIntegration = () => {
           </label>
 
           <CustomCheckbox />
-          {/* <input
-            id="testMode"
-            type="checkbox"
-            className="h-5 w-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-          /> */}
           
         </div>
 
