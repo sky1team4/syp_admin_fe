@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 
 // UI Components
 import Input from '../../components/ui/input'
+import Button from '../../components/ui/button'
 import CustomCheckbox from '@/app/components/ui/customCheckbox';
 
 const currencies = ['USD', 'EUR', 'GBP', 'AUD', 'INR'];
@@ -88,12 +89,7 @@ const StripePaymentIntegration = () => {
 
         {/* Save Button */}
         <div className=''>
-          <button
-            type="submit"
-            className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 text-sm font-medium"
-          >
-            Save Changes
-          </button>
+          <Button w="full" text="Save Changes" />
         </div>
       </form>
     </div>
