@@ -1,23 +1,20 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import Card from "../../../components/Card";
+import Card from "../../components/cardmanagement";
 
 const SettingContentArea = () => {
   const cards = [
     {
-      title: "Employ Status",
-      Icon: () => <Image src="/workexperience/employment.png" width={50} height={50} alt="Relationship Icon" />,
+      title: "Degree List",
+      Icon: "/educationmanagement/degree list.png",
+      // Icon: () => <Image src="/educationmanagement/degree list.png" width={50} height={50} alt="Relationship Icon" />,
       link: "#",
     },
     {
-      title: "Job Title",
-      Icon: () => <Image src="/workexperience/jobtitle.png" width={50} height={50} alt="Education Icon" />,
-      link: "#",
-    },
-    {
-      title: "Company Names",
-      Icon: () => <Image src="/workexperience/companyname.png" width={50} height={50} alt="Relationship Icon" />,
+      title: "Field of Study",
+      Icon: "/educationmanagement/field of study.png",
+      // Icon: () => <Image src="/educationmanagement/field of study.png" width={50} height={50} alt="Education Icon" />,
       link: "#",
     }
   ];
@@ -26,7 +23,7 @@ const SettingContentArea = () => {
     <div className="min-h-screen w-full bg-gray-100 p-4 rounded-xl">
       <div className="flex flex-wrap w-full gap-4 items-center justify-start">
         {cards.map((card, index) => (
-          <div className="w-full sm:w-1/4" key={index}>
+          <div className="" key={index}>
             <Card title={card.title} Icon={card.Icon} link={card.link} />
           </div>
         ))}

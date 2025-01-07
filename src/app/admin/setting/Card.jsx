@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import Card from "../admin/setting/cardmanagement";
+import Card from "../../components/cardmanagement";
 
 const SettingContentArea = () => {
   const cards = [
@@ -15,7 +15,7 @@ const SettingContentArea = () => {
       title: "Education Management",
       Icon: "/setting_icon/EducationManagement.png",
       // Icon: () => <Image src="/setting_icon/EducationManagement.png" width={50} height={50} alt="Education Icon" />,
-      link: "#",
+      link: "/admin/education-management",
     },
     {
       title: "Specialty Management",

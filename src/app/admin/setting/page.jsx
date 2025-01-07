@@ -3,7 +3,7 @@
 import React from 'react'
 // import Header from '../../../components/Header'
 // import SideBar from '../../../components/Sidebar'
-import Content from '../../components/Card'
+import Content from './Card'
 
 
 function page() {

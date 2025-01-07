@@ -1,18 +1,23 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import Card from "../../../components/Card";
+import Card from "../../admin/setting/Card";
 
 const SettingContentArea = () => {
   const cards = [
     {
-      title: "Degree List",
-      Icon: () => <Image src="/educationmanagement/degree list.png" width={50} height={50} alt="Relationship Icon" />,
+      title: "Employ Status",
+      Icon: () => <Image src="/workexperience/employment.png" width={50} height={50} alt="Relationship Icon" />,
       link: "#",
     },
     {
-      title: "Field of Study",
-      Icon: () => <Image src="/educationmanagement/field of study.png" width={50} height={50} alt="Education Icon" />,
+      title: "Job Title",
+      Icon: () => <Image src="/workexperience/jobtitle.png" width={50} height={50} alt="Education Icon" />,
+      link: "#",
+    },
+    {
+      title: "Company Names",
+      Icon: () => <Image src="/workexperience/companyname.png" width={50} height={50} alt="Relationship Icon" />,
       link: "#",
     }
   ];

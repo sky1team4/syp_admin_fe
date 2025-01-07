@@ -3,7 +3,7 @@
 import React from 'react'
 import Header from '../../../components/Header'
 import SideBar from '../../../components/Sidebar'
-import Content from '../Work experience/page'
+import Content from '../../Work experience/page'
 
 
 function page() {
@@ -13,7 +13,7 @@ function page() {
       <div className='flex flex-col gap-3 w-screen '>
         <Header />
         <div className='flex gap-3 w-full'>
-            <Content/>
+          <Content />
         </div>
       </div>
     </div>
