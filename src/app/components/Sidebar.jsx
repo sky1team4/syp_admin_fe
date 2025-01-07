@@ -42,19 +42,24 @@ const Sidebar = () => {
         </button>
 
         {/* Logo / Active Dashboard */}
-        <div
-          className={`${staticTab === "dashboard" ? activeSidebarClass : sidebarClass} mt-16`}
-        >
-          <Image
-            src="/dashbaord_siedebar_icon/Graph.png"
-            width={30}
-            height={30}
-            alt="icon"
-          />
-          <span className="ml-2 text-purple-600 text-sm font-medium">
-            Dashboard
-          </span>
-        </div>
+        <a href="/admin/dashboard">
+          <div
+            className={`${staticTab === "dashboard" ? activeSidebarClass : sidebarClass} mt-16`}
+          >
+            <Image
+              src="/dashbaord_siedebar_icon/Graph.png"
+              width={30}
+              height={30}
+              alt="icon"
+            />
+
+            
+              <span className="ml-2 text-purple-600 text-sm font-medium">
+                Dashboard
+              </span>
+            
+          </div>
+        </a>
 
         {/* Menu Items */}
         <nav className="flex flex-col space-y-6">
@@ -91,36 +96,40 @@ const Sidebar = () => {
           </div>
 
           {/* Payment Integration */}
-          <div
-            className={
-              staticTab === "payment" ? activeSidebarClass : sidebarClass
-            }
-          >
-            <Image
-              src="/dashbaord_siedebar_icon/payment.png"
-              width={30}
-              height={30}
-              alt="icon"
-              className="text-purple-500"
-            />
-            <span className="text-sm">Payment Integration</span>
-          </div>
+          <a href="/admin/payment">
+            <div
+              className={
+                staticTab === "payment" ? activeSidebarClass : sidebarClass
+              }
+            >
+              <Image
+                src="/dashbaord_siedebar_icon/payment.png"
+                width={30}
+                height={30}
+                alt="icon"
+                className="text-purple-500"
+              />
+              <span className="text-sm">Payment Integration</span>
+            </div>
+          </a>
 
           {/* Settings */}
-          <div
-            className={
-              staticTab === "setting" ? activeSidebarClass : sidebarClass
-            }
-          >
-            <Image
-              src="/dashbaord_siedebar_icon/setting.png"
-              width={30}
-              height={30}
-              alt="icon"
-              className="text-purple-500"
-            />
-            <span className="text-sm">Settings</span>
-          </div>
+          <a href="/admin/setting">
+            <div
+              className={
+                staticTab === "setting" ? activeSidebarClass : sidebarClass
+              }
+            >
+              <Image
+                src="/dashbaord_siedebar_icon/setting.png"
+                width={30}
+                height={30}
+                alt="icon"
+                className="text-purple-500"
+              />
+              <span className="text-sm">Settings</span>
+            </div>
+          </a>
 
           {/* Sign Out */}
           <div
