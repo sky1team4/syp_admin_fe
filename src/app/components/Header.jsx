@@ -4,13 +4,13 @@ const DashboardTopBar = () => {
   return (
     <div className="flex items-center justify-between px-6 py-4 bg-white rounded-xl shadow flex-col md:flex-row">
       {/* Left Section: Dashboard Title and Search Bar */}
-      <div className="flex items-center">
-        <h1 className="text-xl font-bold text-gray-800">Dashboard</h1>
-        <div className="relative ml-4">
+      <div className="flex md:items-center lg:item-center">
+        <h1 className="text-sm md:text-xl font-bold text-gray-800">Dashboard</h1>
+        <div className="relative ml-4 hidden md:block">
           <input
             type="text"
             placeholder="Search here..."
-            className="w-64 px-4 py-2 text-gray-700 bg-gray-100 border rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="hidden md:block w-64 px-4 py-2 text-gray-700 bg-gray-100 border rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           <span className="absolute top-1/2 right-3 transform -translate-y-1/2 text-purple-500">
             <svg
@@ -19,7 +19,7 @@ const DashboardTopBar = () => {
               viewBox="0 0 24 24"
               strokeWidth={2}
               stroke="currentColor"
-              className="w-5 h-5"
+              className="w-5 h-5 hidden md:block"
             >
               <path
                 strokeLinecap="round"
@@ -86,7 +86,7 @@ const DashboardTopBar = () => {
             className="w-8 h-8 rounded-full"
           />
           <div className="text-gray-700">
-            <h4 className="text-sm font-medium">Musfiq</h4>
+            <h4 className="text-sm font-bold">Musfiq</h4>
             <span className="text-xs">Admin</span>
           </div>
           <svg

@@ -5,7 +5,7 @@ import Sidebar from '../../components/Sidebar'
 import Header from '../../components/Header'
 import UserTable from './mianpart'
 import UpperSide from './upperDashbaord'
-import Left from './notification'
+import Notification from './notification'
 
 const DashboardPage = () => {
   return (
@@ -18,7 +18,7 @@ const DashboardPage = () => {
             <UpperSide />
             <UserTable />
           </div>
-          <Left />
+          <Notification />
         </div>
         
       </div>
