@@ -7,16 +7,16 @@ import Content from "./content"
 function PaymentInte() {
   return (
         <>
-            <div className='flex gap-3 bg-gray-50'>
+            {/* <div className='flex gap-3 bg-gray-50'>
                 <Sidebar />
                 <div className='flex flex-col gap-3 w-full '>
-                    <Header />
+                    <Header /> */}
                     <div className='flex gap-3'>
                         <Content />
                     </div>
                     
-                </div>
-                </div>
+                {/* </div> */}
+                {/* // </div> */}
         </>
   )
 }
