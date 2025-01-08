@@ -64,20 +64,22 @@ const Sidebar = () => {
         {/* Menu Items */}
         <nav className="flex flex-col space-y-6">
           {/* Subscriptions */}
-          <div
-            className={
-              staticTab === "subscription" ? activeSidebarClass : sidebarClass
-            }
-          >
-            <Image
-              src="/dashbaord_siedebar_icon/subscribe.png"
-              width={30}
-              height={30}
-              alt="icon"
-              className="text-purple-500"
-            />
-            <span className="text-sm">Subscriptions</span>
-          </div>
+          <a href="/admin/subscriptionManagement">
+            <div
+              className={
+                staticTab === "subscription" ? activeSidebarClass : sidebarClass
+              }
+            >
+              <Image
+                src="/dashbaord_siedebar_icon/subscribe.png"
+                width={30}
+                height={30}
+                alt="icon"
+                className="text-purple-500"
+              />
+              <span className="text-sm">Subscriptions</span>
+            </div>
+          </a>
 
           {/* Companies */}
           <div
