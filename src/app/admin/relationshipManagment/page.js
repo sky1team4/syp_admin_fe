@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 import data from "../../../../lib/relationshipdata"; // Import JSON data
@@ -49,7 +49,7 @@ const RelationshipManagement = () => {
   };
 
   return (
-    <div className=" bg-gray-50 min-h-screen w-full flex flex-col gap-4">
+    <div className="bg-gray-50 min-h-screen w-full flex flex-col gap-4 relative">
       <div className="flex justify-between items-center mr-2">
         <h1 className="text-xl font-bold text-gray-800">Relationship Management</h1>
         <button
@@ -98,11 +98,18 @@ const RelationshipManagement = () => {
       </div>
 
       {showModal && (
-        <AddRelationshipPopup
-          onClose={handleCloseModal}
-          onSave={handleSaveRelationships}
-          editingRelationship={editingRelationship}
-        />
+        <>
+          {/* Overlay */}
+          <div className="fixed inset-0  bg-black bg-opacity-50 backdrop-blur-md transition-opacity duration-300"></div>
+
+          {/* Popup */}
+          <AddRelationshipPopup
+            className="transition-transform duration-1min transform translate-x-full animate-slide-in fixed inset-0 z-50"
+            onClose={handleCloseModal}
+            onSave={handleSaveRelationships}
+            editingRelationship={editingRelationship}
+          />
+        </>
       )}
     </div>
   );
