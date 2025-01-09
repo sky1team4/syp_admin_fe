@@ -12,7 +12,8 @@ function input(info) {
                 type="text"
                 // {...register('publishableKey')}
                 placeholder={info.placeholder}
-                className="w-[20rem] md:w-[40rem] border border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm p-2.5"
+                // className="w-[20rem] md:w-[40rem] border border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm p-2.5"
+                className={`w-${info.w} md:w-${info.mdw} border border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm p-2.5`}
             />
         </div>
     </>
