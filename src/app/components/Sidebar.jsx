@@ -136,6 +136,8 @@ const Sidebar = () => {
           </a>
 
           {/* Sign Out */}
+          <a href="/admin-Login">
+          
           <div
             className={
               staticTab === "signout" ? activeSidebarClass : sidebarClass
@@ -150,6 +152,7 @@ const Sidebar = () => {
             />
             <span className="text-sm">Sign Out</span>
           </div>
+          </a>
         </nav>
       </div>
 
