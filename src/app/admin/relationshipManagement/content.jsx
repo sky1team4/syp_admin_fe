@@ -4,7 +4,7 @@ import React , {useState } from 'react'
 
 import UpperSide from '../../components/upperDashbaord'
 import SubscriptionSideBar from '../../components/SubscriptionSideBar'
-import DisplayTable from './displayTable'
+import DisplayTable from '../../components/displayTable'
 
 
 function content() {
