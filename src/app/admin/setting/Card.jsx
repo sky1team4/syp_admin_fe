@@ -30,6 +30,12 @@ const SettingContentArea = () => {
       link: "/admin/InterestManagement",
     },
     {
+      title: "Q&A Catogory Management",
+      Icon: "/setting_icon/RelationshipManagement.png",
+      // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
+      link: "/admin/QAcateManagement",
+    },
+    {
       title: "Job Title Management",
       Icon: "/setting_icon/RelationshipManagement.png",
       // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
