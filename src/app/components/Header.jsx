@@ -2,7 +2,7 @@ import React from "react";
 
 const DashboardTopBar = () => {
   return (
-    <div className="flex items-center justify-between px-6 py-4 bg-white rounded-xl shadow flex-col md:flex-row">
+    <div className="flex items-center justify-between px-6 py-2 bg-white rounded-xl shadow flex-col md:flex-row">
       {/* Left Section: Dashboard Title and Search Bar */}
       <div className="flex md:items-center lg:item-center">
         <h1 className="text-sm md:text-xl font-bold text-gray-800">Dashboard</h1>

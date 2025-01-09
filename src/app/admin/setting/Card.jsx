@@ -39,7 +39,7 @@ const SettingContentArea = () => {
       title: "FAQ",
       Icon: "/setting_icon/FAQ.png",
       // Icon: () => <Image src="/setting_icon/FAQ.png" width={50} height={50} alt="FAQ Icon" />,
-      link: "#",
+      link: "/admin/FAQ/faq_details",
     },
   ];
 
