@@ -15,7 +15,7 @@ const SettingContentArea = () => {
       title: "FAQ Q&A Management",
       Icon: "/setting_icon/RelationshipManagement.png",
       // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
-      link: "/admin/FAQQAcategoryManagement",
+      link: "/admin/faq_details",
     },
   ];
 
