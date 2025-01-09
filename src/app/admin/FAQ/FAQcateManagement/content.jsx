@@ -2,9 +2,9 @@
 // import React from 'react'
 import React , {useState } from 'react'
 
-import UpperSide from '../../components/upperDashbaord'
-import SubscriptionSideBar from '../../components/SubscriptionSideBar'
-import DisplayTable from '../../components/displayTable'
+import UpperSide from '../../../components/upperDashbaord'
+import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
+import DisplayTable from '../../../components/displayTable'
 
 
 function content() {

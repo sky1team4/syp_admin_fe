@@ -2,9 +2,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 // UI Components
-import Input from '../../components/ui/input'
-import Button from '../../components/ui/button'
-import Dropdown from '../../components/ui/dropdown'
+import Input from '../../../components/ui/input'
+import Button from '../../../components/ui/button'
+import Dropdown from '../../../components/ui/dropdown'
 import CustomCheckbox from '@/app/components/ui/customCheckbox';
 
 const currencies = ['USD', 'EUR', 'GBP', 'AUD', 'INR'];

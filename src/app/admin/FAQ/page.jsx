@@ -9,13 +9,13 @@ const SettingContentArea = () => {
       title: "FAQ Category Management",
       Icon: "/setting_icon/RelationshipManagement.png",
       // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
-      link: "/admin/FAQcateManagement",
+      link: "/admin/FAQ/FAQcateManagement",
     },
     {
       title: "FAQ Q&A Management",
       Icon: "/setting_icon/RelationshipManagement.png",
       // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
-      link: "/admin/faq_details",
+      link: "/admin/FAQ/faq_details",
     },
   ];
 
