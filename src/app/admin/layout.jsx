@@ -8,7 +8,7 @@ import Sidebar from "./../components/Sidebar";
 const AdminLayout = ({ children }) => {
     return (
         <>
-            <div className='flex gap-3 bg-gray-50 w-screen h-screen pr-8'>
+            <div className='flex gap-3 bg-gray-50 w-screen  pr-8'>
                 <div className="">
                     <Sidebar />
                 </div>
