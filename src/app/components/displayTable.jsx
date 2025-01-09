@@ -34,8 +34,9 @@ const TableComponent = (info) => {
         <h2 className="text-xl font-semibold text-gray-900 mb-4">
           {info.title}
         </h2>
-
-        <Button click={info.click} isOpen={info.isOpen} w="" h="10" text={info.btnText} />
+        {
+          info.click? <Button click={info.click} isOpen={info.isOpen} w="" h="10" text={info.btnText} /> : ""
+        }
       </div>
 
       {/* Table */}
