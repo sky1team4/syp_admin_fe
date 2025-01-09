@@ -48,9 +48,9 @@ function content() {
     return (
         <>
             <div className='flex flex-col gap-3 w-full h-full'>
-                <UpperSide title="Relationship" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Relationship" />
+                {/* <UpperSide title="Relationship" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Relationship" /> */}
                 <SubscriptionSideBar title="Add Relationship" dis="lorem ipsum has been the industry's standard." subTitle="Relationship" click={toggleSidebar} isOpen={isOpen} />
-                <DisplayTable title="Relationship" array={tableData} col1_Title="Relationship" col2_Title="Created Date" col3_Title="Last Updated" />
+                <DisplayTable click={toggleSidebar} isOpen={isOpen} btnText="Add Relationship" title="Relationship" array={tableData} col1_Title="Relationship" col2_Title="Created Date" col3_Title="Last Updated" />
             </div>
         </>
     )

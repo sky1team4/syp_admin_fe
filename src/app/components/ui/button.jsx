@@ -4,9 +4,9 @@ function button(info) {
     return (
         <>
             <button
-            // onClick={()=> info.click}
+                onClick={()=> info.click()}
                 type="submit"
-                className={`w-${info.w} bg-purple-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 text-sm font-medium`}
+                className={`w-${info.w} h-${info.h? info.h : ""} bg-purple-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 text-sm font-medium`}
             >
                 {info.text}
             </button>

@@ -1,5 +1,7 @@
 import React from "react";
 
+import Button from './ui/button'
+
 const TableComponent = (info) => {
   // Mock data for subscriptions
   // const subscriptions = [
@@ -28,9 +30,13 @@ const TableComponent = (info) => {
   return (
     <div className="p-6 h-full bg-white shadow-lg rounded-xl">
       {/* Header */}
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">
-        {info.title}
-      </h2>
+      <div className="flex justify-between w-full ">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          {info.title}
+        </h2>
+
+        <Button click={info.click} isOpen={info.isOpen} w="" h="10" text={info.btnText} />
+      </div>
 
       {/* Table */}
       <table className="w-full border-collapse">
