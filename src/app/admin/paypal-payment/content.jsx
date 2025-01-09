@@ -25,15 +25,15 @@ const PaypalPaymentIntegration = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-[81.5rem]">
         {/* Publishable Key and Secret Key */}
         <div className="flex gap-6 flex-wrap">
-          <Input id="clientId" label="Client ID" placeholder="Client ID"/>
-          <Input id="clientsecret" label="Client Secret" placeholder="Client Secret"/>
+          <Input id="clientId" w="[20rem]" mdw="[40rem]" label="Client ID" placeholder="Client ID"/>
+          <Input id="clientsecret" w="[20rem]" mdw="[40rem]" label="Client Secret" placeholder="Client Secret"/>
         </div>
 
         {/* Webhook Signing Secret and URL */}
         <div className="flex gap-6 flex-wrap">
           {/* <Input id="webhookSigningSecret" label="Webhook Signing Secret" placeholder="Enter your Webhook Signing Secret"/> */}
           <Dropdown id="environment" label="Environmet" array={currencies} seleted="Select Below"/>
-          <Input id="webhookid" label="Webhook ID" placeholder="Webhook ID"/>
+          <Input id="webhookid" w="[20rem]" mdw="[40rem]" label="Webhook ID" placeholder="Webhook ID"/>
         </div>
 
         {/* Default Currency and Allowed Currencies */}
