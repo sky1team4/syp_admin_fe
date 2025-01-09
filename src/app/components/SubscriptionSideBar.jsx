@@ -27,7 +27,7 @@ function SubscriptionSideBar(info) {
                 <div className="p-6">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-4 text-black">
-                    <h2 className="text-xl font-semibold">Add Subscriptions</h2>
+                    <h2 className="text-xl font-semibold">{info.title}</h2>
                     <button
                     onClick={()=> info.click()}
                     className="text-gray-400 hover:text-gray-600"
@@ -38,13 +38,13 @@ function SubscriptionSideBar(info) {
 
                 {/* Description */}
                 <p className="text-gray-500 text-sm mb-6">
-                    Lorem Ipsum has been the industry's standard.
+                    {info.dis}
                 </p>
 
                 {/* Subscriptions List */}
                 <div>
                     <h3 className="text-sm font-medium text-gray-700 mb-2">
-                    Subscriptions
+                    {info.subTitle}
                     </h3>
                     <div className="flex flex-col gap-4">
                         <Input id={`input_${1}`} w="full" mdw="full" placeholder="Monthly Subscription" />
