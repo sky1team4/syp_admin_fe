@@ -8,11 +8,11 @@ import Sidebar from "./../components/Sidebar";
 const AdminLayout = ({ children }) => {
     return (
         <>
-            <div className='flex gap-3 bg-gray-50 w-screen'>
+            <div className='flex gap-3 bg-gray-50 w-screen md:h-screen'>
                 <Sidebar />
                 <div className='flex flex-col gap-3 w-full'>
                     <Header />
-                    <div className='flex gap-3 w-full'>
+                    <div className='flex gap-3 w-full md:h-full pb-4'>
                         {children}
                     {/* <div className='flex flex-col gap-3'>
                         <UpperSide />

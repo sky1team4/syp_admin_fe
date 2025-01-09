@@ -4,7 +4,7 @@ import React from 'react'
 import Sidebar from '../../components/Sidebar'
 import Header from '../../components/Header'
 import UserTable from './mianpart'
-import UpperSide from './upperDashbaord'
+import UpperSide from '../../components/upperDashbaord'
 import Notification from './notification'
 
 const DashboardPage = () => {

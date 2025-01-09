@@ -7,17 +7,17 @@ const PaymentIntegration = () => {
     {
       title: "Stripe",
       icon: "/paymentIntegration/s.svg",
-      link: "#"
+      link: "/admin/stripe-payment"
     },
     {
       title: "Paypal",
       icon: "/paymentIntegration/paypal.svg",
-      link: "#"
+      link: "/admin/paypal-payment"
     },
     {
       title: "Bank",
       icon: "/paymentIntegration/bank.svg",
-      link: "#"
+      link: "/admin/bank-payment"
     },
   ];
 
