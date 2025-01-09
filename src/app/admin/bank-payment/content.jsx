@@ -25,19 +25,19 @@ const BankPaymentIntegration = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-[81.5rem]">
         {/* Publishable Key and Secret Key */}
         <div className="flex gap-6 flex-wrap">
-          <Input id="accHolderName" label="Account Holder Name" placeholder="Account Holder Name"/>
-          <Input id="bankAccNo" label="Bank Account Number" placeholder="Bank Account Number"/>
+          <Input id="accHolderName" w="[20rem]" mdw="[40rem]" label="Account Holder Name" placeholder="Account Holder Name"/>
+          <Input id="bankAccNo" w="[20rem]" mdw="[40rem]" label="Bank Account Number" placeholder="Bank Account Number"/>
         </div>
 
         {/* Webhook Signing Secret and URL */}
         <div className="flex gap-6 flex-wrap">
-          <Input id="ibanNo" label="IBAN Number" placeholder="IBAN Number"/>
-          <Input id="swiftCode" label="SWIFT Code" placeholder="SWIFT Code"/>
+          <Input id="ibanNo" w="[20rem]" mdw="[40rem]" label="IBAN Number" placeholder="IBAN Number"/>
+          <Input id="swiftCode" w="[20rem]" mdw="[40rem]" label="SWIFT Code" placeholder="SWIFT Code"/>
         </div>
 
         {/* Default Currency and Allowed Currencies */}
         <div className="flex gap-6 flex-wrap">
-          <Input id="bankName" label="Bank Name" placeholder="Bank Name"/>
+          <Input id="bankName" w="[20rem]" mdw="[40rem]" label="Bank Name" placeholder="Bank Name"/>
           <Dropdown id="allowedTType" label="Allowed Transaction" array={currencies} seleted="Select Below"/>
         </div>
 
