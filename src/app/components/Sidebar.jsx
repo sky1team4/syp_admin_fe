@@ -13,7 +13,7 @@ const Sidebar = () => {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
-    <div className="flex w-64 h-auto">
+    <div className="flex w-full h-auto">
       {/* Hamburger Button */}
       <button
         onClick={toggleSidebar}
