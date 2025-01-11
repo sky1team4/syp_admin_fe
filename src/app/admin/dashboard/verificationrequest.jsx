@@ -1,37 +1,38 @@
-import React, { useState } from "react";
-import Image from '../../../../public/pp.jpg'
+import React from "react";
+import Image from '../../../../public/pp.jpg';
 
-const VerificationRequest = () => {
-  const [isOpen, setIsOpen] = useState(true);
-    // setIsOpen(status)
-
+const VerificationRequest = ({ isOpen, setIsOpen }) => {
   const documents = [
     {
       id: 1,
       label: "Front Side",
       fileName: "Front Side.pdf",
       fileSize: "1MB",
-      imageUrl: "https://via.placeholder.com/150", // Replace with the actual front side image URL
+      imageUrl: "https://via.placeholder.com/150",
     },
     {
       id: 2,
       label: "Back Side",
       fileName: "Back Side.pdf",
       fileSize: "1MB",
-      imageUrl: "https://via.placeholder.com/150", // Replace with the actual back side image URL
+      imageUrl: "https://via.placeholder.com/150",
     },
   ];
 
   return (
-    <div className={`fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 ${isOpen ? '' : 'hidden'}`}>
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-xl p-6 relative">
-        {/* Close Button */}
-        <button
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-          onClick={() => setIsOpen(false)}
-        >
-          ✕
-        </button>
+    <div
+    className={`fixed inset-y-0 right-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 transition-transform duration-500 ${
+      isOpen ? 'translate-x-0' : 'translate-x-full'
+    }`}
+  >
+      <div className="bg-white rounded-lg h-screen shadow-lg w-full max-w-xl p-6 relative transform transition-transform duration-500">
+      {/* Close Button */}
+      <button
+        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+        onClick={() => setIsOpen(false)}
+      >
+        ✕
+      </button>
 
         {/* Header */}
         <h2 className="text-xl font-semibold text-gray-800 mb-6">
@@ -43,17 +44,17 @@ const VerificationRequest = () => {
           {documents.map((doc) => (
             <div
               key={doc.id}
-              className="border rounded-lg shadow-sm bg-gray-50 w-40 p-2 relative"
+              className="border rounded-lg shadow-sm bg-gray-50 w-40 h-60 p-2 relative"
             >
               <img
-                src={Image}
+                src='/pp.jpg'
                 alt={doc.label}
                 className="rounded-md mb-2"
               />
               <div className="absolute top-2 right-2">
                 <button
                   className="text-xs text-gray-400 hover:text-gray-600"
-                  onClick={() => setIsOpen(false)} // Replace with remove logic
+                  onClick={() => setIsOpen(false)}
                 >
                   ✕
                 </button>
@@ -77,10 +78,7 @@ const VerificationRequest = () => {
           </button>
           <button
             className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
-            onClick={() => {
-              
-              setIsOpen(false);
-            }}
+            onClick={() => setIsOpen(false)}
           >
             Verify
           </button>

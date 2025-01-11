@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { FiEyeOff } from "react-icons/fi";
 import VerificationRequest from "./verificationrequest";
 
 const UserTable = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Users");
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   const users = [
     {
@@ -46,39 +46,43 @@ const UserTable = () => {
     return <span className="text-red-600 font-medium">Unsubscribed</span>;
   };
 
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (tab === "Users") {
+      setFilteredUsers(users.filter(user => user.status === "Active"));
+    } else {
+      setFilteredUsers(users.filter(user => user.status === "Inactive"));
+    }
+  };
+
   return (
-    <div className="flex flex-col gap-4 p-4 md:p-6 bg-white rounded-xl">
+    <div className="relative">
+      {/* Overlay */}
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+      )}
+      <div className="flex flex-col gap-4 p-4 md:p-6 bg-white rounded-xl">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-800">Users Information</h2>
-        <button className="p-2 bg-gray-100 rounded-full">
-          <image src='/Vector.svg' width={20} height={20}/>
-          {/* <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="w-6 h-6 text-gray-600"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6h.01M12 12h.01M12 18h.01M4.75 6h14.5M4.75 12h14.5M4.75 18h14.5" />
-          </svg> */}
-        </button>
-      </div>
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800">Users Information</h2>
+          <button className=" bg-gray-100 rounded-full">
+            <Image src='/More.svg' width={45} height={45}/>
+          </button>
+        </div>
 
       {/* Tabs */}
       <div className="flex border-b">
         <button
           className={`px-3 py-2 text-sm md:text-base ${activeTab === "Users" ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"
             }`}
-          onClick={() => setActiveTab("Users")}
+          onClick={() => handleTabClick("Users")}
         >
           Users
         </button>
         <button
           className={`px-3 py-2 text-sm md:text-base ${activeTab === "Verification Requests" ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"
             }`}
-          onClick={() => setActiveTab("Verification Requests")}
+          onClick={() => handleTabClick("Verification Requests")}
         >
           Verification Requests
         </button>
@@ -86,7 +90,7 @@ const UserTable = () => {
 
       {/* Table for Larger Screens */}
       <div className="hidden md:block overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg">
+      <table className="min-w-full bg-white rounded-lg">
           <thead className="bg-gray-100">
             <tr>
               <th className="text-left py-3 px-4 text-gray-600">User</th>
@@ -97,7 +101,7 @@ const UserTable = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
+            {filteredUsers.map((user, index) => (
               <tr key={index} className="border-b hover:bg-gray-50">
                 <td className="py-3 px-4 flex items-center space-x-4">
                   <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full" />
@@ -113,12 +117,10 @@ const UserTable = () => {
                   <div className="p-1 flex items-center justify-center">
                     <button
                       onClick={() => setIsOpen(!isOpen)}
-                      // className="px-4 py-2 bg-purple-600 rounded text-black "
                     >
-                      {/* <FiEyeOff /> */}
-                      <image src='/Vector.png' width={20} height={20}/>
+                      <Image src='/Vector.svg' width={5} height={5}/>
                     </button>
-                    {isOpen && <VerificationRequest />}
+                    {isOpen && <VerificationRequest isOpen={isOpen} setIsOpen={setIsOpen} />}
                   </div>
                 </td>
               </tr>
@@ -129,7 +131,7 @@ const UserTable = () => {
 
       {/* Cards for Smaller Screens */}
       <div className="block md:hidden space-y-4 overflow-x-auto">
-        {users.map((user, index) => (
+        {filteredUsers.map((user, index) => (
           <div
             key={index}
             className="p-4 bg-white rounded-lg shadow flex flex-col space-y-2"
@@ -153,22 +155,14 @@ const UserTable = () => {
               </div>
             </div>
             <div className="text-right">
-              <button className="text-gray-600 hover:text-purple-600">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6h.01M12 12h.01M12 18h.01" />
-                </svg>
-              </button>
+            <button className="p-2 bg-gray-100 rounded-full">
+          <Image src='/Vector.svg' width={25} height={25}/>
+        </button>
             </div>
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 };
