@@ -5,7 +5,7 @@ const DashboardTopBar = () => {
     <div className="flex items-center justify-between px-8 py-6 bg-white flex-col md:flex-row">
       {/* Left Section: Dashboard Title and Search Bar */}
       <div className="flex md:items-center lg:item-center">
-        <h1 className="text-sm md:text-xl font-bold text-gray-800">Dashboard</h1>
+        <h1 className="text-sm md:text-2xl font-bold text-gray-800">Dashboard</h1>
         <div className="relative ml-4 hidden md:block">
         <span className="absolute top-1/2 left-3 transform -translate-y-1/2 text-purple-500">
             <svg

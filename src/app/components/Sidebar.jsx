@@ -29,7 +29,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-purple-600 text-white w-screen ${
+        className={`fixed top-0 left-0 h-full bg-purple-600 text-white ${
           isSidebarOpen ? "w-screen" : "sm:w-64"
         } flex flex-col gap-5 items-center py-6 px-4 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -138,20 +138,20 @@ const Sidebar = () => {
           {/* Sign Out */}
           <a href="/admin-Login">
           
-          <div
-            className={
-              staticTab === "signout" ? activeSidebarClass : sidebarClass
-            }
-          >
-            <Image
-              src="/dashbaord_siedebar_icon/signout.png"
-              width={30}
-              height={30}
-              alt="icon"
-              className="text-purple-500"
-            />
-            <span className="text-sm">Sign Out</span>
-          </div>
+            <div
+              className={
+                staticTab === "signout" ? activeSidebarClass : sidebarClass
+              }
+            >
+              <Image
+                src="/dashbaord_siedebar_icon/signout.png"
+                width={30}
+                height={30}
+                alt="icon"
+                className="text-purple-500"
+              />
+              <span className="text-sm">Sign Out</span>
+            </div>
           </a>
         </nav>
       </div>

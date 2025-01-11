@@ -9,13 +9,13 @@ const AdminLayout = ({ children }) => {
     return (
         <>
             <div className='flex bg-gray-50 w-screen h-auto'>
-                <div className="w-[25%]">
+                <div className="md:w-[25%]">
                     <Sidebar />
                 </div>
                     {/* <Sidebar /> */}
-                <div className='flex flex-col gap-3 w-full h-screen pb-8'>
+                <div className='flex flex-col gap-3 w-full h-screen pb-8 overflow-x-hidden'>
                     <Header />
-                    <div className="pl-3 pr-6 h-full">
+                    <div className="pl-3 pr-6">
                         {children}
                     </div>
                     {/* <div className='flex gap-3 w-full pb-4'>

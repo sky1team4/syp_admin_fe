@@ -11,9 +11,10 @@ function PaymentInte() {
                 <Sidebar />
                 <div className='flex flex-col gap-3 w-full '>
                     <Header /> */}
-                    {/* <div className='flex gap-3 w-full'> */}
+                    <div className='flex flex-col gap-3 w-full bg-white rounded-xl p-4'>
+                        <div className="text-xl font-semibold">Payment Integration</div>
                         <Content />
-                    {/* </div> */}
+                    </div>
                     
                 {/* </div> */}
                 {/* // </div> */}

@@ -46,7 +46,7 @@ const UserTable = () => {
   };
 
   return (
-    <div className="p-4 md:p-6 bg-white rounded-xl">
+    <div className="flex flex-col gap-4 p-4 md:p-6 bg-white rounded-xl">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800">Users Information</h2>
@@ -65,7 +65,7 @@ const UserTable = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b mb-4">
+      <div className="flex border-b">
         <button
           className={`px-3 py-2 text-sm md:text-base ${activeTab === "Users" ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"
             }`}
