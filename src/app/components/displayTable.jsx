@@ -1,5 +1,5 @@
 import React from "react";
-
+import Image from "next/image";
 import Button from './ui/button'
 
 const TableComponent = (info) => {
@@ -42,7 +42,7 @@ const TableComponent = (info) => {
       {/* Table */}
       <table className="w-full border-collapse">
         <thead>
-          <tr className="text-left text-sm font-medium text-gray-600">
+          <tr className="text-left text-sm font-medium text-gray-400 border-b">
             <th className="py-3 px-4">{info.col1_Title}</th>
             <th className="py-3 px-4">{info.col2_Title}</th>
             <th className="py-3 px-4">{info.col3_Title}</th>
@@ -60,12 +60,22 @@ const TableComponent = (info) => {
               <td className="py-8 px-4">{subscription.lastUpdated}</td>
               <td className="py-8 px-4 flex space-x-2">
                 {/* Edit Action */}
-                <button className="text-purple-600 hover:text-purple-800">
-                  ✏️
+                <button className="">
+                  <Image
+                    src="/EditTable.svg"
+                    width={20}
+                    height={20}
+                    alt="icon"
+                  />
                 </button>
                 {/* Delete Action */}
-                <button className="text-red-600 hover:text-red-800">
-                  🗑️
+                <button className="">
+                  <Image
+                    src="/delete.svg"
+                    width={20}
+                    height={20}
+                    alt="icon"
+                  />
                 </button>
               </td>
             </tr>
