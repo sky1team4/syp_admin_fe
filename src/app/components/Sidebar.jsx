@@ -10,10 +10,27 @@ const Sidebar = () => {
   const sidebarItemClass = "flex items-center p-2 rounded-md";
 
   return (
-    <div className="flex w-64 h-auto">
+    <div className="flex w-full h-auto">
+      {/* Hamburger Button */}
+      <button
+        onClick={toggleSidebar}
+        className="sm:hidden bg-purple-600 text-white p-2 rounded-md m-2 z-50 h-10 absolute"
+      >
+        <Image
+          src="/dashbaord_siedebar_icon/menu.png"
+          width={25}
+          height={25}
+          // alt=""
+        />
+      </button>
+
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-purple-600 text-purple-500 w-64 flex flex-col gap-5 items-center py-6 px-4`}
+        className={`fixed top-0 left-0 h-full bg-purple-600 text-white w-screen ${
+          isSidebarOpen ? "w-screen" : "sm:w-64"
+        } flex flex-col gap-5 items-center py-6 px-4 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } sm:translate-x-0 transition-transform duration-300 z-50`}
       >
         {/* Logo / Active Dashboard */}
         <Link href="/admin/dashboard">
@@ -109,7 +126,8 @@ const Sidebar = () => {
                 height={30}
                 alt="icon"
               />
-              <span className="ml-2 text-[12px]">Sign Out</span>
+              
+              <span className="text-sm">Sign Out</span>
             </div>
           </Link>
         </nav>

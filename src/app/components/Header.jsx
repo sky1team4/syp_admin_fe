@@ -2,10 +2,10 @@ import React from "react";
 import Image from "next/image";
 const DashboardTopBar = () => {
   return (
-    <div className="flex items-center justify-between px-6 py-2 bg-white rounded-xl shadow flex-col md:flex-row">
+    <div className="flex items-center justify-between px-8 py-6 bg-white flex-col md:flex-row">
       {/* Left Section: Dashboard Title and Search Bar */}
       <div className="flex md:items-center lg:item-center">
-        <h1 className="text-sm md:text-xl font-bold text-gray-800">Dashboard</h1>
+        <h1 className="text-sm md:text-2xl font-bold text-gray-800">Dashboard</h1>
         <div className="relative ml-4 hidden md:block">
         <span className="absolute top-1/2 left-3 transform -translate-y-1/2 text-purple-500">
             <svg
@@ -26,7 +26,7 @@ const DashboardTopBar = () => {
           <input
             type="text"
             placeholder="     Search here..."
-            className="hidden md:block w-[35rem] px-4 py-2 text-gray-700 bg-gray-100 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="hidden md:block w-[25rem] px-10 py-3 text-gray-700 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           
         </div>

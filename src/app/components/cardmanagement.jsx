@@ -12,7 +12,7 @@ const Card = ({ title, Icon, link }) => (
         <Image alt="arrow" src="/setting_icon/arrow.png" width={20} height={20} />
     </div>
     <div className="flex w-full justify-between items-center">
-      <h3 className="text-gray-800 font-semibold text-md mt-10">{title}</h3>
+      <h3 className="text-gray-800 font-semibold text-base mt-10">{title}</h3>
       <div className="mt-10 text-purple-500 text-sm flex items-center space-x-2">
         <Image alt="icon" src="/setting_icon/icon.png" width={20} height={20} />
       </div>

@@ -4,7 +4,7 @@ const CustomCheckbox = () => {
   const [checked, setChecked] = useState(false);
 
   return (
-    <label className="relative inline-block w-10 h-5 cursor-pointer">
+    <label className="relative inline-block w-14 h-7 cursor-pointer">
       <input
         type="checkbox"
         className="sr-only"
@@ -17,8 +17,8 @@ const CustomCheckbox = () => {
         }`}
       ></span>
       <span
-        className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${
-          checked ? 'transform translate-x-5' : ''
+        className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full transition-transform ${
+          checked ? 'transform translate-x-7' : ''
         }`}
       ></span>
     </label>

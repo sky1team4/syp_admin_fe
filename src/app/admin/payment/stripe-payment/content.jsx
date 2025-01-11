@@ -17,12 +17,12 @@ const StripePaymentIntegration = () => {
   };
 
   return (
-    <div className="w-full md:h-full p-8 bg-white rounded-lg shadow-lg">
+    <div className="w-full md:h-full p-8 bg-white rounded-lg shadow-lg flex flex-col items-center">
       <h1 className="text-3xl font-bold mb-2 text-gray-800">Stripe Payment Integration</h1>
       <p className="text-gray-500 mb-8">
         Configure your Stripe account settings below.
       </p>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-[81.5rem]">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-full flex flex-col items-center justify-center">
         {/* Publishable Key and Secret Key */}
         <div className="flex gap-6 flex-wrap">
           <Input id="publishableKey" w="[20rem]" mdw="[40rem]" label="Publishable Key" placeholder="Enter your Publishable Key"/>
