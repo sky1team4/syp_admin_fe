@@ -28,7 +28,7 @@ const TodaysSummary = (info) => {
             key={item.id}
             className={`md:w-[12rem] flex gap-2 flex-col items-start justify-start p-4 ${item.bgColor} rounded-2xl cursor-pointer`}
           >
-            <Image src={item.icon} width={40} height={40}/>
+            <Image src={info.icon} width={40} height={40}/>
             <p className=" text-3xl font-bold text-gray-800">{item.value}</p>
             <p className="text-sm font-medium text-gray-600">{item.label}</p>
           </div>

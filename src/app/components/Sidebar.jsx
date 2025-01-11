@@ -13,7 +13,7 @@ const Sidebar = () => {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
-    <div className="flex w-full h-auto">
+    <div className="flex w-64 h-auto">
       {/* Hamburger Button */}
       <button
         onClick={toggleSidebar}
@@ -35,6 +35,13 @@ const Sidebar = () => {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } sm:translate-x-0 transition-transform duration-300 z-50`}
       >
+        {/* Close Button */}
+        <button
+          onClick={toggleSidebar}
+          className="sm:hidden text-white self-end mr-4"
+        >
+          ✖
+        </button>
         {/* Logo / Active Dashboard */}
         <Link href="/admin/dashboard">
           <div
@@ -54,7 +61,7 @@ const Sidebar = () => {
         {/* Menu Items */}
         <nav className="flex flex-col space-y-6">
           {/* Subscriptions */}
-          <Link href="/admin/subscriptionManagement">
+          <a href="/admin/subscriptionManagement">
             <div
               onClick={() => setStaticTab("subscription")}
               className={`${sidebarItemClass} ${staticTab === "subscription" ? "bg-white text-purple-600" : sidebarClass}`}
@@ -67,7 +74,7 @@ const Sidebar = () => {
               />
               <span className="ml-2 text-[12px]">Subscriptions</span>
             </div>
-          </Link>
+          </a>
 
           {/* Companies */}
           <Link href="/admin/companies">

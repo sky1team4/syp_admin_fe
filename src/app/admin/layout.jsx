@@ -9,7 +9,7 @@ const AdminLayout = ({ children }) => {
     return (
         <>
             <div className='flex bg-gray-50 w-screen h-auto'>
-                <div className="md:w-[25%]">
+                <div className="w-auto">
                     <Sidebar />
                 </div>
                     {/* <Sidebar /> */}
