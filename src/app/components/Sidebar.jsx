@@ -26,7 +26,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-purple-600 text-white w-screen ${
+        className={`fixed top-0 left-0 h-full bg-purple-600 text-white ${
           isSidebarOpen ? "w-screen" : "sm:w-64"
         } flex flex-col gap-5 items-center py-6 px-4 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -126,7 +126,6 @@ const Sidebar = () => {
                 height={30}
                 alt="icon"
               />
-              
               <span className="text-sm">Sign Out</span>
             </div>
           </Link>
