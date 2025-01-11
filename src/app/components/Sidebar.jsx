@@ -9,6 +9,8 @@ const Sidebar = () => {
   const activeSidebarClass = themes.SideBarTheme_Active;
   const sidebarItemClass = "flex items-center p-2 rounded-md";
 
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
   return (
     <div className="flex w-full h-auto">
       {/* Hamburger Button */}
