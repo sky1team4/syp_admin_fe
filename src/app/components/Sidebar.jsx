@@ -13,11 +13,11 @@ const Sidebar = () => {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
-    <div className="flex w-64 h-auto">
+    <div className="flex w-64 h-auto z-20">
       {/* Hamburger Button */}
       <button
         onClick={toggleSidebar}
-        className="sm:hidden bg-purple-600 text-white p-2 rounded-md m-2 z-50 h-10 absolute"
+        className="sm:hidden bg-purple-600 text-white p-2 rounded-md m-2 h-10 absolute"
       >
         <Image
           src="/dashbaord_siedebar_icon/menu.png"
@@ -33,7 +33,7 @@ const Sidebar = () => {
           isSidebarOpen ? "w-screen" : "sm:w-64"
         } flex flex-col gap-5 items-center py-6 px-4 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } sm:translate-x-0 transition-transform duration-300 z-50`}
+        } sm:translate-x-0 transition-transform duration-300`}
       >
         {/* Close Button */}
         <button
@@ -77,7 +77,7 @@ const Sidebar = () => {
           </a>
 
           {/* Companies */}
-          <Link href="/admin/companies">
+          <a href="/admin/companies">
             <div
               onClick={() => setStaticTab("companies")}
               className={`${sidebarItemClass} ${staticTab === "companies" ? "bg-white text-purple-600" : sidebarClass}`}
@@ -90,10 +90,10 @@ const Sidebar = () => {
               />
               <span className="ml-2 text-[12px]">Companies</span>
             </div>
-          </Link>
+          </a>
 
           {/* Payment Integration */}
-          <Link href="/admin/payment">
+          <a href="/admin/payment">
             <div
               onClick={() => setStaticTab("payment")}
               className={`${sidebarItemClass} ${staticTab === "payment" ? "bg-white text-purple-600" : sidebarClass}`}
@@ -106,10 +106,10 @@ const Sidebar = () => {
               />
               <span className="ml-2 text-[12px]">Payment Integration</span>
             </div>
-          </Link>
+          </a>
 
           {/* Settings */}
-          <Link href="/admin/setting">
+          <a href="/admin/setting">
             <div
               onClick={() => setStaticTab("setting")}
               className={`${sidebarItemClass} ${staticTab === "setting" ? "bg-white text-purple-600" : sidebarClass}`}
@@ -122,7 +122,7 @@ const Sidebar = () => {
               />
               <span className="ml-2 text-[12px]">Settings</span>
             </div>
-          </Link>
+          </a>
 
           {/* Sign Out */}
           <Link href="/admin-Login">

@@ -15,7 +15,7 @@ const AdminLayout = ({ children }) => {
                     {/* <Sidebar /> */}
                 <div className='flex flex-col gap-3 w-full h-screen pb-8 overflow-x-hidden'>
                     <Header />
-                    <div className="pl-3 pr-6">
+                    <div className="pl-3 pr-6 h-full">
                         {children}
                     </div>
                     {/* <div className='flex gap-3 w-full pb-4'>
