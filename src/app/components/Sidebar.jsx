@@ -1,171 +1,119 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import themes from "../theme.js";
 
-
-
 const Sidebar = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const staticTab = "dashboard";
+  const [staticTab, setStaticTab] = useState("dashboard"); // Default selected tab
   const sidebarClass = themes.SideBarTheme;
   const activeSidebarClass = themes.SideBarTheme_Active;
-
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const sidebarItemClass = "flex items-center p-2 rounded-md";
 
   return (
     <div className="flex w-64 h-auto">
-      {/* Hamburger Button */}
-      <button
-        onClick={toggleSidebar}
-        className="sm:hidden bg-purple-600 text-white p-2 rounded-md m-2 z-50 h-10 absolute"
-      >
-        <Image
-          src="/dashbaord_siedebar_icon/menu.png"
-          width={25}
-          height={25}
-          // alt=""
-        />
-      </button>
-
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-purple-600 text-white w-screen ${
-          isSidebarOpen ? "w-screen" : "sm:w-64"
-        } flex flex-col gap-5 items-center py-6 px-4 transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } sm:translate-x-0 transition-transform duration-300 z-50`}
+        className={`fixed top-0 left-0 h-full bg-purple-600 text-purple-500 w-64 flex flex-col gap-5 items-center py-6 px-4`}
       >
-        {/* Close Button */}
-        <button
-          onClick={toggleSidebar}
-          className="sm:hidden text-white self-end mr-4"
-        >
-          ✖
-        </button>
-
         {/* Logo / Active Dashboard */}
-        <a href="/admin/dashboard">
+        <Link href="/admin/dashboard">
           <div
-            className={`${staticTab === "dashboard" ? activeSidebarClass : sidebarClass} mt-16`}
+            onClick={() => setStaticTab("dashboard")}
+            className={`${staticTab === "dashboard" ? activeSidebarClass : sidebarClass} mt-16 ${sidebarItemClass}`}
           >
             <Image
-              src="/dashbaord_siedebar_icon/Graph.png"
+              src="/dashbaord_siedebar_icon/Graph.svg"
               width={30}
               height={30}
               alt="icon"
             />
-
-            
-              <span className="ml-2 text-purple-600 text-sm font-medium">
-                Dashboard
-              </span>
-            
+            <span className="ml-2 text-[12px] font-medium">Dashboard</span>
           </div>
-        </a>
+        </Link>
 
         {/* Menu Items */}
         <nav className="flex flex-col space-y-6">
           {/* Subscriptions */}
-          <a href="/admin/subscriptionManagement">
+          <Link href="/admin/subscriptionManagement">
             <div
-              className={
-                staticTab === "subscription" ? activeSidebarClass : sidebarClass
-              }
+              onClick={() => setStaticTab("subscription")}
+              className={`${sidebarItemClass} ${staticTab === "subscription" ? "bg-white text-purple-600" : sidebarClass}`}
             >
               <Image
                 src="/dashbaord_siedebar_icon/subscribe.png"
                 width={30}
                 height={30}
                 alt="icon"
-                className="text-purple-500"
               />
-              <span className="text-sm">Subscriptions</span>
+              <span className="ml-2 text-[12px]">Subscriptions</span>
             </div>
-          </a>
+          </Link>
 
           {/* Companies */}
-          <div
-            className={
-              staticTab === "companies" ? activeSidebarClass : sidebarClass
-            }
-          >
-            <Image
-              src="/dashbaord_siedebar_icon/companies.png"
-              width={30}
-              height={30}
-              alt="icon"
-              className="text-purple-500"
-            />
-            <span className="text-sm">Companies</span>
-          </div>
+          <Link href="/admin/companies">
+            <div
+              onClick={() => setStaticTab("companies")}
+              className={`${sidebarItemClass} ${staticTab === "companies" ? "bg-white text-purple-600" : sidebarClass}`}
+            >
+              <Image
+                src="/dashbaord_siedebar_icon/Mask group (1).svg"
+                width={30}
+                height={30}
+                alt="icon"
+              />
+              <span className="ml-2 text-[12px]">Companies</span>
+            </div>
+          </Link>
 
           {/* Payment Integration */}
-          <a href="/admin/payment">
+          <Link href="/admin/payment">
             <div
-              className={
-                staticTab === "payment" ? activeSidebarClass : sidebarClass
-              }
+              onClick={() => setStaticTab("payment")}
+              className={`${sidebarItemClass} ${staticTab === "payment" ? "bg-white text-purple-600" : sidebarClass}`}
             >
               <Image
-                src="/dashbaord_siedebar_icon/payment.png"
+                src="/dashbaord_siedebar_icon/Mask group (2).svg"
                 width={30}
                 height={30}
                 alt="icon"
-                className="text-purple-500"
               />
-              <span className="text-sm">Payment Integration</span>
+              <span className="ml-2 text-[12px]">Payment Integration</span>
             </div>
-          </a>
+          </Link>
 
           {/* Settings */}
-          <a href="/admin/setting">
+          <Link href="/admin/setting">
             <div
-              className={
-                staticTab === "setting" ? activeSidebarClass : sidebarClass
-              }
+              onClick={() => setStaticTab("setting")}
+              className={`${sidebarItemClass} ${staticTab === "setting" ? "bg-white text-purple-600" : sidebarClass}`}
             >
               <Image
-                src="/dashbaord_siedebar_icon/setting.png"
+                src="/dashbaord_siedebar_icon/setting.svg"
                 width={30}
                 height={30}
                 alt="icon"
-                className="text-purple-500"
               />
-              <span className="text-sm">Settings</span>
+              <span className="ml-2 text-[12px]">Settings</span>
             </div>
-          </a>
+          </Link>
 
           {/* Sign Out */}
-          <a href="/admin-Login">
-          
-          <div
-            className={
-              staticTab === "signout" ? activeSidebarClass : sidebarClass
-            }
-          >
-            <Image
-              src="/dashbaord_siedebar_icon/signout.png"
-              width={30}
-              height={30}
-              alt="icon"
-              className="text-purple-500"
-            />
-            <span className="text-sm">Sign Out</span>
-          </div>
-          </a>
+          <Link href="/admin-Login">
+            <div
+              onClick={() => setStaticTab("signout")}
+              className={`${sidebarItemClass} ${staticTab === "signout" ? "bg-white text-purple-600" : sidebarClass}`}
+            >
+              <Image
+                src="/dashbaord_siedebar_icon/Signout.svg"
+                width={30}
+                height={30}
+                alt="icon"
+              />
+              <span className="ml-2 text-[12px]">Sign Out</span>
+            </div>
+          </Link>
         </nav>
       </div>
-
-      {/* Overlay */}
-      {isSidebarOpen && (
-        <div
-          onClick={toggleSidebar}
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
-        ></div>
-      )}
-
-      {/* Main Content */}
-      
     </div>
   );
 };

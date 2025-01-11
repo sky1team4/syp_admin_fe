@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "next/image";
 import { FiEyeOff } from "react-icons/fi";
 import VerificationRequest from "./verificationrequest";
 
@@ -51,7 +52,8 @@ const UserTable = () => {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800">Users Information</h2>
         <button className="p-2 bg-gray-100 rounded-full">
-          <svg
+          <image src='/Vector.svg' width={20} height={20}/>
+          {/* <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -60,7 +62,7 @@ const UserTable = () => {
             className="w-6 h-6 text-gray-600"
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6h.01M12 12h.01M12 18h.01M4.75 6h14.5M4.75 12h14.5M4.75 18h14.5" />
-          </svg>
+          </svg> */}
         </button>
       </div>
 
@@ -108,12 +110,13 @@ const UserTable = () => {
                 <td className="py-3 px-4">{getStatusBadge(user.status)}</td>
                 <td className="py-3 px-4">{getSubscriptionBadge(user.subscription)}</td>
                 <td className="py-3 px-4">
-                  <div className="p-1 flex items-center justify-center bg-gray-100">
+                  <div className="p-1 flex items-center justify-center">
                     <button
                       onClick={() => setIsOpen(!isOpen)}
-                      className="px-4 py-2 bg-purple-600 rounded text-black "
+                      // className="px-4 py-2 bg-purple-600 rounded text-black "
                     >
-                      <FiEyeOff />
+                      {/* <FiEyeOff /> */}
+                      <image src='/Vector.png' width={20} height={20}/>
                     </button>
                     {isOpen && <VerificationRequest />}
                   </div>
