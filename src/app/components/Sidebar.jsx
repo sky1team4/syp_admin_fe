@@ -4,6 +4,7 @@ import Image from "next/image";
 import themes from "../theme.js";
 
 const Sidebar = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [staticTab, setStaticTab] = useState("dashboard"); // Default selected tab
   const sidebarClass = themes.SideBarTheme;
   const activeSidebarClass = themes.SideBarTheme_Active;
