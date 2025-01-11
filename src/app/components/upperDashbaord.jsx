@@ -5,13 +5,6 @@ import Image from "next/image";
 const TodaysSummary = (info) => {
 
 
-  // const data = [
-  //   { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "👤" },
-  //   { id: 2, label: "Subscribed User", value: "4,590", bgColor: "bg-red-100", icon: "📊" },
-  //   { id: 3, label: "Unsubscribed User", value: "3,866", bgColor: "bg-yellow-100", icon: "📄" },
-  //   { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "🔑" },
-  // ];
-
   return (
     <div className="w-full bg-white shadow-md p-8 rounded-xl">
       <div className="w-full flex justify-between items-center mb-4">

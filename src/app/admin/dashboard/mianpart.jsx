@@ -1,6 +1,19 @@
-import React, { useState } from "react";
+"use client"
+import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import VerificationRequest from "./verificationrequest";
+import Table from "../../../../components/ui/Table";
+// import TableBody from "@/components/ui/TableBody";
+// import TableCell from "@/components/ui/TableCell";
+// import TableHead from "@/components/ui/TableHead";
+import TableHeader from "../../../../components/ui/TableHeader";
+import TableRow from "../../../../components/ui/TableRow";
+import Input from "../../../../components/ui/Input";
+// import Select from "@/components/ui/Select";
+// import SelectTrigger from "@/components/ui/SelectTrigger";
+// import SelectValue from "@/components/ui/SelectValue";
+// import SelectContent from "@/components/ui/SelectContent";
+// import SelectItem from "@/components/ui/SelectItem";
 
 const UserTable = () => {
   const users = [
@@ -32,9 +45,43 @@ const UserTable = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Users");
-  const [filteredUsers, setFilteredUsers] = useState(
-    users.filter((user) => user.status === "Active")
-  );
+  const [filters, setFilters] = useState({
+    name: "",
+    username: "",
+    phone: "",
+    status: "",
+    subscription: "",
+  });
+
+  const handleFilterChange = (field, value) => {
+    setFilters((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const filteredUsers = useMemo(() => {
+    return users.filter((user) => {
+      const matchName = user.name
+        .toLowerCase()
+        .includes(filters.name.toLowerCase());
+      const matchUsername = user.username
+        .toLowerCase()
+        .includes(filters.username.toLowerCase());
+      const matchPhone = user.phone.includes(filters.phone);
+      const matchStatus = filters.status
+        ? user.status === filters.status
+        : true;
+      const matchSubscription = filters.subscription
+        ? user.subscription === filters.subscription
+        : true;
+
+      return (
+        matchName &&
+        matchUsername &&
+        matchPhone &&
+        matchStatus &&
+        matchSubscription
+      );
+    });
+  }, [users, filters]);
 
   const getStatusBadge = (status) => {
     if (status === "Active")
@@ -52,23 +99,8 @@ const UserTable = () => {
 
   const getSubscriptionBadge = (subscription) => {
     if (subscription === "Subscribed")
-      return (
-        <span className="text-green-600 font-medium">Subscribed</span>
-      );
-    return (
-      <span className="text-red-600 font-medium">Unsubscribed</span>
-    );
-  };
-
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-    if (tab === "Users") {
-      setFilteredUsers(users.filter((user) => user.status === "Active"));
-    } else {
-      setFilteredUsers(
-        users.filter((user) => user.status === "Inactive")
-      );
-    }
+      return <span className="text-green-600 font-medium">Subscribed</span>;
+    return <span className="text-red-600 font-medium">Unsubscribed</span>;
   };
 
   return (
@@ -84,7 +116,7 @@ const UserTable = () => {
             Users Information
           </h2>
           <button className="bg-gray-100 rounded-full">
-            <Image src="/More.svg" width={45} height={45} />
+            <Image src="/More.svg" width={45} height={45} alt="More Options" />
           </button>
         </div>
 
@@ -93,10 +125,10 @@ const UserTable = () => {
           {/* Users Tab */}
           <button
             className={`px-4 py-2 text-sm md:text-base font-medium transition ${activeTab === "Users"
-                ? "bg-purple-600 text-white"
-                : "bg-white text-purple-600"
+              ? "bg-purple-600 text-white"
+              : "bg-white text-purple-600"
               }`}
-            onClick={() => handleTabClick("Users")}
+            onClick={() => setActiveTab("Users")}
           >
             Users
           </button>
@@ -104,12 +136,10 @@ const UserTable = () => {
           {/* Verification Requests Tab */}
           <button
             className={`px-4 py-2 text-sm md:text-base font-medium transition ${activeTab === "Verification Requests"
-                ? "bg-purple-600 text-white"
-                : "bg-white text-purple-600"
+              ? "bg-purple-600 text-white"
+              : "bg-white text-purple-600"
               }`}
-            onClick={() =>
-              handleTabClick("Verification Requests")
-            }
+            onClick={() => setActiveTab("Verification Requests")}
           >
             Verification Requests
           </button>
@@ -117,33 +147,78 @@ const UserTable = () => {
 
         {/* Table for Larger Screens */}
         <div className="hidden md:block overflow-x-auto">
-          <table className="min-w-full bg-white rounded-lg">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="text-left py-3 px-4 text-gray-600">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
                   User
-                </th>
-                <th className="text-left py-3 px-4 text-gray-600">
+                  <Input
+                    placeholder="Filter Name"
+                    value={filters.name}
+                    onChange={(e) => handleFilterChange("name", e.target.value)}
+                    className="mt-2"
+                  />
+                  <Input
+                    placeholder="Filter Username"
+                    value={filters.username}
+                    onChange={(e) =>
+                      handleFilterChange("username", e.target.value)
+                    }
+                    className="mt-2"
+                  />
+                </TableHead>
+                <TableHead>
                   Phone Number
-                </th>
-                <th className="text-left py-3 px-4 text-gray-600">
+                  <Input
+                    placeholder="Filter Phone"
+                    value={filters.phone}
+                    onChange={(e) => handleFilterChange("phone", e.target.value)}
+                    className="mt-2"
+                  />
+                </TableHead>
+                <TableHead>
                   Status
-                </th>
-                <th className="text-left py-3 px-4 text-gray-600">
+                  <Select
+                    value={filters.status}
+                    onValueChange={(value) => handleFilterChange("status", value)}
+                    className="mt-2"
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="All" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All</SelectItem>
+                      <SelectItem value="Active">Active</SelectItem>
+                      <SelectItem value="Inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </TableHead>
+                <TableHead>
                   Subscription
-                </th>
-                <th className="text-left py-3 px-4 text-gray-600">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
+                  <Select
+                    value={filters.subscription}
+                    onValueChange={(value) =>
+                      handleFilterChange("subscription", value)
+                    }
+                    className="mt-2"
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="All" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All</SelectItem>
+                      <SelectItem value="Subscribed">Subscribed</SelectItem>
+                      <SelectItem value="Unsubscribed">Unsubscribed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </TableHead>
+                <TableHead>Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {filteredUsers.map((user, index) => (
-                <tr
-                  key={index}
-                  className="border-b hover:bg-gray-50"
-                >
-                  <td className="py-3 px-4 flex items-center space-x-4">
+                <TableRow key={index} className="hover:bg-gray-50">
+                  <TableCell className="flex items-center space-x-4">
                     <img
                       src={user.avatar}
                       alt={user.name}
@@ -157,23 +232,20 @@ const UserTable = () => {
                         {user.username}
                       </p>
                     </div>
-                  </td>
-                  <td className="py-3 px-4 text-gray-500">
+                  </TableCell>
+                  <TableCell className="text-gray-500">
                     {user.phone}
-                  </td>
-                  <td className="py-3 px-4">
-                    {getStatusBadge(user.status)}
-                  </td>
-                  <td className="py-3 px-4">
-                    {getSubscriptionBadge(user.subscription)}
-                  </td>
-                  <td className="py-3 px-4">
-                    <div className="p-1 flex items-center justify-center">
+                  </TableCell>
+                  <TableCell>{getStatusBadge(user.status)}</TableCell>
+                  <TableCell>{getSubscriptionBadge(user.subscription)}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center justify-center">
                       <button onClick={() => setIsOpen(!isOpen)}>
                         <Image
                           src="/Vector.svg"
-                          width={5}
-                          height={5}
+                          width={20}
+                          height={20}
+                          alt="Action"
                         />
                       </button>
                       {isOpen && (
@@ -183,11 +255,11 @@ const UserTable = () => {
                         />
                       )}
                     </div>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
 
         {/* Cards for Smaller Screens */}
@@ -219,8 +291,7 @@ const UserTable = () => {
                 <div className="flex items-center justify-between mt-2">
                   <p>Status: {getStatusBadge(user.status)}</p>
                   <p>
-                    Subscription:{" "}
-                    {getSubscriptionBadge(user.subscription)}
+                    Subscription: {getSubscriptionBadge(user.subscription)}
                   </p>
                 </div>
               </div>
@@ -230,6 +301,7 @@ const UserTable = () => {
                     src="/Vector.svg"
                     width={25}
                     height={25}
+                    alt="Action"
                   />
                 </button>
               </div>
