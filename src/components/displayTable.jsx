@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import Button from './ui/button'
+import Button from './cui/button'
 
 const TableComponent = (info) => {
   // Mock data for subscriptions
@@ -35,7 +35,7 @@ const TableComponent = (info) => {
           {info.title}
         </h2>
         {
-          info.click? <Button click={info.click} isOpen={info.isOpen} h="10" text={info.btnText} /> : ""
+          info.click ? <Button click={info.click} isOpen={info.isOpen} h="10" text={info.btnText} /> : ""
         }
       </div>
 

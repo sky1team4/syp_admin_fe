@@ -1,22 +1,21 @@
 import React from 'react';
-import Input from './ui/input';
+import Input from './cui/input';
 
 function SubscriptionSideBar(info) {
     return (
         <>
             {/* Overlay */}
             {info.isOpen && (
-                <div 
-                    onClick={() => info.click()} 
+                <div
+                    onClick={() => info.click()}
                     className="fixed inset-0 bg-black opacity-50 z-40"
                 ></div>
             )}
 
             {/* Sidebar */}
             <div
-                className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform ${
-                    info.isOpen ? "translate-x-0" : "translate-x-full"
-                } transition-transform duration-300 z-50`}
+                className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform ${info.isOpen ? "translate-x-0" : "translate-x-full"
+                    } transition-transform duration-300 z-50`}
             >
                 <div className="p-6">
                     {/* Header */}

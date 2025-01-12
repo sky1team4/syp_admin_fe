@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import themes from "../theme.js";
+import themes from "../app/theme.js";
 
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -23,17 +23,15 @@ const Sidebar = () => {
           src="/dashbaord_siedebar_icon/menu.png"
           width={25}
           height={25}
-          // alt=""
+        // alt=""
         />
       </button>
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-purple-600 text-white ${
-          isSidebarOpen ? "w-screen" : "sm:w-64"
-        } flex flex-col gap-5 items-center py-6 px-4 transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } sm:translate-x-0 transition-transform duration-300`}
+        className={`fixed top-0 left-0 h-full bg-purple-600 text-white ${isSidebarOpen ? "w-screen" : "sm:w-64"
+          } flex flex-col gap-5 items-center py-6 px-4 transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } sm:translate-x-0 transition-transform duration-300`}
       >
         {/* Close Button */}
         <button

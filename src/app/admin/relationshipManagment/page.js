@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import data from "../../../../lib/relationshipdata"; // Import JSON data
-import AddRelationshipPopup from "../../components/CrudPopup"; // Import the popup component
+import AddRelationshipPopup from "../../../components/CrudPopup"; // Import the popup component
 
 const RelationshipManagement = () => {
   const [relationships, setRelationships] = useState(Array.isArray(data) ? data : []);

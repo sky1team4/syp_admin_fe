@@ -2,10 +2,10 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 // UI Components
-import Input from '../../../components/ui/input'
-import Button from '../../../components/ui/button'
-import Dropdown from '../../../components/ui/dropdown'
-import CustomCheckbox from '@/app/components/ui/customCheckbox';
+import Input from '../../../../components/cui/input'
+import Button from '../../../../components/cui/button'
+import Dropdown from '../../../../components/cui/dropdown'
+import CustomCheckbox from '@/components/cui/customCheckbox';
 
 const currencies = ['USD', 'EUR', 'GBP', 'AUD', 'INR'];
 
@@ -25,20 +25,20 @@ const BankPaymentIntegration = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-[81.5rem]">
         {/* Publishable Key and Secret Key */}
         <div className="flex gap-6 flex-wrap">
-          <Input id="accHolderName" w="[20rem]" mdw="[40rem]" label="Account Holder Name" placeholder="Account Holder Name"/>
-          <Input id="bankAccNo" w="[20rem]" mdw="[40rem]" label="Bank Account Number" placeholder="Bank Account Number"/>
+          <Input id="accHolderName" w="[20rem]" mdw="[40rem]" label="Account Holder Name" placeholder="Account Holder Name" />
+          <Input id="bankAccNo" w="[20rem]" mdw="[40rem]" label="Bank Account Number" placeholder="Bank Account Number" />
         </div>
 
         {/* Webhook Signing Secret and URL */}
         <div className="flex gap-6 flex-wrap">
-          <Input id="ibanNo" w="[20rem]" mdw="[40rem]" label="IBAN Number" placeholder="IBAN Number"/>
-          <Input id="swiftCode" w="[20rem]" mdw="[40rem]" label="SWIFT Code" placeholder="SWIFT Code"/>
+          <Input id="ibanNo" w="[20rem]" mdw="[40rem]" label="IBAN Number" placeholder="IBAN Number" />
+          <Input id="swiftCode" w="[20rem]" mdw="[40rem]" label="SWIFT Code" placeholder="SWIFT Code" />
         </div>
 
         {/* Default Currency and Allowed Currencies */}
         <div className="flex gap-6 flex-wrap">
-          <Input id="bankName" w="[20rem]" mdw="[40rem]" label="Bank Name" placeholder="Bank Name"/>
-          <Dropdown id="allowedTType" label="Allowed Transaction" array={currencies} seleted="Select Below"/>
+          <Input id="bankName" w="[20rem]" mdw="[40rem]" label="Bank Name" placeholder="Bank Name" />
+          <Dropdown id="allowedTType" label="Allowed Transaction" array={currencies} seleted="Select Below" />
         </div>
 
         <div className="flex flex-col gap-3">
@@ -59,7 +59,7 @@ const BankPaymentIntegration = () => {
           </label>
 
           <CustomCheckbox />
-          
+
         </div>
 
         {/* Save Button */}

@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import Card from '../../components/cardmanagement'
+import Card from '../../../components/cardmanagement'
 
 const PaymentIntegration = () => {
   const paymentMethods = [
@@ -24,11 +24,11 @@ const PaymentIntegration = () => {
   return (
     <div className=" flex flex-wrap gap-4">
       {/* <div className="flex flex-wrap w-full gap-4 items-center justify-start"> */}
-        {paymentMethods.map((card, index) => (
-          <div className="shadow rounded-xl" key={index}>
-            <Card title={card.title} Icon={card.icon} link={card.link} />
-          </div>
-        ))}
+      {paymentMethods.map((card, index) => (
+        <div className="shadow rounded-xl" key={index}>
+          <Card title={card.title} Icon={card.icon} link={card.link} />
+        </div>
+      ))}
       {/* </div> */}
     </div>
   );

@@ -2,10 +2,10 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 // UI Components
-import Input from '../../../components/ui/input'
-import Button from '../../../components/ui/button'
-import Dropdown from '../../../components/ui/dropdown'
-import CustomCheckbox from '@/app/components/ui/customCheckbox';
+import Input from '../../../../components/cui/input'
+import Button from '../../../../components/cui/button'
+import Dropdown from '../../../../components/cui/dropdown'
+import CustomCheckbox from '@/components/cui/customCheckbox';
 
 const currencies = ['USD', 'EUR', 'GBP', 'AUD', 'INR'];
 
@@ -25,20 +25,20 @@ const StripePaymentIntegration = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-full flex flex-col items-center justify-center">
         {/* Publishable Key and Secret Key */}
         <div className="flex gap-6 flex-wrap">
-          <Input id="publishableKey" w="[20rem]" mdw="[40rem]" label="Publishable Key" placeholder="Enter your Publishable Key"/>
-          <Input id="secretKey" w="[20rem]" mdw="[40rem]" label="Secret Key" placeholder="Enter your Secret Key"/>
+          <Input id="publishableKey" w="[20rem]" mdw="[40rem]" label="Publishable Key" placeholder="Enter your Publishable Key" />
+          <Input id="secretKey" w="[20rem]" mdw="[40rem]" label="Secret Key" placeholder="Enter your Secret Key" />
         </div>
 
         {/* Webhook Signing Secret and URL */}
         <div className="flex gap-6 flex-wrap">
-          <Input id="webhookSigningSecret" w="[20rem]" mdw="[40rem]" label="Webhook Signing Secret" placeholder="Enter your Webhook Signing Secret"/>
-          <Input id="webhookUrl" w="[20rem]" mdw="[40rem]" label="Webhook URL (Optional)" placeholder="Enter your Webhook URL"/>
+          <Input id="webhookSigningSecret" w="[20rem]" mdw="[40rem]" label="Webhook Signing Secret" placeholder="Enter your Webhook Signing Secret" />
+          <Input id="webhookUrl" w="[20rem]" mdw="[40rem]" label="Webhook URL (Optional)" placeholder="Enter your Webhook URL" />
         </div>
 
         {/* Default Currency and Allowed Currencies */}
         <div className="flex gap-6 flex-wrap">
-          <Dropdown id="defaultCurrency" label="Default Currency" array={currencies} seleted="Select Below"/>
-          <Dropdown id="allowedCurrencies" label="Allowed Currencies" array={currencies} seleted="Select Below"/>
+          <Dropdown id="defaultCurrency" label="Default Currency" array={currencies} seleted="Select Below" />
+          <Dropdown id="allowedCurrencies" label="Allowed Currencies" array={currencies} seleted="Select Below" />
         </div>
 
         {/* Enable Test Mode */}
@@ -48,7 +48,7 @@ const StripePaymentIntegration = () => {
           </label>
 
           <CustomCheckbox />
-          
+
         </div>
 
         {/* Save Button */}

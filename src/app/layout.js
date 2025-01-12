@@ -1,6 +1,12 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+const executeCommand = async () => {
+  const response = await fetch("/api/execute-command");
+  const data = await response.json();
+  console.log(data.output);
+};
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
