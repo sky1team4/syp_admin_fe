@@ -4,11 +4,11 @@ import Content from './content'
 
 function page() {
     return (
-        <>
-            <div className='flex gap-3 w-full'>
+        <div className='w-full min-h-screen overflow-x-hidden'>
+            <div className='container mx-auto px-4'>
                 <Content />
             </div>
-        </>
+        </div>
     )
 }
 

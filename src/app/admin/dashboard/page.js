@@ -20,7 +20,7 @@ const DashboardPage = () => {
     //   <Sidebar />
     //   <div className='flex flex-col gap-3 w-full '>
     //     <Header />
-        <div className='flex gap-3 w-full'>
+        <div className='flex gap-3 w-full flex-wrap'>
           <div className='flex flex-col gap-3 w-auto'>
             <UpperSide title="Today's Summary" data={data} btnText="Export" />
             <UserTable />

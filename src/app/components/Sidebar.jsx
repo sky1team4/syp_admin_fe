@@ -13,7 +13,7 @@ const Sidebar = () => {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
-    <div className="flex w-64 h-auto z-20">
+    <div className="flex md:w-64 h-auto">
       {/* Hamburger Button */}
       <button
         onClick={toggleSidebar}
@@ -23,7 +23,7 @@ const Sidebar = () => {
           src="/dashbaord_siedebar_icon/menu.png"
           width={25}
           height={25}
-          // alt=""
+          alt="Menu"
         />
       </button>
 
@@ -33,7 +33,7 @@ const Sidebar = () => {
           isSidebarOpen ? "w-screen" : "sm:w-64"
         } flex flex-col gap-5 items-center py-6 px-4 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } sm:translate-x-0 transition-transform duration-300`}
+        } sm:translate-x-0 transition-transform duration-300 z-20`}
       >
         {/* Close Button */}
         <button
@@ -67,10 +67,10 @@ const Sidebar = () => {
               className={`${sidebarItemClass} ${staticTab === "subscription" ? "bg-white text-purple-600" : sidebarClass}`}
             >
               <Image
-                src="/dashbaord_siedebar_icon/subscribe.png"
+                src={"/dashbaord_siedebar_icon/subscribe.png"}
                 width={30}
                 height={30}
-                alt="icon"
+                alt="Subscriptions icon"
               />
               <span className="ml-2 text-[12px]">Subscriptions</span>
             </div>
