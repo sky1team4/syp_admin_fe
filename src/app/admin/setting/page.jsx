@@ -12,7 +12,7 @@ function page() {
     //   <SideBar />
     //   <div className='flex flex-col gap-3 w-screen '>
     //     <Header />
-        <div className='flex gap-3 w-full'>
+        <div className='flex gap-3 w-full overflow-x-hidden'>
             <Content/>
         </div>
     //   </div>

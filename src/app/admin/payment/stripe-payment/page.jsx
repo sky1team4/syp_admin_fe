@@ -11,7 +11,7 @@ function PaymentInte() {
                 <Sidebar />
                 <div className='flex flex-col gap-3 w-full '>
                     <Header /> */}
-                    <div className='flex gap-3 w-auto h-full justify-center '>
+                    <div className='flex gap-3 w-full h-full overflow-x-hidden'>
                         <Content />
                     </div>
                     

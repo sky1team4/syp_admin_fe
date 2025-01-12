@@ -18,23 +18,23 @@ const PaypalPaymentIntegration = () => {
   };
 
   return (
-    <div className="w-full md:h-full p-8 bg-white rounded-lg shadow-lg">
+    <div className="w-auto md:h-full p-4 md:p-6 bg-white rounded-lg shadow-lg">
       <h1 className="text-3xl font-bold mb-2 text-gray-800">Paypal Payment Integration</h1>
       <p className="text-gray-500 mb-8">
         Configure your Paypal account settings below.
       </p>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-[81.5rem]">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-auto flex flex-col items-center justify-center">
         {/* Publishable Key and Secret Key */}
         <div className="flex gap-6 flex-wrap">
-          <Input id="clientId" w="[20rem]" mdw="[40rem]" label="Client ID" placeholder="Client ID"/>
-          <Input id="clientsecret" w="[20rem]" mdw="[40rem]" label="Client Secret" placeholder="Client Secret"/>
+          <Input id="clientId" w="[18rem]" mdw="[40rem]" label="Client ID" placeholder="Client ID"/>
+          <Input id="clientsecret" w="[18rem]" mdw="[40rem]" label="Client Secret" placeholder="Client Secret"/>
         </div>
 
         {/* Webhook Signing Secret and URL */}
         <div className="flex gap-6 flex-wrap">
           {/* <Input id="webhookSigningSecret" label="Webhook Signing Secret" placeholder="Enter your Webhook Signing Secret"/> */}
           <Dropdown id="environment" label="Environmet" array={currencies} seleted="Select Below"/>
-          <Input id="webhookid" w="[20rem]" mdw="[40rem]" label="Webhook ID" placeholder="Webhook ID"/>
+          <Input id="webhookid" w="[18rem]" mdw="[40rem]" label="Webhook ID" placeholder="Webhook ID"/>
         </div>
 
         {/* Default Currency and Allowed Currencies */}
