@@ -43,6 +43,19 @@ const VerificationRequest = ({ isOpen, setIsOpen }) => {
           ✕
         </button>
 
+            <div className="flex items-center p-4 bg-purple-100 rounded-lg shadow-sm max-w-md mt-4">
+              <Image
+                src={NIC}
+                alt="User Profile"
+                className="w-12 h-12 rounded-full border border-gray-300"
+              />
+              <div className="ml-4">
+                <h2 className="text-sm font-semibold text-gray-800">Maddison</h2>
+                <p className="text-xs text-gray-500">@Maddison_c21</p>
+                <p className="text-xs text-gray-500">0321765284</p>
+              </div>
+            </div>
+
         {/* Header */}
         <h2 className="text-xl font-semibold text-gray-800 mb-6">
           Verification Request

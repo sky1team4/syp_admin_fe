@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import { ArrowDown, ArrowUp, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -16,8 +16,22 @@ import VerificationRequest from "@/app/admin/dashboard/verificationrequest"
 
 export const columns = [
     {
-        accessorKey: "Users",
-        header: "Username",
+        accessorKey: "username",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Username
+                    {column.getIsSorted() === "asc" ? (
+                        <ArrowUp className="ml-2 h-4 w-4" />
+                    ) : (
+                        <ArrowDown className="ml-2 h-4 w-4" />
+                    )}
+                </Button>
+            )
+        },
         cell: ({ row }) => (
             <div className="flex items-center gap-3">
                 <img
@@ -34,18 +48,60 @@ export const columns = [
     },
     {
         accessorKey: "phone",
-        header: "Phone Number",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Phone Number
+                    {column.getIsSorted() === "asc" ? (
+                        <ArrowUp className="ml-2 h-4 w-4" />
+                    ) : (
+                        <ArrowDown className="ml-2 h-4 w-4" />
+                    )}
+                </Button>
+            )
+        },
     },
     {
         accessorKey: "status",
-        header: "Status",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Status
+                    {column.getIsSorted() === "asc" ? (
+                        <ArrowUp className="ml-2 h-4 w-4" />
+                    ) : (
+                        <ArrowDown className="ml-2 h-4 w-4" />
+                    )}
+                </Button>
+            )
+        },
         cell: ({ row }) => (
             <div className="capitalize">{row.getValue("status")}</div>
         ),
     },
     {
         accessorKey: "subscription",
-        header: "Subscription",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Subscription
+                    {column.getIsSorted() === "asc" ? (
+                        <ArrowUp className="ml-2 h-4 w-4" />
+                    ) : (
+                        <ArrowDown className="ml-2 h-4 w-4" />
+                    )}
+                </Button>
+            )
+        },
     },
     {
         id: "actions",
