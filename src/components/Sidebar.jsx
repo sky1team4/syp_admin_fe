@@ -13,7 +13,7 @@ const Sidebar = () => {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
-    <div className="flex w-64 h-auto z-20">
+    <div className="flex md:w-64 h-auto">
       {/* Hamburger Button */}
       <button
         onClick={toggleSidebar}
@@ -65,10 +65,10 @@ const Sidebar = () => {
               className={`${sidebarItemClass} ${staticTab === "subscription" ? "bg-white text-purple-600" : sidebarClass}`}
             >
               <Image
-                src="/dashbaord_siedebar_icon/subscribe.png"
+                src={"/dashbaord_siedebar_icon/subscribe.png"}
                 width={30}
                 height={30}
-                alt="icon"
+                alt="Subscriptions icon"
               />
               <span className="ml-2 text-[12px]">Subscriptions</span>
             </div>

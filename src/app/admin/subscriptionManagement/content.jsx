@@ -1,4 +1,4 @@
-"use client"
+// "use client"
 // import React from 'react'
 import React, { useState } from 'react'
 
@@ -9,11 +9,19 @@ import DisplayTable from '../../../components/displayTable'
 
 function content() {
 
+<<<<<<< HEAD
   const data = [
     { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "👤" },
     { id: 2, label: "Subscribed User", value: "4,590", bgColor: "bg-red-100", icon: "📊" },
     { id: 3, label: "Unsubscribed User", value: "3,866", bgColor: "bg-yellow-100", icon: "📄" },
     { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "🔑" },
+=======
+    const data = [
+    { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "/4box_1.svg" },
+    { id: 2, label: "Subscribed User", value: "4,590", bgColor: "bg-red-100", icon: "/4box_2.svg" },
+    { id: 3, label: "Unsubscribed User", value: "3,866", bgColor: "bg-yellow-100", icon: "/4box_3.svg" },
+    { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "/4box_4.svg" },
+>>>>>>> 30349c1f880112f8d0d297849fdf424d65e0ae2b
   ];
 
   const tableData = [
@@ -46,6 +54,7 @@ function content() {
     setIsOpen(!isOpen);
   };
 
+<<<<<<< HEAD
   return (
     <>
       <div className='flex flex-col gap-3 w-full h-full'>
@@ -55,6 +64,35 @@ function content() {
       </div>
     </>
   )
+=======
+    return (
+        <div className='flex flex-col w-full max-w-full overflow-x-hidden'>
+            <div className='flex flex-col gap-3'>
+                <UpperSide 
+                    title="Subscription" 
+                    data={data} 
+                    click={toggleSidebar} 
+                    isOpen={isOpen} 
+                    btnText="Add Subscrition" 
+                />
+                <SubscriptionSideBar 
+                    title="Add Subscription" 
+                    dis="lorem ipsum has been the industry's standard." 
+                    subTitle="Subscription" 
+                    click={toggleSidebar} 
+                    isOpen={isOpen} 
+                />
+                <DisplayTable 
+                    title="Subscription" 
+                    array={tableData} 
+                    col1_Title="Subscription" 
+                    col2_Title="Created Date" 
+                    col3_Title="Last Updated" 
+                />
+            </div>
+        </div>
+    )
+>>>>>>> 30349c1f880112f8d0d297849fdf424d65e0ae2b
 }
 
 export default content

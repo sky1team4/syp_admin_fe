@@ -4,7 +4,7 @@ import React from 'react'
 function input(info) {
   return (
     <>
-        <div className='flex flex-col gap-3'>
+        <div className='flex flex-col gap-3 w-full md:w-auto'>
             <label htmlFor={info.id} className="text-sm font-medium text-gray-700">
                 {info.label}
             </label>

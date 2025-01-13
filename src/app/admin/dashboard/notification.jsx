@@ -46,7 +46,7 @@ const Notifications = () => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Notifications</h2>
         <button
-          className="flex gap-2 text-sm text-purple-600 hover:underline flex items-center"
+          className="gap-2 text-sm text-purple-600 hover:underline flex items-center"
           onClick={handleMarkAsRead}
         >
           <Image src="/doubletick.svg" alt="mark" width={20} height={20} />

@@ -17,22 +17,32 @@ const StripePaymentIntegration = () => {
   };
 
   return (
-    <div className="w-full md:h-full p-8 bg-white rounded-lg shadow-lg flex flex-col items-center">
+    <div className="w-auto h-auto md:h-full p-4 md:p-5 bg-white rounded-lg shadow-lg ">
       <h1 className="text-3xl font-bold mb-2 text-gray-800">Stripe Payment Integration</h1>
       <p className="text-gray-500 mb-8">
         Configure your Stripe account settings below.
       </p>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-full flex flex-col items-center justify-center">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-auto flex flex-col items-center justify-center ">
         {/* Publishable Key and Secret Key */}
         <div className="flex gap-6 flex-wrap">
+<<<<<<< HEAD
           <Input id="publishableKey" w="[20rem]" mdw="[40rem]" label="Publishable Key" placeholder="Enter your Publishable Key" />
           <Input id="secretKey" w="[20rem]" mdw="[40rem]" label="Secret Key" placeholder="Enter your Secret Key" />
+=======
+          <Input id="publishableKey" w="full" mdw="[40rem]" label="Publishable Key" placeholder="Enter your Publishable Key"/>
+          <Input id="secretKey" w="full" mdw="[40rem]" label="Secret Key" placeholder="Enter your Secret Key"/>
+>>>>>>> 30349c1f880112f8d0d297849fdf424d65e0ae2b
         </div>
 
         {/* Webhook Signing Secret and URL */}
         <div className="flex gap-6 flex-wrap">
+<<<<<<< HEAD
           <Input id="webhookSigningSecret" w="[20rem]" mdw="[40rem]" label="Webhook Signing Secret" placeholder="Enter your Webhook Signing Secret" />
           <Input id="webhookUrl" w="[20rem]" mdw="[40rem]" label="Webhook URL (Optional)" placeholder="Enter your Webhook URL" />
+=======
+          <Input id="webhookSigningSecret" w="full" mdw="[40rem]" label="Webhook Signing Secret" placeholder="Enter your Webhook Signing Secret"/>
+          <Input id="webhookUrl" w="full" mdw="[40rem]" label="Webhook URL (Optional)" placeholder="Enter your Webhook URL"/>
+>>>>>>> 30349c1f880112f8d0d297849fdf424d65e0ae2b
         </div>
 
         {/* Default Currency and Allowed Currencies */}

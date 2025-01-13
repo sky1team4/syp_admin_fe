@@ -7,21 +7,21 @@ const DashboardTopBar = () => {
       <div className="flex md:items-center lg:item-center">
         <h1 className="text-sm md:text-2xl font-bold text-gray-800">Dashboard</h1>
         <div className="relative ml-4 hidden md:block">
-        <span className="absolute top-1/2 left-3 transform -translate-y-1/2 text-purple-500">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-5 h-5 hidden md:block"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
+          <span className="absolute top-1/2 left-3 transform -translate-y-1/2 text-purple-500">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-5 h-5 hidden md:block"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
           </span>
           <input
             type="text"
@@ -56,12 +56,12 @@ const DashboardTopBar = () => {
               d="M19 9l-7 7-7-7"
             /> */}
           {/* </svg> */}
-          <Image src="/downArrow.svg" width={30} height={30}/>
+          <Image alt="downArrow" src="/downArrow.svg" width={30} height={30}/>
         </div>
 
         {/* Notifications */}
         <div className="relative cursor-pointer">
-        <Image src="/bellicon.png" width={30} height={30}/>
+        <Image alt="bellicon" src="/bellicon.png" width={30} height={30}/>
           <span className="absolute top-0 right-0 w-4 h-4 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
             1
           </span>
@@ -70,14 +70,14 @@ const DashboardTopBar = () => {
         {/* Profile Section */}
         <div className="flex items-center space-x-2 cursor-pointer">
           
-          <Image src="/profile.png" width={40} height={40}/>
+          <Image alt="profile" src="/profile.png" width={40} height={40}/>
 
           <div className="text-gray-700">
             <h4 className="text-sm font-bold">Musfiq</h4>
             <span className="text-xs">Admin</span>
           </div>
           
-          <Image src="/downArrow.svg" width={30} height={30}/>
+          <Image alt="downArrow" src="/downArrow.svg" width={30} height={30}/>
 
         </div>
       </div>

@@ -7,14 +7,14 @@ const Card = ({ title, Icon, link }) => (
     <div className="flex justify-between w-full items-center">
       <div className="text-purple-500 text-[50px]">
         {/* <Icon />  */}
-        <Image src={Icon} alt="Illustration" width={60} height={60} priority className="max-w-full h-auto object-cover"  />
+        <Image src={Icon} alt="Illustration" width={60}  height={60} priority className="max-w-full h-auto object-cover"  />
       </div>
         <Image alt="arrow" src="/setting_icon/arrow.png" width={20} height={20} />
     </div>
     <div className="flex w-full justify-between items-center">
       <h3 className="text-gray-800 font-semibold text-base mt-10">{title}</h3>
       <div className="mt-10 text-purple-500 text-sm flex items-center space-x-2">
-        <Image alt="icon" src="/setting_icon/icon.png" width={20} height={20} />
+        <Image alt="icon" src="/setting_icon/icon.png" width={20} height={20}  />
       </div>
     </div>
   </div>
