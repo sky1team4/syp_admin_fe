@@ -25,24 +25,14 @@ const StripePaymentIntegration = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-auto flex flex-col items-center justify-center ">
         {/* Publishable Key and Secret Key */}
         <div className="flex gap-6 flex-wrap">
-<<<<<<< HEAD
           <Input id="publishableKey" w="[20rem]" mdw="[40rem]" label="Publishable Key" placeholder="Enter your Publishable Key" />
           <Input id="secretKey" w="[20rem]" mdw="[40rem]" label="Secret Key" placeholder="Enter your Secret Key" />
-=======
-          <Input id="publishableKey" w="full" mdw="[40rem]" label="Publishable Key" placeholder="Enter your Publishable Key"/>
-          <Input id="secretKey" w="full" mdw="[40rem]" label="Secret Key" placeholder="Enter your Secret Key"/>
->>>>>>> 30349c1f880112f8d0d297849fdf424d65e0ae2b
         </div>
 
         {/* Webhook Signing Secret and URL */}
         <div className="flex gap-6 flex-wrap">
-<<<<<<< HEAD
-          <Input id="webhookSigningSecret" w="[20rem]" mdw="[40rem]" label="Webhook Signing Secret" placeholder="Enter your Webhook Signing Secret" />
-          <Input id="webhookUrl" w="[20rem]" mdw="[40rem]" label="Webhook URL (Optional)" placeholder="Enter your Webhook URL" />
-=======
           <Input id="webhookSigningSecret" w="full" mdw="[40rem]" label="Webhook Signing Secret" placeholder="Enter your Webhook Signing Secret"/>
           <Input id="webhookUrl" w="full" mdw="[40rem]" label="Webhook URL (Optional)" placeholder="Enter your Webhook URL"/>
->>>>>>> 30349c1f880112f8d0d297849fdf424d65e0ae2b
         </div>
 
         {/* Default Currency and Allowed Currencies */}
