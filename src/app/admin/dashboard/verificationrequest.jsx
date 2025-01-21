@@ -1,5 +1,7 @@
+import Image from "next/image";
 import React from "react";
-import Image from '../../../../public/pp.jpg';
+import NIC from '../../../../public/pp.jpg';
+// Image
 
 const VerificationRequest = ({ isOpen, setIsOpen }) => {
   const documents = [
@@ -21,18 +23,38 @@ const VerificationRequest = ({ isOpen, setIsOpen }) => {
 
   return (
     <div
-    className={`fixed inset-y-0 right-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 transition-transform duration-500 ${
-      isOpen ? 'translate-x-0' : 'translate-x-full'
-    }`}
-  >
-      <div className="bg-white rounded-lg h-screen shadow-lg w-full max-w-xl p-6 relative transform transition-transform duration-500">
-      {/* Close Button */}
-      <button
-        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+      className={`fixed right-0 inset-y-0 flex justify-center items-center z-50 transition-transform duration-500 ${
+        isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+      }`}
+    >
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black bg-opacity-60"
         onClick={() => setIsOpen(false)}
-      >
-        ✕
-      </button>
+      ></div>
+
+      {/* Popup */}
+      <div className="bg-white rounded-lg h-screen shadow-lg w-full max-w-xl p-6 relative transform transition-transform duration-500">
+        {/* Close Button */}
+        <button
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+          onClick={() => setIsOpen(false)}
+        >
+          ✕
+        </button>
+
+            <div className="flex items-center p-4 bg-purple-100 rounded-lg shadow-sm max-w-md mt-4">
+              <Image
+                src={NIC}
+                alt="User Profile"
+                className="w-12 h-12 rounded-full border border-gray-300"
+              />
+              <div className="ml-4">
+                <h2 className="text-sm font-semibold text-gray-800">Maddison</h2>
+                <p className="text-xs text-gray-500">@Maddison_c21</p>
+                <p className="text-xs text-gray-500">0321765284</p>
+              </div>
+            </div>
 
         {/* Header */}
         <h2 className="text-xl font-semibold text-gray-800 mb-6">
@@ -46,10 +68,12 @@ const VerificationRequest = ({ isOpen, setIsOpen }) => {
               key={doc.id}
               className="border rounded-lg shadow-sm bg-gray-50 w-40 h-60 p-2 relative"
             >
-              <img
-                src='/pp.jpg'
+             <Image
+                src={NIC}
                 alt={doc.label}
-                className="rounded-md mb-2"
+                width={350} // Set width
+                height={467} // Set height
+                className="rounded-md mb-2 object-cover" // Use Tailwind classes for additional styling
               />
               <div className="absolute top-2 right-2">
                 <button

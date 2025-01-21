@@ -60,7 +60,7 @@ const Notifications = () => {
           <button
             key={tab}
             className={`px-4 py-2 text-sm font-medium rounded-md ${filter === tab
-                ? "bg-purple-600 text-white"
+                ? "border border-purple-600 text-purple-600"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             onClick={() => handleFilterChange(tab)}

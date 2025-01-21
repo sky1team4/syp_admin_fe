@@ -1,13 +1,14 @@
 // "use client"
 // import React from 'react'
-import React , {useState } from 'react'
+import React, { useState } from 'react'
 
-import UpperSide from '../../components/upperDashbaord'
-import SubscriptionSideBar from '../../components/SubscriptionSideBar'
-import DisplayTable from '../../components/displayTable'
+import UpperSide from '../../../components/upperDashbaord'
+import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
+import DisplayTable from '../../../components/displayTable'
 
 
 function content() {
+
 
     const data = [
     { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "/4box_1.svg" },
@@ -16,7 +17,7 @@ function content() {
     { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "/4box_4.svg" },
   ];
 
-const tableData = [
+  const tableData = [
     {
       title: "Monthly Subscription",
       createdDate: "26/02/2024",
@@ -39,12 +40,11 @@ const tableData = [
     },
   ];
 
-
   const [isOpen, setIsOpen] = useState(false);
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
 
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
-    };
 
     return (
         <div className='flex flex-col w-full max-w-full overflow-x-hidden'>
@@ -73,6 +73,7 @@ const tableData = [
             </div>
         </div>
     )
+
 }
 
 export default content

@@ -3,10 +3,10 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 // UI Components
-import Input from '../../../components/ui/input'
-import Button from '../../../components/ui/button'
-import Dropdown from '../../../components/ui/dropdown'
-import CustomCheckbox from '@/app/components/ui/customCheckbox';
+import Input from '../../../../components/cui/input'
+import Button from '../../../../components/cui/button'
+import Dropdown from '../../../../components/cui/dropdown'
+import CustomCheckbox from '@/components/cui/customCheckbox';
 
 const currencies = ['USD', 'EUR', 'GBP', 'AUD', 'INR'];
 
@@ -39,9 +39,9 @@ const PaypalPaymentIntegration = () => {
 
         {/* Default Currency and Allowed Currencies */}
         <div className="flex gap-6 flex-wrap">
-        {/* <Input id="webhookSigningSecret" label="Webhook Signing Secret" placeholder="Enter your Webhook Signing Secret"/> */}
-          <Dropdown id="merchantAccountId" label="Merchant Account ID (Optional)" array={currencies} seleted="Select Below"/>
-          <Dropdown id="defaultCurrency" label="Default Currency" array={currencies} seleted="Select Below"/>
+          {/* <Input id="webhookSigningSecret" label="Webhook Signing Secret" placeholder="Enter your Webhook Signing Secret"/> */}
+          <Dropdown id="merchantAccountId" label="Merchant Account ID (Optional)" array={currencies} seleted="Select Below" />
+          <Dropdown id="defaultCurrency" label="Default Currency" array={currencies} seleted="Select Below" />
         </div>
 
         {/* Enable Test Mode */}
@@ -56,7 +56,7 @@ const PaypalPaymentIntegration = () => {
             type="checkbox"
             className="h-5 w-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
           /> */}
-          
+
         </div>
 
         {/* Save Button */}

@@ -2,26 +2,26 @@
 import Image from "next/image";
 import React from "react";
 // import Card from "../../admin/setting/Card";
-import Card from "../../components/cardmanagement";
+import Card from "../../../components/cardmanagement";
 
 const SettingContentArea = () => {
   const cards = [
     {
       title: "Employ Status",
-      Icon:"/workexperience/employment.png",
+      Icon: "/workexperience/employment.png",
       // Icon: () => <Image src="/workexperience/employment.png" width={50} height={50} alt="Relationship Icon" />,
       link: "#",
     },
     {
       title: "Job Title",
-      Icon:"/workexperience/employment.png",
-      
+      Icon: "/workexperience/employment.png",
+
       // Icon: () => <Image src="/workexperience/jobtitle.png" width={50} height={50} alt="Education Icon" />,
       link: "#",
     },
     {
       title: "Company Names",
-      Icon:"/workexperience/companyname.png",
+      Icon: "/workexperience/companyname.png",
 
       // Icon: () => <Image src="/workexperience/companyname.png" width={50} height={50} alt="Relationship Icon" />,
       link: "#",

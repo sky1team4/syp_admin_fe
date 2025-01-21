@@ -1,8 +1,8 @@
 "use client"
 
 import React from 'react'
-import Header from '../../../components/Header'
-import SideBar from '../../../components/Sidebar'
+import Header from '../../../../components/Header'
+import SideBar from '../../../../components/Sidebar'
 import Content from '../../work-experience/page'
 
 

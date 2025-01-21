@@ -2,33 +2,33 @@
 import Image from "next/image";
 import React from "react";
 // import Card from "../../components/Card";
-import Card from "../../components/cardmanagement";
+import Card from "../../../components/cardmanagement";
 
 const SettingContentArea = () => {
   const cards = [
     {
       title: "Interest Management",
-      Icon:"/profilemanagement/interestedmanagement.png",
+      Icon: "/profilemanagement/interestedmanagement.png",
       // Icon: () => <Image src="/profilemanagement/interestedmanagement.png" width={50} height={50} alt="Relationship Icon" />,
       link: "#",
     },
     {
       title: "Skills Category List",
-      Icon:"/profilemanagement/skillcategory.png",
+      Icon: "/profilemanagement/skillcategory.png",
 
       // Icon: () => <Image src="/profilemanagement/skillcategory.png" width={50} height={50} alt="Education Icon" />,
       link: "#",
     },
     {
       title: "Skills Subcategory List",
-      Icon:"/profilemanagement/skillcategory.png",
+      Icon: "/profilemanagement/skillcategory.png",
 
       // Icon: () => <Image src="/profilemanagement/skillssubcategory.png" width={50} height={50} alt="Relationship Icon" />,
       link: "#",
     },
     {
       title: "Work Experience",
-      Icon:"/profilemanagement/skillcategory.png",
+      Icon: "/profilemanagement/skillcategory.png",
 
       // Icon: () => <Image src="/profilemanagement/workexperience.png" width={50} height={50} alt="Education Icon" />,
       link: "/admin/work-experience",
