@@ -4,9 +4,9 @@ import Router from "./routes/test";
 
 export default function Home() {
   return (
-    <div className="">
-      <Router />
-      {/* <Router/> */}
+    <div className="w-screen h-screen">
+      {/* <Router /> */}
+      <Login/>
     </div>
   );
 }
