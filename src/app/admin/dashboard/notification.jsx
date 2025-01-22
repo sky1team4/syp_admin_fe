@@ -41,9 +41,9 @@ const Notifications = () => {
   };
 
   return (
-    <div className="p-2 sm:p-6 bg-white shadow-md rounded-lg w-full max-w-xs sm:max-w-sm overflow-x-auto">
+    <div className="hidden lg:block p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto">
       {/* Header */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center flex-wrap mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Notifications</h2>
         <button
           className="gap-2 text-sm text-purple-600 hover:underline flex items-center"
@@ -76,7 +76,7 @@ const Notifications = () => {
           filteredNotifications.map((notification, index) => (
             <li
               key={index}
-              className={`flex items-start sm:items-center space-x-4 p-2 border-b last:border-none ${!notification.isRead ? "bg-gray-50" : ""
+              className={`flex flex-wrap items-start sm:items-center space-x-4 p-2 border-b last:border-none ${!notification.isRead ? "" : ""
                 }`}
             >
               <img
@@ -84,19 +84,19 @@ const Notifications = () => {
                 src={notification.avatar}
                 alt={notification.name}
               />
-              <div className="flex-1">
+              <div className="2xl:flex-1 flex flex-col w-full">  
                 <p className="text-sm font-medium text-gray-800">
                   {notification.name}{" "}
                   <span className="font-normal">{notification.message}</span>
                 </p>
                 <p className="text-xs text-gray-500">{notification.time}</p>
               </div>
-              <button
+              {/* <button
                 className="text-xs text-blue-500 hover:underline"
                 onClick={() => toggleArchive(index)}
               >
                 {notification.isArchived ? "Unarchive" : "Archive"}
-              </button>
+              </button> */}
             </li>
           ))
         ) : (

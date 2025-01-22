@@ -19,7 +19,7 @@ const TodaysSummary = (info) => {
         {info.data.map((item) => (
           <div
             key={item.id}
-            className={`w-[8.5rem] md:w-[12rem] flex gap-2 flex-col items-start justify-start p-4 ${item.bgColor} rounded-2xl cursor-pointer`}
+            className={`w-full md:w-[8.5rem] lg:w-[12rem] flex gap-2 flex-col items-start justify-start p-4 ${item.bgColor} rounded-2xl cursor-pointer`}
           >
             <Image src={item.icon} width={40} height={40} alt="icon" />
             <p className=" text-3xl font-bold text-gray-800">{item.value}</p>

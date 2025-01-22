@@ -4,10 +4,10 @@ const DashboardTopBar = () => {
   return (
     <div className="flex items-center justify-between px-8 py-6 bg-white flex-col md:flex-row">
       {/* Left Section: Dashboard Title and Search Bar */}
-      <div className="flex md:items-center lg:item-center">
-        <h1 className="text-sm md:text-2xl font-bold text-gray-800">Dashboard</h1>
-        <div className="relative ml-4 hidden md:block">
-          <span className="absolute top-1/2 left-3 transform -translate-y-1/2 text-purple-500">
+      <div className="flex md:items-center lg:items-center">
+        <h1 className="hidden lg:block text-sm md:text-2xl font-bold text-gray-800">Dashboard</h1>
+        <div className="relative ml-4 hidden lg:block">
+          <span className="absolute top-1/2 left-3 lg:left-5 transform -translate-y-1/2 text-purple-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -26,14 +26,14 @@ const DashboardTopBar = () => {
           <input
             type="text"
             placeholder="     Search here..."
-            className="hidden md:block w-[25rem] px-10 py-3 text-gray-700 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className=" w-[25rem] 2xl:w-[33rem] px-10 py-3 text-gray-700 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           
         </div>
       </div>
 
       {/* Right Section: Language Dropdown, Notifications, Profile */}
-      <div className="flex items-center space-x-6">
+      <div className="pl-6 md:pl-0 flex items-center space-x-2 md:space-x-6">
         {/* Language Dropdown */}
         <div className="flex items-center space-x-2 cursor-pointer">
           <img
