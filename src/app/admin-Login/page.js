@@ -38,6 +38,8 @@ export default function Login() {
       
       if (response) {
         // Successful login
+        console.log(response);
+        
         router.push('/admin/dashboard');
       } else {
         setError('Login failed - please try again');

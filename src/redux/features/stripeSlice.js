@@ -2,28 +2,27 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export const saveStripeConfig = createAsyncThunk(
   'stripe/saveConfig',
-  async (data) => {
-    const response = await fetch('/stripe', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        publish_key: data.publishableKey,
-        secret_key: data.secretKey,
-        webhook_signing_secret: data.webhookSigningSecret,
-        webhook_url: data.webhookUrl,
-        default_currency: data.defaultCurrency,
-        allowed_currency: data.allowedCurrencies.join(','),
-        text_mode: data.testMode ? 'test' : 'live'
-      }),
-    });
+  async (data, { rejectWithValue, getState }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:3000/stripe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
 
-    if (!response.ok) {
-      throw new Error('Failed to save Stripe configuration');
+      if (!response.ok) {
+        const errorData = await response.json();
+        return rejectWithValue(errorData.message || 'Failed to save configuration');
+      }
+
+      return await response.json();
+    } catch (error) {
+      return rejectWithValue(error.message || 'Network error occurred');
     }
-
-    return await response.json();
   }
 );
 
@@ -32,8 +31,13 @@ const stripeSlice = createSlice({
   initialState: {
     isLoading: false,
     error: null,
+    config: null,
   },
-  reducers: {},
+  reducers: {
+    clearError: (state) => {
+      state.error = null;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(saveStripeConfig.pending, (state) => {
@@ -50,4 +54,5 @@ const stripeSlice = createSlice({
   },
 });
 
+export const { clearError } = stripeSlice.actions;
 export default stripeSlice.reducer; 
