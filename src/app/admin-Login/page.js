@@ -5,6 +5,53 @@ import { useState } from "react";
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
+  // Add new state for form data
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [error, setError] = useState('');
+
+  // Add handle input change function
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [id]: value
+    }));
+  };
+
+  // Add handle submit function
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    
+    try {
+      const response = await fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+      console.log(data);
+      // Handle successful login
+      // Store token in localStorage or other state management solution
+      localStorage.setItem('token', data.access_token);
+      // Redirect to dashboard or home page
+      window.location.href = '/admin/dashboard'; // Or use Next.js router
+      
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
     <>    
       <div className="flex flex-col w-full h-full bg-[#F5F5F5] text-white lg:overflow-hidden">
@@ -35,7 +82,15 @@ export default function Login() {
           <div className="md:w-1/2 flex flex-col justify-center items-center p-8 bg-[#F5F5F5] text-black">
             <div className=" w-full 2xl:w-[40rem] 2xl:h-[30rem] bg-white p-8 rounded-lg">
               <h1 className="text-3xl font-bold mb-6 2xl:mt-5 text-center">Sign In</h1>
-              <form>
+              
+              {/* Add error message display */}
+              {error && (
+                <div className="mb-4 text-red-500 text-center">
+                  {error}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit}>
                 <div className="mb-4 2xl:mb-6">
                   <label
                     className="block text-sm font-medium mb-1 2xl:mb-3"
@@ -46,6 +101,8 @@ export default function Login() {
                   <input
                     type="email"
                     id="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
                     placeholder="Enter your Email"
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
@@ -61,6 +118,8 @@ export default function Login() {
                     <input
                       type={showPassword ? "text" : "password"}
                       id="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
                       placeholder="Enter your Password"
                       className="w-full px-4 pr-10 lg:pr-0 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
