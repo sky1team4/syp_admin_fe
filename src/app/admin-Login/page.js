@@ -1,8 +1,14 @@
 "use client"
 import Image from "next/image";
 import { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../redux/features/authSlice';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { loading, error: reduxError } = useSelector((state) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
 
   // Add new state for form data
@@ -21,34 +27,17 @@ export default function Login() {
     }));
   };
 
-  // Add handle submit function
+  // Update handle submit function
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
-      console.log(data);
+      const resultAction = await dispatch(loginUser(formData)).unwrap();
       // Handle successful login
-      // Store token in localStorage or other state management solution
-      localStorage.setItem('token', data.access_token);
-      // Redirect to dashboard or home page
-      window.location.href = '/admin/dashboard'; // Or use Next.js router
-      
+      router.push('/admin/dashboard');
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Login failed');
     }
   };
 
@@ -83,10 +72,10 @@ export default function Login() {
             <div className=" w-full 2xl:w-[40rem] 2xl:h-[30rem] bg-white p-8 rounded-lg">
               <h1 className="text-3xl font-bold mb-6 2xl:mt-5 text-center">Sign In</h1>
               
-              {/* Add error message display */}
-              {error && (
+              {/* Update the error display to show either local or Redux error */}
+              {(error || reduxError) && (
                 <div className="mb-4 text-red-500 text-center">
-                  {error}
+                  {error || reduxError}
                 </div>
               )}
 
@@ -139,11 +128,13 @@ export default function Login() {
                     </button>
                   </div>
                 </div>
+                {/* Add loading state to the submit button */}
                 <button
                   type="submit"
-                  className="w-full py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none"
+                  disabled={loading}
+                  className="w-full py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none disabled:bg-purple-400"
                 >
-                  Sign In
+                  {loading ? 'Signing in...' : 'Sign In'}
                 </button>
               </form>
               <p className="mt-4 2xl:mt-10 text-center">
