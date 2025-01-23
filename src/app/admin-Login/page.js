@@ -33,11 +33,22 @@ export default function Login() {
     setError('');
     
     try {
-      const resultAction = await dispatch(loginUser(formData)).unwrap();
-      // Handle successful login
-      router.push('/admin/dashboard');
+      const response = await dispatch(loginUser(formData)).unwrap();
+      console.log('Login response:', response); // Debug log
+      
+      if (response) {
+        // Successful login
+        router.push('/admin/dashboard');
+      } else {
+        setError('Login failed - please try again');
+      }
     } catch (err) {
-      setError(err.message || 'Login failed');
+      console.error('Login error:', err); // Debug log
+      if (err.message.includes('SSL_PROTOCOL_ERROR')) {
+        setError('Connection error - please check the server is running and using the correct protocol');
+      } else {
+        setError(err?.message || 'An error occurred during login');
+      }
     }
   };
 
