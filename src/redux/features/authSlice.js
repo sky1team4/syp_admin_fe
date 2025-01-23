@@ -1,19 +1,30 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = process.env.BASE_URL;
+// const API_URL = process.env.BASE_URL;
+const API_URL = "https://localhost:3000";
 
 export const loginUser = createAsyncThunk(
-  'users/login',
-  async (credentials, { rejectWithValue }) => {
+  'auth/login',
+  async (credentials) => {
     try {
-      console.log('Attempting to login with credentials:', credentials);
-      const response = await axios.post(`${API_URL}/users/login`, credentials);
-      console.log('Login successful:', response.data);
-      return response.data;
+      const response = await fetch('http://localhost:3000/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Login failed');
+      }
+
+      const data = await response.json();
+      return data;
     } catch (error) {
-      console.error('Login error:', error.response ? error.response.data : error.message);
-      return rejectWithValue(error.response ? error.response.data : { message: 'Network error' });
+      throw error;
     }
   }
 );
