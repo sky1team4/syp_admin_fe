@@ -7,10 +7,13 @@ export const loginUser = createAsyncThunk(
   'users/login',
   async (credentials, { rejectWithValue }) => {
     try {
+      console.log('Attempting to login with credentials:', credentials);
       const response = await axios.post(`${API_URL}/users/login`, credentials);
+      console.log('Login successful:', response.data);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      console.error('Login error:', error.response ? error.response.data : error.message);
+      return rejectWithValue(error.response ? error.response.data : { message: 'Network error' });
     }
   }
 );
