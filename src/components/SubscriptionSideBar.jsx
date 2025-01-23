@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Input from './cui/input';
 
-function SubscriptionSideBar({ isOpen, onClose, mode = 'create', data = null, onSave }) {
+function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSave }) {
     const [subscription, setSubscription] = useState('');
 
     useEffect(() => {
@@ -15,7 +15,7 @@ function SubscriptionSideBar({ isOpen, onClose, mode = 'create', data = null, on
 
     const handleSave = () => {
         onSave?.({ subscription, id: data?.id });
-        onClose();
+        click();
     };
 
     return (
@@ -23,7 +23,7 @@ function SubscriptionSideBar({ isOpen, onClose, mode = 'create', data = null, on
             {/* Overlay */}
             {isOpen && (
                 <div
-                    onClick={onClose}
+                    onClick={() => click()}
                     className="fixed inset-0 bg-black opacity-50 z-40"
                 ></div>
             )}
@@ -40,7 +40,7 @@ function SubscriptionSideBar({ isOpen, onClose, mode = 'create', data = null, on
                             {mode === 'edit' ? 'Edit Subscription' : 'New Subscription'}
                         </h2>
                         <button
-                            onClick={onClose}
+                            onClick={click}
                             className="text-gray-400 hover:text-gray-600"
                         >
                             ✖
@@ -73,7 +73,7 @@ function SubscriptionSideBar({ isOpen, onClose, mode = 'create', data = null, on
                 {/* Footer */}
                 <div className="absolute bottom-0 left-0 w-full p-4">
                     <button
-                        onClick={handleSave}
+                        onClick={() => handleSave()}
                         className="w-full bg-purple-600 text-white py-2 rounded-md"
                     >
                         {mode === 'edit' ? 'Update' : 'Save'}

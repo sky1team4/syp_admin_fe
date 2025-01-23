@@ -23,7 +23,7 @@ const Sidebar = () => {
           src="/dashbaord_siedebar_icon/menu.png"
           width={25}
           height={25}
-        // alt=""
+          alt="menu"
         />
       </button>
 

@@ -65,7 +65,7 @@ export function DataTable({ columns, data }) {
           Users Information
         </h2>
         <button className="bg-gray-100 rounded-full">
-          <Image src="/More.svg" width={45} height={45} />
+          <Image alt="more" src="/More.svg" width={45} height={45} />
         </button>
       </div>
       {/* Tabs */}
