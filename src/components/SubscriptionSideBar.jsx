@@ -1,37 +1,104 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
+import { saveSubscription } from '../redux/features/subscriptionSlice';
 import Input from './cui/input';
 
-function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSave }) {
-    const [subscription, setSubscription] = useState('');
+const FORM_VALIDATION = {
+  name: {
+    required: 'Subscription name is required'
+  },
+  price: {
+    required: 'Price is required',
+    pattern: {
+      value: /^\d+(\.\d{1,2})?$/,
+      message: 'Please enter a valid price'
+    }
+  }
+};
+
+function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
+    const dispatch = useDispatch();
+    const { isLoading } = useSelector((state) => state.subscription);
+    
+    const [formData, setFormData] = useState({
+        name: '',
+        price: '',
+        status: 'ACTIVE'
+    });
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        // Pre-fill the input when editing
         if (mode === 'edit' && data) {
-            setSubscription(data.title || '');
+            setFormData({
+                name: data.name || '',
+                price: data.price || '',
+                status: data.status || 'ACTIVE'
+            });
         } else {
-            setSubscription('');
+            setFormData({
+                name: '',
+                price: '',
+                status: 'ACTIVE'
+            });
         }
     }, [mode, data]);
 
-    const handleSave = () => {
-        onSave?.({ subscription, id: data?.id });
-        click();
+    const validateForm = () => {
+        const newErrors = {};
+        
+        if (!formData.name) {
+            newErrors.name = FORM_VALIDATION.name.required;
+        }
+        
+        if (!formData.price) {
+            newErrors.price = FORM_VALIDATION.price.required;
+        } else if (!FORM_VALIDATION.price.pattern.value.test(formData.price)) {
+            newErrors.price = FORM_VALIDATION.price.pattern.message;
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSave = async () => {
+        if (!validateForm()) {
+            toast.error('Please fill in all required fields correctly');
+            return;
+        }
+
+        try {
+            const subscriptionData = {
+                name: formData.name,
+                status: formData.status,
+                price: parseFloat(formData.price)
+            };
+
+            await dispatch(saveSubscription(subscriptionData)).unwrap();
+            toast.success(`Subscription ${mode === 'edit' ? 'updated' : 'created'} successfully`);
+            click();
+        } catch (err) {
+            toast.error(err?.message || 'Failed to save subscription');
+        }
     };
 
     return (
         <>
+            <Toaster position="top-right" />
             {/* Overlay */}
             {isOpen && (
                 <div
-                    onClick={() => click()}
+                    onClick={click}
                     className="fixed inset-0 bg-black opacity-50 z-40"
                 ></div>
             )}
 
             {/* Sidebar */}
             <div
-                className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform ${isOpen ? "translate-x-0" : "translate-x-full"
-                    } transition-transform duration-300 z-50`}
+                className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform ${
+                    isOpen ? "translate-x-0" : "translate-x-full"
+                } transition-transform duration-300 z-50`}
             >
                 <div className="p-6">
                     {/* Header */}
@@ -52,20 +119,44 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSa
                         {mode === 'edit' ? 'Update your subscription details' : 'Create a new subscription'}
                     </p>
 
-                    {/* Subscription Input */}
-                    <div>
-                        <h3 className="text-sm font-medium text-gray-700 mb-2">
-                            Subscription Details
-                        </h3>
-                        <div className="flex flex-col gap-4">
-                            <Input
-                                id="subscription-input"
-                                value={subscription}
-                                onChange={(e) => setSubscription(e.target.value)}
-                                w="full"
-                                mdw="full"
-                                placeholder="Monthly Subscription"
-                            />
+                    {/* Subscription Inputs */}
+                    <div className="flex flex-col gap-4">
+                        <Input
+                            id="name"
+                            value={formData.name}
+                            onChange={(e) => setFormData({...formData, name: e.target.value})}
+                            w="full"
+                            mdw="full"
+                            label="Subscription Name *"
+                            placeholder="Enter subscription name"
+                            error={errors.name}
+                        />
+                        
+                        <Input
+                            id="price"
+                            value={formData.price}
+                            onChange={(e) => setFormData({...formData, price: e.target.value})}
+                            w="full"
+                            mdw="full"
+                            label="Price *"
+                            placeholder="Enter price"
+                            type="number"
+                            step="0.01"
+                            error={errors.price}
+                        />
+
+                        <div className="flex items-center gap-2">
+                            <label className="text-sm font-medium text-gray-700">
+                                Status:
+                            </label>
+                            <select
+                                value={formData.status}
+                                onChange={(e) => setFormData({...formData, status: e.target.value})}
+                                className="border border-gray-300 rounded-md p-2"
+                            >
+                                <option value="ACTIVE">Active</option>
+                                <option value="INACTIVE">Inactive</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -73,10 +164,11 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSa
                 {/* Footer */}
                 <div className="absolute bottom-0 left-0 w-full p-4">
                     <button
-                        onClick={() => handleSave()}
-                        className="w-full bg-purple-600 text-white py-2 rounded-md"
+                        onClick={handleSave}
+                        disabled={isLoading}
+                        className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 disabled:opacity-50"
                     >
-                        {mode === 'edit' ? 'Update' : 'Save'}
+                        {isLoading ? 'Saving...' : (mode === 'edit' ? 'Update' : 'Save')}
                     </button>
                 </div>
             </div>

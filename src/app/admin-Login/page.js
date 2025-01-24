@@ -37,6 +37,9 @@ export default function Login() {
       console.log('Login response:', response); // Debug log
 
       if (response) {
+        // Successful login
+        console.log(response);
+        
         router.push('/admin/dashboard');
       } else {
         setError('Login failed - please try again');

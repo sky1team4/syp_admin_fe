@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-export const saveStripeConfig = createAsyncThunk(
-  'stripe/saveConfig',
-  async (data, { rejectWithValue, getState }) => {
+export const saveBankConfig = createAsyncThunk(
+  'bank/saveConfig',
+  async (data, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/stripe', {
+      const response = await fetch('http://localhost:3000/bank', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,8 +26,8 @@ export const saveStripeConfig = createAsyncThunk(
   }
 );
 
-const stripeSlice = createSlice({
-  name: 'stripe',
+const bankSlice = createSlice({
+  name: 'bank',
   initialState: {
     isLoading: false,
     error: null,
@@ -40,19 +40,19 @@ const stripeSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(saveStripeConfig.pending, (state) => {
+      .addCase(saveBankConfig.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(saveStripeConfig.fulfilled, (state) => {
+      .addCase(saveBankConfig.fulfilled, (state) => {
         state.isLoading = false;
       })
-      .addCase(saveStripeConfig.rejected, (state, action) => {
+      .addCase(saveBankConfig.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message;
+        state.error = action.payload;
       });
   },
 });
 
-export const { clearError } = stripeSlice.actions;
-export default stripeSlice.reducer; 
+export const { clearError } = bankSlice.actions;
+export default bankSlice.reducer; 

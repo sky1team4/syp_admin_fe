@@ -11,48 +11,96 @@ import Button from '../../../../components/cui/button'
 import Dropdown from '../../../../components/cui/dropdown'
 import CustomCheckbox from '@/components/cui/customCheckbox';
 
-const currencies = ['USD', 'EUR', 'GBP', 'AUD', 'INR'];
+// Move constants outside component
+const CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD', 'INR'];
+
+const FORM_VALIDATION = {
+  publishableKey: {
+    required: 'Publishable Key is required',
+    pattern: {
+      value: /^pk_/,
+      message: 'Invalid publishable key format'
+    }
+  },
+  secretKey: {
+    required: 'Secret Key is required',
+    pattern: {
+      value: /^sk_/,
+      message: 'Invalid secret key format'
+    }
+  },
+  webhookSigningSecret: {
+    required: 'Webhook Signing Secret is required'
+  },
+  defaultCurrency: {
+    required: 'Default Currency is required'
+  },
+  allowedCurrencies: {
+    required: 'Allowed Currencies is required'
+  }
+};
 
 const StripePaymentIntegration = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.stripe);
+  const { isLoading, error } = useSelector((state) => state.stripe);
 
   const onSubmit = async (data) => {
     try {
-      await dispatch(saveStripeConfig(data)).unwrap();
+      const transformedData = {
+        publish_key: data.publishableKey,
+        secret_key: data.secretKey,
+        webhook_signing_secret: data.webhookSigningSecret,
+        webhook_url: data.webhookUrl || '',
+        default_currency: data.defaultCurrency,
+        allowed_currency: Array.isArray(data.allowedCurrencies) 
+          ? data.allowedCurrencies.join(',')
+          : data.allowedCurrencies,
+        text_mode: data.testMode ? 'test' : 'live'
+      };
+
+      console.log(transformedData);
+      
+      await dispatch(saveStripeConfig(transformedData)).unwrap();
       toast.success('Stripe configuration saved successfully');
-    } catch (error) {
-      console.error('Error saving Stripe configuration:', error);
-      toast.error('Failed to save Stripe configuration');
+    } catch (err) {
+      toast.error(err?.message || 'Failed to save Stripe configuration');
     }
   };
 
+  const onError = (errors) => {
+    toast.error('Please fill in all required fields correctly');
+  };
+
   return (
-    <div className="w-auto h-auto md:h-full p-4 md:p-5 bg-white rounded-lg shadow-lg ">
+    <div className="w-auto h-auto md:h-full p-4 md:p-5 bg-white rounded-lg shadow-lg">
       <h1 className="text-3xl font-bold mb-2 text-gray-800">Stripe Payment Integration</h1>
       <p className="text-gray-500 mb-8">
         Configure your Stripe account settings below.
       </p>
       <Toaster position="top-right" />
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-auto flex flex-col items-center justify-center ">
-        {/* Publishable Key and Secret Key */}
+      <form 
+        onSubmit={handleSubmit(onSubmit, onError)} 
+        className="space-y-8 w-auto flex flex-col items-center justify-center"
+      >
         <div className="flex gap-6 flex-wrap">
           <Input 
             id="publishableKey" 
-            {...register('publishableKey', { required: true })}
+            {...register('publishableKey', FORM_VALIDATION.publishableKey)}
             w="[20rem]" 
             mdw="[40rem]" 
-            label="Publishable Key" 
-            placeholder="Enter your Publishable Key" 
+            label="Publishable Key *" 
+            placeholder="Enter your Publishable Key"
+            error={errors.publishableKey?.message}
           />
           <Input 
             id="secretKey" 
-            {...register('secretKey', { required: true })}
+            {...register('secretKey', FORM_VALIDATION.secretKey)}
             w="[20rem]" 
             mdw="[40rem]" 
-            label="Secret Key" 
-            placeholder="Enter your Secret Key" 
+            label="Secret Key *" 
+            placeholder="Enter your Secret Key"
+            error={errors.secretKey?.message}
           />
         </div>
 
@@ -60,11 +108,12 @@ const StripePaymentIntegration = () => {
         <div className="flex gap-6 flex-wrap">
           <Input 
             id="webhookSigningSecret" 
-            {...register('webhookSigningSecret', { required: true })}
+            {...register('webhookSigningSecret', FORM_VALIDATION.webhookSigningSecret)}
             w="full" 
             mdw="[40rem]" 
-            label="Webhook Signing Secret" 
+            label="Webhook Signing Secret *" 
             placeholder="Enter your Webhook Signing Secret"
+            error={errors.webhookSigningSecret?.message}
           />
           <Input 
             id="webhookUrl" 
@@ -80,17 +129,19 @@ const StripePaymentIntegration = () => {
         <div className="flex gap-6 flex-wrap">
           <Dropdown 
             id="defaultCurrency" 
-            {...register('defaultCurrency', { required: true })}
-            label="Default Currency" 
-            array={currencies} 
-            seleted="Select Below" 
+            register={register('defaultCurrency', FORM_VALIDATION.defaultCurrency)}
+            label="Default Currency *" 
+            array={CURRENCIES} 
+            selected="Select Below"
+            error={errors.defaultCurrency?.message}
           />
           <Dropdown 
             id="allowedCurrencies" 
-            {...register('allowedCurrencies', { required: true })}
-            label="Allowed Currencies" 
-            array={currencies} 
-            seleted="Select Below" 
+            register={register('allowedCurrencies', FORM_VALIDATION.allowedCurrencies)}
+            label="Allowed Currencies *" 
+            array={CURRENCIES} 
+            selected="Select Below"
+            error={errors.allowedCurrencies?.message}
           />
         </div>
 
@@ -99,18 +150,21 @@ const StripePaymentIntegration = () => {
           <label htmlFor="testMode" className="text-sm font-medium text-gray-700">
             Enable Test Mode
           </label>
-          <CustomCheckbox {...register('testMode')} />
+          <CustomCheckbox 
+            id="testMode"
+            {...register('testMode')}
+            defaultChecked={false}
+          />
         </div>
 
-        {/* Save Button */}
-        <div className=''>
-          <Button 
-            w="full" 
-            text={isLoading ? "Saving..." : "Save Changes"} 
-            type="submit" 
-            disabled={isLoading}
-            click={() => handleSubmit(onSubmit)}
-          />
+        <div className='w-full max-w-[40rem]'>
+          <button
+              type="submit"
+              className="w-full h-auto bg-purple-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50"
+              disabled={isLoading}
+            >
+              {isLoading ? "Saving..." : "Save Changes"}
+          </button>
         </div>
       </form>
     </div>

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-export const saveStripeConfig = createAsyncThunk(
-  'stripe/saveConfig',
-  async (data, { rejectWithValue, getState }) => {
+export const savePaypalConfig = createAsyncThunk(
+  'paypal/saveConfig',
+  async (data, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/stripe', {
+      const response = await fetch('http://localhost:3000/paypal', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,8 +26,8 @@ export const saveStripeConfig = createAsyncThunk(
   }
 );
 
-const stripeSlice = createSlice({
-  name: 'stripe',
+const paypalSlice = createSlice({
+  name: 'paypal',
   initialState: {
     isLoading: false,
     error: null,
@@ -40,19 +40,19 @@ const stripeSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(saveStripeConfig.pending, (state) => {
+      .addCase(savePaypalConfig.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(saveStripeConfig.fulfilled, (state) => {
+      .addCase(savePaypalConfig.fulfilled, (state) => {
         state.isLoading = false;
       })
-      .addCase(saveStripeConfig.rejected, (state, action) => {
+      .addCase(savePaypalConfig.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message;
+        state.error = action.payload;
       });
   },
 });
 
-export const { clearError } = stripeSlice.actions;
-export default stripeSlice.reducer; 
+export const { clearError } = paypalSlice.actions;
+export default paypalSlice.reducer; 
