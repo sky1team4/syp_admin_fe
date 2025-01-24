@@ -31,13 +31,12 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     try {
       const response = await dispatch(loginUser(formData)).unwrap();
       console.log('Login response:', response); // Debug log
-      
+
       if (response) {
-        // Successful login
         router.push('/admin/dashboard');
       } else {
         setError('Login failed - please try again');
@@ -53,7 +52,7 @@ export default function Login() {
   };
 
   return (
-    <>    
+    <>
       <div className="flex flex-col w-full h-full bg-[#F5F5F5] text-white lg:overflow-hidden">
         {/* Navigation Bar */}
         <nav className="bg-white text-black px-6 py-4 z-40">
@@ -76,13 +75,13 @@ export default function Login() {
             </div> */}
           </div>
         </nav>
-        
+
         <div className="w-full h-full px-0 md:px-20 flex gap-10 justify-center items-center">
           {/* Left Section - Form */}
           <div className="md:w-1/2 flex flex-col justify-center items-center p-8 bg-[#F5F5F5] text-black">
             <div className=" w-full 2xl:w-[40rem] 2xl:h-[30rem] bg-white p-8 rounded-lg">
               <h1 className="text-3xl font-bold mb-6 2xl:mt-5 text-center">Sign In</h1>
-              
+
               {/* Update the error display to show either local or Redux error */}
               {(error || reduxError) && (
                 <div className="mb-4 text-red-500 text-center">
