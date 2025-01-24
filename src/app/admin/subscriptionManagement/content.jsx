@@ -53,13 +53,11 @@ function content() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this subscription?')) {
-      try {
-        await dispatch(deleteSubscription(id)).unwrap();
-        toast.success('Subscription deleted successfully');
-      } catch (err) {
-        toast.error(err?.message || 'Failed to delete subscription');
-      }
+    try {
+      await dispatch(deleteSubscription(id)).unwrap();
+      toast.success('Subscription deleted successfully');
+    } catch (err) {
+      toast.error(err?.message || 'Failed to delete subscription');
     }
   };
 

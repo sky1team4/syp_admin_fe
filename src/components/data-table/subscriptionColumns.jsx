@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useState } from "react"
 import SubscriptionSideBar from "@/components/SubscriptionSideBar"
+import ConfirmationDialog from "@/components/ConfirmationDialog"
 
 export const columns = [
     {
@@ -66,9 +67,14 @@ export const columns = [
         header: "Actions",
         cell: ({ row }) => {
             const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+            const [isConfirmOpen, setIsConfirmOpen] = useState(false)
             const subscription = row.original;
 
             const handleDelete = () => {
+                setIsConfirmOpen(true);
+            };
+
+            const handleConfirmDelete = () => {
                 if (typeof subscription.onDelete === 'function') {
                     subscription.onDelete(subscription.id);
                 } else {
@@ -113,6 +119,14 @@ export const columns = [
                             price: subscription.price,
                             status: subscription.status
                         }}
+                    />
+
+                    <ConfirmationDialog 
+                        isOpen={isConfirmOpen}
+                        onClose={() => setIsConfirmOpen(false)}
+                        onConfirm={handleConfirmDelete}
+                        title="Delete Subscription"
+                        message="Are you sure you want to delete this subscription? This action cannot be undone."
                     />
                 </>
             )
