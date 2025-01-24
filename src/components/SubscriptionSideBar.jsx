@@ -89,7 +89,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
             {/* Overlay */}
             {isOpen && (
                 <div
-                    onClick={click}
+                    onClick={()=>click()}
                     className="fixed inset-0 bg-black opacity-50 z-40"
                 ></div>
             )}
@@ -107,7 +107,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
                             {mode === 'edit' ? 'Edit Subscription' : 'New Subscription'}
                         </h2>
                         <button
-                            onClick={click}
+                            onClick={()=>click()}
                             className="text-gray-400 hover:text-gray-600"
                         >
                             ✖
