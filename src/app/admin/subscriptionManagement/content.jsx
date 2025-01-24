@@ -2,7 +2,13 @@
 // import React from 'react'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { saveSubscription, fetchSubscriptions } from '../../../redux/features/subscriptionSlice'
+import { 
+  saveSubscription, 
+  fetchSubscriptions, 
+  deleteSubscription,
+  updateSubscription 
+} from '../../../redux/features/subscriptionSlice'
+import { toast } from 'react-hot-toast'
 
 import UpperSide from '../../../components/upperDashbaord'
 import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
@@ -26,24 +32,47 @@ function content() {
     dispatch(fetchSubscriptions());
   }, [dispatch]);
 
-  const handleEdit = (subscription) => {
-    setSelectedSubscription({
-      name: subscription.title,
-      price: subscription.price,
-      status: subscription.status || 'ACTIVE'
-    });
-    setMode('edit');
-    setIsOpen(true);
+  const handleEdit = async (subscription) => {
+    try {
+      const formData = {
+        name: subscription.name,
+        price: subscription.price,
+        status: subscription.status
+      };
+      
+      await dispatch(updateSubscription({
+        id: subscription.id,
+        data: formData
+      })).unwrap();
+      
+      toast.success('Subscription updated successfully');
+      dispatch(fetchSubscriptions()); // Refresh the list
+    } catch (err) {
+      toast.error(err?.message || 'Failed to update subscription');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this subscription?')) {
+      try {
+        await dispatch(deleteSubscription(id)).unwrap();
+        toast.success('Subscription deleted successfully');
+      } catch (err) {
+        toast.error(err?.message || 'Failed to delete subscription');
+      }
+    }
   };
 
   // Transform subscriptions data to match table format
   const tableData = subscriptions.map(subscription => ({
-    title: subscription.name,
-    createdDate: new Date(subscription.createdAt).toLocaleDateString(),
-    lastUpdated: new Date(subscription.updatedAt).toLocaleDateString(),
+    id: subscription.id,
+    title: subscription.name || subscription.title,
     price: subscription.price,
     status: subscription.status,
-    onEdit: handleEdit
+    createdDate: new Date(subscription.createdAt).toLocaleDateString(),
+    lastUpdated: new Date(subscription.updatedAt).toLocaleDateString(),
+    onEdit: handleEdit,
+    onDelete: handleDelete
   }));
 
   const [isOpen, setIsOpen] = useState(false);
