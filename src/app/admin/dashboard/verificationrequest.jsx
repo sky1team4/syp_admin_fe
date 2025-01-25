@@ -4,6 +4,7 @@ import NIC from '../../../../public/pp.jpg';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitVerificationRequest, resetVerificationState } from '../../../redux/features/verificationSlice';
+import { IndentIncrease } from "lucide-react";
 
 // Image
 
@@ -11,7 +12,7 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
   const dispatch = useDispatch();
   const { loading, error, success } = useSelector((state) => state.verification);
 
-  const [documents, setDocuments] = React.useState([
+  const initialDocuments = [
     {
       id: 1,
       label: "Front Side",
@@ -28,7 +29,9 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
       imageUrl: null,
       file: null,
     },
-  ]);
+  ];
+
+  const [documents, setDocuments] = React.useState(initialDocuments);
 
   const handleFileUpload = async (e, docId) => {
     const file = e.target.files[0];
@@ -100,7 +103,10 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
         {/* Close Button */}
         <button
           className="absolute top-4 right-4 bg-gray-500 px-1 rounded-full text-white hover:text-gray-600"
-          onClick={() => setIsOpen(false)}
+          onClick={() => {
+            setIsOpen(false);
+            setDocuments(initialDocuments);
+          }}
         >
           ✕
         </button>
@@ -131,7 +137,7 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
           {documents.map((doc) => (
             <div
               key={doc.id}
-              className="border rounded-lg shadow-sm bg-gray-50 w-40 h-60 p-2 relative"
+              className="border rounded-lg shadow-sm bg-gray-50 w-40 h-42 p-2 relative"
             >
               <label className="cursor-pointer block">
                 {doc.imageUrl ? (
@@ -139,11 +145,11 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
                     src={doc.imageUrl}
                     alt={doc.label}
                     width={350}
-                    height={467}
+                    height={6}
                     className="rounded-md mb-2 object-cover"
                   />
                 ) : (
-                  <div className="w-full h-40 bg-gray-200 rounded-md mb-2 flex items-center justify-center">
+                  <div className="w-full h-32 bg-gray-200 rounded-md mb-2 flex items-center justify-center">
                     <span className="text-gray-500">Click to upload</span>
                   </div>
                 )}
@@ -162,8 +168,8 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
                   ✕
                 </button>
               </div>
-              <div className="text-center">
-                <p className="text-sm font-medium text-gray-700">{doc.label}</p>
+              <div className="text-center flex justify-between">
+                {/* <p className="text-sm font-medium text-gray-700">{doc.label}</p> */}
                 <p className="text-xs text-gray-500">{doc.fileName}</p>
                 <p className="text-xs text-gray-500">{doc.fileSize}</p>
               </div>
@@ -175,7 +181,9 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
         <div className="flex justify-end space-x-4">
           <button
             className="px-4 py-2 text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {setIsOpen(false)
+              setDocuments(initialDocuments);}
+            }
           >
             Cancel
           </button>
