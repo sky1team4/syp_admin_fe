@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
-import { saveSubscription } from '../redux/features/subscriptionSlice';
+import { saveSubscription, fetchSubscriptions, updateSubscription } from '../redux/features/subscriptionSlice';
 import Input from './cui/input';
 
 const FORM_VALIDATION = {
@@ -32,9 +32,10 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
     useEffect(() => {
         if (mode === 'edit' && data) {
             setFormData({
-                name: data.name || '',
-                price: data.price || '',
-                status: data.status || 'ACTIVE'
+                name: data.name || data.title || '',
+                price: data.price?.toString() || '',
+                status: data.status || 'ACTIVE',
+                id: data.id
             });
         } else {
             setFormData({
@@ -75,11 +76,21 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
                 price: parseFloat(formData.price)
             };
 
-            await dispatch(saveSubscription(subscriptionData)).unwrap();
-            toast.success(`Subscription ${mode === 'edit' ? 'updated' : 'created'} successfully`);
-            click();
+            if (mode === 'edit' && data?.id) {
+                await dispatch(updateSubscription({
+                    id: data.id,
+                    data: subscriptionData
+                })).unwrap();
+                toast.success('Subscription updated successfully');
+            } else {
+                await dispatch(saveSubscription(subscriptionData)).unwrap();
+                toast.success('Subscription created successfully');
+            }
+            
+            click(false); // Close sidebar
+            dispatch(fetchSubscriptions()); // Refresh the list
         } catch (err) {
-            toast.error(err?.message || 'Failed to save subscription');
+            toast.error(err?.message || `Failed to ${mode === 'edit' ? 'update' : 'create'} subscription`);
         }
     };
 
@@ -89,7 +100,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
             {/* Overlay */}
             {isOpen && (
                 <div
-                    onClick={click}
+                    onClick={()=>click()}
                     className="fixed inset-0 bg-black opacity-50 z-40"
                 ></div>
             )}
@@ -107,7 +118,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
                             {mode === 'edit' ? 'Edit Subscription' : 'New Subscription'}
                         </h2>
                         <button
-                            onClick={click}
+                            onClick={()=>click()}
                             className="text-gray-400 hover:text-gray-600"
                         >
                             ✖

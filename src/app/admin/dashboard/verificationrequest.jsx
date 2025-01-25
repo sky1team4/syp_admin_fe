@@ -1,11 +1,16 @@
 import Image from "next/image";
 import React from "react";
 import NIC from '../../../../public/pp.jpg';
-import toast from 'react-hot-toast';
-// import BaseUrl from "../../../../BaseUrl";
+import toast, { Toaster } from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { submitVerificationRequest, resetVerificationState } from '../../../redux/features/verificationSlice';
+
 // Image
 
 const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
+  const dispatch = useDispatch();
+  const { loading, error, success } = useSelector((state) => state.verification);
+
   const [documents, setDocuments] = React.useState([
     {
       id: 1,
@@ -45,56 +50,44 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
   };
 
   const handleSubmit = async () => {
-    const formData = new FormData();
-
-    // Add user data to formData
-    formData.append('userId', userData.id);
-    formData.append('username', userData.username);
-    formData.append('phone', userData.phone);
-
-    // Get the files from documents state
-    const frontDoc = documents.find(doc => doc.id === 1);
-    const backDoc = documents.find(doc => doc.id === 2);
-
-    if (!frontDoc.file || !backDoc.file) {
-      toast.error('Please upload both front and back images');
-      return;
-    }
-
-    formData.append('frontSide', frontDoc.file);
-    formData.append('backSide', backDoc.file);
-
     try {
-      // Don't close popup until request succeeds
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verification-requests`, {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
-        headers: {
-          // Don't set Content-Type header when sending FormData
-          // Browser will automatically set the correct multipart/form-data header with boundary
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      // Check if both documents are uploaded
+      if (!documents[0].file || !documents[1].file) {
+        toast.error('Please upload both front and back side documents');
+        return;
       }
 
-      const data = await response.json();
-      toast.success(data.message || 'Verification request submitted successfully');
-      setIsOpen(false); // Close popup only after successful submission
-      
+      // Pass the correct data structure to match the slice expectations
+      const requestData = {
+        userData: {
+          id: userData?.id || '',
+          username: userData?.username || '',
+          phone: userData?.phone || ''
+        },
+        documents: documents
+      };
+
+      await dispatch(submitVerificationRequest(requestData)).unwrap();
+      toast.success('Verification request submitted successfully');
+      setIsOpen(false);
     } catch (error) {
-      console.error('Error submitting verification request:', error);
-      toast.error(error.message || 'Error submitting verification request');
+      toast.error(error?.message || 'Error submitting verification request');
     }
   };
+
+  // Cleanup on unmount
+  React.useEffect(() => {
+    return () => {
+      dispatch(resetVerificationState());
+    };
+  }, [dispatch]);
 
   return (
     <div
       className={`fixed right-0 inset-y-0 flex justify-center items-center z-50 transition-transform duration-500 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
     >
+      <Toaster position="top-center" />
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black bg-opacity-60"
@@ -102,7 +95,7 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
       ></div>
 
       {/* Popup */}
-      
+
       <div className="bg-white rounded-lg h-screen shadow-lg w-full max-w-xl p-6 relative transform transition-transform duration-500">
         {/* Close Button */}
         <button
@@ -188,7 +181,7 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
           </button>
           <button
             className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
-            onClick={handleSubmit} 
+            onClick={handleSubmit}
           >
             Verify
           </button>

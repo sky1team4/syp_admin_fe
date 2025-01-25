@@ -34,12 +34,12 @@ export function SubscriptionTable({ columns, data, title, btnText, click, isOpen
 
     return (
         <div className="p-6 h-full bg-white shadow-lg rounded-xl w-full">
-            <div className="flex justify-between items-center mb-4">
+            {/* <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-gray-900">
                     {title}
                 </h2>
-                {click && <Button click={click} isOpen={isOpen} h="10" text={btnText} />}
-            </div>
+                {<Button click={click} isOpen={isOpen} h="10" text={btnText} />}
+            </div> */}
 
             <div className="relative overflow-x-auto w-full">
                 <Table>

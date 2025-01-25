@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useState } from "react"
 import SubscriptionSideBar from "@/components/SubscriptionSideBar"
+import ConfirmationDialog from "@/components/ConfirmationDialog"
 
 export const columns = [
     {
@@ -66,14 +67,21 @@ export const columns = [
         header: "Actions",
         cell: ({ row }) => {
             const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+            const [isConfirmOpen, setIsConfirmOpen] = useState(false)
+            const subscription = row.original;
+
             const handleDelete = () => {
-                if (typeof row.original.onDelete === 'function') {
-                    row.original.onDelete(row.original)
+                setIsConfirmOpen(true);
+            };
+
+            const handleConfirmDelete = () => {
+                if (typeof subscription.onDelete === 'function') {
+                    subscription.onDelete(subscription.id);
                 } else {
-                    console.error('onDelete handler is not defined')
+                    console.error('onDelete handler is not defined');
                 }
-            }
-            
+            };
+
             return (
                 <>
                     <div className="flex gap-2">
@@ -103,10 +111,22 @@ export const columns = [
 
                     <SubscriptionSideBar 
                         isOpen={isSidebarOpen}
-                        onClose={() => setIsSidebarOpen(false)}
+                        click={() => setIsSidebarOpen(false)}
                         mode="edit"
-                        data={row.original}
-                        onSave={row.original.onEdit}
+                        data={{
+                            id: subscription.id,
+                            name: subscription.title,
+                            price: subscription.price,
+                            status: subscription.status
+                        }}
+                    />
+
+                    <ConfirmationDialog 
+                        isOpen={isConfirmOpen}
+                        onClose={() => setIsConfirmOpen(false)}
+                        onConfirm={handleConfirmDelete}
+                        title="Delete Subscription"
+                        message="Are you sure you want to delete this subscription? This action cannot be undone."
                     />
                 </>
             )
