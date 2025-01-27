@@ -6,7 +6,7 @@ const DashboardTopBar = () => {
       {/* Left Section: Dashboard Title and Search Bar */}
       <div className="flex md:items-center lg:items-center">
         <h1 className="hidden lg:block text-sm md:text-2xl font-bold text-gray-800">Dashboard</h1>
-        <div className="relative ml-4 hidden lg:block">
+        {/* <div className="relative ml-4 hidden lg:block">
           <span className="absolute top-1/2 left-3 lg:left-5 transform -translate-y-1/2 text-purple-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -29,7 +29,7 @@ const DashboardTopBar = () => {
             className=" w-[25rem] 2xl:w-[33rem] px-10 py-3 text-gray-700 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           
-        </div>
+        </div> */}
       </div>
 
       {/* Right Section: Language Dropdown, Notifications, Profile */}

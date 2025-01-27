@@ -39,7 +39,7 @@ export default function Login() {
       if (response) {
         // Successful login
         console.log(response);
-        
+
         router.push('/admin/dashboard');
       } else {
         setError('Login failed - please try again');
@@ -56,7 +56,7 @@ export default function Login() {
 
   return (
     <>
-      <div className="flex flex-col w-full h-full bg-[#F5F5F5] text-white lg:overflow-hidden">
+      <div className="flex flex-col w-full h-screen bg-[#F5F5F5] text-white lg:overflow-hidden">
         {/* Navigation Bar */}
         <nav className="bg-white text-black px-6 py-4 z-40">
           <div className=" mx-auto flex items-center justify-between">
@@ -64,18 +64,7 @@ export default function Login() {
             <a href="#" className="text-xl font-bold">
               Logo
             </a>
-            {/* Optional Links (if needed) */}
-            {/* <div className="hidden md:flex space-x-4">
-              <a href="#" className="hover:text-purple-600">
-                Home
-              </a>
-              <a href="#" className="hover:text-purple-600">
-                About
-              </a>
-              <a href="#" className="hover:text-purple-600">
-                Contact
-              </a>
-            </div> */}
+
           </div>
         </nav>
 
@@ -160,11 +149,7 @@ export default function Login() {
           </div>
           {/* Right Section - Illustration */}
           <div className="hidden md:flex w-1/2 justify-center items-center bg-[#F5F5F5]">
-            {/* <img
-              src={login_sideimage}
-              alt="Illustration"
-              className="max-w-full h-auto"
-            /> */}
+
             <Image
               src="/loginImage.svg"  // path from public folder
               alt="Illustration"
