@@ -35,7 +35,7 @@ const DashboardTopBar = () => {
       {/* Right Section: Language Dropdown, Notifications, Profile */}
       <div className="pl-6 md:pl-0 flex items-center space-x-2 md:space-x-6">
         {/* Language Dropdown */}
-        <div className="flex items-center space-x-2 cursor-pointer">
+        {/* <div className="flex items-center space-x-2 cursor-pointer">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg"
             alt="US Flag"
@@ -56,8 +56,8 @@ const DashboardTopBar = () => {
               d="M19 9l-7 7-7-7"
             /> */}
           {/* </svg> */}
-          <Image alt="downArrow" src="/downArrow.svg" width={30} height={30}/>
-        </div>
+          {/* <Image alt="downArrow" src="/downArrow.svg" width={30} height={30}/> */}
+        {/* </div> */} 
 
         {/* Notifications */}
         <div className="relative cursor-pointer">
@@ -77,7 +77,7 @@ const DashboardTopBar = () => {
             <span className="text-xs">Admin</span>
           </div>
           
-          <Image alt="downArrow" src="/downArrow.svg" width={30} height={30}/>
+          {/* <Image alt="downArrow" src="/downArrow.svg" width={30} height={30}/> */}
 
         </div>
       </div>
