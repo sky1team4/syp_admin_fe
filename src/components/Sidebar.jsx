@@ -43,7 +43,7 @@ const Sidebar = () => {
         {/* Logo / Active Dashboard */}
         <Link href="/admin/dashboard">
           <div
-            onClick={() => setStaticTab("dashboard")}
+            onClick={() => handleTabClick("dashboard")}
             className={`${staticTab === "dashboard" ? activeSidebarClass : sidebarClass} mt-16 ${sidebarItemClass}`}
           >
             <Image
@@ -61,7 +61,7 @@ const Sidebar = () => {
           {/* Subscriptions */}
           <a href="/admin/subscriptionManagement">
             <div
-              onClick={() => setStaticTab("subscription")}
+              onClick={() => handleTabClick("subscription")}
               className={`${sidebarItemClass} ${staticTab === "subscription" ? "bg-white text-purple-600" : sidebarClass}`}
             >
               <Image
@@ -77,7 +77,7 @@ const Sidebar = () => {
           {/* Companies */}
           <a href="/admin/companies">
             <div
-              onClick={() => setStaticTab("companies")}
+              onClick={() => handleTabClick("companies")}
               className={`${sidebarItemClass} ${staticTab === "companies" ? "bg-white text-purple-600" : sidebarClass}`}
             >
               <Image
@@ -93,7 +93,7 @@ const Sidebar = () => {
           {/* Payment Integration */}
           <a href="/admin/payment">
             <div
-              onClick={() => setStaticTab("payment")}
+              onClick={() => handleTabClick("payment")}
               className={`${sidebarItemClass} ${staticTab === "payment" ? "bg-white text-purple-600" : sidebarClass}`}
             >
               <Image
@@ -109,7 +109,7 @@ const Sidebar = () => {
           {/* Settings */}
           <a href="/admin/setting">
             <div
-              onClick={() => setStaticTab("setting")}
+              onClick={() => handleTabClick("setting")}
               className={`${sidebarItemClass} ${staticTab === "setting" ? "bg-white text-purple-600" : sidebarClass}`}
             >
               <Image
@@ -125,7 +125,7 @@ const Sidebar = () => {
           {/* Sign Out */}
           <Link href="/admin-Login">
             <div
-              onClick={() => setStaticTab("signout")}
+              onClick={() => handleTabClick("signout")}
               className={`${sidebarItemClass} ${staticTab === "signout" ? "bg-white text-purple-600" : sidebarClass}`}
             >
               <Image

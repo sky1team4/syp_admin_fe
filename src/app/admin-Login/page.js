@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/features/authSlice';
 import { useRouter } from 'next/navigation';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -18,6 +20,12 @@ export default function Login() {
   });
   const [error, setError] = useState('');
 
+  // Update state to handle specific input errors
+  const [inputErrors, setInputErrors] = useState({
+    email: '',
+    password: ''
+  });
+
   // Add handle input change function
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -31,6 +39,17 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setInputErrors({ email: '', password: '' });
+
+    // Basic validation
+    if (!formData.email) {
+      toast.error('Enter your email address');
+      return;
+    }
+    if (!formData.password) {
+      toast.error('Enter your password');
+      return;
+    }
 
     try {
       const response = await dispatch(loginUser(formData)).unwrap();
@@ -39,7 +58,6 @@ export default function Login() {
       if (response) {
         // Successful login
         console.log(response);
-
         router.push('/admin/dashboard');
       } else {
         setError('Login failed - please try again');
@@ -47,39 +65,32 @@ export default function Login() {
     } catch (err) {
       console.error('Login error:', err); // Debug log
       if (err.message.includes('SSL_PROTOCOL_ERROR')) {
-        setError('Connection error - please check the server is running and using the correct protocol');
+        toast.error('Connection error - please check the server is running and using the correct protocol');
       } else {
-        setError(err?.message || 'An error occurred during login');
+        toast.error(err?.message || 'An error occurred during login');
       }
     }
   };
 
   return (
     <>
+      <ToastContainer />
       <div className="flex flex-col w-full h-screen bg-[#F5F5F5] text-white lg:overflow-hidden">
         {/* Navigation Bar */}
         <nav className="bg-white text-black px-6 py-4 z-40">
-          <div className=" mx-auto flex items-center justify-between">
+          <div className="mx-auto flex items-center justify-between">
             {/* Logo */}
             <a href="#" className="text-xl font-bold">
               Logo
             </a>
-
           </div>
         </nav>
 
         <div className="w-full h-full px-0 md:px-20 flex gap-10 justify-center items-center">
           {/* Left Section - Form */}
           <div className="md:w-1/2 flex flex-col justify-center items-center p-8 bg-[#F5F5F5] text-black">
-            <div className=" w-full 2xl:w-[40rem] 2xl:h-[30rem] bg-white p-8 rounded-lg">
+            <div className="w-full max-w-md min-w-[20rem] 2xl:w-[40rem] 2xl:h-[30rem] bg-white p-8 rounded-lg">
               <h1 className="text-3xl font-bold mb-6 2xl:mt-5 text-center">Sign In</h1>
-
-              {/* Update the error display to show either local or Redux error */}
-              {(error || reduxError) && (
-                <div className="mb-4 text-red-500 text-center">
-                  {error || reduxError}
-                </div>
-              )}
 
               <form onSubmit={handleSubmit}>
                 <div className="mb-4 2xl:mb-6">
@@ -97,6 +108,13 @@ export default function Login() {
                     placeholder="Enter your Email"
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
+                  {/* Display specific error below email input */}
+                  {inputErrors.email && (
+                    <div className="mt-1 text-red-500 text-sm flex items-center">
+                      <span className="material-icons text-red-500 mr-1">error</span>
+                      {inputErrors.email}
+                    </div>
+                  )}
                 </div>
                 <div className="mb-4 2xl:mb-8">
                   <label
@@ -120,7 +138,7 @@ export default function Login() {
                       className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-600"
                     >
                       <Image
-                        src={showPassword ? "/eye 1.svg" : "/eye 1.svg"}
+                        src={showPassword ? "/eye 1.svg" : "/eye.png"}
                         alt={showPassword ? "Hide password" : "Show password"}
                         width={17}
                         height={17}
@@ -129,6 +147,13 @@ export default function Login() {
                       />
                     </button>
                   </div>
+                  {/* Display specific error below password input */}
+                  {inputErrors.password && (
+                    <div className="mt-1 text-red-500 text-sm flex items-center">
+                      <span className="material-icons text-red-500 mr-1">error</span>
+                      {inputErrors.password}
+                    </div>
+                  )}
                 </div>
                 {/* Add loading state to the submit button */}
                 <button
@@ -149,7 +174,6 @@ export default function Login() {
           </div>
           {/* Right Section - Illustration */}
           <div className="hidden md:flex w-1/2 justify-center items-center bg-[#F5F5F5]">
-
             <Image
               src="/loginImage.svg"  // path from public folder
               alt="Illustration"
