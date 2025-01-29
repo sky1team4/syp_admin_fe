@@ -120,10 +120,12 @@ export function DataTable({ columns, data }) {
                     <TableCell key={cell.id}>
                       {cell.column.id === "user" ? (
                         <div className="flex items-center space-x-3">
-                          <img
-                            src={cell.getValue().image}
+                          <Image
+                            src={cell.getValue().image || "/avatar.png"}
                             alt="Profile"
-                            className="w-8 h-8 rounded-full"
+                            width={32}
+                            height={32}
+                            className="rounded-full"
                           />
                           <div>
                             <p className="text-sm font-medium">

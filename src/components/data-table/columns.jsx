@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useState } from "react"
 import VerificationRequest from "@/app/admin/dashboard/verificationrequest"
+import Image from "next/image"
 
 export const columns = [
     {
@@ -23,7 +24,7 @@ export const columns = [
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Username
+                    User
                     {column.getIsSorted() === "asc" ? (
                         <ArrowUp className="ml-2 h-4 w-4" />
                     ) : (
@@ -34,10 +35,12 @@ export const columns = [
         },
         cell: ({ row }) => (
             <div className="flex items-center gap-3">
-                <img
-                    src={row.original.image}
-                    alt={`${row.original.username}'s avatar`}
-                    className="w-8 h-8 rounded-full"
+                <Image
+                    src="/dash.png"
+                    alt="Profile"
+                    width={32}
+                    height={32}
+                    className="rounded-lg"
                 />
                 <div>
                     <div className="font-medium">{row.original.username}</div>
@@ -85,24 +88,24 @@ export const columns = [
             <div className="capitalize">{row.getValue("status")}</div>
         ),
     },
-    {
-        accessorKey: "subscription",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Subscription
-                    {column.getIsSorted() === "asc" ? (
-                        <ArrowUp className="ml-2 h-4 w-4" />
-                    ) : (
-                        <ArrowDown className="ml-2 h-4 w-4" />
-                    )}
-                </Button>
-            )
-        },
-    },
+    // {
+    //     accessorKey: "subscription",
+    //     header: ({ column }) => {
+    //         return (
+    //             <Button
+    //                 variant="ghost"
+    //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //             >
+    //                 Subscription
+    //                 {column.getIsSorted() === "asc" ? (
+    //                     <ArrowUp className="ml-2 h-4 w-4" />
+    //                 ) : (
+    //                     <ArrowDown className="ml-2 h-4 w-4" />
+    //                 )}
+    //             </Button>
+    //         )
+    //     },
+    // },
     {
         id: "actions",
         header: "Actions",

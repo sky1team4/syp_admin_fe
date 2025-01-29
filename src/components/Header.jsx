@@ -1,6 +1,33 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import Notifications from "../../src/app/admin/dashboard/notification";
+
 const DashboardTopBar = () => {
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const notificationRef = useRef(null);
+
+  const toggleNotifications = () => {
+    setIsNotificationOpen(!isNotificationOpen);
+  };
+
+  const handleClickOutside = (event) => {
+    if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+      setIsNotificationOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isNotificationOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isNotificationOpen]);
+
   return (
     <div className="flex items-center justify-between px-8 py-6 bg-white flex-col md:flex-row">
       {/* Left Section: Dashboard Title and Search Bar */}
@@ -60,11 +87,24 @@ const DashboardTopBar = () => {
         {/* </div> */} 
 
         {/* Notifications */}
-        <div className="relative cursor-pointer">
-        <Image alt="bellicon" src="/bellicon.png" width={30} height={30}/>
+        <div className="relative cursor-pointer" ref={notificationRef}>
+          <Image 
+            alt="bellicon" 
+            src="/bellicon.png" 
+            width={30} 
+            height={30} 
+            onClick={toggleNotifications}
+          />
           <span className="absolute top-0 right-0 w-4 h-4 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
             1
           </span>
+          
+          {/* Notification Popup */}
+          {isNotificationOpen && (
+            <div className="absolute -right-28 mt-14 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+              <Notifications />
+            </div>
+          )}
         </div>
 
         {/* Profile Section */}

@@ -24,7 +24,7 @@ const DashboardPage = () => {
         <UpperSide title="Today's Summary" data={data} btnText="Export" />
         <UserTable />
       </div>
-      <Notification />
+      {/* <Notification /> */}
     </div>
   )
 }
