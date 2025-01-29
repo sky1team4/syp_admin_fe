@@ -6,6 +6,7 @@ import { store } from '../redux/store';
 import { metadata } from './layout-metadata';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Toaster } from 'react-hot-toast';
 
 const executeCommand = async () => {
   const response = await fetch("/api/execute-command");
@@ -54,6 +55,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        <Toaster position="top-right" />
         <Provider store={store}>
           {children}
         </Provider>

@@ -56,7 +56,7 @@ export default function Login() {
 
   return (
     <>    
-      <div className="flex flex-col w-full h-full bg-[#F5F5F5] text-white lg:overflow-hidden">
+      <div className="flex flex-col w-full h-full bg-[#F5F5F5] text-white">
         {/* Navigation Bar */}
         <nav className="bg-white text-black px-6 py-4 z-40">
           <div className=" mx-auto flex items-center justify-between">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import { Toaster } from 'react-hot-toast';
+// import { Toaster } from 'react-hot-toast';
 import { saveSubscription, fetchSubscriptions, updateSubscription } from '../redux/features/subscriptionSlice';
 import Input from './cui/input';
 
@@ -65,7 +65,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
 
     const handleSave = async () => {
         if (!validateForm()) {
-            toast.error('Please fill in all required fields correctly');
+            toast.error('Please fill in all required fields correctly', { id: 'validation-error' });
             return;
         }
 
@@ -96,7 +96,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
 
     return (
         <>
-            <Toaster position="top-right" />
+            {/* <Toaster position="top-right" /> */}
             {/* Overlay */}
             {isOpen && (
                 <div

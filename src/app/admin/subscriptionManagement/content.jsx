@@ -44,9 +44,6 @@ function content() {
         id: subscription.id,
         data: formData
       })).unwrap();
-      
-      toast.success('Subscription updated successfully');
-      dispatch(fetchSubscriptions()); // Refresh the list
     } catch (err) {
       toast.error(err?.message || 'Failed to update subscription');
     }
@@ -87,7 +84,6 @@ function content() {
     try {
       await dispatch(saveSubscription(formData)).unwrap();
       toggleSidebar();
-      dispatch(fetchSubscriptions()); // Refresh the list after saving
     } catch (err) {
       console.error('Failed to save subscription:', err);
     }
