@@ -17,7 +17,7 @@ import Image from "next/image"
 
 export const columns = [
     {
-        accessorKey: "username",
+        accessorKey: "user_name",
         header: ({ column }) => {
             return (
                 <Button
@@ -43,14 +43,14 @@ export const columns = [
                     className="rounded-lg"
                 />
                 <div>
-                    <div className="font-medium">{row.original.username}</div>
-                    <div className="text-sm text-gray-500">{row.original.email}</div>
+                    <div className="font-medium">{row.original.user_name}</div>
+                    {/* <div className="text-sm text-gray-500">{row.original.email}</div> */}
                 </div>
             </div>
         ),
     },
     {
-        accessorKey: "phone",
+        accessorKey: "phone_number",
         header: ({ column }) => {
             return (
                 <Button
@@ -66,9 +66,12 @@ export const columns = [
                 </Button>
             )
         },
+        cell: ({ row }) => (
+            <div className="text-sm font-medium">{row.original.phone_number}</div>
+        ),
     },
     {
-        accessorKey: "status",
+        accessorKey: "subscription_status",
         header: ({ column }) => {
             return (
                 <Button
@@ -85,9 +88,31 @@ export const columns = [
             )
         },
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("status")}</div>
+            <div className="capitalize">{row.getValue("subscription_status")}</div>
         ),
     },
+    // {
+    //     accessorKey: "name",
+    //     header: ({ column }) => {
+    //         return (
+    //             <Button
+    //                 variant="ghost"
+    //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //             >
+    //                 Name
+    //                 {column.getIsSorted() === "asc" ? (
+    //                     <ArrowUp className="ml-2 h-4 w-4" />
+    //                 ) : (
+    //                     <ArrowDown className="ml-2 h-4 w-4" />
+    //                 )}
+    //             </Button>
+    //         )
+    //     },
+    //     cell: ({ row }) => (
+    //         <div className="font-medium text-black">{row.original.name}
+    //         {console.log(row.original.name)}</div>
+    //     ),
+    // },
     // {
     //     accessorKey: "subscription",
     //     header: ({ column }) => {
@@ -105,6 +130,9 @@ export const columns = [
     //             </Button>
     //         )
     //     },
+    //     cell: ({ row }) => (
+    //         <div className="text-sm font-medium">{row.original.subscription}</div>
+    //     ),
     // },
     {
         id: "actions",

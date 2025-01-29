@@ -2,15 +2,15 @@
 // import React from 'react'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { 
-  saveSubscription, 
-  fetchSubscriptions, 
+import {
+  saveSubscription,
+  fetchSubscriptions,
   deleteSubscription,
-  updateSubscription 
+  updateSubscription
 } from '../../../redux/features/subscriptionSlice'
 import { toast } from 'react-hot-toast'
 
-import UpperSide from '../../../components/upperDashbaord'
+import UpperSide from '../../../components/dashbaord_stats'
 import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
 import DisplayTable from '../../../components/displayTable'
 
@@ -39,12 +39,12 @@ function content() {
         price: subscription.price,
         status: subscription.status
       };
-      
+
       await dispatch(updateSubscription({
         id: subscription.id,
         data: formData
       })).unwrap();
-      
+
       toast.success('Subscription updated successfully');
       dispatch(fetchSubscriptions()); // Refresh the list
     } catch (err) {
@@ -74,7 +74,7 @@ function content() {
   }));
 
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const toggleSidebar = () => {
     if (!isOpen) {
       setMode('create');
@@ -96,25 +96,25 @@ function content() {
   return (
     <div className='flex flex-col w-full max-w-full overflow-x-hidden'>
       <div className='flex flex-col gap-3'>
-        <UpperSide 
-          title="Subscription" 
-          data={data} 
-          click={toggleSidebar} 
-          isOpen={isOpen} 
-          btnText="Add Subscrition" 
+        <UpperSide
+          title="Subscription"
+          data={data}
+          click={toggleSidebar}
+          isOpen={isOpen}
+          btnText="Add Subscrition"
         />
-        <SubscriptionSideBar 
+        <SubscriptionSideBar
           isOpen={isOpen}
           click={toggleSidebar}
           mode={mode}
           data={selectedSubscription}
         />
-        <DisplayTable 
-          title="Subscription" 
-          array={tableData} 
-          col1_Title="Subscription" 
-          col2_Title="Created Date" 
-          col3_Title="Last Updated" 
+        <DisplayTable
+          title="Subscription"
+          array={tableData}
+          col1_Title="Subscription"
+          col2_Title="Created Date"
+          col3_Title="Last Updated"
           isOpen={isOpen}
           click={toggleSidebar}
         />

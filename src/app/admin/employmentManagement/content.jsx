@@ -2,7 +2,7 @@
 // import React from 'react'
 import React, { useState } from 'react'
 
-import UpperSide from '../../../components/upperDashbaord'
+import UpperSide from '../../../components/dashbaord_stats'
 import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
 import DisplayTable from '../../../components/displayTable'
 
