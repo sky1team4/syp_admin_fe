@@ -4,6 +4,7 @@ import stripeReducer from './features/stripeSlice';
 import paypalReducer from './features/paypalSlice';
 import bankReducer from './features/bankSlice';
 import subscriptionReducer from './features/subscriptionSlice';
+import verificationReducer from './features/verificationSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     paypal: paypalReducer,
     bank: bankReducer,
     subscription: subscriptionReducer,
+    verification: verificationReducer,
   },
 }); 
