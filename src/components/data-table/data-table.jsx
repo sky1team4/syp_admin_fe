@@ -29,7 +29,7 @@ import { ChevronDown, MoreVertical } from "lucide-react";
 import VerificationRequest from "@/app/admin/dashboard/verificationrequest";
 
 export function DataTable({ columns, data }) {
-  console.log(data);
+  // console.log(data);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [activeTab, setActiveTab] = useState("Users");
@@ -38,9 +38,9 @@ export function DataTable({ columns, data }) {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     if (tab === "Users") {
-      setColumnFilters([{ id: "status", value: "Active" }]);
+      setColumnFilters([{ id: "subscription_status", value: "verified" }]);
     } else {
-      setColumnFilters([{ id: "status", value: "Inactive" }]);
+      setColumnFilters([{ id: "subscription_status", value: "pending" }]);
     }
   };
 
@@ -61,7 +61,7 @@ export function DataTable({ columns, data }) {
 
   return (
      
-      console.log(data),
+      // console.log(data),
     
     <div className="w-full">
       <div className="flex items-center justify-between mb-4">
@@ -146,8 +146,8 @@ export function DataTable({ columns, data }) {
                         </span>
                       ) : cell.column.id === "subscription_status" ? (
                         <span
-                          className={`text-sm font-medium ${
-                            cell.getValue() === "Subscribed" ? "text-green-500" : "text-red-500"
+                          className={`text-sm font-medium  ${
+                            cell.getValue() === "verified" ? "bg-green-100 text-green-600 rounded-full px-2 py-1" : "bg-yellow-100 text-yellow-600 rounded-full px-2 py-1"
                           }`}
                         >
                           {cell.getValue() ? cell.getValue().toString() : "N/A"}
