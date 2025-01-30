@@ -2,27 +2,35 @@
 "use client"
 import React from "react";
 import Image from "next/image";
-const TodaysSummary = (info) => {
 
+const TodaysSummary = ({ btnText, title, data }) => {
+  console.log(data);
+
+  // Calculate totals from incoming data
+  const totalUsers = data.length; // Assuming each entry in data represents a user
+  const subscribedUsers = data.filter(user => user.subscription_status === "verified").length;
+  const unsubscribedUsers = data.filter(user => user.subscription_status === "pending").length;
+
+  const info = [
+    { id: 1, label: "Total user", value: totalUsers.toString(), bgColor: "bg-purple-100", icon: '/totalusers.svg' },
+    { id: 2, label: "Subscribed User", value: subscribedUsers.toString(), bgColor: "bg-red-100", icon: '/subscribeuser.svg' },
+    { id: 3, label: "Unsubscribed User", value: unsubscribedUsers.toString(), bgColor: "bg-yellow-100", icon: '/unsubscribe.svg' },
+    { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: '/activedomain.svg' },
+  ];
 
   return (
-    <div className="w-full bg-white shadow-md p-3 md:p-8 rounded-xl">
+    <div className="w-full bg-white shadow-md p-4 md:p-8 rounded-xl">
       <div className="w-full flex justify-between items-center mb-4">
-        {/* <h2 className="text-lg font-semibold text-gray-800">Today's Summary</h2> */}
-        <h2 className="text-lg font-semibold text-gray-800">{info.title}</h2>
-        {/* <button onClick={()=> info.click()} className="flex justify-center items-center gap-1 px-2 py-2 text-sm text-gray-600 outline outline-2 outline-gray-300 rounded-md hover:bg-purple-300 hover:text-purple-500">
-          <Image alt="Export" src='/Exporticon.svg' width={20} height={20}className="mb-1"/>
-          {info.btnText}
-        </button> */}
+        <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
       </div>
       <div className="flex gap-4 justify-start w-full flex-wrap">
-        {info.data.map((item) => (
+        {info.map((item) => (
           <div
             key={item.id}
-            className={`w-full md:w-[8.5rem] lg:w-[12rem] flex gap-2 flex-col items-start justify-start p-4 ${item.bgColor} rounded-2xl cursor-pointer`}
+            className={`w-full md:w-[8rem] lg:w-[12rem] flex gap-2 flex-col items-start justify-start p-4 ${item.bgColor} rounded-2xl shadow-lg transition-transform transform hover:scale-105 cursor-pointer`}
           >
             <Image src={item.icon} width={40} height={40} alt="icon" />
-            <p className=" text-3xl font-bold text-gray-800">{item.value}</p>
+            <p className="text-3xl font-bold text-gray-800">{item.value}</p>
             <p className="text-sm font-medium text-gray-600">{item.label}</p>
           </div>
         ))}

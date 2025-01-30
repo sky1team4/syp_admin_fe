@@ -29,7 +29,7 @@ const DashboardTopBar = () => {
   }, [isNotificationOpen]);
 
   return (
-    <div className="flex items-center justify-between px-8 py-6 bg-white flex-col md:flex-row">
+    <div className="flex items-center justify-between px-8 py-4 bg-white flex-col md:flex-row">
       {/* Left Section: Dashboard Title and Search Bar */}
       <div className="flex md:items-center lg:items-center">
         <h1 className="hidden lg:block text-sm md:text-2xl font-bold text-gray-800">Dashboard</h1>

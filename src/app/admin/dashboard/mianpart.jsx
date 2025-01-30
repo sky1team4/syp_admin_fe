@@ -23,7 +23,7 @@ export default function DashboardPage() {
         }
 
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setData(data);
     } catch (error) {
         console.log(error.message);
