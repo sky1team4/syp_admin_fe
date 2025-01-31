@@ -17,8 +17,9 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import Button from '../cui/button'
+import Image from "next/image"
 
-export function SubscriptionTable({ columns, data, title, btnText, click, isOpen }) {
+export function SubscriptionTable({ columns, data, title, btnText, click, isOpen , backBTN}) {
     const [sorting, setSorting] = useState([])
 
     const table = useReactTable({
@@ -34,12 +35,25 @@ export function SubscriptionTable({ columns, data, title, btnText, click, isOpen
 
     return (
         <div className="p-6 h-full bg-white shadow-lg rounded-xl w-full">
-            {/* <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-gray-900">
-                    {title}
-                </h2>
+            <div className="flex justify-between items-center mb-4">
+                <div className="flex gap-3">
+                    {backBTN == "no" ? null : (
+                        <a href="/admin/setting" className="self-center cursor-pointer">
+                            <Image
+                                src="/backArrow.svg"  // path from public folder
+                                alt="Illustration"
+                                width={8}  // required in Next.js
+                                height={8}
+                            />
+                        </a>
+                    )}
+                    <h2 className="text-xl font-semibold text-gray-900">
+                        {title}
+                    </h2>
+
+                </div>
                 {<Button click={click} isOpen={isOpen} h="10" text={btnText} />}
-            </div> */}
+            </div>
 
             <div className="relative overflow-x-auto w-full">
                 <Table>

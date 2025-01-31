@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 
 import UpperSide from '../../../components/upperDashbaord'
-import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
+import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
 
 
@@ -49,7 +49,16 @@ function content() {
     <>
       <div className='flex flex-col gap-3 w-full h-full'>
         {/* <UpperSide title="Relationship" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Relationship" /> */}
-        <SubscriptionSideBar title="Add Relationship" dis="lorem ipsum has been the industry's standard." subTitle="Relationship" click={toggleSidebar} isOpen={isOpen} />
+        <TableSideBar
+          isOpen={isOpen}
+          click={toggleSidebar}
+          headerText="Relationship"
+          descriptionText="lorem ipsum has been the industry's standard."
+          nameLabel="Relationship Name *"
+          namePlaceholder="Enter relationship name"
+          saveButtonText="Add Relationship"
+          updateButtonText="Update Relationship"
+        />
         <DisplayTable click={toggleSidebar} isOpen={isOpen} btnText="Add Relationship" title="Relationship" array={tableData} col1_Title="Relationship" col2_Title="Created Date" col3_Title="Last Updated" />
       </div>
     </>

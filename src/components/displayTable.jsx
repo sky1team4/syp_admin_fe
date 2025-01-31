@@ -5,6 +5,7 @@ const TableComponent = (info) => {
   return (
     <SubscriptionTable
       columns={columns}
+      backBTN={info.backBTN}
       data={info.array}
       title={info.title}
       btnText={info.btnText}
