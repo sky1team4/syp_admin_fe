@@ -98,8 +98,9 @@ const Sidebar = () => {
 
           {/* Companies */}
           <Link
-            href="/admin/companies"
+            href="/admin/companyPage"
             onClick={() => handleTabClick("companies")}
+
           >
             <div
               className={`${sidebarItemClass} ${

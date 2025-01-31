@@ -21,12 +21,6 @@ function content() {
   const [selectedSubscription, setSelectedSubscription] = useState(null);
   const [mode, setMode] = useState('create');
 
-  const data = [
-    { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "/4box_1.svg" },
-    { id: 2, label: "Subscribed User", value: "4,590", bgColor: "bg-red-100", icon: "/4box_2.svg" },
-    { id: 3, label: "Unsubscribed User", value: "3,866", bgColor: "bg-yellow-100", icon: "/4box_3.svg" },
-    { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "/4box_4.svg" },
-  ];
 
   useEffect(() => {
     dispatch(fetchSubscriptions());
@@ -85,11 +79,17 @@ function content() {
 
   const handleSubmitSubscription = async (formData) => {
     try {
-      await dispatch(saveSubscription(formData)).unwrap();
+      // Log the formData to ensure it has the correct structure
+      console.log('Submitting subscription with data:', formData);
+
+      const { name, price, status } = formData; // Destructure formData
+      await dispatch(saveSubscription({ name, price, status })).unwrap(); // Pass the correct structure
       toggleSidebar();
       dispatch(fetchSubscriptions()); // Refresh the list after saving
     } catch (err) {
+      // Log the full error response for debugging
       console.error('Failed to save subscription:', err);
+      toast.error(err?.message || 'Failed to save subscription'); // Update error message
     }
   };
 
@@ -98,7 +98,6 @@ function content() {
       <div className='flex flex-col gap-3'>
         <UpperSide
           title="Subscription"
-          data={data}
           click={toggleSidebar}
           isOpen={isOpen}
           btnText="Add Subscrition"
