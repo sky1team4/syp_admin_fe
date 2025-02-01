@@ -18,22 +18,22 @@ function content() {
 
   const tableData = [
     {
-      title: "Monthly Subscription",
+      title: "Business Partner",
       createdDate: "26/02/2024",
       lastUpdated: "27/02/2024",
     },
     {
-      title: "Professional Subscription",
+      title: "Supplier",
       createdDate: "26/02/2024",
       lastUpdated: "27/02/2024",
     },
     {
-      title: "Special Subscription",
+      title: "Customer",
       createdDate: "26/02/2024",
       lastUpdated: "27/02/2024",
     },
     {
-      title: "Annual Subscription",
+      title: "Affiliate",
       createdDate: "26/02/2024",
       lastUpdated: "27/02/2024",
     },
@@ -52,9 +52,9 @@ function content() {
         <TableSideBar
           isOpen={isOpen}
           click={toggleSidebar}
-          headerText="Relationship"
-          descriptionText="lorem ipsum has been the industry's standard."
-          nameLabel="Relationship Name *"
+          title="Relationship"
+          dis="lorem ipsum has been the industry's standard."
+          subTitle="Relationship Name *"
           namePlaceholder="Enter relationship name"
           saveButtonText="Add Relationship"
           updateButtonText="Update Relationship"

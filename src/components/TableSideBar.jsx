@@ -16,13 +16,16 @@ function TableSideBar({
     click,
     mode = 'create',
     data = null,
-    headerText = 'Subscription',
-    descriptionText = 'Manage your subscription',
-    nameLabel = 'Subscription Name *',
+    title = 'Subscription',
+    dis = 'Manage your subscription',
+    subTitle = 'Subscription Name *',
     namePlaceholder = 'Enter subscription name',
     saveButtonText = 'Save',
     updateButtonText = 'Update'
 }) {
+//     title
+// dis
+// subTitle
     const dispatch = useDispatch();
     const { isLoading } = useSelector((state) => state.subscription);
     
@@ -104,7 +107,7 @@ function TableSideBar({
                     {/* Header */}
                     <div className="flex justify-between items-center mb-4 text-black">
                         <h2 className="text-xl font-semibold">
-                            Add {headerText}
+                            Add {title}
                         </h2>
                         <button
                             onClick={() => click()}
@@ -116,7 +119,7 @@ function TableSideBar({
 
                     {/* Description */}
                     <p className="text-gray-500 text-sm mb-6">
-                        {descriptionText}
+                        {dis}
                     </p>
 
                     {/* Subscription Inputs */}
@@ -127,7 +130,7 @@ function TableSideBar({
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                             w="full"
                             mdw="full"
-                            label={nameLabel}
+                            label={subTitle}
                             placeholder={namePlaceholder}
                             error={errors.name}
                         />

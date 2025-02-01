@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 
 import UpperSide from '../../../components/upperDashbaord'
-import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
+import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
 
 
@@ -16,26 +16,49 @@ function content() {
     { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "🔑" },
   ];
 
+  // const tableData = [
+  //   {
+  //     title: "Monthly Subscription",
+  //     createdDate: "26/02/2024",
+  //     lastUpdated: "27/02/2024",
+  //   },
+  //   {
+  //     title: "Professional Subscription",
+  //     createdDate: "26/02/2024",
+  //     lastUpdated: "27/02/2024",
+  //   },
+  //   {
+  //     title: "Special Subscription",
+  //     createdDate: "26/02/2024",
+  //     lastUpdated: "27/02/2024",
+  //   },
+  //   {
+  //     title: "Annual Subscription",
+  //     createdDate: "26/02/2024",
+  //     lastUpdated: "27/02/2024",
+  //   },
+  // ];
+
   const tableData = [
     {
-      title: "Monthly Subscription",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
+      title: "Computer Science",
+      createdDate: "01/01/2023",
+      lastUpdated: "15/01/2023",
     },
     {
-      title: "Professional Subscription",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
+      title: "Mechanical Engineering",
+      createdDate: "05/02/2023",
+      lastUpdated: "20/02/2023",
     },
     {
-      title: "Special Subscription",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
+      title: "Biology",
+      createdDate: "10/03/2023",
+      lastUpdated: "25/03/2023",
     },
     {
-      title: "Annual Subscription",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
+      title: "Economics",
+      createdDate: "15/04/2023",
+      lastUpdated: "30/04/2023",
     },
   ];
 
@@ -49,7 +72,7 @@ function content() {
     <>
       <div className='flex flex-col gap-3 w-full h-full'>
         {/* <UpperSide title="Degree" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Degree" /> */}
-        <SubscriptionSideBar title="Add Specialty" dis="lorem ipsum has been the industry's standard." subTitle="Specialty" click={toggleSidebar} isOpen={isOpen} />
+        <TableSideBar title="Specialty" namePlaceholder='Enter Specialty' dis="lorem ipsum has been the industry's standard." subTitle="Specialty" click={toggleSidebar} isOpen={isOpen} />
         <DisplayTable click={toggleSidebar} isOpen={isOpen} btnText="Add Field Study" title="Specialty" array={tableData} col1_Title="Specialty" col2_Title="Created Date" col3_Title="Last Updated" />
       </div>
     </>

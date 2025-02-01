@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 
 import UpperSide from '../../../components/upperDashbaord'
-import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
+import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
 
 
@@ -18,22 +18,22 @@ function content() {
 
   const tableData = [
     {
-      title: "Monthly Subscription",
+      title: "Cardiology",
       createdDate: "26/02/2024",
       lastUpdated: "27/02/2024",
     },
     {
-      title: "Professional Subscription",
+      title: "Neurology",
       createdDate: "26/02/2024",
       lastUpdated: "27/02/2024",
     },
     {
-      title: "Special Subscription",
+      title: "Pediatrics",
       createdDate: "26/02/2024",
       lastUpdated: "27/02/2024",
     },
     {
-      title: "Annual Subscription",
+      title: "Orthopedics",
       createdDate: "26/02/2024",
       lastUpdated: "27/02/2024",
     },
@@ -49,7 +49,7 @@ function content() {
     <>
       <div className='flex flex-col gap-3 w-full h-full'>
         {/* <UpperSide title="Degree" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Degree" /> */}
-        <SubscriptionSideBar title="Add Degree" dis="lorem ipsum has been the industry's standard." subTitle="Degree" click={toggleSidebar} isOpen={isOpen} />
+        <TableSideBar title="Degree" namePlaceholder='Enter degree' dis="lorem ipsum has been the industry's standard." subTitle="Degree" click={toggleSidebar} isOpen={isOpen} />
         <DisplayTable click={toggleSidebar} isOpen={isOpen} btnText="Add Specialty" title="Field of Study Management" array={tableData} col1_Title="Field of study Title" col2_Title="Created Date" col3_Title="Last Updated" />
       </div>
     </>
