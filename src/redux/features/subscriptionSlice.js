@@ -6,7 +6,7 @@ export const fetchSubscriptions = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-        // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Mzc2NDE3NzEsImV4cCI6MTczNzY0NTM3MX0.aTaYNl0SvCRpYB98yjgPTcrITeTGtKlyQMHZ_VXHUbM";
+      // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Mzc2NDE3NzEsImV4cCI6MTczNzY0NTM3MX0.aTaYNl0SvCRpYB98yjgPTcrITeTGtKlyQMHZ_VXHUbM";
       const response = await fetch('http://localhost:3000/subscriptions', {
         method: 'GET',
         headers: {
@@ -93,7 +93,7 @@ export const updateSubscription = createAsyncThunk(
 // Add delete subscription thunk
 export const deleteSubscription = createAsyncThunk(
   'subscription/delete',
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, dispatch }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:3000/subscriptions/${id}`, {
@@ -109,7 +109,8 @@ export const deleteSubscription = createAsyncThunk(
         throw new Error(errorData.message || 'Failed to delete subscription');
       }
 
-      return id; // Return the id of deleted subscription
+      dispatch(fetchSubscriptions());
+      return id;
     } catch (error) {
       return rejectWithValue(error.message || 'Network error occurred');
     }
@@ -182,15 +183,18 @@ const subscriptionSlice = createSlice({
       })
       .addCase(deleteSubscription.fulfilled, (state, action) => {
         state.isLoading = false;
-        // Remove the deleted subscription from state
-        state.subscriptions = state.subscriptions.filter(
-          subscription => subscription.id !== action.payload
-        );
+        // Ensure the server confirms deletion before removing from state
+        if (action.payload) {
+          state.subscriptions = state.subscriptions.filter(
+            subscription => subscription.id !== action.payload
+          );
+        }
       })
       .addCase(deleteSubscription.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });
+
   },
 });
 

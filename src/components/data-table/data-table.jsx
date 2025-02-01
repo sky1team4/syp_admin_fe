@@ -29,6 +29,7 @@ import { ChevronDown, MoreVertical } from "lucide-react";
 import VerificationRequest from "@/app/admin/dashboard/verificationrequest";
 
 export function DataTable({ columns, data }) {
+  // console.log(data);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [activeTab, setActiveTab] = useState("Users");
@@ -37,14 +38,14 @@ export function DataTable({ columns, data }) {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     if (tab === "Users") {
-      setColumnFilters([{ id: "status", value: "Active" }]);
+      setColumnFilters([{ id: "subscription_status", value: "verified" }]);
     } else {
-      setColumnFilters([{ id: "status", value: "Inactive" }]);
+      setColumnFilters([{ id: "subscription_status", value: "pending" }]);
     }
   };
 
   const table = useReactTable({
-    data,
+    data: data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -59,6 +60,9 @@ export function DataTable({ columns, data }) {
   });
 
   return (
+     
+      // console.log(data),
+    
     <div className="w-full">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800">
@@ -118,63 +122,38 @@ export function DataTable({ columns, data }) {
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {cell.column.id === "user" ? (
+                      {cell.column.id === "user_name" ? (
                         <div className="flex items-center space-x-3">
-                          <img
-                            src={cell.getValue().image}
+                          <Image
+                            src={cell.getValue()?.image || "/dash.png"}
                             alt="Profile"
-                            className="w-8 h-8 rounded-full"
+                            width={32}
+                            height={32}
+                            className="rounded-lg"
                           />
                           <div>
                             <p className="text-sm font-medium">
-                              {cell.getValue().name}
+                              {cell.getValue() || "Unknown"}
                             </p>
                             <p className="text-xs text-gray-500">
-                              {cell.getValue().username}
+                              {/* {cell.getValue()?.email || "No Email"} */}
                             </p>
                           </div>
                         </div>
-                      ) : cell.column.id === "status" ? (
+                      ) : cell.column.id === "phone_number" ? (
+                        <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-500">
+                          {cell.getValue() || "N/A"}
+                        </span>
+                      ) : cell.column.id === "subscription_status" ? (
                         <span
-                          className={`px-2 py-1 text-xs rounded-full ${
-                            cell.getValue() === "Active"
-                              ? "bg-purple-100 text-purple-500"
-                              : "bg-red-100 text-red-500"
+                          className={`text-sm font-medium  ${
+                            cell.getValue() === "verified" ? "bg-green-100 text-green-600 rounded-full px-2 py-1" : "bg-yellow-100 text-yellow-600 rounded-full px-2 py-1"
                           }`}
                         >
-                          {cell.getValue()}
+                          {cell.getValue() ? cell.getValue().toString() : "N/A"}
                         </span>
-                      ) : cell.column.id === "subscription" ? (
-                        <span
-                          className={`text-sm font-medium ${
-                            cell.getValue() === "Subscribed"
-                              ? "text-green-500"
-                              : "text-red-500"
-                          }`}
-                        >
-                          {cell.getValue()}
-                        </span>
-                      ) : cell.column.id === "action" ? (
-                        <>
-                          <Button
-                            size="sm"
-                            className="w-full justify-start"
-                            onClick={() => setOpenVerificationRow(row.id)} // Open the popup for this row
-                          >
-                            View Documents
-                          </Button>
-                          {openVerificationRow === row.id && (
-                            <VerificationRequest
-                              isOpen={true}
-                              setIsOpen={() => setOpenVerificationRow(null)} // Close the popup
-                            />
-                          )}
-                        </>
                       ) : (
-                        flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )
+                        flexRender(cell.column.columnDef.cell, cell.getContext())
                       )}
                     </TableCell>
                   ))}
