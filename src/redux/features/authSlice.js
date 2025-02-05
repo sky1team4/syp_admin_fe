@@ -3,8 +3,8 @@ import axios from 'axios';
 
 // const API_URL = process.env.BASE_URL;
 // const API_URL = "https://localhost:3000";
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      console.log('NEXT_PUBLIC_API_URL:', apiUrl); // Debugging line
+// const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+//       console.log('NEXT_PUBLIC_API_URL:', apiUrl); // Debugging line
 export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials) => {

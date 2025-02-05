@@ -40,7 +40,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="container py-10 bg-white rounded-xl p-5 shadow-md">
+    <div className="w-full py-10 bg-white rounded-xl p-5 shadow-md">
       <DataTable
         columns={columns}
         data={data}

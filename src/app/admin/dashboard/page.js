@@ -13,7 +13,7 @@ const DashboardPage = () => {
   return (
     <div className='flex flex-col md:flex-row gap-5 w-full md:p-4'>
       {/* <Sidebar /> */}
-      <div className='flex flex-col flex-1 gap-3'>
+      <div className='flex flex-col flex-1 gap-3 w-full'>
         {/* <Header /> */}
         <Dashbaord_stats title="Today's Summary" />
         <UserTable />

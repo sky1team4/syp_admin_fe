@@ -8,36 +8,17 @@ import Sidebar from "../../components/Sidebar";
 const AdminLayout = ({ children }) => {
     return (
         <>
-            <div className='flex flex-col bg-gray-50 w-full'>
-                <div className="w-full z-30 lg:w-[80%] h-auto self-end fixed top-0">
+            <div className="bg-purple-50/75 w-full h-screen grid gap-4 grid-cols-1 md:grid-cols-[240px_1fr]">
+                <div className="w-full">
+                    <Sidebar />
+                </div>
+
+                <div className="flex flex-col">
                     <Header />
+                    <main className="mt-5 w-full px-4">
+                        {children}
+                    </main>
                 </div>
-
-
-                <div className="flex justify-end mt-20 m-5">
-                    <Sidebar />
-                    <div className="mt-5 w-full md:w-[80%]">
-                        {children}
-
-
-                    </div>
-                </div>
-
-                {/* <div className="w-auto">
-                    <Sidebar />
-                </div> */}
-
-                {/* <Sidebar /> */}
-                {/* <div className='flex flex-col gap-3 w-full'> */}
-                    {/* <Header />
-                    <div className="">
-                        {children}
-                    </div> */}
-                    {/* <div className='flex gap-3 w-full pb-4'>
-                        {children}
-                    </div> */}
-
-                {/* </div> */}
             </div>
         </>
     );
