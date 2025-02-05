@@ -1,6 +1,6 @@
 // FAQManagement.jsx
 import React from "react";
-import FAQCard from "./FAQCard";
+import FAQCard from "./FAQcards";
 
 const FAQManagement = () => {
   const faqs = [
