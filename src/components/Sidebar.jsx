@@ -13,9 +13,7 @@ const Sidebar = () => {
   useEffect(() => {
     // Load the selected tab from localStorage on component mount
     const savedTab = localStorage.getItem("selectedTab");
-    if (savedTab) {
-      setStaticTab(savedTab);
-    }
+    setStaticTab(savedTab || "dashboard"); // Default to "dashboard" if no tab is saved
   }, []);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);

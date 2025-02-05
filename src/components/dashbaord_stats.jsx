@@ -44,12 +44,14 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
     <div className="w-full bg-white shadow-md p-4 md:p-8 rounded-xl">
       <div className="w-full flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
-        <button
-          className="text-sm bg-purple-600 text-white px-2 py-2 rounded-md"
-          onClick={click}
-        >
-          {btnText}
-        </button>
+        {btnText && (
+          <button
+            className="text-sm bg-purple-600 text-white px-2 py-2 rounded-md"
+            onClick={click}
+          >
+            {btnText}
+          </button>
+        )}
       </div>
       {isOpen && (
         <div className="popup-content">

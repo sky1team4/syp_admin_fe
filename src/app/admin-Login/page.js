@@ -164,12 +164,7 @@ export default function Login() {
                   {loading ? 'Signing in...' : 'Sign In'}
                 </button>
               </form>
-              <p className="mt-4 2xl:mt-10 text-center">
-                Don't have an Account?{" "}
-                <a href="#" className="text-purple-600 hover:underline">
-                  Signup
-                </a>
-              </p>
+              
             </div>
           </div>
           {/* Right Section - Illustration */}

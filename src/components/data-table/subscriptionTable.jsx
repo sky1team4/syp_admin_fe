@@ -52,7 +52,7 @@ export function SubscriptionTable({ columns, data, title, btnText, click, isOpen
                     </h2>
 
                 </div>
-                {<Button click={click} isOpen={isOpen} h="10" text={btnText} />}
+                {btnText && <Button click={click} isOpen={isOpen} h="10" text={btnText} />}
             </div>
 
             <div className="relative overflow-x-auto w-full">
