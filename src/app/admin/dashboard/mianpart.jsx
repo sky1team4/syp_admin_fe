@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { columns } from "@/components/data-table/columns"
 import { DataTable } from "@/components/data-table/data-table"
 
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export default function DashboardPage() {
   const [data, setData] = useState([]);
 
@@ -10,7 +11,7 @@ export default function DashboardPage() {
     const fetchData = async () => {
       const yourToken = localStorage.getItem('token');
       try {
-        const response = await fetch('http://localhost:3000/subscription-verification', {
+        const response = await fetch(`${API_URL}/subscription-verification`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${yourToken}`, // Include your JWT token if required

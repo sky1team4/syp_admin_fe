@@ -1,15 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// const API_URL = process.env.BASE_URL;
-const API_URL = "https://localhost:3000";
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
+// const API_URL = "https://localhost:3000";
 
 export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials) => {
     try {
-      const response = await fetch(`http://localhost:3000/users/login`, {
-        // const response = await fetch(`${API_URL}/users/login`, {
+      // const response = await fetch(`http:///users/login`, {
+        const response = await fetch(`${API_URL}/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

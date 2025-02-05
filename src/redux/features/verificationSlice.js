@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export const submitVerificationRequest = createAsyncThunk(
     'verification/submit',
     async ({ userData, documents }, { rejectWithValue }) => {
@@ -33,7 +34,7 @@ export const submitVerificationRequest = createAsyncThunk(
                 console.log(pair[0] + ': ', pair[1]);
             }
 
-            const response = await fetch(`http://localhost:3000/verification-requests`, {
+            const response = await fetch(`${API_URL}/verification-requests`, {
                 method: 'POST',
                 body: formData,
                 credentials: 'include',

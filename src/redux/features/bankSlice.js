@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export const saveBankConfig = createAsyncThunk(
   'bank/saveConfig',
   async (data, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/bank', {
+      const response = await fetch(`${API_URL}/bank`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

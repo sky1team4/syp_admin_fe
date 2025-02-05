@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const TodaysSummary = ({ btnText, title, click, isOpen }) => {
   const [data, setData] = useState([]);
 
@@ -10,7 +11,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token'); // Retrieve token from local storage
-        const response = await fetch('http://localhost:3000/subscription-verification', {
+        const response = await fetch(`${API_URL}/subscription-verification`, {
           method: 'GET', // Specify the method
           headers: {
 

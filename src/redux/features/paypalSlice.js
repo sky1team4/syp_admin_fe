@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export const savePaypalConfig = createAsyncThunk(
   'paypal/saveConfig',
   async (data, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/paypal', {
+      const response = await fetch(`${API_URL}/paypal`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

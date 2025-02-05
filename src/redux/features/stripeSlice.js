@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export const saveStripeConfig = createAsyncThunk(
   'stripe/saveConfig',
   async (data, { rejectWithValue, getState }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/stripe', {
+      const response = await fetch(`${API_URL}/stripe`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
