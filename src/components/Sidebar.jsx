@@ -65,7 +65,12 @@ const Sidebar = () => {
             onClick={toggleSidebar}
             className="sm:hidden text-white self-end mr-4"
           >
-            ✖
+            <Image
+              src="/closeIcon.svg"
+              width={25}
+              height={25}
+              alt="close"
+            />
           </button>
 
           {/* Sidebar Content */}

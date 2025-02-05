@@ -61,30 +61,6 @@ const DashboardTopBar = () => {
 
       {/* Right Section: Language Dropdown, Notifications, Profile */}
       <div className="pl-6 md:pl-0 flex items-center space-x-2 md:space-x-6">
-        {/* Language Dropdown */}
-        {/* <div className="flex items-center space-x-2 cursor-pointer">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg"
-            alt="US Flag"
-            className="w-5 h-5 rounded-full"
-          />
-          <span className="text-gray-700">Eng (US)</span>
-          {/* <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="w-4 h-4 text-gray-500"
-          > */}
-            {/* <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 9l-7 7-7-7"
-            /> */}
-          {/* </svg> */}
-          {/* <Image alt="downArrow" src="/downArrow.svg" width={30} height={30}/> */}
-        {/* </div> */} 
 
         {/* Notifications */}
         <div className="relative cursor-pointer" ref={notificationRef}>
