@@ -10,7 +10,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token'); // Retrieve token from local storage
-        const response = await fetch('http://localhost:3000/subscription-verification', {
+        const response = await fetch('${process.env.NEXT_PUBLIC_API_URL}/subscription-verification', {
           method: 'GET', // Specify the method
           headers: {
 

@@ -7,7 +7,7 @@ export const fetchSubscriptions = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Mzc2NDE3NzEsImV4cCI6MTczNzY0NTM3MX0.aTaYNl0SvCRpYB98yjgPTcrITeTGtKlyQMHZ_VXHUbM";
-      const response = await fetch('http://localhost:3000/subscriptions', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export const saveSubscription = createAsyncThunk(
 
       console.log('Sending subscription data:', data); // Debug log
 
-      const response = await fetch('http://localhost:3000/subscriptions', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ export const updateSubscription = createAsyncThunk(
   async ({ id, data }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/subscriptions/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export const deleteSubscription = createAsyncThunk(
   async (id, { rejectWithValue, dispatch }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/subscriptions/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
