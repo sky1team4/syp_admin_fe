@@ -10,7 +10,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token'); // Retrieve token from local storage
-        const response = await fetch('http://localhost:3000/subscription-verification', {
+        const response = await fetch('${process.env.NEXT_PUBLIC_API_URL}/subscription-verification', {
           method: 'GET', // Specify the method
           headers: {
 
@@ -44,12 +44,14 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
     <div className="w-full bg-white shadow-md p-4 md:p-8 rounded-xl">
       <div className="w-full flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
-        <button
-          className="text-sm bg-purple-600 text-white px-2 py-2 rounded-md"
-          onClick={click}
-        >
-          {btnText}
-        </button>
+        {btnText && (
+          <button
+            className="text-sm bg-purple-600 text-white px-2 py-2 rounded-md"
+            onClick={click}
+          >
+            {btnText}
+          </button>
+        )}
       </div>
       {isOpen && (
         <div className="popup-content">
@@ -62,7 +64,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
         {info.map((item) => (
           <div
             key={item.id}
-            className={`w-full md:w-[8rem] lg:w-[12rem] flex gap-2 flex-col items-start justify-start p-4 ${item.bgColor} rounded-2xl shadow-lg transition-transform transform hover:scale-105 cursor-pointer`}
+            className={`w-full md:w-[8rem] lg:w-[12rem] flex gap-2 flex-col items-start justify-start p-4 ${item.bgColor} rounded-2xl cursor-pointer`}
           >
             <Image src={item.icon} width={40} height={40} alt="icon" />
             <p className="text-3xl font-bold text-gray-800">{item.value}</p>

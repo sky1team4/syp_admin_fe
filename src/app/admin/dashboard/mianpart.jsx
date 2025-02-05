@@ -10,7 +10,7 @@ export default function DashboardPage() {
     const fetchData = async () => {
       const yourToken = localStorage.getItem('token');
       try {
-        const response = await fetch('http://localhost:3000/subscription-verification', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscription-verification`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${yourToken}`, // Include your JWT token if required
@@ -40,7 +40,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="container py-10">
+    <div className="container py-10 bg-white rounded-xl p-5 shadow-md">
       <DataTable
         columns={columns}
         data={data}

@@ -5,7 +5,7 @@ export const saveStripeConfig = createAsyncThunk(
   async (data, { rejectWithValue, getState }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/stripe', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

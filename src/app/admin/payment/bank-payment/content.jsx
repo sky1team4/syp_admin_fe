@@ -1,13 +1,12 @@
 import React from 'react';
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-hot-toast';
-import { Toaster } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveBankConfig } from '../../../../redux/features/bankSlice';
 
 // UI Components
 import Input from '../../../../components/cui/input'
-import Button from '../../../../components/cui/button'
 import Dropdown from '../../../../components/cui/dropdown'
 import CustomCheckbox from '@/components/cui/customCheckbox';
 
@@ -67,19 +66,27 @@ const BankPaymentIntegration = () => {
   };
 
   return (
-    <div className="w-full md:h-full p-8 bg-white rounded-lg shadow-lg">
-      <h1 className="text-3xl font-bold mb-2 text-gray-800">Bank Payment Integration</h1>
-      <p className="text-gray-500 mb-8">
-        Configure your Bank account settings below.
-      </p>
+    <div className="w-full max-w-[32rem] md:max-w-[40rem] xl:max-w-[60rem] 2xl:max-w-[80rem] p-4 bg-white rounded-lg shadow-lg">
+      <div className="flex gap-3 justify-center">
+        <a href="/admin/payment" className="self-center cursor-pointer">
+          <Image
+            src="/backArrow.svg" 
+            alt="Illustration"
+            width={8}  
+            height={8}
+          />
+        </a>
+        <h1 className="text-2xl md:text-3xl font-bold mb-3 text-gray-800 text-center">Bank Payment Integration</h1>
+      </div>
+      <p className="text-gray-500 mb-4 text-center">Configure your Bank account settings below.</p>
       <Toaster position="top-right" />
-      <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-8 w-[81.5rem]">
-        <div className="flex gap-6 flex-wrap">
+
+      <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
+        {/* Account Info Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input 
             id="accHolderName" 
             {...register('accHolderName', FORM_VALIDATION.accHolderName)}
-            w="[20rem]" 
-            mdw="[40rem]" 
             label="Account Holder Name *" 
             placeholder="Enter Account Holder Name"
             error={errors.accHolderName?.message}
@@ -87,20 +94,17 @@ const BankPaymentIntegration = () => {
           <Input 
             id="bankAccNo" 
             {...register('bankAccNo', FORM_VALIDATION.bankAccNo)}
-            w="[20rem]" 
-            mdw="[40rem]" 
             label="Bank Account Number *" 
             placeholder="Enter Bank Account Number"
             error={errors.bankAccNo?.message}
           />
         </div>
 
-        <div className="flex gap-6 flex-wrap">
+        {/* IBAN & SWIFT Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input 
             id="ibanNo" 
             {...register('ibanNo', FORM_VALIDATION.ibanNo)}
-            w="[20rem]" 
-            mdw="[40rem]" 
             label="IBAN Number *" 
             placeholder="Enter IBAN Number"
             error={errors.ibanNo?.message}
@@ -108,20 +112,17 @@ const BankPaymentIntegration = () => {
           <Input 
             id="swiftCode" 
             {...register('swiftCode', FORM_VALIDATION.swiftCode)}
-            w="[20rem]" 
-            mdw="[40rem]" 
             label="SWIFT Code *" 
             placeholder="Enter SWIFT Code"
             error={errors.swiftCode?.message}
           />
         </div>
 
-        <div className="flex gap-6 flex-wrap">
+        {/* Bank Name & Transaction Type Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input 
             id="bankName" 
             {...register('bankName', FORM_VALIDATION.bankName)}
-            w="[20rem]" 
-            mdw="[40rem]" 
             label="Bank Name *" 
             placeholder="Enter Bank Name"
             error={errors.bankName?.message}
@@ -136,15 +137,14 @@ const BankPaymentIntegration = () => {
           />
         </div>
 
+        {/* Bank Address Section */}
         <div className="flex flex-col gap-3">
-          <label htmlFor="bankAddress" className="text-sm font-medium text-gray-700">
-            Bank Address *
-          </label>
+          <label htmlFor="bankAddress" className="text-sm font-medium text-gray-700">Bank Address *</label>
           <textarea 
             id="bankAddress" 
             {...register('bankAddress', FORM_VALIDATION.bankAddress)}
-            placeholder='Enter Bank Address'
-            className="w-[20rem] md:w-full border border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm p-2.5"
+            placeholder="Enter Bank Address"
+            className="w-full border border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm p-2.5"
             rows={5}
           />
           {errors.bankAddress && (
@@ -152,26 +152,20 @@ const BankPaymentIntegration = () => {
           )}
         </div>
 
-        <div className="flex gap-5 md:gap-80 items-center flex-wrap">
-          <label htmlFor="enableBankPayment" className="text-sm font-medium text-gray-700">
-            Enable Bank Payment
-          </label>
-          <CustomCheckbox 
-            id="enableBankPayment"
-            {...register('enableBankPayment')}
-            defaultChecked={false}
-          />
+        {/* Enable Bank Payment Section */}
+        <div className="flex justify-between items-center">
+          <label htmlFor="enableBankPayment" className="text-sm font-medium text-gray-700">Enable Bank Payment</label>
+          <CustomCheckbox id="enableBankPayment" {...register('enableBankPayment')} defaultChecked={false} />
         </div>
 
-        <div className='w-full max-w-[40rem]'>
-          <button
-            type="submit"
-            className="w-full h-auto bg-purple-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50"
-            disabled={isLoading}
-          >
-            {isLoading ? "Saving..." : "Save Changes"}
-          </button>
-        </div>
+        {/* Submit Button */}
+        <button 
+          type="submit"
+          className="w-full bg-purple-600 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50"
+          disabled={isLoading}
+        >
+          {isLoading ? "Saving..." : "Save Changes"}
+        </button>
       </form>
     </div>
   );
