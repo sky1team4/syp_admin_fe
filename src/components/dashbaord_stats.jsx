@@ -64,7 +64,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
         {info.map((item) => (
           <div
             key={item.id}
-            className={`w-full md:w-[8rem] lg:w-[12rem] flex gap-2 flex-col items-start justify-start p-4 ${item.bgColor} rounded-2xl shadow-lg transition-transform transform hover:scale-105 cursor-pointer`}
+            className={`w-full md:w-[8rem] lg:w-[12rem] flex gap-2 flex-col items-start justify-start p-4 ${item.bgColor} rounded-2xl cursor-pointer`}
           >
             <Image src={item.icon} width={40} height={40} alt="icon" />
             <p className="text-3xl font-bold text-gray-800">{item.value}</p>

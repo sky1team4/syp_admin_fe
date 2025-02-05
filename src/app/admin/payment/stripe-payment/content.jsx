@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { toast, Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
@@ -64,9 +65,19 @@ const StripePaymentIntegration = () => {
   };
 
   return (
-    <div className="w-full max-w-[32rem] md:max-w-[40rem] xl:max-w-[60rem] 2xl:max-w-[80rem] h-auto p-4 md:p-6 xl:p-8 bg-white rounded-lg shadow-lg">
-      <h1 className="text-2xl md:text-3xl font-bold mb-4 text-gray-800 text-center">Stripe Payment Integration</h1>
-      <p className="text-gray-500 mb-6 text-center">Configure your Stripe account settings below.</p>
+    <div className="w-full max-w-[32rem] md:max-w-[40rem] xl:max-w-[60rem] 2xl:max-w-[80rem] h-auto p-4 md:p-4 bg-white rounded-lg shadow-lg">
+      <div className="flex gap-3 justify-center">
+        <a href="/admin/payment" className="self-center cursor-pointer">
+          <Image
+            src="/backArrow.svg"
+            alt="Illustration"
+            width={8}
+            height={8}
+          />
+        </a>
+        <h1 className="text-2xl md:text-3xl font-bold mb-3 text-gray-800 text-center">Stripe Payment Integration</h1>
+      </div>
+      <p className="text-gray-500 mb-4 text-center">Configure your Stripe account settings below.</p>
       <Toaster position="top-right" />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -106,7 +117,7 @@ const StripePaymentIntegration = () => {
 
         {/* Submit Button */}
         <button type="submit"
-          className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50"
+          className="w-full bg-purple-600 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50"
           disabled={isLoading}>
           {isLoading ? "Saving..." : "Save Changes"}
         </button>
