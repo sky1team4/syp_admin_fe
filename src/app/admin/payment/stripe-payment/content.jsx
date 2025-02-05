@@ -1,17 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-hot-toast';
-import { Toaster } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveStripeConfig } from '../../../../redux/features/stripeSlice';
 
 // UI Components
-import Input from '../../../../components/cui/input'
-import Button from '../../../../components/cui/button'
-import Dropdown from '../../../../components/cui/dropdown'
+import Input from '../../../../components/cui/input';
+import Dropdown from '../../../../components/cui/dropdown';
 import CustomCheckbox from '@/components/cui/customCheckbox';
 
-// Move constants outside component
 const CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD', 'INR'];
 
 const FORM_VALIDATION = {
@@ -43,7 +40,7 @@ const FORM_VALIDATION = {
 const StripePaymentIntegration = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
-  const { isLoading, error } = useSelector((state) => state.stripe);
+  const { isLoading } = useSelector((state) => state.stripe);
 
   const onSubmit = async (data) => {
     try {
@@ -59,8 +56,6 @@ const StripePaymentIntegration = () => {
         text_mode: data.testMode ? 'test' : 'live'
       };
 
-      console.log(transformedData);
-      
       await dispatch(saveStripeConfig(transformedData)).unwrap();
       toast.success('Stripe configuration saved successfully');
     } catch (err) {
@@ -68,104 +63,53 @@ const StripePaymentIntegration = () => {
     }
   };
 
-  const onError = (errors) => {
-    toast.error('Please fill in all required fields correctly');
-  };
-
   return (
-    <div className="w-auto h-auto md:h-full p-4 md:p-5 bg-white rounded-lg shadow-lg">
-      <h1 className="text-3xl font-bold mb-2 text-gray-800">Stripe Payment Integration</h1>
-      <p className="text-gray-500 mb-8">
-        Configure your Stripe account settings below.
-      </p>
+    <div className="w-full max-w-[32rem] md:max-w-[40rem] xl:max-w-[60rem] 2xl:max-w-[80rem] h-auto p-4 md:p-6 xl:p-8 bg-white rounded-lg shadow-lg">
+      <h1 className="text-2xl md:text-3xl font-bold mb-4 text-gray-800 text-center">Stripe Payment Integration</h1>
+      <p className="text-gray-500 mb-6 text-center">Configure your Stripe account settings below.</p>
       <Toaster position="top-right" />
-      <form 
-        onSubmit={handleSubmit(onSubmit, onError)} 
-        className="space-y-8 w-auto flex flex-col items-center justify-center"
-      >
-        <div className="flex gap-6 flex-wrap">
-          <Input 
-            id="publishableKey" 
-            {...register('publishableKey', FORM_VALIDATION.publishableKey)}
-            w="[20rem]" 
-            mdw="[40rem]" 
-            label="Publishable Key *" 
-            placeholder="Enter your Publishable Key"
-            error={errors.publishableKey?.message}
-          />
-          <Input 
-            id="secretKey" 
-            {...register('secretKey', FORM_VALIDATION.secretKey)}
-            w="[20rem]" 
-            mdw="[40rem]" 
-            label="Secret Key *" 
-            placeholder="Enter your Secret Key"
-            error={errors.secretKey?.message}
-          />
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* API Keys Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Input id="publishableKey" {...register('publishableKey', FORM_VALIDATION.publishableKey)}
+            label="Publishable Key *" placeholder="Enter your Publishable Key"
+            error={errors.publishableKey?.message} />
+          <Input id="secretKey" {...register('secretKey', FORM_VALIDATION.secretKey)}
+            label="Secret Key *" placeholder="Enter your Secret Key"
+            error={errors.secretKey?.message} />
         </div>
 
-        {/* Webhook Signing Secret and URL */}
-        <div className="flex gap-6 flex-wrap">
-          <Input 
-            id="webhookSigningSecret" 
-            {...register('webhookSigningSecret', FORM_VALIDATION.webhookSigningSecret)}
-            w="full" 
-            mdw="[40rem]" 
-            label="Webhook Signing Secret *" 
-            placeholder="Enter your Webhook Signing Secret"
-            error={errors.webhookSigningSecret?.message}
-          />
-          <Input 
-            id="webhookUrl" 
-            {...register('webhookUrl')}
-            w="full" 
-            mdw="[40rem]" 
-            label="Webhook URL (Optional)" 
-            placeholder="Enter your Webhook URL"
-          />
+        {/* Webhook Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Input id="webhookSigningSecret" {...register('webhookSigningSecret', FORM_VALIDATION.webhookSigningSecret)}
+            label="Webhook Signing Secret *" placeholder="Enter your Webhook Signing Secret"
+            error={errors.webhookSigningSecret?.message} />
+          <Input id="webhookUrl" {...register('webhookUrl')} label="Webhook URL (Optional)" placeholder="Enter your Webhook URL" />
         </div>
 
-        {/* Default Currency and Allowed Currencies */}
-        <div className="flex gap-6 flex-wrap">
-          <Dropdown 
-            id="defaultCurrency" 
-            register={register('defaultCurrency', FORM_VALIDATION.defaultCurrency)}
-            label="Default Currency *" 
-            array={CURRENCIES} 
-            selected="Select Below"
-            error={errors.defaultCurrency?.message}
-          />
-          <Dropdown 
-            id="allowedCurrencies" 
-            register={register('allowedCurrencies', FORM_VALIDATION.allowedCurrencies)}
-            label="Allowed Currencies *" 
-            array={CURRENCIES} 
-            selected="Select Below"
-            error={errors.allowedCurrencies?.message}
-          />
+        {/* Currency Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Dropdown id="defaultCurrency" register={register('defaultCurrency', FORM_VALIDATION.defaultCurrency)}
+            label="Default Currency *" array={CURRENCIES} selected="Select Below"
+            error={errors.defaultCurrency?.message} />
+          <Dropdown id="allowedCurrencies" register={register('allowedCurrencies', FORM_VALIDATION.allowedCurrencies)}
+            label="Allowed Currencies *" array={CURRENCIES} selected="Select Below"
+            error={errors.allowedCurrencies?.message} />
         </div>
 
-        {/* Enable Test Mode */}
-        <div className="flex gap-5 md:gap-80 items-center flex-wrap">
-          <label htmlFor="testMode" className="text-sm font-medium text-gray-700">
-            Enable Test Mode
-          </label>
-          <CustomCheckbox 
-            id="testMode"
-            {...register('testMode')}
-            defaultChecked={false}
-          />
+        {/* Test Mode Section */}
+        <div className="flex justify-between items-center">
+          <label htmlFor="testMode" className="text-sm font-medium text-gray-700">Enable Test Mode</label>
+          <CustomCheckbox id="testMode" {...register('testMode')} defaultChecked={false} />
         </div>
 
-        <div className='w-full max-w-[40rem]'>
-          <button
-              type="submit"
-              className="w-full h-auto bg-purple-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50"
-              disabled={isLoading}
-            >
-              {isLoading ? "Saving..." : "Save Changes"}
-          </button>
-        </div>
+        {/* Submit Button */}
+        <button type="submit"
+          className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50"
+          disabled={isLoading}>
+          {isLoading ? "Saving..." : "Save Changes"}
+        </button>
       </form>
     </div>
   );

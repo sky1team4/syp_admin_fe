@@ -11,30 +11,30 @@ const SettingContentArea = () => {
       // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
       link: "/admin/relationshipManagement",
     },
-    {
-      title: "Degree Management",
-      Icon: "/setting_icon/RelationshipManagement.png",
-      // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
-      link: "/admin/degreeManagement",
-    },
-    {
-      title: "Employment Management",
-      Icon: "/setting_icon/RelationshipManagement.png",
-      // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
-      link: "/admin/employmentManagement",
-    },
-    {
-      title: "Interest Management",
-      Icon: "/setting_icon/RelationshipManagement.png",
-      // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
-      link: "/admin/InterestManagement",
-    },
-    {
-      title: "Q&A Catogory Management",
-      Icon: "/setting_icon/RelationshipManagement.png",
-      // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
-      link: "/admin/QAcateManagement",
-    },
+    // {
+    //   title: "Degree Management",
+    //   Icon: "/setting_icon/RelationshipManagement.png",
+    //   // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
+    //   link: "/admin/degreeManagement",
+    // },
+    // {
+    //   title: "Employment Management",
+    //   Icon: "/setting_icon/RelationshipManagement.png",
+    //   // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
+    //   link: "/admin/employmentManagement",
+    // },
+    // {
+    //   title: "Interest Management",
+    //   Icon: "/setting_icon/RelationshipManagement.png",
+    //   // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
+    //   link: "/admin/InterestManagement",
+    // },
+    // {
+    //   title: "Q&A Catogory Management",
+    //   Icon: "/setting_icon/RelationshipManagement.png",
+    //   // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
+    //   link: "/admin/QAcateManagement",
+    // },
     // {
     //   title: "Job Title Management",
     //   Icon: "/setting_icon/RelationshipManagement.png",
@@ -59,36 +59,36 @@ const SettingContentArea = () => {
     //   // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
     //   link: "/admin/companyNameManagement",
     // },
-    // {
-    //   title: "Education Management",
-    //   Icon: "/setting_icon/EducationManagement.png",
-    //   // Icon: () => <Image src="/setting_icon/EducationManagement.png" width={50} height={50} alt="Education Icon" />,
-    //   link: "/admin/education-management",
-    // },
-    // {
-    //   title: "Specialty Management",
-    //   Icon: "/setting_icon/SpecialtyManagement.png",
-    //   // Icon: () => <Image src="/setting_icon/SpecialtyManagement.png" width={50} height={50} alt="Specialty Icon" />,
-    //   link: "/admin/specialtyManagement",
-    // },
-    // {
-    //   title: "Profile Management",
-    //   Icon: "/setting_icon/profilemanagement.png",
-    //   // Icon: () => <Image src="/setting_icon/profilemanagement.png" width={50} height={50} alt="Profile Icon" />,
-    //   link: "/admin/profile-management",
-    // },
-    // {
-    //   title: "RSS Feed Category",
-    //   Icon: "/setting_icon/category.png",
-    //   // Icon: () => <Image src="/setting_icon/category.png" width={50} height={50} alt="Category Icon" />,
-    //   link: "/admin/rssFeedManagement",
-    // },
-    // {
-    //   title: "FAQ",
-    //   Icon: "/setting_icon/FAQ.png",
-    //   // Icon: () => <Image src="/setting_icon/FAQ.png" width={50} height={50} alt="FAQ Icon" />,
-    //   link: "/admin/FAQ",
-    // },
+    {
+      title: "Education Management",
+      Icon: "/setting_icon/EducationManagement.png",
+      // Icon: () => <Image src="/setting_icon/EducationManagement.png" width={50} height={50} alt="Education Icon" />,
+      link: "/admin/education-management",
+    },
+    {
+      title: "Specialty Management",
+      Icon: "/setting_icon/SpecialtyManagement.png",
+      // Icon: () => <Image src="/setting_icon/SpecialtyManagement.png" width={50} height={50} alt="Specialty Icon" />,
+      link: "/admin/specialtyManagement",
+    },
+    {
+      title: "Profile Management",
+      Icon: "/setting_icon/profilemanagement.png",
+      // Icon: () => <Image src="/setting_icon/profilemanagement.png" width={50} height={50} alt="Profile Icon" />,
+      link: "/admin/profile-management",
+    },
+    {
+      title: "RSS Feed Category",
+      Icon: "/setting_icon/category.png",
+      // Icon: () => <Image src="/setting_icon/category.png" width={50} height={50} alt="Category Icon" />,
+      link: "/admin/rssFeedManagement",
+    },
+    {
+      title: "FAQ",
+      Icon: "/setting_icon/FAQ.png",
+      // Icon: () => <Image src="/setting_icon/FAQ.png" width={50} height={50} alt="FAQ Icon" />,
+      link: "/admin/FAQ",
+    },
   ];
 
   return (

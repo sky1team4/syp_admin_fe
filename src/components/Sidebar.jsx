@@ -20,162 +20,189 @@ const Sidebar = () => {
 
   const handleTabClick = (tab) => {
     setStaticTab(tab);
-    localStorage.setItem("selectedTab", tab); // Save the selected tab in localStorage
+    if (tab === "signout") {
+      localStorage.removeItem("selectedTab"); // Clear the selected tab on sign out
+    } else {
+      localStorage.setItem("selectedTab", tab); // Save the selected tab in localStorage
+    }
+    setIsSidebarOpen(false); // Close sidebar after selecting a tab
   };
 
   return (
-    <div className="flex md:w-64 h-auto">
-      {/* Hamburger Button */}
-      <button
-        onClick={toggleSidebar}
-        className="sm:hidden bg-purple-600 text-white p-2 rounded-md m-2 h-10 absolute top-4"
-      >
-        <Image
-          src="/dashbaord_siedebar_icon/menu.png"
-          width={25}
-          height={25}
-          alt="menu"
-        />
-      </button>
+    <>
+      {/* Overlay (Appears only on mobile when sidebar is open) */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 sm:hidden"
+          onClick={toggleSidebar}
+        ></div>
+      )}
 
-      {/* Sidebar */}
-      <div
-        className={`z-40 fixed top-0 left-0 h-full bg-purple-600 text-white ${
-          isSidebarOpen ? "w-screen" : "sm:w-64"
-        } flex flex-col gap-5 items-center py-6 px-4 transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } sm:translate-x-0 transition-transform duration-300`}
-      >
-        {/* Close Button */}
+      <div className="flex md:w-64 h-auto">
+        {/* Hamburger Button */}
         <button
           onClick={toggleSidebar}
-          className="sm:hidden text-white self-end mr-4"
+          className="sm:hidden bg-purple-600 text-white p-2 rounded-md m-2 h-10 fixed top-4 z-40"
         >
-          ✖
+          <Image
+            src="/dashbaord_siedebar_icon/menu.png"
+            width={25}
+            height={25}
+            alt="menu"
+          />
         </button>
-        {/* Logo / Active Dashboard */}
-        <Link href="/admin/dashboard" onClick={() => handleTabClick("dashboard")}>
-          <div
-            className={`${
-              staticTab === "dashboard" ? activeSidebarClass : sidebarClass
-            } mt-16 ${sidebarItemClass}`}
+
+        {/* Sidebar */}
+        <div
+          className={`z-40 fixed top-0 left-0 h-full bg-purple-600 text-white ${
+            isSidebarOpen ? "w-[70%]" : "sm:w-64"
+          } flex flex-col gap-5 items-center py-6 px-4 transform ${
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } sm:translate-x-0 transition-transform duration-300`}
+        >
+          {/* Close Button */}
+          <button
+            onClick={toggleSidebar}
+            className="sm:hidden text-white self-end mr-4"
           >
-            <Image
-              src="/dashbaord_siedebar_icon/Graph.svg"
-              width={30}
-              height={30}
-              alt="icon"
-            />
-            <span className="ml-2 text-[12px] font-medium">Dashboard</span>
-          </div>
-        </Link>
+            ✖
+          </button>
 
-        {/* Menu Items */}
-        <nav className="flex flex-col space-y-6">
-          {/* Subscriptions */}
-          <Link
-            href="/admin/subscriptionManagement"
-            onClick={() => handleTabClick("subscription")}
-          >
+          {/* Sidebar Content */}
+          <Link href="/admin/dashboard" onClick={() => handleTabClick("dashboard")}>
             <div
-              className={`${sidebarItemClass} ${
-                staticTab === "subscription"
-                  ? "bg-white text-purple-600"
-                  : sidebarClass
-              }`}
+              className={`${
+                staticTab === "dashboard" ? activeSidebarClass : sidebarClass
+              } mt-16 ${sidebarItemClass}`}
             >
               <Image
-                src={"/dashbaord_siedebar_icon/subscribe.png"}
-                width={30}
-                height={30}
-                alt="Subscriptions icon"
-              />
-              <span className="ml-2 text-[12px]">Subscriptions</span>
-            </div>
-          </Link>
-
-          {/* Companies */}
-          <Link
-            href="/admin/companyPage"
-            onClick={() => handleTabClick("companies")}
-
-          >
-            <div
-              className={`${sidebarItemClass} ${
-                staticTab === "companies"
-                  ? "bg-white text-purple-600"
-                  : sidebarClass
-              }`}
-            >
-              <Image
-                src="/dashbaord_siedebar_icon/Mask group (1).svg"
+                src={
+                  staticTab === "dashboard"
+                    ? "/dashbaord_siedebar_icon/dashboardIcon_active.svg"
+                    : "/dashbaord_siedebar_icon/dashboardIcon.svg"
+                }
                 width={30}
                 height={30}
                 alt="icon"
               />
-              <span className="ml-2 text-[12px]">Companies</span>
+              <span className="ml-2 text-[12px] font-medium">Dashboard</span>
             </div>
           </Link>
 
-          {/* Payment Integration */}
-          <Link href="/admin/payment" onClick={() => handleTabClick("payment")}>
-            <div
-              className={`${sidebarItemClass} ${
-                staticTab === "payment"
-                  ? "bg-white text-purple-600"
-                  : sidebarClass
-              }`}
+          {/* Menu Items */}
+          <nav className="flex flex-col space-y-6">
+            <Link
+              href="/admin/subscriptionManagement"
+              onClick={() => handleTabClick("subscription")}
             >
-              <Image
-                src="/dashbaord_siedebar_icon/Mask group (2).svg"
-                width={30}
-                height={30}
-                alt="icon"
-              />
-              <span className="ml-2 text-[12px]">Payment Integration</span>
-            </div>
-          </Link>
+              <div
+                className={`${sidebarItemClass} ${
+                  staticTab === "subscription"
+                    ? "bg-white text-purple-600"
+                    : sidebarClass
+                }`}
+              >
+                <Image
+                  src={
+                    staticTab === "subscription"
+                      ? "/dashbaord_siedebar_icon/subscriptionIcon_active.svg"
+                      : "/dashbaord_siedebar_icon/subscriptionIcon.svg"
+                  }
+                  width={30}
+                  height={30}
+                  alt="Subscriptions icon"
+                />
+                <span className="ml-2 text-[12px]">Subscriptions</span>
+              </div>
+            </Link>
 
-          {/* Settings */}
-          <Link href="/admin/setting" onClick={() => handleTabClick("setting")}>
-            <div
-              className={`${sidebarItemClass} ${
-                staticTab === "setting"
-                  ? "bg-white text-purple-600"
-                  : sidebarClass
-              }`}
-            >
-              <Image
-                src="/dashbaord_siedebar_icon/setting.svg"
-                width={30}
-                height={30}
-                alt="icon"
-              />
-              <span className="ml-2 text-[12px]">Settings</span>
-            </div>
-          </Link>
+            <Link href="/admin/companyPage" onClick={() => handleTabClick("companies")}>
+              <div
+                className={`${sidebarItemClass} ${
+                  staticTab === "companies"
+                    ? "bg-white text-purple-600"
+                    : sidebarClass
+                }`}
+              >
+                <Image
+                  src={
+                    staticTab === "companies"
+                      ? "/dashbaord_siedebar_icon/companyIcon_active.svg"
+                      : "/dashbaord_siedebar_icon/companyIcon.svg"
+                  }
+                  width={30}
+                  height={30}
+                  alt="icon"
+                />
+                <span className="ml-2 text-[12px]">Companies</span>
+              </div>
+            </Link>
 
-          {/* Sign Out */}
-          <Link href="/admin-Login" onClick={() => handleTabClick("signout")}>
-            <div
-              className={`${sidebarItemClass} ${
-                staticTab === "signout"
-                  ? "bg-white text-purple-600"
-                  : sidebarClass
-              }`}
-            >
-              <Image
-                src="/dashbaord_siedebar_icon/Signout.svg"
-                width={30}
-                height={30}
-                alt="icon"
-              />
-              <span className="text-sm">Sign Out</span>
-            </div>
-          </Link>
-        </nav>
+            <Link href="/admin/payment" onClick={() => handleTabClick("payment")}>
+              <div
+                className={`${sidebarItemClass} ${
+                  staticTab === "payment"
+                    ? "bg-white text-purple-600"
+                    : sidebarClass
+                }`}
+              >
+                <Image
+                  src={
+                    staticTab === "payment"
+                      ? "/dashbaord_siedebar_icon/paymentIcon_active.svg"
+                      : "/dashbaord_siedebar_icon/paymentIcon.svg"
+                  }
+                  width={30}
+                  height={30}
+                  alt="icon"
+                />
+                <span className="ml-2 text-[12px]">Payment Integration</span>
+              </div>
+            </Link>
+
+            <Link href="/admin/setting" onClick={() => handleTabClick("setting")}>
+              <div
+                className={`${sidebarItemClass} ${
+                  staticTab === "setting"
+                    ? "bg-white text-purple-600"
+                    : sidebarClass
+                }`}
+              >
+                <Image
+                  src={
+                    staticTab === "setting"
+                      ? "/dashbaord_siedebar_icon/settingIcon_active.svg"
+                      : "/dashbaord_siedebar_icon/settingIcon.svg"
+                  }
+                  width={30}
+                  height={30}
+                  alt="icon"
+                />
+                <span className="ml-2 text-[12px]">Settings</span>
+              </div>
+            </Link>
+
+            <Link href="/admin-Login" onClick={() => handleTabClick("signout")}>
+              <div
+                className={`${sidebarItemClass} ${
+                  staticTab === "signout"
+                    ? "bg-white text-purple-600"
+                    : sidebarClass
+                }`}
+              >
+                <Image
+                  src="/dashbaord_siedebar_icon/Signout.svg"
+                  width={30}
+                  height={30}
+                  alt="icon"
+                />
+                <span className="text-sm">Sign Out</span>
+              </div>
+            </Link>
+          </nav>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

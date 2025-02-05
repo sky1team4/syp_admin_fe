@@ -4,8 +4,9 @@ import { SubscriptionTable } from "../components/data-table/subscriptionTable"
 const TableComponent = (info) => {
   return (
     <SubscriptionTable
+      link={info.link}
       columns={columns}
-      backBTN={info.backBTN}
+      backBTN={info.backBTN}  
       data={info.array}
       title={info.title}
       btnText={info.btnText}

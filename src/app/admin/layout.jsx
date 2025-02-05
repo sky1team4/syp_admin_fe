@@ -9,14 +9,14 @@ const AdminLayout = ({ children }) => {
     return (
         <>
             <div className='flex flex-col bg-gray-50 w-full'>
-                <div className="w-[80%] h-auto self-end fixed top-0">
+                <div className="w-full z-30 lg:w-[80%] h-auto self-end fixed top-0">
                     <Header />
                 </div>
 
 
                 <div className="flex justify-end mt-20 m-5">
                     <Sidebar />
-                    <div className="mt-5 w-[80%]">
+                    <div className="mt-5 w-full md:w-[80%]">
                         {children}
 
 
