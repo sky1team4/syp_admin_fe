@@ -34,7 +34,7 @@ export const submitVerificationRequest = createAsyncThunk(
                 console.log(pair[0] + ': ', pair[1]);
             }
 
-            const response = await fetch(`${API_URL}/verification-requests`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verification-requests`, {
                 method: 'POST',
                 body: formData,
                 credentials: 'include',

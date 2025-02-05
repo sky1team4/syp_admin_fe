@@ -6,7 +6,7 @@ export const savePaypalConfig = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/paypal`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/paypal`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

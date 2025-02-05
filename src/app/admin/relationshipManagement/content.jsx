@@ -58,6 +58,7 @@ function content() {
           namePlaceholder="Enter relationship name"
           saveButtonText="Add Relationship"
           updateButtonText="Update Relationship"
+          type="relationship"
         />
         <DisplayTable click={toggleSidebar} isOpen={isOpen} btnText="Add Relationship" title="Relationship" array={tableData} col1_Title="Relationship" col2_Title="Created Date" col3_Title="Last Updated" />
       </div>

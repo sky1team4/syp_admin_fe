@@ -108,7 +108,7 @@ function content() {
           title="Subscription" 
           array={tableData} 
           backBTN="no"
-          btnText="Add Subscription"
+          // btnText="Add Subscription"
           col1_Title="Subscription" 
           col2_Title="Created Date" 
           col3_Title="Last Updated" 

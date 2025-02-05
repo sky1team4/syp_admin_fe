@@ -6,7 +6,7 @@ export const saveBankConfig = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/bank`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bank`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
