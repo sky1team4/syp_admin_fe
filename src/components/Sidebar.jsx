@@ -55,7 +55,7 @@ const Sidebar = () => {
         {/* Sidebar */}
         <div
           className={`z-40 fixed top-0 left-0 h-full bg-purple-600 text-white ${
-            isSidebarOpen ? "w-[70%]" : "sm:w-64"
+            isSidebarOpen ? "w-[70%]" : "sm:w-72"
           } flex flex-col gap-5 items-center py-6 px-4 transform ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           } sm:translate-x-0 transition-transform duration-300`}
@@ -90,7 +90,7 @@ const Sidebar = () => {
                 height={30}
                 alt="icon"
               />
-              <span className="ml-2 text-[12px] font-medium">Dashboard</span>
+              <span className="ml-2 font-medium">Dashboard</span>
             </div>
           </Link>
 
@@ -117,7 +117,7 @@ const Sidebar = () => {
                   height={30}
                   alt="Subscriptions icon"
                 />
-                <span className="ml-2 text-[12px]">Subscriptions</span>
+                <span className="ml-2 font-medium">Subscriptions</span>
               </div>
             </Link>
 
@@ -139,15 +139,16 @@ const Sidebar = () => {
                   height={30}
                   alt="icon"
                 />
-                <span className="ml-2 text-[12px]">Companies</span>
+                <span className="ml-2 font-medium">Companies</span>
               </div>
             </Link>
+
 
             <Link href="/admin/payment" onClick={() => handleTabClick("payment")}>
               <div
                 className={`${sidebarItemClass} ${
                   staticTab === "payment"
-                    ? "bg-white text-purple-600"
+                    ? "bg-white  text-purple-600"
                     : sidebarClass
                 }`}
               >
@@ -161,9 +162,10 @@ const Sidebar = () => {
                   height={30}
                   alt="icon"
                 />
-                <span className="ml-2 text-[12px]">Payment Integration</span>
+                <span className="ml-2 font-medium">Payment Integration</span>
               </div>
             </Link>
+
 
             <Link href="/admin/setting" onClick={() => handleTabClick("setting")}>
               <div
@@ -183,27 +185,31 @@ const Sidebar = () => {
                   height={30}
                   alt="icon"
                 />
-                <span className="ml-2 text-[12px]">Settings</span>
+                <span className="ml-2 font-medium">Settings</span>
               </div>
             </Link>
 
-            <Link href="/admin-Login" onClick={() => handleTabClick("signout")}>
-              <div
-                className={`${sidebarItemClass} ${
-                  staticTab === "signout"
-                    ? "bg-white text-purple-600"
-                    : sidebarClass
-                }`}
-              >
-                <Image
-                  src="/dashbaord_siedebar_icon/Signout.svg"
-                  width={30}
-                  height={30}
-                  alt="icon"
-                />
-                <span className="text-sm">Sign Out</span>
-              </div>
-            </Link>
+            <div className="pt-52">
+              <Link href="/admin-Login" onClick={() => handleTabClick("signout")}>
+                <div
+
+                  className={`${sidebarItemClass} ${
+                    staticTab === "signout"
+                      ? "bg-white text-purple-600"
+                      : sidebarClass
+                  }`}
+                >
+                  <Image
+                    src="/dashbaord_siedebar_icon/Signout.svg"
+                    width={40}
+                    height={40}
+                    alt="icon"
+                  />
+                  <span className="ml-2 font-medium">Sign Out</span>
+                </div>
+              </Link>
+            </div>
+
           </nav>
         </div>
       </div>

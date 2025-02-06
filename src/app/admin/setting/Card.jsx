@@ -92,8 +92,8 @@ const SettingContentArea = () => {
   ];
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 p-4 rounded-xl">
-      <div className="flex flex-wrap w-full gap-4 items-center justify-start">
+    <div className="h-full w-full bg-gray-100 p-4 rounded-xl">
+      <div className="flex flex-wrap w-full gap-4 items-center justify-center md:justify-start">
         {cards.map((card, index) => (
           <div className="" key={index}>
             <Card title={card.title} Icon={card.Icon} link={card.link} />

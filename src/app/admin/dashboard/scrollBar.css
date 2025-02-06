@@ -10,3 +10,22 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: #555; /* Change the color on hover */
   }
+
+
+  .notification-panel {
+    position: fixed;
+    top: 100px;
+    right: -100%;
+    width: 20rem;
+    height: 38rem;
+    transition: right 0.3s ease-in-out;
+  }
+  
+
+  .slide-in {
+    right: 0;
+  }
+  
+  .slide-out {
+    right: -100%;
+  }

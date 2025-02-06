@@ -7,7 +7,7 @@ const DashboardTopBar = () => {
   const notificationRef = useRef(null);
 
   const toggleNotifications = () => {
-    setIsNotificationOpen(!isNotificationOpen);
+    setIsNotificationOpen((prev) => !prev);
   };
 
   const handleClickOutside = (event) => {
@@ -76,11 +76,9 @@ const DashboardTopBar = () => {
           </span>
           
           {/* Notification Popup */}
-          {isNotificationOpen && (
-            <div className="absolute -right-36 mt-14 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-auto">
-              <Notifications />
-            </div>
-          )}
+          <div className="absolute top-10 -right-36 ">
+            <Notifications isVisible={isNotificationOpen} />
+          </div>
         </div>
 
         {/* Profile Section */}
