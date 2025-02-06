@@ -60,10 +60,10 @@ const Sidebar = () => {
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           } sm:translate-x-0 transition-transform duration-300`}
         >
-          {/* Close Button */}
+          {/* Close Button */}  
           <button
             onClick={toggleSidebar}
-            className="sm:hidden text-white self-end mr-4"
+            className="sm:hidden md:hidden text-white self-end mr-4"
           >
             <Image
               src="/closeIcon.svg"
