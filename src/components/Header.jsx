@@ -77,7 +77,7 @@ const DashboardTopBar = () => {
           
           {/* Notification Popup */}
           {isNotificationOpen && (
-            <div className="absolute -right-28 mt-14 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-auto">
+            <div className="absolute -right-36 mt-14 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-auto">
               <Notifications />
             </div>
           )}

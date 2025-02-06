@@ -1,6 +1,7 @@
 // Notifications.jsx
 import React, { useState } from "react";
 import Image from "next/image";
+import "./scrollBar.css";
 
 const Notifications = () => {
   const initialNotifications = Array(10).fill({
@@ -41,7 +42,7 @@ const Notifications = () => {
   };
 
   return (
-    <div className="relative h-[38rem] z-50 lg:block p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto">
+    <div className="relative h-[38rem] z-50 lg:block p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto custom-scrollbar">
       {/* Header */}
       <div className="flex justify-between items-center flex-wrap mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Notifications</h2>
