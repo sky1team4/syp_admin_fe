@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import themes from "../app/theme.js";
+import { TabContext } from '../context/Tabcontext'; // Adjust the path as necessary
 
 const Sidebar = () => {
+  const { setCurrentTab } = useContext(TabContext);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [staticTab, setStaticTab] = useState("dashboard"); // Default selected tab
   const sidebarClass = themes.SideBarTheme;
@@ -20,6 +22,7 @@ const Sidebar = () => {
 
   const handleTabClick = (tab) => {
     setStaticTab(tab);
+    setCurrentTab(tab); // Update the context with the selected tab
     if (tab === "signout") {
       localStorage.removeItem("selectedTab"); // Clear the selected tab on sign out
     } else {

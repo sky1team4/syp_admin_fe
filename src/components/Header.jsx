@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import Image from "next/image";
 import Notifications from "../../src/app/admin/dashboard/notification";
+import { TabContext } from '../context/Tabcontext'; // Adjust the path as necessary
+
 
 const DashboardTopBar = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const notificationRef = useRef(null);
+  const { currentTab } = useContext(TabContext);
 
   const toggleNotifications = () => {
     setIsNotificationOpen((prev) => !prev);
@@ -32,7 +35,9 @@ const DashboardTopBar = () => {
     <div className="flex items-center justify-between px-8 py-4 bg-white flex-col md:flex-row">
       {/* Left Section: Dashboard Title and Search Bar */}
       <div className="flex md:items-center lg:items-center">
-        <h1 className="hidden lg:block text-sm md:text-2xl font-bold text-gray-800">Dashboard</h1>
+        <h1 className="hidden lg:block text-sm md:text-2xl font-bold text-gray-800">
+          {currentTab.charAt(0).toUpperCase() + currentTab.slice(1)} {/* Capitalize the first letter */}
+        </h1>
         {/* <div className="relative ml-4 hidden lg:block">
           <span className="absolute top-1/2 left-3 lg:left-5 transform -translate-y-1/2 text-purple-500">
               <svg
