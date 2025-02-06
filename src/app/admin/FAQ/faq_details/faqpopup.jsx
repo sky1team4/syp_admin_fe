@@ -28,7 +28,7 @@ const AddFAQPopup = ({ onClose, onSave, editingFAQ }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-end z-50">
+    <div className="fixed inset-y-0 right-0 bg-black bg-opacity-50 flex items-center justify-center justify-end z-50">
       <div className="bg-white w-full max-w-md h-screen p-6 shadow-lg relative">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">

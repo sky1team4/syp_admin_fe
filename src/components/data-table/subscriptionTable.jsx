@@ -42,8 +42,8 @@ export function SubscriptionTable({ columns, data, title, btnText, click, isOpen
                             <Image
                                 src="/backArrow.svg"  // path from public folder
                                 alt="Illustration"
-                                width={8}  // required in Next.js
-                                height={8}
+                                width={10}  // required in Next.js
+                                height={10}
                             />
                         </a>
                     )}
@@ -52,7 +52,7 @@ export function SubscriptionTable({ columns, data, title, btnText, click, isOpen
                     </h2>
 
                 </div>
-                {btnText && <Button click={click} isOpen={isOpen} h="10" text={btnText} />}
+                {btnText && <Button click={click} isOpen={isOpen} h="10" text={btnText} className="text-sm md:text-base lg:text-lg xl:text-xl" />}
             </div>
 
             <div className="relative overflow-x-auto w-full">

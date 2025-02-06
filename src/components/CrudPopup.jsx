@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 
 const AddRelationshipPopup = ({ onClose, onSave, editingRelationship }) => {
   const [title, setTitle] = useState("");
@@ -31,7 +32,7 @@ const AddRelationshipPopup = ({ onClose, onSave, editingRelationship }) => {
             {editingRelationship ? "Edit Relationship" : "Add Relationship"}
           </h2>
           <button onClick={onClose} className="close-button bg-gray-300 rounded-full 0 mb-4 rotate-45 p-1" title="Close">
-            ✖️
+            <Image src="/FAQ/cross.png" alt="close" width={20} height={20} />
           </button>
         </div>
         <div className="flex flex-col space-y-4">

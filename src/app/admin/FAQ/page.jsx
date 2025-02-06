@@ -6,13 +6,13 @@ import Card from "../../../components/cardmanagement";
 const SettingContentArea = () => {
   const cards = [
     {
-      title: "FAQ Category Management",
+      title: "FAQ Category ",
       Icon: "/setting_icon/RelationshipManagement.png",
       // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
       link: "/admin/FAQ/FAQcateManagement",
     },
     {
-      title: "FAQ Q&A Management",
+      title: "FAQ Q&A ",
       Icon: "/setting_icon/RelationshipManagement.png",
       // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,
       link: "/admin/FAQ/faq_details",
@@ -20,7 +20,7 @@ const SettingContentArea = () => {
   ];
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 p-4 rounded-xl flex flex-col gap-4">
+    <div className="min-h-screen w-full bg-gray-100 p-1 mt-2 rounded-xl flex flex-col gap-4">
       <div className="flex gap-3">
                     {/* {backBTN == "no" ? null : ( */}
                         <a href="/admin/setting" className="self-center cursor-pointer">
@@ -33,7 +33,7 @@ const SettingContentArea = () => {
                         </a>
                     {/* )} */}
                     <h2 className="text-xl font-semibold text-gray-900">
-                        FAQ Management
+                        FAQ
                     </h2>
 
                 </div>

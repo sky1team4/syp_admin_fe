@@ -6,7 +6,7 @@ import Card from "../../../components/cardmanagement";
 const SettingContentArea = () => {
   const cards = [
     {
-      title: "Degree List",
+      title: "Degrees List",
       Icon: "/educationmanagement/degree list.png",
       // Icon: () => <Image src="/educationmanagement/degree list.png" width={50} height={50} alt="Relationship Icon" />,
       link: "/admin/degreeManagement",

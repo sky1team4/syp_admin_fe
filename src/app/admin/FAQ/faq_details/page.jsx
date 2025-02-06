@@ -66,21 +66,21 @@ const FAQManagement = () => {
     <div className="w-full h-screen mx-auto p-4 bg-white rounded-xl">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-2">
-        <a href="/admin/FAQ" className="self-center cursor-pointer">
-                            <Image
-                                src="/backArrow.svg"  // path from public folder
-                                alt="Illustration"
-                                width={8}  // required in Next.js
-                                height={8}
+          <a href="/admin/FAQ" className="self-center cursor-pointer">
+            <Image
+              src="/backArrow.svg"  // path from public folder
+              alt="Illustration"
+              width={10}  // required in Next.js
+              height={10}
 
-                            />
-                        </a>
-        <h1 className="text-2xl font-semibold text-gray-800">FAQ Q/A Management</h1>
+            />
+          </a>
+          <h1 className="text-2xl font-semibold text-gray-800">FAQ Q/A Management</h1>
         </div>
         <button
-
           onClick={handleAddFAQ}
-          className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-600"
+          className="bg-purple-600 text-white rounded p-1 text-[10px] md:text-base lg:text-lg xl:text-xl"
+        // {btnText && <Button click={click} isOpen={isOpen} h="10" text={btnText} className="text-sm md:text-base lg:text-lg xl:text-xl" />}
         >
           Add FAQ Q/A
         </button>

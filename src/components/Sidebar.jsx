@@ -57,11 +57,10 @@ const Sidebar = () => {
 
         {/* Sidebar */}
         <div
-          className={`z-40 fixed top-0 left-0 h-screen bg-purple-600 text-white ${
-            isSidebarOpen ? "w-[70%] translate-x-0" : "md:w-72 -translate-x-full"
-          } flex flex-col gap-5 items-center py-6 px-4 transform  md:translate-x-0 transition-transform duration-300`}
+          className={`z-40 fixed top-0 left-0 h-screen bg-purple-600 text-white ${isSidebarOpen ? "w-[70%] translate-x-0" : "md:w-72 -translate-x-full"
+            } flex flex-col gap-5 items-center py-6 px-4 transform  md:translate-x-0 transition-transform duration-300`}
         >
-          {/* Close Button */}  
+          {/* Close Button */}
           <button
             onClick={toggleSidebar}
             className="md:hidden text-white self-end mr-4"
@@ -77,9 +76,8 @@ const Sidebar = () => {
           {/* Sidebar Content */}
           <Link href="/admin/dashboard" onClick={() => handleTabClick("dashboard")}>
             <div
-              className={`${
-                staticTab === "dashboard" ? activeSidebarClass : sidebarClass
-              } mt-16 ${sidebarItemClass}`}
+              className={`${staticTab === "dashboard" ? activeSidebarClass : sidebarClass
+                } mt-16 ${sidebarItemClass}`}
             >
               <Image
                 src={
@@ -102,11 +100,10 @@ const Sidebar = () => {
               onClick={() => handleTabClick("subscription")}
             >
               <div
-                className={`${sidebarItemClass} ${
-                  staticTab === "subscription"
+                className={`${sidebarItemClass} ${staticTab === "subscription"
                     ? "bg-white text-purple-600"
                     : sidebarClass
-                }`}
+                  }`}
               >
                 <Image
                   src={
@@ -124,11 +121,10 @@ const Sidebar = () => {
 
             <Link href="/admin/companyPage" onClick={() => handleTabClick("companies")}>
               <div
-                className={`${sidebarItemClass} ${
-                  staticTab === "companies"
+                className={`${sidebarItemClass} ${staticTab === "companies"
                     ? "bg-white text-purple-600"
                     : sidebarClass
-                }`}
+                  }`}
               >
                 <Image
                   src={
@@ -147,11 +143,10 @@ const Sidebar = () => {
 
             <Link href="/admin/payment" onClick={() => handleTabClick("payment")}>
               <div
-                className={`${sidebarItemClass} ${
-                  staticTab === "payment"
+                className={`${sidebarItemClass} ${staticTab === "payment"
                     ? "bg-white  text-purple-600"
                     : sidebarClass
-                }`}
+                  }`}
               >
                 <Image
                   src={
@@ -166,15 +161,12 @@ const Sidebar = () => {
                 <span className="ml-2 font-medium">Payment Integration</span>
               </div>
             </Link>
-
-
             <Link href="/admin/setting" onClick={() => handleTabClick("setting")}>
               <div
-                className={`${sidebarItemClass} ${
-                  staticTab === "setting"
+                className={`${sidebarItemClass} ${staticTab === "setting"
                     ? "bg-white text-purple-600"
                     : sidebarClass
-                }`}
+                  }`}
               >
                 <Image
                   src={
@@ -191,14 +183,12 @@ const Sidebar = () => {
             </Link>
 
             <div className="">
-              <Link href="/admin-Login" onClick={() => handleTabClick("signout")}>
+              <Link href="/admin-Login" >
                 <div
-
-                  className={`${sidebarItemClass} ${
-                    staticTab === "signout"
+                  className={`${sidebarItemClass} ${staticTab === "signout"
                       ? "bg-white text-purple-600"
                       : sidebarClass
-                  }`}
+                    }`}
                 >
                   <Image
                     src="/dashbaord_siedebar_icon/Signout.svg"
@@ -210,7 +200,6 @@ const Sidebar = () => {
                 </div>
               </Link>
             </div>
-
           </nav>
         </div>
       </div>
