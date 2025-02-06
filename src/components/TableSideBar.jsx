@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast';
 import { saveSubscription, fetchSubscriptions, updateSubscription } from '../redux/features/subscriptionSlice';
 import { saveRelationship, updateRelationship, fetchRelationships } from '../redux/features/relationshipSlice';
 import Input from './cui/input';
+import Image from 'next/image';
 
 const FORM_VALIDATION = {
   name: {
@@ -123,7 +124,7 @@ function TableSideBar({
                             onClick={() => click()}
                             className="text-gray-400 hover:text-gray-600"
                         >
-                            ✖
+                            <Image src="/FAQ/cross.png" alt="close" width={20} height={20} />
                         </button>
                     </div>
 
