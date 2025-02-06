@@ -41,7 +41,7 @@ const Notifications = () => {
   };
 
   return (
-    <div className="hidden lg:block p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto z-50">
+    <div className="hidden lg:block p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto">
       {/* Header */}
       <div className="flex justify-between items-center flex-wrap mb-4">
 
@@ -56,7 +56,7 @@ const Notifications = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex space-x-2 mb-4 overflow-x-auto">
+      <div className="flex space-x-2 mb-4 overflow-x-auto z-50">
         {["All", "Unread", "Archived"].map((tab) => (
           <button
             key={tab}
@@ -72,12 +72,12 @@ const Notifications = () => {
       </div>
 
       {/* Notifications List */}
-      <ul className="space-y-4">
+      <ul className="space-y-4 ">
         {filteredNotifications.length > 0 ? (
           filteredNotifications.map((notification, index) => (
             <li
               key={index}
-              className={`flex flex-wrap items-start sm:items-center space-x-4 p-2 border-b last:border-none ${!notification.isRead ? "" : ""
+              className={` flex flex-wrap items-start sm:items-center space-x-4 p-2 border-b last:border-none ${!notification.isRead ? "" : ""
                 }`}
             >
               <img
@@ -85,7 +85,7 @@ const Notifications = () => {
                 src={notification.avatar}
                 alt={notification.name}
               />
-              <div className="2xl:flex-1 flex flex-col w-full">
+              <div className="2xl:flex-1 flex flex-col w-full">  
                 <p className="text-sm font-medium text-gray-800">
                   {notification.name}{" "}
                   <span className="font-normal">{notification.message}</span>

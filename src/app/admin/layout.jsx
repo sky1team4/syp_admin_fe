@@ -13,9 +13,9 @@ const AdminLayout = ({ children }) => {
                     <Sidebar />
                 </div>
 
-                <div className="flex flex-col">
+                <div className="flex flex-col pb-4">
                     <Header />
-                    <main className="mt-5 w-full px-4">
+                    <main className="mt-5 w-full h-full px-4">
                         {children}
                     </main>
                 </div>
