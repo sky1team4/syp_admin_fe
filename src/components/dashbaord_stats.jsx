@@ -11,16 +11,23 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token'); // Retrieve token from local storage
-        const response = await fetch('${process.env.NEXT_PUBLIC_API_URL}/subscription-verification', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscription-verification`, {
           method: 'GET', // Specify the method
           headers: {
-
             'Authorization': `Bearer ${token}`, // Add token to headers
             'Content-Type': 'application/json', // Specify content type
           },
         });
+
+        // Check if the response is ok (status in the range 200-299)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`); // Throw an error if the response is not ok
+        }
+
         const result = await response.json();
+        console.log(result);
         setData(result);
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
