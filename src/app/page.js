@@ -4,7 +4,7 @@ import Router from "./routes/test";
 
 export default function Home() {
   return (
-    <div className="w-screen h-screen">
+    <div className="w-screen h-screen bg-gray-50">
       {/* <Router /> */}
       <Login/>
     </div>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { columns } from "@/components/data-table/columns"
 import { DataTable } from "@/components/data-table/data-table"
 
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export default function DashboardPage() {
   const [data, setData] = useState([]);
 
@@ -41,7 +42,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="container py-10">
+    <div className="w-full py-10 bg-white rounded-xl p-5 shadow-md">
       <DataTable
         columns={columns}
         data={data}

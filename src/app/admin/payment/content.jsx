@@ -25,7 +25,7 @@ const PaymentIntegration = () => {
     <div className=" flex flex-wrap gap-4">
       {/* <div className="flex flex-wrap w-full gap-4 items-center justify-start"> */}
       {paymentMethods.map((card, index) => (
-        <div className="shadow rounded-xl" key={index}>
+        <div className="shadow-lg rounded-xl" key={index}>
           <Card title={card.title} Icon={card.icon} link={card.link} />
         </div>
       ))}

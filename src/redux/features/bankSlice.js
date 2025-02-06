@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export const saveBankConfig = createAsyncThunk(
   'bank/saveConfig',
   async (data, { rejectWithValue }) => {

@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 // import { Toaster } from 'react-hot-toast';
 import { saveSubscription, fetchSubscriptions, updateSubscription } from '../redux/features/subscriptionSlice';
+import { saveRelationship, updateRelationship, fetchRelationships } from '../redux/features/relationshipSlice';
 import Input from './cui/input';
 
 const FORM_VALIDATION = {
   name: {
-    required: 'Subscription name is required'
+    required: 'Name is required'
   }
 };
 
@@ -16,18 +17,19 @@ function TableSideBar({
     click,
     mode = 'create',
     data = null,
-    title = 'Subscription',
-    dis = 'Manage your subscription',
-    subTitle = 'Subscription Name *',
-    namePlaceholder = 'Enter subscription name',
+    title = 'Item',
+    dis = 'Manage your item',
+    subTitle = 'Name *',
+    namePlaceholder = 'Enter name',
     saveButtonText = 'Save',
-    updateButtonText = 'Update'
+    updateButtonText = 'Update',
+    type = 'relationship'
 }) {
 //     title
 // dis
 // subTitle
     const dispatch = useDispatch();
-    const { isLoading } = useSelector((state) => state.subscription);
+    const { isLoading } = useSelector((state) => state[type] || { isLoading: false });
     
     const [formData, setFormData] = useState({
         name: ''
@@ -64,25 +66,33 @@ function TableSideBar({
         }
 
         try {
-            const subscriptionData = {
+            const itemData = {
                 name: formData.name
             };
 
-            if (mode === 'edit' && data?.id) {
-                await dispatch(updateSubscription({
-                    id: data.id,
-                    data: subscriptionData
-                })).unwrap();
-                toast.success('Subscription updated successfully');
-            } else {
-                await dispatch(saveSubscription(subscriptionData)).unwrap();
-                toast.success('Subscription created successfully');
+            if (type === 'relationship') {
+                if (mode === 'edit' && data?.id) {
+                    await dispatch(updateRelationship({ id: data.id, data: itemData })).unwrap();
+                    toast.success('Relationship updated successfully');
+                } else {
+                    await dispatch(saveRelationship(itemData)).unwrap();
+                    toast.success('Relationship created successfully');
+                }
+                dispatch(fetchRelationships());
+            } else if (type === 'subscription') {
+                if (mode === 'edit' && data?.id) {
+                    await dispatch(updateSubscription({ id: data.id, data: itemData })).unwrap();
+                    toast.success('Subscription updated successfully');
+                } else {
+                    await dispatch(saveSubscription(itemData)).unwrap();
+                    toast.success('Subscription created successfully');
+                }
+                dispatch(fetchSubscriptions());
             }
             
             click(false); // Close sidebar
-            dispatch(fetchSubscriptions()); // Refresh the list
         } catch (err) {
-            toast.error(err?.message || `Failed to ${mode === 'edit' ? 'update' : 'create'} ${headerText}`);
+            toast.error(err?.message || `Failed to ${mode === 'edit' ? 'update' : 'create'} ${type}`);
         }
     };
 

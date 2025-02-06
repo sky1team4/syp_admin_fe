@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-
 export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials) => {
@@ -23,6 +22,7 @@ export const loginUser = createAsyncThunk(
       const data = await response.json();
       return data;
     } catch (error) {
+      console.error('Login error:', error);
       throw error;
     }
   }

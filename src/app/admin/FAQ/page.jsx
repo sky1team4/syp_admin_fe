@@ -20,7 +20,23 @@ const SettingContentArea = () => {
   ];
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 p-4 rounded-xl">
+    <div className="min-h-screen w-full bg-gray-100 p-4 rounded-xl flex flex-col gap-4">
+      <div className="flex gap-3">
+                    {/* {backBTN == "no" ? null : ( */}
+                        <a href="/admin/setting" className="self-center cursor-pointer">
+                            <Image
+                                src="/backArrow.svg"  // path from public folder
+                                alt="Illustration"
+                                width={8}  // required in Next.js
+                                height={8}
+                            />
+                        </a>
+                    {/* )} */}
+                    <h2 className="text-xl font-semibold text-gray-900">
+                        FAQ Management
+                    </h2>
+
+                </div>
       <div className="flex flex-wrap w-full gap-4 items-center justify-start">
         {cards.map((card, index) => (
           <div className="" key={index}>

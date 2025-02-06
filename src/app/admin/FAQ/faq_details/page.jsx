@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import FAQCard from "./FAQcards";
 import FAQPopup from "./faqpopup";
+import Image from "next/image";
+import Link from "next/link";
 
 const FAQManagement = () => {
   const [faqs, setFaqs] = useState([
@@ -61,12 +63,24 @@ const FAQManagement = () => {
   };
 
   return (
-    <div className="w-full h-screen mx-auto">
+    <div className="w-full h-screen mx-auto p-4 bg-white rounded-xl">
       <div className="flex justify-between items-center mb-6">
+        <div className="flex items-center gap-2">
+        <a href="/admin/FAQ" className="self-center cursor-pointer">
+                            <Image
+                                src="/backArrow.svg"  // path from public folder
+                                alt="Illustration"
+                                width={8}  // required in Next.js
+                                height={8}
+
+                            />
+                        </a>
         <h1 className="text-2xl font-semibold text-gray-800">FAQ Q/A Management</h1>
+        </div>
         <button
+
           onClick={handleAddFAQ}
-          className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
+          className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-600"
         >
           Add FAQ Q/A
         </button>

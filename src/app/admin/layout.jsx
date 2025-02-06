@@ -8,20 +8,16 @@ import Sidebar from "../../components/Sidebar";
 const AdminLayout = ({ children }) => {
     return (
         <>
-            <div className='flex bg-gray-50 w-screen h-auto'>
-                <div className="w-auto">
+            <div className="bg-purple-50/75 w-full h-screen grid gap-4 grid-cols-1 md:grid-cols-[240px_1fr]">
+                <div className="w-full">
                     <Sidebar />
                 </div>
-                {/* <Sidebar /> */}
-                <div className='flex flex-col gap-3 w-full h-screen pb-8 overflow-x-hidden'>
-                    <Header />
-                    <div className="pl-3 pr-6 h-full overflow-x-hidden">
-                        {children}
-                    </div>
-                    {/* <div className='flex gap-3 w-full pb-4'>
-                        {children}
-                    </div> */}
 
+                <div className="flex flex-col">
+                    <Header />
+                    <main className="mt-5 w-full px-4">
+                        {children}
+                    </main>
                 </div>
             </div>
         </>

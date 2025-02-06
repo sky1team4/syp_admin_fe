@@ -88,14 +88,14 @@ export default function Login() {
 
         <div className="w-full h-full px-0 md:px-20 flex gap-10 justify-center items-center">
           {/* Left Section - Form */}
-          <div className="md:w-1/2 flex flex-col justify-center items-center p-8 bg-[#F5F5F5] text-black">
-            <div className="w-full max-w-md min-w-[20rem] 2xl:w-[40rem] 2xl:h-[30rem] bg-white p-8 rounded-lg">
-              <h1 className="text-3xl font-bold mb-6 2xl:mt-5 text-center">Sign In</h1>
+          <div className="flex flex-col justify-center items-center w-full h-full md:w-1/2 md:p-8 p-4 bg-[#F5F5F5] text-black">
+            <div className="w-full max-w-md min-w-[20rem] 2xl:w-[40rem] 2xl:h-[30rem] bg-white md:p-8 p-2 rounded-lg md:h-[60%] h-[90%]">
+              <h1 className="text-3xl font-bold mb-6 2xl:mt-5 md:mt-0 mt-36 text-center">Sign In</h1>
 
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className="">
                 <div className="mb-4 2xl:mb-6">
                   <label
-                    className="block text-sm font-medium mb-1 2xl:mb-3"
+                    className="block text-md font-medium mb-1 2xl:mb-3"
                     htmlFor="email"
                   >
                     Email
@@ -106,7 +106,7 @@ export default function Login() {
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="Enter your Email"
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-4 md:py-2 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-base md:text-sm"
                   />
                   {/* Display specific error below email input */}
                   {inputErrors.email && (
@@ -118,7 +118,7 @@ export default function Login() {
                 </div>
                 <div className="mb-4 2xl:mb-8">
                   <label
-                    className="block text-sm font-medium mb-1 2xl:mb-3"
+                    className="block text-md font-medium mb-1 2xl:mb-3"
                     htmlFor="password"
                   >
                     Password
@@ -130,7 +130,7 @@ export default function Login() {
                       value={formData.password}
                       onChange={handleInputChange}
                       placeholder="Enter your Password"
-                      className="w-full px-4 pr-10 lg:pr-0 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full px-4 pr-10 lg:pr-0 md:py-2 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-base md:text-sm"
                     />
                     <button
                       type="button"
@@ -140,8 +140,8 @@ export default function Login() {
                       <Image
                         src={showPassword ? "/eye 1.svg" : "/eye.png"}
                         alt={showPassword ? "Hide password" : "Show password"}
-                        width={17}
-                        height={17}
+                        width={20}
+                        height={20}
                         priority
                         className="max-w-full h-auto object-cover"
                       />
@@ -155,21 +155,14 @@ export default function Login() {
                     </div>
                   )}
                 </div>
-                {/* Add loading state to the submit button */}
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none disabled:bg-purple-400"
+                  className="w-full py-2 text-xl md:text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none disabled:bg-purple-400"
                 >
                   {loading ? 'Signing in...' : 'Sign In'}
                 </button>
               </form>
-              <p className="mt-4 2xl:mt-10 text-center">
-                Don't have an Account?{" "}
-                <a href="#" className="text-purple-600 hover:underline">
-                  Signup
-                </a>
-              </p>
             </div>
           </div>
           {/* Right Section - Illustration */}

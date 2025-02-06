@@ -19,7 +19,7 @@ import {
 import Button from '../cui/button'
 import Image from "next/image"
 
-export function SubscriptionTable({ columns, data, title, btnText, click, isOpen , backBTN}) {
+export function SubscriptionTable({ columns, data, title, btnText, click, isOpen , backBTN, link}) {
     const [sorting, setSorting] = useState([])
 
     const table = useReactTable({
@@ -38,7 +38,7 @@ export function SubscriptionTable({ columns, data, title, btnText, click, isOpen
             <div className="flex justify-between items-center mb-4">
                 <div className="flex gap-3">
                     {backBTN == "no" ? null : (
-                        <a href="/admin/setting" className="self-center cursor-pointer">
+                        <a href={`${link? link : "/admin/setting"}`} className="self-center cursor-pointer">
                             <Image
                                 src="/backArrow.svg"  // path from public folder
                                 alt="Illustration"
@@ -52,7 +52,7 @@ export function SubscriptionTable({ columns, data, title, btnText, click, isOpen
                     </h2>
 
                 </div>
-                {<Button click={click} isOpen={isOpen} h="10" text={btnText} />}
+                {btnText && <Button click={click} isOpen={isOpen} h="10" text={btnText} />}
             </div>
 
             <div className="relative overflow-x-auto w-full">

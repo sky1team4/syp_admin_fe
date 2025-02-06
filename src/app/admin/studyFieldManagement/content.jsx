@@ -41,24 +41,24 @@ function content() {
 
   const tableData = [
     {
-      title: "Computer Science",
-      createdDate: "01/01/2023",
-      lastUpdated: "15/01/2023",
+      title: "Business Partner",
+      createdDate: "26/02/2024",
+      lastUpdated: "27/02/2024",
     },
     {
-      title: "Mechanical Engineering",
-      createdDate: "05/02/2023",
-      lastUpdated: "20/02/2023",
+      title: "Supplier",
+      createdDate: "26/02/2024",
+      lastUpdated: "27/02/2024",
     },
     {
-      title: "Biology",
-      createdDate: "10/03/2023",
-      lastUpdated: "25/03/2023",
+      title: "Customer",
+      createdDate: "26/02/2024",
+      lastUpdated: "27/02/2024",
     },
     {
-      title: "Economics",
-      createdDate: "15/04/2023",
-      lastUpdated: "30/04/2023",
+      title: "Affiliate",
+      createdDate: "26/02/2024",
+      lastUpdated: "27/02/2024",
     },
   ];
 
@@ -73,7 +73,7 @@ function content() {
       <div className='flex flex-col gap-3 w-full h-full'>
         {/* <UpperSide title="Degree" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Degree" /> */}
         <TableSideBar title="Specialty" namePlaceholder='Enter Specialty' dis="lorem ipsum has been the industry's standard." subTitle="Specialty" click={toggleSidebar} isOpen={isOpen} />
-        <DisplayTable click={toggleSidebar} isOpen={isOpen} btnText="Add Field Study" title="Specialty" array={tableData} col1_Title="Specialty" col2_Title="Created Date" col3_Title="Last Updated" />
+        <DisplayTable link="/admin/education-management" click={toggleSidebar} isOpen={isOpen} btnText="Add Field Study" title="Specialty" array={tableData} col1_Title="Specialty" col2_Title="Created Date" col3_Title="Last Updated" />
       </div>
     </>
   )

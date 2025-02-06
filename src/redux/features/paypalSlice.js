@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export const savePaypalConfig = createAsyncThunk(
   'paypal/saveConfig',
   async (data, { rejectWithValue }) => {
