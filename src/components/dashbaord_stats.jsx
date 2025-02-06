@@ -13,8 +13,6 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscription-verification`, { 
           method: 'GET', // Specify the method
           headers: {
-
-
             'Authorization': `Bearer ${token}`, // Add token to headers
             'Content-Type': 'application/json', // Specify content type
           },
