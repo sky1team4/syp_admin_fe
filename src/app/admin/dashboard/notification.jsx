@@ -41,9 +41,10 @@ const Notifications = () => {
   };
 
   return (
-    <div className="hidden lg:block p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto">
+    <div className="hidden lg:block p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto z-50">
       {/* Header */}
       <div className="flex justify-between items-center flex-wrap mb-4">
+
         <h2 className="text-lg font-semibold text-gray-800">Notifications</h2>
         <button
           className="gap-2 text-sm text-purple-600 hover:underline flex items-center"
@@ -60,8 +61,8 @@ const Notifications = () => {
           <button
             key={tab}
             className={`px-4 py-2 text-sm font-medium rounded-md ${filter === tab
-                ? "border border-purple-600 text-purple-600"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              ? "border border-purple-600 text-purple-600"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             onClick={() => handleFilterChange(tab)}
           >
@@ -84,7 +85,7 @@ const Notifications = () => {
                 src={notification.avatar}
                 alt={notification.name}
               />
-              <div className="2xl:flex-1 flex flex-col w-full">  
+              <div className="2xl:flex-1 flex flex-col w-full">
                 <p className="text-sm font-medium text-gray-800">
                   {notification.name}{" "}
                   <span className="font-normal">{notification.message}</span>

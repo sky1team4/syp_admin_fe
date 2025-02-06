@@ -60,7 +60,7 @@ const DashboardTopBar = () => {
       </div>
 
       {/* Right Section: Language Dropdown, Notifications, Profile */}
-      <div className="pl-6 md:pl-0 flex items-center space-x-2 md:space-x-6">
+      <div className="pl-6 md:pl-0 flex ml-auto items-center space-x-2 md:space-x-6">
 
         {/* Notifications */}
         <div className="relative cursor-pointer" ref={notificationRef}>
