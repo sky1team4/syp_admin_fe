@@ -66,9 +66,10 @@ const StripePaymentIntegration = () => {
 
   return (
     <div className="w-full max-w-[32rem] md:max-w-[40rem] xl:max-w-[60rem] 2xl:max-w-[80rem] h-auto p-4 md:p-4 bg-white rounded-lg shadow-lg">
-      <div className="flex gap-3 justify-center">
+      <div className="flex gap-3 justify-between w-[70%]">
         <a href="/admin/payment" className="self-center cursor-pointer">
           <Image
+
             src="/backArrow.svg"
             alt="Illustration"
             width={8}

@@ -20,10 +20,11 @@ const SettingContentArea = () => {
   ];
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 p-4 rounded-xl flex flex-col gap-4">
+    <div className="md:h-full w-full bg-white p-4 rounded-xl flex flex-col gap-4">
       <div className="flex gap-3">
                     {/* {backBTN == "no" ? null : ( */}
                         <a href="/admin/setting" className="self-center cursor-pointer">
+
                             <Image
                                 src="/backArrow.svg"  // path from public folder
                                 alt="Illustration"

@@ -32,9 +32,10 @@ const DashboardTopBar = () => {
   }, [isNotificationOpen]);
 
   return (
-    <div className="flex items-center justify-between px-8 py-4 bg-white flex-col md:flex-row">
+    <div className="fixed top-0 w-full md:w-[78%] 2xl:w-[85%] flex items-center justify-between px-8 py-4 bg-white flex-col md:flex-row">
       {/* Left Section: Dashboard Title and Search Bar */}
       <div className="flex md:items-center lg:items-center">
+
         <h1 className="hidden lg:block text-sm md:text-2xl font-bold text-gray-800">
           {currentTab.charAt(0).toUpperCase() + currentTab.slice(1)} {/* Capitalize the first letter */}
         </h1>

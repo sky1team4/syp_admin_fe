@@ -10,15 +10,16 @@ const SettingContentArea = () => {
       title: "Interest Management",
       Icon: "/profilemanagement/interestedmanagement.png",
       // Icon: () => <Image src="/profilemanagement/interestedmanagement.png" width={50} height={50} alt="Relationship Icon" />,
-      link: "#",
+      link: "/admin/InterestManagement",
     },
     {
       title: "Skills Category List",
       Icon: "/profilemanagement/skillcategory.png",
 
       // Icon: () => <Image src="/profilemanagement/skillcategory.png" width={50} height={50} alt="Education Icon" />,
-      link: "#",
+      link: "/admin/skillManagement",
     },
+
     {
       title: "Skills Subcategory List",
       Icon: "/profilemanagement/skillcategory.png",
@@ -36,7 +37,7 @@ const SettingContentArea = () => {
   ];
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 p-4 rounded-xl flex flex-col gap-4">
+    <div className="h-auto w-full bg-white p-4 rounded-xl flex flex-col gap-4">
       <div className="flex gap-3">
                     {/* {backBTN == "no" ? null : ( */}
                         <a href="/admin/setting" className="self-center cursor-pointer">
@@ -53,7 +54,7 @@ const SettingContentArea = () => {
                     </h2>
 
                 </div>
-      <div className="flex flex-wrap w-full gap-4 items-center justify-start">
+      <div className="flex flex-wrap w-full gap-4 items-center justify-center md:justify-start">
         {cards.map((card, index) => (
           <div className="" key={index}>
             <Card title={card.title} Icon={card.Icon} link={card.link} />

@@ -36,7 +36,7 @@ const Sidebar = () => {
       {/* Overlay (Appears only on mobile when sidebar is open) */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 sm:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
           onClick={toggleSidebar}
         ></div>
       )}
@@ -45,7 +45,7 @@ const Sidebar = () => {
         {/* Hamburger Button */}
         <button
           onClick={toggleSidebar}
-          className="sm:hidden bg-purple-600 text-white p-2 rounded-md m-2 h-10 fixed top-4 z-40"
+          className="md:hidden bg-purple-600 text-white p-2 rounded-md m-2 ml-3 h-10 fixed top-4 z-40"
         >
           <Image
             src="/dashbaord_siedebar_icon/menu.png"
@@ -57,16 +57,14 @@ const Sidebar = () => {
 
         {/* Sidebar */}
         <div
-          className={`z-40 fixed top-0 left-0 h-full bg-purple-600 text-white ${
-            isSidebarOpen ? "w-[70%]" : "sm:w-72"
-          } flex flex-col gap-5 items-center py-6 px-4 transform ${
-            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } sm:translate-x-0 transition-transform duration-300`}
+          className={`z-40 fixed top-0 left-0 h-screen bg-purple-600 text-white ${
+            isSidebarOpen ? "w-[70%] translate-x-0" : "md:w-72 -translate-x-full"
+          } flex flex-col gap-5 items-center py-6 px-4 transform  md:translate-x-0 transition-transform duration-300`}
         >
           {/* Close Button */}  
           <button
             onClick={toggleSidebar}
-            className="sm:hidden md:hidden text-white self-end mr-4"
+            className="md:hidden text-white self-end mr-4"
           >
             <Image
               src="/closeIcon.svg"
@@ -192,7 +190,7 @@ const Sidebar = () => {
               </div>
             </Link>
 
-            <div className="pt-52">
+            <div className="">
               <Link href="/admin-Login" onClick={() => handleTabClick("signout")}>
                 <div
 

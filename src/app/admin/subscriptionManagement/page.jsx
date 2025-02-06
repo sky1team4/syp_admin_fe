@@ -4,8 +4,8 @@ import Content from './content'
 
 function page() {
     return (
-        <div className='w-full min-h-screen overflow-x-hidden'>
-            <div className='container px-4'>
+        <div className='w-full overflow-x-hidden'>
+            <div className='container'>
                 <Content />
             </div>
         </div>
