@@ -34,9 +34,9 @@ export function SubscriptionTable({ columns, data, title, btnText, click, isOpen
     })
 
     return (
-        <div className="p-6 h-full bg-white shadow-lg rounded-xl w-full">
+        <div className="p-4 md:p-6 h-full bg-white shadow-lg rounded-xl w-full">
             <div className="flex justify-between items-center mb-4">
-                <div className="flex gap-3">
+                <div className="flex gap-2 md:gap-3">
                     {backBTN == "no" ? null : (
                         <a href={`${link? link : "/admin/setting"}`} className="self-center cursor-pointer">
                             <Image
@@ -47,7 +47,7 @@ export function SubscriptionTable({ columns, data, title, btnText, click, isOpen
                             />
                         </a>
                     )}
-                    <h2 className="text-xl font-semibold text-gray-900">
+                    <h2 className="text-lg md:text-xl font-semibold text-gray-900">
                         {title}
                     </h2>
 
