@@ -69,7 +69,7 @@ const SettingContentArea = () => {
       title: "Specialty Management",
       Icon: "/setting_icon/SpecialtyManagement.png",
       // Icon: () => <Image src="/setting_icon/SpecialtyManagement.png" width={50} height={50} alt="Specialty Icon" />,
-      link: "/admin/specialtyManagement",
+      link: "/admin/studyFieldManagement",
     },
     {
       title: "Profile Management",

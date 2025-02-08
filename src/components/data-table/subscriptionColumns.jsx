@@ -75,17 +75,19 @@ export const columns = [
             };
 
             const handleConfirmDelete = () => {
-                if (typeof subscription.onDelete === 'function') {
-                    subscription.onDelete(subscription.id);
+                if (typeof subscription.deleteSubscription === 'function') {
+                    subscription.deleteSubscription(subscription.id);
+                    setIsConfirmOpen(false);
                 } else {
-                    console.error('onDelete handler is not defined');
+                    console.error('deleteSubscription handler is not defined');
+                    alert('Delete action cannot be performed. Please check the subscription settings.');
                 }
             };
 
             return (
                 <>
                     <div className="flex gap-2">
-                        <button 
+                        <button
                             className="p-1"
                             onClick={() => setIsSidebarOpen(true)}
                         >
@@ -96,7 +98,7 @@ export const columns = [
                                 alt="Edit"
                             />
                         </button>
-                        <button 
+                        <button
                             className="p-1"
                             onClick={handleDelete}
                         >
@@ -109,7 +111,7 @@ export const columns = [
                         </button>
                     </div>
 
-                    <SubscriptionSideBar 
+                    <SubscriptionSideBar
                         isOpen={isSidebarOpen}
                         click={() => setIsSidebarOpen(false)}
                         mode="edit"
@@ -121,7 +123,7 @@ export const columns = [
                         }}
                     />
 
-                    <ConfirmationDialog 
+                    <ConfirmationDialog
                         isOpen={isConfirmOpen}
                         onClose={() => setIsConfirmOpen(false)}
                         onConfirm={handleConfirmDelete}
