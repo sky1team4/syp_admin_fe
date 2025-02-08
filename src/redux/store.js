@@ -5,6 +5,7 @@ import paypalReducer from './features/paypalSlice';
 import bankReducer from './features/bankSlice';
 import subscriptionReducer from './features/subscriptionSlice';
 import verificationReducer from './features/verificationSlice';
+import relationshipReducer from './features/relationshipSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     bank: bankReducer,
     subscription: subscriptionReducer,
     verification: verificationReducer,
+    relationship: relationshipReducer,
   },
 }); 
