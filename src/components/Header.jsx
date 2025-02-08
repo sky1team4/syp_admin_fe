@@ -70,6 +70,7 @@ const DashboardTopBar = () => {
 
         {/* Notifications */}
         <div className="relative cursor-pointer" ref={notificationRef}>
+        <Notifications isVisible={isNotificationOpen} />
           <Image
             alt="bellicon"
             src="/bellicon.png"
@@ -79,11 +80,12 @@ const DashboardTopBar = () => {
           />
           <span className="absolute top-0 right-0 w-4 h-4 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
             1
+            <Notifications isVisible={isNotificationOpen} />
           </span>
 
           {/* Notification Popup */}
           <div className="absolute top-10 -right-36 z-60">
-            <Notifications isVisible={isNotificationOpen} />
+            {/* <Notifications isVisible={isNotificationOpen} /> */}
           </div>
         </div>
 
