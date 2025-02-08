@@ -1,13 +1,25 @@
 "use client"
 // import React from 'react'
-import React, { useState } from 'react'
-
-// import UpperSide from '../../../components/upperDashbaord'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchRelationships } from '../../../redux/features/relationshipSlice'
 import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
 
-
 function content() {
+  const dispatch = useDispatch();
+  const { items: relationships, isLoading, error } = useSelector((state) => {
+    console.log('State:', state.relationships ); // Debugging: Log the entire state
+    return state.relationships || { items: [], isLoading: false, error: null };
+  });
+
+  useEffect(() => {
+    dispatch(fetchRelationships());
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log('Relationships:', relationships); // Debugging: Log the relationships data
+  }, [relationships]);
 
   const data = [
     { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "👤" },
@@ -48,7 +60,11 @@ function content() {
   return (
     <>
       <div className='flex flex-col gap-3 w-full h-full'>
-        {/* <UpperSide title="Relationship" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Relationship" /> */}
+        {/* Handle loading and error states */}
+        {isLoading && <p>Loading relationships...</p>}
+        {error && <p>Error loading relationships: {error}</p>}
+        
+        {/* Use relationships data */}
         <TableSideBar
           isOpen={isOpen}
           click={toggleSidebar}
@@ -60,7 +76,16 @@ function content() {
           updateButtonText="Update Relationship"
           type="relationship"
         />
-        <DisplayTable  click={toggleSidebar} isOpen={isOpen} btnText="Add Relationship" title="Relationship" array={tableData} col1_Title="Relationship" col2_Title="Created Date" col3_Title="Last Updated" />
+        <DisplayTable
+          click={toggleSidebar}
+          isOpen={isOpen}
+          btnText="Add Relationship"
+          title="Relationship"
+          array={relationships}
+          col1_Title="Relationship"
+          col2_Title="Created Date"
+          col3_Title="Last Updated"
+        />
       </div>
     </>
   )
