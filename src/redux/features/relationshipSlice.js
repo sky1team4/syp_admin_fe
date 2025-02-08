@@ -1,23 +1,26 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
-
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+// const BASE_URL = 'http://localhost:3000';
+// 
 // Function to get the JWT token
 const getToken = () => {
   return localStorage.getItem('token');
 };
 
 // Async thunk to fetch relationships
-export const fetchRelationships = createAsyncThunk('relationships/fetchAll', async (_, { rejectWithValue }) => {
+export const fetchRelationships = createAsyncThunk('relationships/findAll', async (_, { rejectWithValue }) => {
   try {
     const token = getToken();
-    const response = await axios.get(`${BASE_URL}/relationships`, {
+    console.log('Fetching relationships with token:', token);
+    const response = await axios.post(`${BASE_URL}/relationships/findAll`, {}, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
+    console.log('Fetched relationships:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching relationships:', error.response?.data || error.message);
@@ -49,7 +52,7 @@ export const saveRelationship = createAsyncThunk('relationships/create', async (
 export const updateRelationship = createAsyncThunk('relationships/update', async ({ id, data }, { rejectWithValue }) => {
   try {
     const token = getToken();
-    const response = await axios.put(`${BASE_URL}/relationships/${id}`, data, {
+    const response = await axios.post(`${BASE_URL}/relationships/${id}/update`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -67,7 +70,7 @@ export const updateRelationship = createAsyncThunk('relationships/update', async
 export const deleteRelationship = createAsyncThunk('relationships/delete', async (id, { rejectWithValue }) => {
   try {
     const token = getToken();
-    await axios.delete(`${BASE_URL}/relationships/${id}`, {
+    const response = await axios.post(`${BASE_URL}/relationships/${id}/delete`, {}, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
