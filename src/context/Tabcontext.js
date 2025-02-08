@@ -4,13 +4,18 @@ export const TabContext = createContext();
 
 export const TabProvider = ({ children }) => {
   const [currentTab, setCurrentTab] = useState(() => {
-    // Retrieve the selected tab from localStorage or default to "dashboard"
-    return localStorage.getItem('selectedTab') || 'dashboard';
+    // Check if localStorage is available
+    if (typeof window !== 'undefined' && window.localStorage) {
+      // Retrieve the selected tab from localStorage or default to "dashboard"
+      return localStorage.getItem('selectedTab') || 'dashboard';
+    }
+    return 'dashboard'; // Default value if localStorage is not available
   });
 
   useEffect(() => {
-    // Update localStorage whenever currentTab changes
-    localStorage.setItem('selectedTab', currentTab);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('selectedTab', currentTab);
+    }
   }, [currentTab]);
 
   return (
@@ -19,3 +24,5 @@ export const TabProvider = ({ children }) => {
     </TabContext.Provider>
   );
 };
+
+export default TabProvider;
