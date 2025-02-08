@@ -20,7 +20,7 @@ const SettingContentArea = () => {
   ];
 
   return (
-    <div className="md:h-full w-full bg-white rounded-xl flex flex-col gap-4">
+    <div className="md:h-full w-full bg-white rounded-xl flex flex-col p-2 gap-4">
       <div className="flex gap-3">
                     {/* {backBTN == "no" ? null : ( */}
                         <a href="/admin/setting" className="self-center cursor-pointer">
