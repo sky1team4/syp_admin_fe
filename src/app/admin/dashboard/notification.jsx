@@ -41,7 +41,7 @@ const Notifications = () => {
   };
 
   return (
-    <div className="hidden lg:block p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto">
+    <div className="hidden lg:block p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto z-60">
       {/* Header */}
       <div className="flex justify-between items-center flex-wrap mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Notifications</h2>
