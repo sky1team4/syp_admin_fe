@@ -32,7 +32,7 @@ const DashboardTopBar = () => {
   }, [isNotificationOpen]);
 
   return (
-    <div className="fixed top-0 w-full md:w-[78%] 2xl:w-[85%] flex items-center justify-between px-8 py-4 bg-white flex-col md:flex-row">
+    <div className={`fixed top-0 w-full md:w-[78%] 2xl:w-[85%] flex items-center justify-between px-8 py-4 bg-white flex-col md:flex-row ${isNotificationOpen ? 'backdrop-blur-md z-10' : ''}`}>
       {/* Left Section: Dashboard Title and Search Bar */}
       <div className="flex md:items-center lg:items-center">
 
@@ -70,33 +70,33 @@ const DashboardTopBar = () => {
 
         {/* Notifications */}
         <div className="relative cursor-pointer" ref={notificationRef}>
-          <Image 
-            alt="bellicon" 
-            src="/bellicon.png" 
-            width={30} 
-            height={30} 
+          <Image
+            alt="bellicon"
+            src="/bellicon.png"
+            width={30}
+            height={30}
             onClick={toggleNotifications}
           />
           <span className="absolute top-0 right-0 w-4 h-4 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
             1
           </span>
-          
+
           {/* Notification Popup */}
-          <div className="absolute top-10 -right-36 ">
+          <div className="absolute top-10 -right-36 z-60">
             <Notifications isVisible={isNotificationOpen} />
           </div>
         </div>
 
         {/* Profile Section */}
         <div className="flex items-center space-x-2 cursor-pointer">
-          
-          <Image alt="profile" src="/profile.png" width={40} height={40}/>
+
+          <Image alt="profile" src="/profile.png" width={40} height={40} />
 
           <div className="text-gray-700">
             <h4 className="text-sm font-bold">Musfiq</h4>
             <span className="text-xs">Admin</span>
           </div>
-          
+
           {/* <Image alt="downArrow" src="/downArrow.svg" width={30} height={30}/> */}
 
         </div>
