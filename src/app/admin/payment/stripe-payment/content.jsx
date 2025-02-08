@@ -66,17 +66,16 @@ const StripePaymentIntegration = () => {
 
   return (
     <div className="w-full max-w-[32rem] md:max-w-[40rem] xl:max-w-[60rem] 2xl:max-w-[80rem] h-auto p-4 md:p-4 bg-white rounded-lg shadow-lg">
-      <div className="flex gap-3 justify-between w-[70%]">
-        <a href="/admin/payment" className="self-center cursor-pointer">
+      <div className="flex gap-3 items-center md:justify-between md:w-[70%]">
+        <a href="/admin/payment" className="mb-2 cursor-pointer">
           <Image
-
             src="/backArrow.svg"
             alt="Illustration"
             width={8}
             height={8}
           />
         </a>
-        <h1 className="text-2xl md:text-3xl font-bold mb-3 text-gray-800 text-center">Stripe Payment Integration</h1>
+        <h1 className="text-lg md:text-3xl font-bold mb-3 text-gray-800 text-center">Stripe Payment Integration</h1>
       </div>
       <p className="text-gray-500 mb-4 text-center">Configure your Stripe account settings below.</p>
       <Toaster position="top-right" />
