@@ -15,7 +15,7 @@ const SettingContentArea = () => {
       title: "Field of Study",
       Icon: "/educationmanagement/field of study.png",
       // Icon: () => <Image src="/educationmanagement/field of study.png" width={50} height={50} alt="Education Icon" />,
-      link: "/admin/specialtyManagement",
+      link: "/admin/studyFieldManagement",
     }
   ];
 
