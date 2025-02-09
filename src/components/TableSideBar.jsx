@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast';
 // import { Toaster } from 'react-hot-toast';
 import { saveSubscription, fetchSubscriptions, updateSubscription } from '../redux/features/subscriptionSlice';
 import { saveRelationship, updateRelationship, fetchRelationships } from '../redux/features/relationshipSlice';
-import { saveFieldOfStudy, fetchFieldOfStudies, updateFieldOfStudy } from '../redux/features/fieldofstudySlice';
+import { saveFieldOfStudy, fetchFieldOfStudy, updateFieldOfStudy,deleteFieldOfStudy } from '../redux/features/fieldofstudySlice';
 import Input from './cui/input';
 import Image from 'next/image';
 
@@ -69,40 +69,78 @@ function TableSideBar({
 
         try {
             const itemData = {
-                name: formData.name
+                name: formData.name,
+                status: 'active', // Set the status as a string (e.g., 'active', 'inactive')
+                educationId: 1 // Replace with the actual educationId you want to use (ensure it's a number)
             };
 
-            if (type === 'relationship') {
-                if (mode === 'edit' && data?.id) {
-                    await dispatch(updateRelationship({ id: data.id, data: itemData })).unwrap();
-                    toast.success('Relationship updated successfully');
-                } else {
-                    await dispatch(saveRelationship(itemData)).unwrap();
-                    toast.success('Relationship created successfully');
+            // Check if type is an array and handle accordingly
+            if (Array.isArray(type)) {
+                for (const t of type) {
+                    if (t === 'relationship') {
+                        if (mode === 'edit' && data?.id) {
+                            await dispatch(updateRelationship({ id: data.id, data: itemData })).unwrap();
+                            toast.success('Relationship updated successfully');
+                        } else {
+                            await dispatch(saveRelationship(itemData)).unwrap();
+                            toast.success('Relationship created successfully');
+                        }
+                        dispatch(fetchRelationships());
+                    } else if (t === 'subscription') {
+                        if (mode === 'edit' && data?.id) {
+                            await dispatch(updateSubscription({ id: data.id, data: itemData })).unwrap();
+                            toast.success('Subscription updated successfully');
+                        } else {
+                            await dispatch(saveSubscription(itemData)).unwrap();
+                            toast.success('Subscription created successfully');
+                        }
+                        dispatch(fetchSubscriptions());
+                    } else if (t === 'fieldOfStudies') {
+                        if (mode === 'edit' && data?.id) {
+                            await dispatch(updateFieldOfStudy({ id: data.id, data: itemData })).unwrap();
+                            toast.success('Field of Study updated successfully');
+                        } else {
+                            await dispatch(saveFieldOfStudy(itemData)).unwrap();
+                            toast.success('Field of Study created successfully');
+                        }
+                        dispatch(fetchFieldOfStudy());
+                    }
                 }
-                dispatch(fetchRelationships());
-            } else if (type === 'subscription') {
-                if (mode === 'edit' && data?.id) {
-                    await dispatch(updateSubscription({ id: data.id, data: itemData })).unwrap();
-                    toast.success('Subscription updated successfully');
-                } else {
-                    await dispatch(saveSubscription(itemData)).unwrap();
-                    toast.success('Subscription created successfully');
+            } else {
+                // Existing logic for single type
+                if (type === 'relationship') {
+                    if (mode === 'edit' && data?.id) {
+                        await dispatch(updateRelationship({ id: data.id, data: itemData })).unwrap();
+                        toast.success('Relationship updated successfully');
+                    } else {
+                        await dispatch(saveRelationship(itemData)).unwrap();
+                        toast.success('Relationship created successfully');
+                    }
+                    dispatch(fetchRelationships());
+                } else if (type === 'subscription') {
+                    if (mode === 'edit' && data?.id) {
+                        await dispatch(updateSubscription({ id: data.id, data: itemData })).unwrap();
+                        toast.success('Subscription updated successfully');
+                    } else {
+                        await dispatch(saveSubscription(itemData)).unwrap();
+                        toast.success('Subscription created successfully');
+                    }
+                    dispatch(fetchSubscriptions());
+                } else if (type === 'fieldOfStudies') {
+                    if (mode === 'edit' && data?.id) {
+                        await dispatch(updateFieldOfStudy({ id: data.id, data: itemData })).unwrap();
+                        toast.success('Field of Study updated successfully');
+                    } else {
+                        await dispatch(saveFieldOfStudy(itemData)).unwrap();
+                        toast.success('Field of Study created successfully');
+                    }
+                    dispatch(fetchFieldOfStudy());
                 }
-                dispatch(fetchSubscriptions());
-            } else if (type === 'fieldOfStudies') {
-                if (mode === 'edit' && data?.id) {
-                    await dispatch(updateFieldOfStudy({ id: data.id, data: itemData })).unwrap();
-                    toast.success('Field of Study updated successfully');
-                } else {
-                    await dispatch(saveFieldOfStudy(itemData)).unwrap();
-                    toast.success('Field of Study created successfully');
-                }
-                dispatch(fetchFieldOfStudies());
             }
             
             click(false); // Close sidebar
         } catch (err) {
+            console.error('Error details:', err); // Log the error for debugging
             toast.error(err?.message || `Failed to ${mode === 'edit' ? 'update' : 'create'} ${type}`);
         }
     };
