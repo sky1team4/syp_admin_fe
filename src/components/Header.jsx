@@ -80,7 +80,9 @@ const DashboardTopBar = () => {
           />
           <span className="absolute top-0 right-0 w-4 h-4 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
             1
-            <Notifications isVisible={isNotificationOpen} />
+            {/* <div className="absolute -top-10 right-0 "> */}
+              <Notifications isVisible={isNotificationOpen} />
+            {/* </div> */}
           </span>
 
           {/* Notification Popup */}
