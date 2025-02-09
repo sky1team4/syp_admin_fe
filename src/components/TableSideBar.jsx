@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 // import { Toaster } from 'react-hot-toast';
 import { saveSubscription, fetchSubscriptions, updateSubscription } from '../redux/features/subscriptionSlice';
 import { saveRelationship, updateRelationship, fetchRelationships } from '../redux/features/relationshipSlice';
+import { saveFieldOfStudy, fetchFieldOfStudies, updateFieldOfStudy } from '../redux/features/fieldofstudySlice';
 import Input from './cui/input';
 import Image from 'next/image';
 
@@ -24,7 +25,7 @@ function TableSideBar({
     namePlaceholder = 'Enter name',
     saveButtonText = 'Save',
     updateButtonText = 'Update',
-    type = 'relationship'
+    type = 'fieldOfStudies'
 }) {
 //     title
 // dis
@@ -89,6 +90,15 @@ function TableSideBar({
                     toast.success('Subscription created successfully');
                 }
                 dispatch(fetchSubscriptions());
+            } else if (type === 'fieldOfStudies') {
+                if (mode === 'edit' && data?.id) {
+                    await dispatch(updateFieldOfStudy({ id: data.id, data: itemData })).unwrap();
+                    toast.success('Field of Study updated successfully');
+                } else {
+                    await dispatch(saveFieldOfStudy(itemData)).unwrap();
+                    toast.success('Field of Study created successfully');
+                }
+                dispatch(fetchFieldOfStudies());
             }
             
             click(false); // Close sidebar

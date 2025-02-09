@@ -6,7 +6,7 @@ import bankReducer from './features/bankSlice';
 import subscriptionReducer from './features/subscriptionSlice';
 import verificationReducer from './features/verificationSlice';
 import relationshipReducer from './features/relationshipSlice';
-import fieldofstudyReducer from './features/fieldofstudy';
+import fieldofstudyReducer from './features/fieldofstudySlice';
 
 export const store = configureStore({
   reducer: {

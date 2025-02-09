@@ -1,19 +1,20 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 // Fetch all field of study records
-export const fetchFieldOfStudy = createAsyncThunk(
-  'fieldOfStudy/fetchAll', // Updated action type
+export const fetchFieldOfStudies = createAsyncThunk(
+  'field-of-studies/findAll', // Updated action type
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field-of-studies`, { // Updated endpoint
+      console.log(token);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field-of-studies/findAll`, { // Updated endpoint
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
       });
-
+      console.log(response);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to fetch field of study records');
@@ -29,11 +30,11 @@ export const fetchFieldOfStudy = createAsyncThunk(
 
 // Save field of study record
 export const saveFieldOfStudy = createAsyncThunk(
-  'fieldOfStudy/save', // Updated action type
+  'field-of-studies/save', // Updated action type
   async (data, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field-of-studies`, { // Updated endpoint
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field-of-studies/save`, { // Updated endpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -107,7 +108,7 @@ export const deleteFieldOfStudy = createAsyncThunk(
   }
 );
 
-const educationSlice = createSlice({
+const fieldofstudySlice = createSlice({
   name: 'fieldOfStudy', // Updated slice name
   initialState: {
     items: [],
@@ -122,15 +123,15 @@ const educationSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Fetch cases
-      .addCase(fetchFieldOfStudy.pending, (state) => { // Updated action
+      .addCase(fetchFieldOfStudies.pending, (state) => { // Updated action
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchFieldOfStudy.fulfilled, (state, action) => { // Updated action
+      .addCase(fetchFieldOfStudies.fulfilled, (state, action) => { // Updated action
         state.isLoading = false;
         state.items = action.payload;
       })
-      .addCase(fetchFieldOfStudy.rejected, (state, action) => { // Updated action
+      .addCase(fetchFieldOfStudies.rejected, (state, action) => { // Updated action
         state.isLoading = false;
         state.error = action.payload;
       })
@@ -179,4 +180,4 @@ const educationSlice = createSlice({
   },
 });
 
-export default educationSlice.reducer; 
+export default fieldofstudySlice.reducer; 

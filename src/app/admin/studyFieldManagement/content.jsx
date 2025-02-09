@@ -1,6 +1,7 @@
 "use client"
 // import React from 'react'
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'; // Import useSelector from react-redux
 
 // import UpperSide from '../../../components/upperDashbaord'
 import TableSideBar from '../../../components/TableSideBar'
@@ -9,58 +10,9 @@ import DisplayTable from '../../../components/displayTable'
 
 function content() {
 
-  const data = [
-    { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "👤" },
-    { id: 2, label: "Subscribed User", value: "4,590", bgColor: "bg-red-100", icon: "📊" },
-    { id: 3, label: "Unsubscribed User", value: "3,866", bgColor: "bg-yellow-100", icon: "📄" },
-    { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "🔑" },
-  ];
-
-  // const tableData = [
-  //   {
-  //     title: "Monthly Subscription",
-  //     createdDate: "26/02/2024",
-  //     lastUpdated: "27/02/2024",
-  //   },
-  //   {
-  //     title: "Professional Subscription",
-  //     createdDate: "26/02/2024",
-  //     lastUpdated: "27/02/2024",
-  //   },
-  //   {
-  //     title: "Special Subscription",
-  //     createdDate: "26/02/2024",
-  //     lastUpdated: "27/02/2024",
-  //   },
-  //   {
-  //     title: "Annual Subscription",
-  //     createdDate: "26/02/2024",
-  //     lastUpdated: "27/02/2024",
-  //   },
-  // ];
-
-  const tableData = [
-    {
-      title: "Business Partner",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Supplier",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Customer",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Affiliate",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-  ];
+  const data = useSelector((state) => state.data); // Get data from Redux store
+  console.log(data);
+  const tableData = useSelector((state) => state.tableData) || []; // Provide a default empty array
 
   const [isOpen, setIsOpen] = useState(false);
 
