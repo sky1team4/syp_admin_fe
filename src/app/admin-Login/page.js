@@ -81,7 +81,7 @@ export default function Login() {
           <div className="mx-auto flex items-center justify-between">
             {/* Logo */}
             <a href="#" className="text-xl font-bold">
-              Logo
+              SYP
             </a>
           </div>
         </nav>
@@ -89,8 +89,8 @@ export default function Login() {
         <div className="w-full h-full px-0 md:px-20 flex gap-10 justify-center items-center">
           {/* Left Section - Form */}
           <div className="flex flex-col justify-center items-center w-full h-full md:w-1/2 md:p-8 p-4 bg-[#F5F5F5] text-black">
-            <div className="w-full max-w-md min-w-[20rem] 2xl:w-[40rem] 2xl:h-[30rem] bg-white md:p-8 p-2 rounded-lg md:h-[60%] h-[90%]">
-              <h1 className="text-3xl font-bold mb-6 2xl:mt-5 md:mt-0 mt-36 text-center">Sign In</h1>
+            <div className="w-full max-w-md min-w-[20rem] py-8 px-6 md:scale-150 lg:scale-100 2xl:scale-125 bg-white md:p-8 rounded-lg">
+              <h1 className="text-3xl font-bold text-center">Sign In</h1>
 
               <form onSubmit={handleSubmit} className="">
                 <div className="mb-4 2xl:mb-6">
@@ -117,12 +117,17 @@ export default function Login() {
                   )}
                 </div>
                 <div className="mb-4 2xl:mb-8">
-                  <label
-                    className="block text-md font-medium mb-1 2xl:mb-3"
-                    htmlFor="password"
-                  >
-                    Password
-                  </label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label
+                      className="block text-md font-medium mb-1 2xl:mb-3"
+                      htmlFor="password"
+                    >
+                      Password
+                    </label>
+                    <a href="#" className="text-sm text-purple-600 hover:underline">
+                      Forgot Password?
+                    </a>
+                  </div>
                   <div className="relative">
                     <input
                       type={showPassword ? "text" : "password"}
@@ -147,6 +152,20 @@ export default function Login() {
                       />
                     </button>
                   </div>
+                  {/* Add Remember Me checkbox */}
+                  {/* <div className="flex items-center justify-between mt-4"> */}
+                    <label className="flex items-center text-sm mt-5 mb-5">
+                      <input
+                        type="checkbox"
+                        id="rememberMe"
+                        // checked={formData.rememberMe}
+                        // onChange={handleInputChange}
+                        className="mr-2"
+                      />
+                      Remember Me
+                    </label>
+              
+                  {/* </div> */}
                   {/* Display specific error below password input */}
                   {inputErrors.password && (
                     <div className="mt-1 text-red-500 text-sm flex items-center">
@@ -166,7 +185,7 @@ export default function Login() {
             </div>
           </div>
           {/* Right Section - Illustration */}
-          <div className="hidden md:flex w-1/2 justify-center items-center bg-[#F5F5F5]">
+          <div className="hidden lg:flex w-1/2 2xl:scale-125 justify-center items-center bg-[#F5F5F5]">
             <Image
               src="/loginImage.svg"  // path from public folder
               alt="Illustration"
