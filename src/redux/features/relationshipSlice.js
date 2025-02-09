@@ -2,8 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-// const BASE_URL = 'http://localhost:3000';
-// 
+
 // Function to get the JWT token
 const getToken = () => {
   return localStorage.getItem('token');
@@ -13,23 +12,20 @@ const getToken = () => {
 export const fetchRelationships = createAsyncThunk('relationships/findAll', async (_, { rejectWithValue }) => {
   try {
     const token = getToken();
-    console.log('Fetching relationships with token:', token);
     const response = await axios.post(`${BASE_URL}/relationships/findAll`, {}, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    console.log('Fetched relationships:', response.data);
     return response.data;
   } catch (error) {
-    console.error('Error fetching relationships:', error.response?.data || error.message);
     return rejectWithValue(error.response?.data || error.message);
   }
 });
 
 // Async thunk to create a relationship
-export const saveRelationship = createAsyncThunk('relationships/create', async (relationship, { rejectWithValue }) => {
+export const saveRelationship = createAsyncThunk('relationships/create', async (relationship, { dispatch, rejectWithValue }) => {
   try {
     const token = getToken();
     const relationshipData = { ...relationship, status: relationship.status || 'Active' };
@@ -40,16 +36,15 @@ export const saveRelationship = createAsyncThunk('relationships/create', async (
       },
     });
 
-    console.log(response.data, 'Created Relationship');
+    await dispatch(fetchRelationships()); // Refresh data after creation
     return response.data;
   } catch (error) {
-    console.error('Error creating relationship:', error.response?.data || error.message);
     return rejectWithValue(error.response?.data || error.message);
   }
 });
 
 // Async thunk to update a relationship
-export const updateRelationship = createAsyncThunk('relationships/update', async ({ id, data }, { rejectWithValue }) => {
+export const updateRelationship = createAsyncThunk('relationships/update', async ({ id, data }, { dispatch, rejectWithValue }) => {
   try {
     const token = getToken();
     const response = await axios.post(`${BASE_URL}/relationships/${id}/update`, data, {
@@ -58,28 +53,26 @@ export const updateRelationship = createAsyncThunk('relationships/update', async
       },
     });
 
-    console.log(response.data, 'Updated Relationship');
+    await dispatch(fetchRelationships()); // Refresh data after update
     return response.data;
   } catch (error) {
-    console.error('Error updating relationship:', error.response?.data || error.message);
     return rejectWithValue(error.response?.data || error.message);
   }
 });
 
 // Async thunk to delete a relationship
-export const deleteRelationship = createAsyncThunk('relationships/delete', async (id, { rejectWithValue }) => {
+export const deleteRelationship = createAsyncThunk('relationships/delete', async (id, { dispatch, rejectWithValue }) => {
   try {
     const token = getToken();
-    const response = await axios.post(`${BASE_URL}/relationships/${id}/delete`, {}, {
+    await axios.post(`${BASE_URL}/relationships/${id}/delete`, {}, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    console.log('Deleted Relationship:', id);
+    await dispatch(fetchRelationships()); // Refresh data after deletion
     return id;
   } catch (error) {
-    console.error('Error deleting relationship:', error.response?.data || error.message);
     return rejectWithValue(error.response?.data || error.message);
   }
 });

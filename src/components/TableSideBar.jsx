@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
-// import { Toaster } from 'react-hot-toast';
-import { saveSubscription, fetchSubscriptions, updateSubscription } from '../redux/features/subscriptionSlice';
-import { saveRelationship, updateRelationship, fetchRelationships } from '../redux/features/relationshipSlice';
 import Input from './cui/input';
 import Image from 'next/image';
 
@@ -24,11 +21,11 @@ function TableSideBar({
     namePlaceholder = 'Enter name',
     saveButtonText = 'Save',
     updateButtonText = 'Update',
-    type = 'relationship'
+    type,
+    fetchData,
+    saveData,
+    updateData
 }) {
-//     title
-// dis
-// subTitle
     const dispatch = useDispatch();
     const { isLoading } = useSelector((state) => state[type] || { isLoading: false });
     
@@ -62,78 +59,49 @@ function TableSideBar({
 
     const handleSave = async () => {
         if (!validateForm()) {
-            toast.error('Please fill in all required fields correctly', { id: 'validation-error' });
+            toast.error('Please fill in all required fields correctly');
             return;
         }
 
         try {
-            const itemData = {
-                name: formData.name
-            };
+            const itemData = { name: formData.name };
 
-            if (type === 'relationship') {
-                if (mode === 'edit' && data?.id) {
-                    await dispatch(updateRelationship({ id: data.id, data: itemData })).unwrap();
-                    toast.success('Relationship updated successfully');
-                } else {
-                    await dispatch(saveRelationship(itemData)).unwrap();
-                    toast.success('Relationship created successfully');
-                }
-                dispatch(fetchRelationships());
-            } else if (type === 'subscription') {
-                if (mode === 'edit' && data?.id) {
-                    await dispatch(updateSubscription({ id: data.id, data: itemData })).unwrap();
-                    toast.success('Subscription updated successfully');
-                } else {
-                    await dispatch(saveSubscription(itemData)).unwrap();
-                    toast.success('Subscription created successfully');
-                }
-                dispatch(fetchSubscriptions());
+            if (mode === 'edit' && data?.id) {
+                await dispatch(updateData({ id: data.id, data: itemData })).unwrap();
+                toast.success(`${title} updated successfully`);
+            } else {
+                await dispatch(saveData(itemData)).unwrap();
+                toast.success(`${title} created successfully`);
             }
             
-            click(false); // Close sidebar
+            dispatch(fetchData());
+            click(false);
         } catch (err) {
-            toast.error(err?.message || `Failed to ${mode === 'edit' ? 'update' : 'create'} ${type}`);
+            toast.error(`Failed to ${mode === 'edit' ? 'update' : 'create'} ${title}`);
         }
     };
 
     return (
         <>
-            {/* <Toaster position="top-right" /> */}
-            {/* Overlay */}
             {isOpen && (
-                <div
-                    onClick={() => click()}
-                    className="fixed inset-0 bg-black opacity-50 z-40"
-                ></div>
+                <div onClick={() => click()} className="fixed inset-0 bg-black opacity-50 z-40"></div>
             )}
 
-            {/* Sidebar */}
             <div
                 className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform ${
                     isOpen ? "translate-x-0" : "translate-x-full"
                 } transition-transform duration-300 z-50`}
             >
                 <div className="p-6">
-                    {/* Header */}
                     <div className="flex justify-between items-center mb-4 text-black">
-                        <h2 className="text-xl font-semibold">
-                            Add {title}
-                        </h2>
-                        <button
-                            onClick={() => click()}
-                            className="text-gray-400 hover:text-gray-600"
-                        >
+                        <h2 className="text-xl font-semibold">Add {title}</h2>
+                        <button onClick={() => click()} className="text-gray-400 hover:text-gray-600">
                             <Image src="/FAQ/cross.png" alt="close" width={20} height={20} />
                         </button>
                     </div>
 
-                    {/* Description */}
-                    <p className="text-gray-500 text-sm mb-6">
-                        {dis}
-                    </p>
+                    <p className="text-gray-500 text-sm mb-6">{dis}</p>
 
-                    {/* Subscription Inputs */}
                     <div className="flex flex-col gap-4">
                         <Input
                             id="name"
@@ -148,7 +116,6 @@ function TableSideBar({
                     </div>
                 </div>
 
-                {/* Footer */}
                 <div className="absolute bottom-0 left-0 w-full p-4">
                     <button
                         onClick={handleSave}
