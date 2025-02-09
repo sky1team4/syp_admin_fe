@@ -62,8 +62,9 @@ const Sidebar = () => {
         {/* Sidebar */}
         <div
           className={`z-40 fixed top-0 left-0 h-screen bg-[#7349c9] text-white ${isSidebarOpen ? "w-[70%] translate-x-0" : "lg:w-72 -translate-x-full"
-            } flex flex-col gap-5 items-center py-6 px-4 transform  lg:translate-x-0 transition-transform duration-300`}
+          } flex flex-col gap-5 items-center py-6 px-4 transform  lg:translate-x-0 transition-transform duration-300`}
         >
+          <div className="text-4xl font-bold self-start ml-4"> SYP</div>
           {/* Close Button */}
           <button
             onClick={toggleSidebar}
@@ -84,7 +85,7 @@ const Sidebar = () => {
             <Link href="/admin/dashboard" onClick={() => handleTabClick("dashboard")}>
               <div
                 className={`${staticTab === "dashboard" ? activeSidebarClass : sidebarClass
-                  } mt-16 ${sidebarItemClass}`}
+                  } mt-7 ${sidebarItemClass}`}
               >
                 <Image
                   src={
