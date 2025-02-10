@@ -1,214 +1,147 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
-// import { Toaster } from 'react-hot-toast';
-import { saveSubscription, fetchSubscriptions, updateSubscription } from '../redux/features/subscriptionSlice';
-import { saveRelationship, updateRelationship, fetchRelationships } from '../redux/features/relationshipSlice';
-import { saveFieldOfStudy, fetchFieldOfStudy, updateFieldOfStudy,deleteFieldOfStudy } from '../redux/features/fieldofstudySlice';
 import Input from './cui/input';
 import Image from 'next/image';
 
 const FORM_VALIDATION = {
   name: {
-    required: 'Name is required'
-  }
+    required: 'Name is required',
+  },
 };
 
 function TableSideBar({
-    isOpen,
-    click,
-    mode = 'create',
-    data = null,
-    title = 'Item',
-    dis = 'Manage your item',
-    subTitle = 'Name *',
-    namePlaceholder = 'Enter name',
-    saveButtonText = 'Save',
-    updateButtonText = 'Update',
-    type = 'fieldOfStudies'
+  title = 'Item',
+  isOpen,
+  click,
+  mode = 'create',
+  dis = 'Manage your item',
+  subTitle = 'Name *',
+  namePlaceholder = 'Enter name',
+  saveButtonText = 'Save',
+  updateButtonText = 'Update',
+  saveItem,
+  updateItem,
+  deleteItem,
+  isLoading,
+  error,
+  selectedItem,
 }) {
-//     title
-// dis
-// subTitle
-    const dispatch = useDispatch();
-    const { isLoading } = useSelector((state) => state[type] || { isLoading: false });
-    
-    const [formData, setFormData] = useState({
-        name: ''
-    });
-    const [errors, setErrors] = useState({});
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState({ name: '' });
+  const [errors, setErrors] = useState({});
 
-    useEffect(() => {
-        if (mode === 'edit' && data) {
-            setFormData({
-                name: data.name || data.title || ''
-            });
-        } else {
-            setFormData({
-                name: ''
-            });
-        }
-    }, [mode, data]);
+  useEffect(() => {
+    if (mode === 'edit' && selectedItem) {
+      setFormData({ name: selectedItem.name || '', id: selectedItem.id || '' });
+    } else {
+      setFormData({ name: '' });
+    }
+  }, [selectedItem, mode]);
 
-    const validateForm = () => {
-        const newErrors = {};
-        
-        if (!formData.name) {
-            newErrors.name = FORM_VALIDATION.name.required;
-        }
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name) {
+      newErrors.name = FORM_VALIDATION.name.required;
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
+  const handleSave = async () => {
+    if (!validateForm()) {
+      toast.error('Please fill in all required fields correctly', { id: 'validation-error' });
+      return;
+    }
+    try {
+      const itemData = { name: formData.name };
+      if (mode === 'edit' && formData.id) {
+        await dispatch(updateItem({ ...itemData, id: formData.id }));
+      } else {
+        await dispatch(saveItem(itemData));
+      }
+      toast.success(`Field of Study ${mode === 'edit' ? 'updated' : 'created'} successfully`);
+      click(false);
+    } catch (err) {
+      console.error('Error details:', err);
+      toast.error(err?.message || 'Failed to save Field of Study');
+    }
+  };
 
-    const handleSave = async () => {
-        if (!validateForm()) {
-            toast.error('Please fill in all required fields correctly', { id: 'validation-error' });
-            return;
-        }
+  const handleDelete = async () => {
+    if (mode === 'edit' && formData.id) {
+      try {
+        await dispatch(deleteItem(formData.id));
+        toast.success('Field of Study deleted successfully');
+        click(false);
+      } catch (err) {
+        console.error('Error details:', err);
+        toast.error(err?.message || 'Failed to delete Field of Study');
+      }
+    }
+  };
 
-        try {
-            const itemData = {
-                name: formData.name,
-                status: 'active', // Set the status as a string (e.g., 'active', 'inactive')
-                educationId: 1 // Replace with the actual educationId you want to use (ensure it's a number)
-            };
+  console.log('Data:', { isOpen, click, mode, title, dis, subTitle, namePlaceholder, saveButtonText, updateButtonText, saveItem, updateItem, deleteItem, isLoading, error, selectedItem });
 
-            // Check if type is an array and handle accordingly
-            if (Array.isArray(type)) {
-                for (const t of type) {
-                    if (t === 'relationship') {
-                        if (mode === 'edit' && data?.id) {
-                            await dispatch(updateRelationship({ id: data.id, data: itemData })).unwrap();
-                            toast.success('Relationship updated successfully');
-                        } else {
-                            await dispatch(saveRelationship(itemData)).unwrap();
-                            toast.success('Relationship created successfully');
-                        }
-                        dispatch(fetchRelationships());
-                    } else if (t === 'subscription') {
-                        if (mode === 'edit' && data?.id) {
-                            await dispatch(updateSubscription({ id: data.id, data: itemData })).unwrap();
-                            toast.success('Subscription updated successfully');
-                        } else {
-                            await dispatch(saveSubscription(itemData)).unwrap();
-                            toast.success('Subscription created successfully');
-                        }
-                        dispatch(fetchSubscriptions());
-                    } else if (t === 'fieldOfStudies') {
-                        if (mode === 'edit' && data?.id) {
-                            await dispatch(updateFieldOfStudy({ id: data.id, data: itemData })).unwrap();
-                            toast.success('Field of Study updated successfully');
-                        } else {
-                            await dispatch(saveFieldOfStudy(itemData)).unwrap();
-                            toast.success('Field of Study created successfully');
-                        }
-                        dispatch(fetchFieldOfStudy());
-                    }
-                }
-            } else {
-                // Existing logic for single type
-                if (type === 'relationship') {
-                    if (mode === 'edit' && data?.id) {
-                        await dispatch(updateRelationship({ id: data.id, data: itemData })).unwrap();
-                        toast.success('Relationship updated successfully');
-                    } else {
-                        await dispatch(saveRelationship(itemData)).unwrap();
-                        toast.success('Relationship created successfully');
-                    }
-                    dispatch(fetchRelationships());
-                } else if (type === 'subscription') {
-                    if (mode === 'edit' && data?.id) {
-                        await dispatch(updateSubscription({ id: data.id, data: itemData })).unwrap();
-                        toast.success('Subscription updated successfully');
-                    } else {
-                        await dispatch(saveSubscription(itemData)).unwrap();
-                        toast.success('Subscription created successfully');
-                    }
-                    dispatch(fetchSubscriptions());
-                } else if (type === 'fieldOfStudies') {
-                    if (mode === 'edit' && data?.id) {
-                        await dispatch(updateFieldOfStudy({ id: data.id, data: itemData })).unwrap();
-                        toast.success('Field of Study updated successfully');
-                    } else {
-                        await dispatch(saveFieldOfStudy(itemData)).unwrap();
-                        toast.success('Field of Study created successfully');
-                    }
-                    dispatch(fetchFieldOfStudy());
-                }
-            }
-            
-            click(false); // Close sidebar
-        } catch (err) {
-            console.error('Error details:', err); // Log the error for debugging
-            toast.error(err?.message || `Failed to ${mode === 'edit' ? 'update' : 'create'} ${type}`);
-        }
-    };
+  return (
+    <>
+      {isOpen && <div onClick={() => click(false)} className="fixed inset-0 bg-black opacity-50 z-40"></div>}
 
-    return (
-        <>
-            {/* <Toaster position="top-right" /> */}
-            {/* Overlay */}
-            {isOpen && (
-                <div
-                    onClick={() => click()}
-                    className="fixed inset-0 bg-black opacity-50 z-40"
-                ></div>
-            )}
+      <div
+        className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform transition-transform duration-300 z-50 ${
+          isOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-4 text-black">
+            <h2 className="text-xl font-semibold">
+              Add {title}
+            </h2>
+            <button onClick={() => click(false)} className="text-gray-400 hover:text-gray-600">
+              <Image src="/FAQ/cross.png" alt="close" width={20} height={20} />
+            </button>
+          </div>
 
-            {/* Sidebar */}
-            <div
-                className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform ${
-                    isOpen ? "translate-x-0" : "translate-x-full"
-                } transition-transform duration-300 z-50`}
+          <p className="text-gray-500 text-sm mb-6">{dis}</p>
+
+          <div className="flex flex-col gap-4">
+            <Input
+              id="name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              w="full"
+              mdw="full"
+              label={subTitle}
+              placeholder={namePlaceholder}
+              error={errors.name}
+            />
+          </div>
+        </div>
+
+        <div className="absolute bottom-0 left-0 w-full p-4">
+          <button
+            onClick={handleSave}
+            disabled={isLoading}
+            className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 disabled:opacity-50"
+          >
+            {isLoading ? 'Saving...' : mode === 'edit' ? updateButtonText : saveButtonText}
+          </button>
+          {mode === 'edit' && (
+            <button
+              onClick={handleDelete}
+              disabled={isLoading}
+              className="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 disabled:opacity-50 mt-2"
             >
-                <div className="p-6">
-                    {/* Header */}
-                    <div className="flex justify-between items-center mb-4 text-black">
-                        <h2 className="text-xl font-semibold">
-                            Add {title}
-                        </h2>
-                        <button
-                            onClick={() => click()}
-                            className="text-gray-400 hover:text-gray-600"
-                        >
-                            <Image src="/FAQ/cross.png" alt="close" width={20} height={20} />
-                        </button>
-                    </div>
+              Delete
+            </button>
+          )}
+        </div>
+      </div>
 
-                    {/* Description */}
-                    <p className="text-gray-500 text-sm mb-6">
-                        {dis}
-                    </p>
-
-                    {/* Subscription Inputs */}
-                    <div className="flex flex-col gap-4">
-                        <Input
-                            id="name"
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            w="full"
-                            mdw="full"
-                            label={subTitle}
-                            placeholder={namePlaceholder}
-                            error={errors.name}
-                        />
-                    </div>
-                </div>
-
-                {/* Footer */}
-                <div className="absolute bottom-0 left-0 w-full p-4">
-                    <button
-                        onClick={handleSave}
-                        disabled={isLoading}
-                        className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 disabled:opacity-50"
-                    >
-                        {isLoading ? 'Saving...' : (mode === 'edit' ? updateButtonText : saveButtonText)}
-                    </button>
-                </div>
-            </div>
-        </>
-    );
+      {error && <p className="text-red-500">{error}</p>}
+      {isLoading && <p>Loading...</p>}
+    </>
+  );
 }
 
 export default TableSideBar;

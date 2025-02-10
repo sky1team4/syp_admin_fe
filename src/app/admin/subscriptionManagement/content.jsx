@@ -98,7 +98,7 @@ function content() {
           isOpen={isOpen}
           btnText="Add Subscrition"
         />
-        <SubscriptionSideBar
+        {/* <SubscriptionSideBar
           isOpen={isOpen}
           click={toggleSidebar}
           mode={mode}
@@ -114,7 +114,7 @@ function content() {
           col3_Title="Last Updated" 
           isOpen={isOpen}
           click={toggleSidebar}
-        />
+        /> */}
       </div>
     </div>
   )

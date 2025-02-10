@@ -2,7 +2,7 @@
 // import React from 'react'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchRelationships } from '../../../redux/features/relationshipSlice'
+import { fetchRelationships } from '@/redux/features/relationshipSlice'
 import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
 
@@ -14,7 +14,10 @@ function content() {
   });
 
   useEffect(() => {
-    dispatch(fetchRelationships());
+    const fetchData = async () => {
+      await dispatch(fetchRelationships());
+    };
+    fetchData();
   }, [dispatch]);
 
   useEffect(() => {
@@ -28,28 +31,28 @@ function content() {
     { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "🔑" },
   ];
 
-  const tableData = [
-    {
-      title: "Business Partner",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Supplier",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Customer",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Affiliate",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-  ];
+  // const tableData = [
+  //   {
+  //     title: "Business Partner",
+  //     createdDate: "26/02/2024",
+  //     lastUpdated: "27/02/2024",
+  //   },
+  //   {
+  //     title: "Supplier",
+  //     createdDate: "26/02/2024",
+  //     lastUpdated: "27/02/2024",
+  //   },
+  //   {
+  //     title: "Customer",
+  //     createdDate: "26/02/2024",
+  //     lastUpdated: "27/02/2024",
+  //   },
+  //   {
+  //     title: "Affiliate",
+  //     createdDate: "26/02/2024",
+  //     lastUpdated: "27/02/2024",
+  //   },
+  // ];
 
   const [isOpen, setIsOpen] = useState(false);
 
