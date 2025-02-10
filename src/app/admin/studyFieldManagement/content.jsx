@@ -2,22 +2,23 @@
 // import React from 'react'
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'; // Import useSelector from react-redux
-import { fetchFieldOfStudy, saveFieldOfStudy, updateFieldOfStudy, deleteFieldOfStudy } from '../../../redux/features/fieldofstudySlice';
+import { fetchFieldOfStudy, saveFieldOfStudy } from '@/redux/features/fieldofstudySlice';
 
 // import UpperSide from '../../../components/upperDashbaord'
 import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
 
 function Content() {
-
+  
   const dispatch = useDispatch();
-  const { items: fetchFieldOfStudies, isLoading, error } = useSelector((state) => {
-    console.log('State:', state.fetchFieldOfStudies ); // Debugging: Log the entire state
-    return state.fetchFieldOfStudies || { items: [], isLoading: false, error: null };
-  });
-
+  // Changed the selector to correctly access the state
+  const { items: fetchFieldOfStudies, isLoading, error } = useSelector((state) => state.fieldofstudy); // Ensure correct state path
+  
+  const tableData = fetchFieldOfStudies || []; // Ensure tableData is an array
+  console.log('Table Data:', tableData);
+  
   useEffect(() => {
-    dispatch(fetchFieldOfStudies());
+    dispatch(fetchFieldOfStudy()); // Ensure correct action is dispatched
   }, [dispatch]);
 
   useEffect(() => {
@@ -30,38 +31,11 @@ function Content() {
   };
 
   return (
-    <>
-      <div className='flex flex-col gap-3 w-full h-full'>
-        {/* <UpperSide title="Degree" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Degree" /> */}
-          {/* {isLoading && <p>Loading field of study...</p>}
-          {error && <p>Error loading field of study: {error}</p>} */}
-        {/* <TableSideBar
-          // title="Field Of Study"
-          dis="lorem ipsum has been the industry's standard."
-          subTitle="Field Of Study Name"
-          namePlaceholder="Enter Field of Study"
-          saveButtonText="Add Field Of Study"
-          updateButtonText="Update Field Of Study" // Pass the fetched data
-          // isLoading={isLoading} // Pass loading state
-          // error={error}
-        
-          save={saveFieldOfStudy} // Pass save function
-          update={updateFieldOfStudy} // Pass update function
-          delete={deleteFieldOfStudy} // Pass delete function
-        />
-        <DisplayTable 
-            click={toggleSidebar}
-            isOpen={isOpen}
-            btnText="Add Field Of Study"
-            // title="Field Of Study"
-            array={fetchFieldOfStudy}
-            col1_Title="Field Of Study"
-            col2_Title="Created Date"
-            col3_Title="Last Updated" 
-          /> */}
-      </div>
-    </>
-  )
+    <div className='flex flex-col gap-3 w-full h-full'>
+      <TableSideBar title="Field of Study Management" namePlaceholder="Field of Study" dis="lorem ipsum has been the industry's standard." subTitle="Field of Study" click={toggleSidebar} isOpen={isOpen} />
+      <DisplayTable link="/admin/education-management" click={toggleSidebar} isOpen={isOpen} btnText="Add Study Field" title="Field of Study" array={tableData} col1_Title="Field of Study" col2_Title="Created Date" col3_Title="Last Updated" />
+    </div>
+  );
 }
 
 export default Content

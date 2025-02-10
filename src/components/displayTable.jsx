@@ -1,19 +1,31 @@
 import { columns } from "../components/data-table/subscriptionColumns"
 import { SubscriptionTable } from "../components/data-table/subscriptionTable"
 
-const TableComponent = (info) => {
-  return (
-    <SubscriptionTable
-      link={info.link}
-      columns={columns}
-      backBTN={info.backBTN}  
-      data={info.array}
-      title={info.title}
-      btnText={info.btnText}
-      click={info.click}
-      isOpen={info.isOpen}
-    />
-  )
+const TableComponent = ({ 
+  title, 
+  array, 
+  btnText, 
+  click, 
+  isOpen, 
+  link,
+  // columnTitles 
+}) => {
+return (
+  <SubscriptionTable
+    columns={columns} 
+    data={array}
+    title={title}
+    btnText={btnText}
+    link={link}
+    click={click}
+    isOpen={isOpen}
+  />
+);
 }
 
-export default TableComponent
+export default TableComponent;
+
+
+
+
+

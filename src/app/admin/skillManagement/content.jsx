@@ -49,8 +49,8 @@ function content() {
     <>
       <div className='flex flex-col gap-3 w-full h-full'>
         {/* <UpperSide title="Degree" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Degree" /> */}
-        {/* <TableSideBar title="Skill" namePlaceholder='Enter Skill' dis="lorem ipsum has been the industry's standard." subTitle="Skill" click={toggleSidebar} isOpen={isOpen} />
-        <DisplayTable link="/admin/profile-management" click={toggleSidebar} isOpen={isOpen} btnText="Add Skill" title="Skill" array={tableData} col1_Title="Skill" col2_Title="Created Date" col3_Title="Last Updated" /> */}
+        <TableSideBar title="Skill" namePlaceholder='Enter Skill' dis="lorem ipsum has been the industry's standard." subTitle="Skill" click={toggleSidebar} isOpen={isOpen} />
+        <DisplayTable link="/admin/profile-management" click={toggleSidebar} isOpen={isOpen} btnText="Add Skill" title="Skill" array={tableData} col1_Title="Skill" col2_Title="Created Date" col3_Title="Last Updated" />
       </div>
     </>
 

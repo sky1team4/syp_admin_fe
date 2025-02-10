@@ -44,7 +44,7 @@ const Notifications = ({ isVisible }) => {
   return (
     <div>
       <div
-        className={`notification-panel ${isVisible ? "slide-in" : "slide-out"} relative h-[38rem] p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto custom-scrollbar`}
+        className={`notification-panel ${isVisible ? "slide-in" : "slide-out"} relative  h-[38rem] p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto custom-scrollbar`}
       >
         {/* Header */}
         <div className="flex justify-between items-center flex-wrap mb-4">
@@ -81,7 +81,7 @@ const Notifications = ({ isVisible }) => {
             filteredNotifications.map((notification, index) => (
               <li
                 key={index}
-                className={` flex flex-wrap items-start sm:items-center space-x-4 p-2 border-b last:border-none ${!notification.isRead ? "" : ""
+                className={` flex items-start sm:items-center space-x-4 p-2 border-b last:border-none ${!notification.isRead ? "" : ""
                   }`}
               >
                 <img

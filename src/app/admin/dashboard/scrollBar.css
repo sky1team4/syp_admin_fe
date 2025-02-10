@@ -14,8 +14,8 @@
 
   .notification-panel {
     position: fixed;
-    top: 100px;
-    right: -100%;
+    top: 80px;
+    /* right: 50px; */
     width: 20rem;
     height: 38rem;
     transition: right 0.3s ease-in-out;

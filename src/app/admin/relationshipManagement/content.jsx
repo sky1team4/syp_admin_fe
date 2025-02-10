@@ -1,17 +1,12 @@
-"use client"
-// import React from 'react'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchRelationships } from '@/redux/features/relationshipSlice'
+import { fetchRelationships, saveRelationship, updateRelationship } from '../../../redux/features/relationshipSlice'
 import TableSideBar from '../../../components/TableSideBar'
-import DisplayTable from '../../../components/displayTable'
+import TableComponent from '../../../components/displayTable'
 
-function content() {
+function Content() {
   const dispatch = useDispatch();
-  const { items: relationships, isLoading, error } = useSelector((state) => {
-    console.log('State:', state.relationships ); // Debugging: Log the entire state
-    return state.relationships || { items: [], isLoading: false, error: null };
-  });
+  const { items: relationships, isLoading, error } = useSelector((state) => state.relationships || { items: [], isLoading: false, error: null });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,40 +14,6 @@ function content() {
     };
     fetchData();
   }, [dispatch]);
-
-  useEffect(() => {
-    console.log('Relationships:', relationships); // Debugging: Log the relationships data
-  }, [relationships]);
-
-  const data = [
-    { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "👤" },
-    { id: 2, label: "Subscribed User", value: "4,590", bgColor: "bg-red-100", icon: "📊" },
-    { id: 3, label: "Unsubscribed User", value: "3,866", bgColor: "bg-yellow-100", icon: "📄" },
-    { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "🔑" },
-  ];
-
-  // const tableData = [
-  //   {
-  //     title: "Business Partner",
-  //     createdDate: "26/02/2024",
-  //     lastUpdated: "27/02/2024",
-  //   },
-  //   {
-  //     title: "Supplier",
-  //     createdDate: "26/02/2024",
-  //     lastUpdated: "27/02/2024",
-  //   },
-  //   {
-  //     title: "Customer",
-  //     createdDate: "26/02/2024",
-  //     lastUpdated: "27/02/2024",
-  //   },
-  //   {
-  //     title: "Affiliate",
-  //     createdDate: "26/02/2024",
-  //     lastUpdated: "27/02/2024",
-  //   },
-  // ];
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -63,35 +24,39 @@ function content() {
   return (
     <>
       <div className='flex flex-col gap-3 w-full h-full'>
-        {/* Handle loading and error states */}
         {isLoading && <p>Loading relationships...</p>}
         {error && <p>Error loading relationships: {error}</p>}
         
-        {/* Use relationships data */}
         <TableSideBar
           isOpen={isOpen}
           click={toggleSidebar}
           title="Relationship"
-          dis="lorem ipsum has been the industry's standard."
+          dis="Manage relationship records efficiently."
           subTitle="Relationship Name *"
           namePlaceholder="Enter relationship name"
           saveButtonText="Add Relationship"
           updateButtonText="Update Relationship"
           type="relationship"
+          fetchData={fetchRelationships}
+          saveData={saveRelationship}
+          updateData={updateRelationship}
         />
-        <DisplayTable
+
+        <TableComponent
           click={toggleSidebar}
           isOpen={isOpen}
           btnText="Add Relationship"
           title="Relationship"
           array={relationships}
-          col1_Title="Relationship"
-          col2_Title="Created Date"
-          col3_Title="Last Updated"
+          columnTitles={[
+            { header: "Relationship", accessorKey: "title" },
+            { header: "Created Date", accessorKey: "createdDate" },
+            { header: "Last Updated", accessorKey: "lastUpdated" }
+          ]}
         />
       </div>
     </>
   )
 }
 
-export default content
+export default Content;

@@ -32,7 +32,7 @@ const DashboardTopBar = () => {
   }, [isNotificationOpen]);
 
   return (
-    <div className={`fixed top-0 w-full md:w-[78%] 2xl:w-[85%] flex items-center justify-between px-8 py-4 bg-white flex-col md:flex-row ${isNotificationOpen ? 'backdrop-blur-md z-10' : ''}`}>
+    <div className={`fixed top-0 w-full lg:w-[78%] 2xl:w-[85%] flex items-center justify-between px-8 py-4 bg-white flex-col md:flex-row ${isNotificationOpen ? 'backdrop-blur-md z-10' : ''}`}>
       {/* Left Section: Dashboard Title and Search Bar */}
       <div className="flex md:items-center lg:items-center">
 
@@ -80,7 +80,9 @@ const DashboardTopBar = () => {
           />
           <span className="absolute top-0 right-0 w-4 h-4 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
             1
-            <Notifications isVisible={isNotificationOpen} />
+            {/* <div className="absolute -top-10 right-0 "> */}
+              <Notifications isVisible={isNotificationOpen} />
+            {/* </div> */}
           </span>
 
           {/* Notification Popup */}

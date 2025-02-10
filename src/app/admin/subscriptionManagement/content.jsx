@@ -2,12 +2,7 @@
 // import React from 'react'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  saveSubscription,
-  fetchSubscriptions,
-  deleteSubscription,
-  updateSubscription
-} from '../../../redux/features/subscriptionSlice'
+import { saveSubscription, fetchSubscriptions, deleteSubscription, updateSubscription } from '../../../redux/features/subscriptionSlice'
 import { toast } from 'react-hot-toast'
 
 import UpperSide from '../../../components/dashbaord_stats'
@@ -98,7 +93,7 @@ function content() {
           isOpen={isOpen}
           btnText="Add Subscrition"
         />
-        {/* <SubscriptionSideBar
+        <SubscriptionSideBar
           isOpen={isOpen}
           click={toggleSidebar}
           mode={mode}
@@ -108,13 +103,13 @@ function content() {
           title="Subscription" 
           array={tableData} 
           backBTN="no"
-          // btnText="Add Subscription"
+          btnText="Add Subscription"
           col1_Title="Subscription" 
           col2_Title="Created Date" 
           col3_Title="Last Updated" 
           isOpen={isOpen}
           click={toggleSidebar}
-        /> */}
+        />
       </div>
     </div>
   )

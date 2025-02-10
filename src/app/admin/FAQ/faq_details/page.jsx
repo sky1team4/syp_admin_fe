@@ -70,17 +70,16 @@ const FAQManagement = () => {
             <Image
               src="/backArrow.svg"  // path from public folder
               alt="Illustration"
-              width={10}  // required in Next.js
-              height={10}
+              width={8}  // required in Next.js
+              height={8}
 
             />
           </a>
-          <h1 className="text-2xl font-semibold text-gray-800">FAQ Q/A Management</h1>
+          <h1 className="text-base sm:text-sm md:text-lg lg:text-xl xl:text-2xl font-semibold text-gray-800">FAQ Q/A Management</h1>
         </div>
         <button
           onClick={handleAddFAQ}
-          className="bg-purple-600 text-white rounded p-1 text-[10px] md:text-base lg:text-lg xl:text-xl"
-        // {btnText && <Button click={click} isOpen={isOpen} h="10" text={btnText} className="text-sm md:text-base lg:text-lg xl:text-xl" />}
+          className="bg-purple-600 text-white rounded px-2 py-1 text-[10px] md:text-base lg:text-lg xl:text-xl"
         >
           Add FAQ Q/A
         </button>
