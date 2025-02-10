@@ -26,6 +26,7 @@ export default function RootLayout({ children }) {
     const token = localStorage.getItem('token');
     
     if (!token) {
+      console.log("checkTokenExpiration = " , false);
       router.push('/admin-Login');
       return;
     }

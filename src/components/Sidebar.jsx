@@ -26,9 +26,8 @@ const Sidebar = () => {
     setStaticTab(tab);
     setCurrentTab(tab); // Update the context with the selected tab
     if (tab === "signout") {
-      console.log("signout");
-      
-      localStorage.setItem("selectedTab" , tab); // Clear the selected tab on sign out
+      localStorage.removeItem("token"); // Remove the token
+      localStorage.removeItem("selectedTab"); // Clear selected tab
     } else {
       localStorage.setItem("selectedTab", tab); // Save the selected tab in localStorage
     }
@@ -189,13 +188,8 @@ const Sidebar = () => {
             </Link>
 
             <div className="">
-              <Link href="/admin-Login" onClick={() => handleTabClick("dashboard")} >
-                <div
-                  className={`${sidebarItemClass} ${staticTab === "signout"
-                      ? "bg-white text-purple-600"
-                      : sidebarClass
-                    }`}
-                >
+              <Link href="/admin-Login" onClick={() => handleTabClick("signout")} >
+                <div className={`${sidebarItemClass} ${sidebarClass}`}>
                   <Image
                     src="/dashbaord_siedebar_icon/Signout.svg"
                     width={40}
