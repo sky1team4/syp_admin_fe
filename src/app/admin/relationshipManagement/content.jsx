@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchRelationships, saveRelationship, updateRelationship } from '../../../redux/features/relationshipSlice'
 import TableSideBar from '../../../components/TableSideBar'
-import TableComponent from '../../../components/displayTable'
+import DisplayTable from '../../../components/displayTable'
 
 function Content() {
   const dispatch = useDispatch();
@@ -39,18 +39,19 @@ function Content() {
           namePlaceholder="Enter relationship name"
           saveButtonText="Add Relationship"
           updateButtonText="Update Relationship"
-          type="relationship"
-          fetchData={fetchRelationships}
+          // type="relationship"
+        
           saveData={saveRelationship}
           updateData={updateRelationship}
         />
 
-        <TableComponent
+<DisplayTable
           click={toggleSidebar}
           isOpen={isOpen}
           btnText="Add Relationship"
           title="Relationship"
           array={relationships}
+          // array={fetchRelationships} // Pass fetchData as a prop
           columnTitles={[
             { header: "Relationship", accessorKey: "title" },
             { header: "Created Date", accessorKey: "createdDate" },

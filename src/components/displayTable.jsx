@@ -11,6 +11,7 @@ const TableComponent = ({
   link,
   // columnTitles 
 }) => {
+  
 return (
   <SubscriptionTable
     columns={columns} 
