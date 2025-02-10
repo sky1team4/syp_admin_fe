@@ -4,20 +4,21 @@ import { SubscriptionTable } from "../components/data-table/subscriptionTable"
 const TableComponent = ({ 
   title, 
   array, 
-  // btnText, 
+  btnText, 
   click, 
   isOpen, 
-   backBTN
-  // link,
-  // columnTitles 
+   backBTN,
+  link,
+  columnTitles 
 }) => {
+  
 return (
   <SubscriptionTable
     columns={columns} 
     data={array}
     title={title}
-    // btnText={btnText}
-    // link={link}
+    btnText={btnText}
+    link={link}
     backBTN={backBTN}
     click={click}
     isOpen={isOpen}
