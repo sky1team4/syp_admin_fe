@@ -1,41 +1,19 @@
 // Today'sSummary.jsx
 "use client"
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux'; // Import hooks from react-redux
+import { fetchSubscriptionVerification } from '../redux/features/subscription_verificationSlice'; // Import the action
 import Image from "next/image";
 import theme from "../app/theme";
 
 const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const TodaysSummary = ({ btnText, title, click, isOpen }) => {
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch(); // Initialize dispatch
+  const { data } = useSelector((state) => state.subscription_verification); // Get data from the Redux store
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem('token'); // Retrieve token from local storage
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscription-verification`, {
-          method: 'GET', // Specify the method
-          headers: {
-            'Authorization': `Bearer ${token}`, // Add token to headers
-            'Content-Type': 'application/json', // Specify content type
-          },
-        });
-
-        // Check if the response is ok (status in the range 200-299)
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`); // Throw an error if the response is not ok
-        }
-
-        const result = await response.json();
-        console.log(result);
-        setData(result);
-
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    dispatch(fetchSubscriptionVerification()); // Dispatch the action to fetch data
+  }, [dispatch]);
 
   // Calculate totals from incoming data
   const totalUsers = data.length; // Assuming each entry in data represents a user
@@ -75,7 +53,6 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
             className={`w-full  lg:w-1/4 flex gap-2 flex-col items-start justify-start p-4 ${item.bgColor} rounded-2xl cursor-pointer`}
           >
             <Image src={item.icon} width={40} height={40} alt="icon" />
-
 
             <p className="text-3xl font-bold text-gray-800">{item.value}</p>
             <p className="text-sm font-medium text-gray-600">{item.label}</p>

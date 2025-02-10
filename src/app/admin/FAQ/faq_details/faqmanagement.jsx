@@ -19,9 +19,7 @@ const FAQManagement = () => {
     <div className="max-w-4xl mx-auto py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-gray-800">FAQ Q/A </h1>
-        <button className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 text-base md:text-lg lg:text-xl">
-          Add FAQ Q/A
-        </button>
+        <Button text="Add FAQ Q/A" click={() => console.log('Add FAQ Q/A clicked')} w="10rem" />
       </div>
       <div className="space-y-4">
         {faqs.map((faq) => (

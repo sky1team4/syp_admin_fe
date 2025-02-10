@@ -1,43 +1,21 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSubscriptionVerification } from "@/redux/features/subscription_verificationSlice"; // Import your action
 import { columns } from "@/components/data-table/columns"
 import { DataTable } from "@/components/data-table/data-table"
 
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export default function DashboardPage() {
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.subscription_verification.data); 
 
   useEffect(() => {
-    const fetchData = async () => {
-      const yourToken = localStorage.getItem('token');
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscription-verification`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${yourToken}`, // Include your JWT token if required
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        // console.log(data);
-        setData(data);
-    } catch (error) {
-        console.log(error.message);
-    }
-    };
-
-    fetchData();
-  }, []);
+    dispatch(fetchSubscriptionVerification()); 
+  }, [dispatch]);
 
   const handleVerification = async (user) => {
-    // Add your verification logic here
+    
     console.log("Verifying user:", user);
-    // Example: await verifyUser(user.id);
   };
 
   return (

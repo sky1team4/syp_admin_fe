@@ -6,6 +6,10 @@ import Image from "next/image"
 import { useState } from "react"
 import SubscriptionSideBar from "@/components/SubscriptionSideBar"
 import ConfirmationDialog from "@/components/ConfirmationDialog"
+import { toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import { deleteSubscription } from '@/redux/features/subscriptionSlice'
+
 
 export const columns = [
     {
@@ -69,19 +73,16 @@ export const columns = [
             const [isSidebarOpen, setIsSidebarOpen] = useState(false)
             const [isConfirmOpen, setIsConfirmOpen] = useState(false)
             const subscription = row.original;
+            const dispatch = useDispatch();
 
             const handleDelete = () => {
                 setIsConfirmOpen(true);
             };
 
             const handleConfirmDelete = () => {
-                if (typeof subscription.deleteSubscription === 'function') {
-                    subscription.deleteSubscription(subscription.id);
-                    setIsConfirmOpen(false);
-                } else {
-                    console.error('deleteSubscription handler is not defined');
-                    alert('Delete action cannot be performed. Please check the subscription settings.');
-                }
+                console.log('Subscription object:', subscription);
+                dispatch(deleteSubscription(subscription.id));
+                setIsConfirmOpen(false);
             };
 
             return (

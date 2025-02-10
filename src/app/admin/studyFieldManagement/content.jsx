@@ -2,21 +2,29 @@
 // import React from 'react'
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'; // Import useSelector from react-redux
-import { fetchFieldOfStudy } from '../../../redux/features/fieldofstudySlice';
+import { fetchFieldOfStudy, saveFieldOfStudy } from '@/redux/features/fieldofstudySlice';
 
 // import UpperSide from '../../../components/upperDashbaord'
 import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
 
-function Content({ title, namePlaceholder, link, btnText, dataSelector, tableDataSelector }) {
+function Content() {
+  
   const dispatch = useDispatch();
-  const data = useSelector(dataSelector);
-  const tableData = useSelector(tableDataSelector) || [];
-  const [isOpen, setIsOpen] = useState(false);
+  // Changed the selector to correctly access the state
+  const { items: fetchFieldOfStudies, isLoading, error } = useSelector((state) => state.fieldofstudy); // Ensure correct state path
+  
+  const tableData = fetchFieldOfStudies || []; // Ensure tableData is an array
+  console.log('Table Data:', tableData);
+  
+  useEffect(() => {
+    dispatch(fetchFieldOfStudy()); // Ensure correct action is dispatched
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchFieldOfStudy());
-  }, [dispatch]);
+    console.log('Relationships:', fetchFieldOfStudies); // Debugging: Log the relationships data
+  }, [fetchFieldOfStudies]);
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -24,8 +32,8 @@ function Content({ title, namePlaceholder, link, btnText, dataSelector, tableDat
 
   return (
     <div className='flex flex-col gap-3 w-full h-full'>
-      <TableSideBar title={title} namePlaceholder={namePlaceholder} dis="lorem ipsum has been the industry's standard." subTitle={title} click={toggleSidebar} isOpen={isOpen} />
-      <DisplayTable link="/admin/education-management" click={toggleSidebar} isOpen={isOpen} btnText={btnText} title={title} array={tableData} col1_Title={title} col2_Title="Created Date" col3_Title="Last Updated" />
+      <TableSideBar title="Field of Study Management" namePlaceholder="Field of Study" dis="lorem ipsum has been the industry's standard." subTitle="Field of Study" click={toggleSidebar} isOpen={isOpen} />
+      <DisplayTable link="/admin/education-management" click={toggleSidebar} isOpen={isOpen} btnText="Add Study Field" title="Field of Study" array={tableData} col1_Title="Field of Study" col2_Title="Created Date" col3_Title="Last Updated" />
     </div>
   );
 }

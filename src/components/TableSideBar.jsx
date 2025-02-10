@@ -6,8 +6,8 @@ import Image from 'next/image';
 
 const FORM_VALIDATION = {
   name: {
-    required: 'Name is required'
-  }
+    required: 'Name is required',
+  },
 };
 
 function TableSideBar({
@@ -24,7 +24,8 @@ function TableSideBar({
     type,
     fetchData,
     saveData,
-    updateData
+    updateData,
+    selectedItem
 }) {
     const dispatch = useDispatch();
     const { isLoading } = useSelector((state) => state[type] || { isLoading: false });
@@ -34,28 +35,42 @@ function TableSideBar({
     });
     const [errors, setErrors] = useState({});
 
-    useEffect(() => {
-        if (mode === 'edit' && data) {
-            setFormData({
-                name: data.name || data.title || ''
-            });
-        } else {
-            setFormData({
-                name: ''
-            });
-        }
-    }, [mode, data]);
+  useEffect(() => {
+    if (mode === 'edit' && selectedItem) {
+      setFormData({ name: selectedItem.name || '', id: selectedItem.id || '' });
+    } else {
+      setFormData({ name: '' });
+    }
+  }, [selectedItem, mode]);
 
-    const validateForm = () => {
-        const newErrors = {};
-        
-        if (!formData.name) {
-            newErrors.name = FORM_VALIDATION.name.required;
-        }
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name) {
+      newErrors.name = FORM_VALIDATION.name.required;
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
+  // const handleSave = async () => {
+  //   if (!validateForm()) {
+  //     toast.error('Please fill in all required fields correctly', { id: 'validation-error' });
+  //     return;
+  //   }
+  //   try {
+  //     const itemData = { name: formData.name };
+  //     if (mode === 'edit' && formData.id) {
+  //       await dispatch(updateItem({ ...itemData, id: formData.id }));
+  //     } else {
+  //       await dispatch(saveItem(itemData));
+  //     }
+  //     toast.success(`Field of Study ${mode === 'edit' ? 'updated' : 'created'} successfully`);
+  //     click(false);
+  //   } catch (err) {
+  //     console.error('Error details:', err);
+  //     toast.error(err?.message || 'Failed to save Field of Study');
+  //   }
+  // };
 
     const handleSave = async () => {
         if (!validateForm()) {

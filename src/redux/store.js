@@ -7,6 +7,7 @@ import subscriptionReducer from './features/subscriptionSlice';
 import verificationReducer from './features/verificationSlice';
 import relationshipReducer from './features/relationshipSlice';
 import fieldofstudyReducer from './features/fieldofstudySlice';
+import subscription_verificationReducer from './features/subscription_verificationSlice';
 
 export const store = configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export const store = configureStore({
     verification: verificationReducer,
     relationship: relationshipReducer,
     fieldofstudy: fieldofstudyReducer,
+    subscription_verification: subscription_verificationReducer,
   },
 }); 

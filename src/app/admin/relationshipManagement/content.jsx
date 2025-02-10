@@ -9,7 +9,10 @@ function Content() {
   const { items: relationships, isLoading, error } = useSelector((state) => state.relationship || { items: [], isLoading: false, error: null });
   // const { items: relationships = [], isLoading, error } = useSelector(state => state.relationships || { items: [], isLoading: false, error: null });
   useEffect(() => {
-    dispatch(fetchRelationships());
+    const fetchData = async () => {
+      await dispatch(fetchRelationships());
+    };
+    fetchData();
   }, [dispatch]);
 
   const [isOpen, setIsOpen] = useState(false);
