@@ -25,7 +25,7 @@ function Content({ title, namePlaceholder, link, btnText, dataSelector, tableDat
   return (
     <div className='flex flex-col gap-3 w-full h-full'>
       <TableSideBar title={title} namePlaceholder={namePlaceholder} dis="lorem ipsum has been the industry's standard." subTitle={title} click={toggleSidebar} isOpen={isOpen} />
-      <DisplayTable link={link} click={toggleSidebar} isOpen={isOpen} btnText={btnText} title={title} array={tableData} col1_Title={title} col2_Title="Created Date" col3_Title="Last Updated" />
+      <DisplayTable link="/admin/education-management" click={toggleSidebar} isOpen={isOpen} btnText={btnText} title={title} array={tableData} col1_Title={title} col2_Title="Created Date" col3_Title="Last Updated" />
     </div>
   );
 }

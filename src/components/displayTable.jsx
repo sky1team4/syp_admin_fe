@@ -7,14 +7,16 @@ const TableComponent = ({
   btnText, 
   click, 
   isOpen, 
-  columnTitles 
+  link,
+  // columnTitles 
 }) => {
 return (
   <SubscriptionTable
-    columns={columnTitles}
+    columns={columns} 
     data={array}
     title={title}
     btnText={btnText}
+    link={link}
     click={click}
     isOpen={isOpen}
   />
