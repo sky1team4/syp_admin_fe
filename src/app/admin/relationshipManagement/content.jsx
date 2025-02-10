@@ -6,8 +6,8 @@ import TableComponent from '../../../components/displayTable'
 
 function Content() {
   const dispatch = useDispatch();
-  const { items: relationships, isLoading, error } = useSelector((state) => state.relationships || { items: [], isLoading: false, error: null });
-
+  const { items: relationships, isLoading, error } = useSelector((state) => state.relationship || { items: [], isLoading: false, error: null });
+  // const { items: relationships = [], isLoading, error } = useSelector(state => state.relationships || { items: [], isLoading: false, error: null });
   useEffect(() => {
     dispatch(fetchRelationships());
   }, [dispatch]);
@@ -17,6 +17,9 @@ function Content() {
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
+
+  console.log(relationships);
+  
 
   return (
     <>

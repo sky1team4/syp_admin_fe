@@ -23,7 +23,7 @@ export function SubscriptionTable({ columns, data, title, btnText, click, isOpen
     const [sorting, setSorting] = useState([])
 
     const table = useReactTable({
-        data,
+        data,   
         columns,
         onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
