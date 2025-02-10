@@ -9,6 +9,7 @@ import { saveStripeConfig } from '../../../../redux/features/stripeSlice';
 import Input from '../../../../components/cui/input';
 import Dropdown from '../../../../components/cui/dropdown';
 import CustomCheckbox from '@/components/cui/customCheckbox';
+import theme from '../../../../app/theme';
 
 const CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD', 'INR'];
 
@@ -117,7 +118,7 @@ const StripePaymentIntegration = () => {
 
         {/* Submit Button */}
         <button type="submit"
-          className="w-full bg-purple-600 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50"
+          className={`w-full bg-[${theme.color}] text-white py-2 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50`}
           disabled={isLoading}>
           {isLoading ? "Saving..." : "Save Changes"}
         </button>

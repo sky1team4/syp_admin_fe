@@ -2,6 +2,7 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import theme from "../app/theme";
 
 const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const TodaysSummary = ({ btnText, title, click, isOpen }) => {
@@ -54,7 +55,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
         <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
         {btnText && (
           <button
-            className="text-sm bg-purple-600 text-white px-2 py-2 rounded-md"
+            className={`text-sm bg-[${theme.color}] text-white px-2 py-2 rounded-md`}
             onClick={click}
           >
             {btnText}
