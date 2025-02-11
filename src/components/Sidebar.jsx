@@ -51,8 +51,9 @@ const Sidebar = () => {
         {/* Hamburger Button */}
         <button
           onClick={toggleSidebar}
-          className={`lg:hidden bg-[${theme.color}] text-white p-2 rounded-md m-2 ml-3 h-10 fixed top-4 z-40`}
-        >
+          className={`lg:hidden text-white p-2 rounded-md m-2 ml-3 h-10 fixed top-4 z-40`}
+          style={{ backgroundColor: theme.color }}
+          >
           <Image
             src="/dashbaord_siedebar_icon/menu.png"
             width={25}
@@ -63,9 +64,10 @@ const Sidebar = () => {
 
         {/* Sidebar */}
         <div
-          className={`z-40 fixed top-0 left-0 h-screen bg-[${theme.color}] text-white ${isSidebarOpen ? "w-[70%] translate-x-0" : "lg:w-72 -translate-x-full"
+          className={`z-40 fixed top-0 left-0 h-screen text-white ${isSidebarOpen ? "w-[70%] translate-x-0" : "lg:w-72 -translate-x-full"
           } flex flex-col gap-5 items-center py-6 px-4 transform  lg:translate-x-0 transition-transform duration-300`}
-        >
+          style={{ backgroundColor: theme.color }}
+          >
           <div className="text-4xl font-bold self-start ml-4"> SYP</div>
           {/* Close Button */}
           <button
