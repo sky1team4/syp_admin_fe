@@ -53,7 +53,7 @@ function Content() {
           array={relationships}
           // array={fetchRelationships} // Pass fetchData as a prop
           columnTitles={[
-            { header: "Relationship", accessorKey: "title" },
+            { header: "Relationship", accessorKey: "name" },
             { header: "Created Date", accessorKey: "createdDate" },
             { header: "Last Updated", accessorKey: "lastUpdated" }
           ]}

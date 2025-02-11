@@ -13,14 +13,14 @@ import { deleteSubscription } from '@/redux/features/subscriptionSlice'
 
 export const columns = [
     {
-        accessorKey: "title",
+        accessorKey: "name",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Title
+                    Name
                     {column.getIsSorted() === "asc" ? (
                         <ArrowUp className="ml-2 h-4 w-4" />
                     ) : (

@@ -50,7 +50,7 @@ function content() {
   // Transform subscriptions data to match table format
   const tableData = subscriptions.map(subscription => ({
     id: subscription.id,
-    title: subscription.name || subscription.title,
+    name: subscription.name,
     price: subscription.price,
     status: subscription.status,
     createdDate: new Date(subscription.createdAt).toLocaleDateString(),

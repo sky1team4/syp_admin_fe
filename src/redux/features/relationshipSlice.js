@@ -25,23 +25,46 @@ export const fetchRelationships = createAsyncThunk('relationships/findAll', asyn
 });
 
 // Async thunk to create a relationship
-export const saveRelationship = createAsyncThunk('relationships/create', async (relationship, { dispatch, rejectWithValue }) => {
-  try {
-    const token = getToken();
-    const relationshipData = { ...relationship, status: relationship.status || 'Active' };
+export const saveRelationship = createAsyncThunk(
+  'relationships/create',
+  async (relationship, { dispatch, rejectWithValue }) => {
+    try {
+      const token = getToken();
+      
+      // Change title to name to match backend expectations
+      const relationshipData = {
+        name: relationship.title?.trim(), // Convert title to name
+        status: relationship.status || 'Active'
+      };
 
-    const response = await axios.post(`${BASE_URL}/relationships/create`, relationshipData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      console.log('Sending request to:', `${BASE_URL}/relationships/create`);
+      console.log('With data:', relationshipData);
+      console.log('Headers:', {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      });
+      
+      const response = await axios.post(
+        `${BASE_URL}/relationships/create`,
+        relationshipData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
 
-    await dispatch(fetchRelationships()); // Refresh data after creation
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response?.data || error.message);
+      console.log('Success response:', response.data);
+      await dispatch(fetchRelationships());
+      return response.data;
+    } catch (error) {
+      // Add this detailed error logging
+      console.error('Full error response:', JSON.stringify(error.response?.data, null, 2));
+      return rejectWithValue(error.response?.data || error.message);
+    }
   }
-});
+);
 
 // Async thunk to update a relationship
 export const updateRelationship = createAsyncThunk('relationships/update', async ({ id, data }, { dispatch, rejectWithValue }) => {

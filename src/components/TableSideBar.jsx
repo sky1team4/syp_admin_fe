@@ -31,22 +31,23 @@ function TableSideBar({
     const { isLoading } = useSelector((state) => state[type] || { isLoading: false });
     
     const [formData, setFormData] = useState({
-        name: ''
+        title: '',
+        status: 'Active'
     });
     const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (mode === 'edit' && selectedItem) {
-      setFormData({ name: selectedItem.name || '', id: selectedItem.id || '' });
+      setFormData({ title: selectedItem.title || '', id: selectedItem.id || '' });
     } else {
-      setFormData({ name: '' });
+      setFormData({ title: '' });
     }
   }, [selectedItem, mode]);
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.name) {
-      newErrors.name = FORM_VALIDATION.name.required;
+    if (!formData.title) {
+      newErrors.title = FORM_VALIDATION.name.required;
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -79,7 +80,10 @@ function TableSideBar({
         }
 
         try {
-            const itemData = { name: formData.name };
+            const itemData = { 
+                title: formData.title,
+                status: formData.status 
+            };
 
             if (mode === 'edit' && data?.id) {
                 await dispatch(updateData({ id: data.id, data: itemData })).unwrap();
@@ -119,14 +123,14 @@ function TableSideBar({
 
                     <div className="flex flex-col gap-4">
                         <Input
-                            id="name"
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            id="title"
+                            value={formData.title}
+                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                             w="full"
                             mdw="full"
                             label={subTitle}
                             placeholder={namePlaceholder}
-                            error={errors.name}
+                            error={errors.title}
                         />
                     </div>
                 </div>
