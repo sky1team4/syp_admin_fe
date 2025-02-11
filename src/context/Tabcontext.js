@@ -12,14 +12,23 @@ export const TabProvider = ({ children }) => {
     return 'dashboard'; // Default value if localStorage is not available
   });
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      localStorage.setItem('selectedTab', currentTab);
+  const handleTabChange = (newTab) => {
+    if (newTab === 'signout') {
+      // Reset to dashboard when signing out
+      setCurrentTab('dashboard');
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('selectedTab', 'dashboard');
+      }
+    } else {
+      setCurrentTab(newTab);
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('selectedTab', newTab);
+      }
     }
-  }, [currentTab]);
+  };
 
   return (
-    <TabContext.Provider value={{ currentTab, setCurrentTab }}>
+    <TabContext.Provider value={{ currentTab, setCurrentTab: handleTabChange }}>
       {children}
     </TabContext.Provider>
   );

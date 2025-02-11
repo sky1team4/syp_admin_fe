@@ -30,7 +30,7 @@ const Sidebar = () => {
     setCurrentTab(tab); // Update the context with the selected tab
     if (tab === "signout") {
       localStorage.removeItem("token"); // Remove the token
-      localStorage.removeItem("selectedTab"); // Clear selected tab
+      localStorage.setItem("selectedTab", "dashboard"); // Clear selected tab
     } else {
       localStorage.setItem("selectedTab", tab); // Save the selected tab in localStorage
     }
