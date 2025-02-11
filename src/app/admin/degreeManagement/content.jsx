@@ -1,44 +1,27 @@
 "use client"
 // import React from 'react'
-import React, { useState } from 'react'
-
-// import UpperSide from '../../../components/upperDashbaord'
-// import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchDegrees } from '@/redux/features/degreeSLice'
 import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
 
 
 function content() {
+  const dispatch = useDispatch()
+  const degrees = useSelector((state) => state.degrees) || [];
+  console.log(degrees);
+  
 
-  const data = [
-    { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "👤" },
-    { id: 2, label: "Subscribed User", value: "4,590", bgColor: "bg-red-100", icon: "📊" },
-    { id: 3, label: "Unsubscribed User", value: "3,866", bgColor: "bg-yellow-100", icon: "📄" },
-    { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "🔑" },
-  ];
+  useEffect(() => {
+    dispatch(fetchDegrees())
+  }, [dispatch])
 
-  const tableData = [
-    {
-      title: "Bachelor's Degree",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Master's Degree",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Doctorate Degree",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Associate Degree",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-  ];
+  const tableData = degrees.map(degree => ({
+    title: degree.title,
+    createdDate: degree.createdDate,
+    lastUpdated: degree.lastUpdated,
+  }));
 
   const [isOpen, setIsOpen] = useState(false);
 
