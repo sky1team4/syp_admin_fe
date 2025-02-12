@@ -6,24 +6,21 @@ export const fetchFieldOfStudy = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      console.log('Fetching field of studies with token:', token);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field-of-studies`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
+          // 'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Fetch error response:', errorData);
         throw new Error(errorData.message || 'Failed to fetch field of study records');
       }
 
       return await response.json();
     } catch (error) {
-      console.error('Fetch error:', error);
       return rejectWithValue(error.message || 'Network error occurred');
     }
   }
@@ -32,28 +29,31 @@ export const fetchFieldOfStudy = createAsyncThunk(
 // Save field of study record
 export const saveFieldOfStudy = createAsyncThunk(
   'field-of-studies/save',
-  async (data, { rejectWithValue }) => {
+  async (data, { dispatch, rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      console.log('Saving field of study with token:', token, 'and data:', data);
+      const fieldOfStudyData = {
+        name: data.title?.trim(),
+        status: data.status || 'Active'
+      };
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field-of-studies`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(fieldOfStudyData),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Save error response:', errorData);
         throw new Error(errorData.message || 'Failed to save field of study record');
       }
 
+      await dispatch(fetchFieldOfStudy());
       return await response.json();
     } catch (error) {
-      console.error('Save error:', error);
       return rejectWithValue(error.message || 'Network error occurred');
     }
   }
@@ -62,28 +62,34 @@ export const saveFieldOfStudy = createAsyncThunk(
 // Update field of study record
 export const updateFieldOfStudy = createAsyncThunk(
   'field-of-studies/update',
-  async ({ id, data }, { rejectWithValue }) => {
+  async ({ id, data }, { dispatch, rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      console.log('Updating field of study with token:', token, 'and data:', data);
+      
+      // Transform the data to match backend expectations
+      const fieldOfStudyData = {
+        name: data.title?.trim(),
+        status: data.status || 'Active'
+      };
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field-of-studies/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(fieldOfStudyData),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Update error response:', errorData);
         throw new Error(errorData.message || 'Failed to update field of study record');
       }
 
+      // Refresh the data after successful update
+      await dispatch(fetchFieldOfStudy());
       return await response.json();
     } catch (error) {
-      console.error('Update error:', error);
       return rejectWithValue(error.message || 'Network error occurred');
     }
   }
