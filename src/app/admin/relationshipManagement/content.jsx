@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchRelationships, saveRelationship, updateRelationship } from '../../../redux/features/relationshipSlice'
+import { fetchRelationships, saveRelationship, updateRelationship, deleteRelationship } from '../../../redux/features/relationshipSlice'
 import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
+import { toast } from 'react-hot-toast'
 
 function Content() {
   const dispatch = useDispatch();
@@ -16,12 +17,38 @@ function Content() {
   }, [dispatch]);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [mode, setMode] = useState('create');
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (mode = 'create') => {
+    if (!isOpen) {
+      setMode(mode);
+    } else {
+      setSelectedItem(null);
+      setMode('create');
+    }
     setIsOpen(!isOpen);
   };
 
-  console.log(relationships);
+  const handleEdit = (item) => {
+    setSelectedItem({
+      id: item.id,
+      title: item.name,
+      status: item.status
+    });
+    toggleSidebar('edit');
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deleteRelationship(id));
+      toast.success('Relationship deleted successfully');
+    } catch (error) {
+      toast.error('Failed to delete relationship');
+    }
+  };
+
+  // console.log(relationships);
   
 
   return (
@@ -33,25 +60,28 @@ function Content() {
         <TableSideBar
           isOpen={isOpen}
           click={toggleSidebar}
+          mode={mode}
+          selectedItem={selectedItem}
           title="Relationship"
           dis="Manage relationship records efficiently."
           subTitle="Relationship Name *"
           namePlaceholder="Enter relationship name"
           saveButtonText="Add Relationship"
           updateButtonText="Update Relationship"
-          // type="relationship"
-        
+          type="relationship"
+          fetchData={fetchRelationships}
           saveData={saveRelationship}
           updateData={updateRelationship}
         />
 
-<DisplayTable
-          click={toggleSidebar}
+        <DisplayTable
+          click={() => toggleSidebar('create')}
           isOpen={isOpen}
           btnText="Add Relationship"
           title="Relationship"
           array={relationships}
-          // array={fetchRelationships} // Pass fetchData as a prop
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
           columnTitles={[
             { header: "Relationship", accessorKey: "name" },
             { header: "Created Date", accessorKey: "createdDate" },

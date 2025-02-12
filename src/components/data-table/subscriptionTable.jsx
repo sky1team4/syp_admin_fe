@@ -25,7 +25,7 @@ export function SubscriptionTable({ columns, data = [], title, btnText, click, i
   // Ensure data is an array before passing it to react-table
   const validatedData = Array.isArray(data) ? data : [];
 
-  console.log("Table Data:", validatedData);
+  // console.log("Table Data:", validatedData);
 
   const table = useReactTable({
     data: validatedData,

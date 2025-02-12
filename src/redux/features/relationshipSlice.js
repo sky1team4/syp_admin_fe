@@ -67,21 +67,42 @@ export const saveRelationship = createAsyncThunk(
 );
 
 // Async thunk to update a relationship
-export const updateRelationship = createAsyncThunk('relationships/update', async ({ id, data }, { dispatch, rejectWithValue }) => {
-  try {
-    const token = getToken();
-    const response = await axios.post(`${BASE_URL}/relationships/${id}/update`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+export const updateRelationship = createAsyncThunk(
+  'relationships/update',
+  async ({ id, data }, { dispatch, rejectWithValue }) => {
+    try {
+      const token = getToken();
+      
+      // Transform the data to match backend expectations
+      const relationshipData = {
+        name: data.title?.trim(), // Convert title to name
+        status: data.status || 'Active'
+      };
 
-    await dispatch(fetchRelationships()); // Refresh data after update
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response?.data || error.message);
+      console.log('Updating relationship:', {
+        url: `${BASE_URL}/relationships/update/${id}`, // Updated endpoint
+        data: relationshipData
+      });
+
+      const response = await axios.post(
+        `${BASE_URL}/relationships/update/${id}`, // Updated endpoint
+        relationshipData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        }
+      );
+
+      await dispatch(fetchRelationships()); // Refresh data after update
+      return response.data;
+    } catch (error) {
+      console.error('Update error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data || error.message);
+    }
   }
-});
+);
 
 // Async thunk to delete a relationship
 export const deleteRelationship = createAsyncThunk('relationships/delete', async (id, { dispatch, rejectWithValue }) => {
