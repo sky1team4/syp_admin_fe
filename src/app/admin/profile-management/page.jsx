@@ -25,7 +25,7 @@ const SettingContentArea = () => {
       Icon: "/profilemanagement/skillcategory.png",
 
       // Icon: () => <Image src="/profilemanagement/skillssubcategory.png" width={50} height={50} alt="Relationship Icon" />,
-      link: "#",
+      link: "/admin/subSkillManagement",
     },
     {
       title: "Work Experience",

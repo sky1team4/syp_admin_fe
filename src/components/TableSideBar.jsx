@@ -14,7 +14,7 @@ function TableSideBar({
     isOpen,
     click,
     mode = 'create',
-    data = null,
+    selectedItem = null,
     title = 'Item',
     dis = 'Manage your item',
     subTitle = 'Name *',
@@ -25,52 +25,39 @@ function TableSideBar({
     fetchData,
     saveData,
     updateData,
-    selectedItem
 }) {
     const dispatch = useDispatch();
     const { isLoading } = useSelector((state) => state[type] || { isLoading: false });
     
     const [formData, setFormData] = useState({
-        name: ''
+        title: '',
+        status: 'Active'
     });
     const [errors, setErrors] = useState({});
 
-  useEffect(() => {
-    if (mode === 'edit' && selectedItem) {
-      setFormData({ name: selectedItem.name || '', id: selectedItem.id || '' });
-    } else {
-      setFormData({ name: '' });
-    }
-  }, [selectedItem, mode]);
+    useEffect(() => {
+        if (mode === 'edit' && selectedItem) {
+            setFormData({
+                title: selectedItem.title || '',
+                id: selectedItem.id,
+                status: selectedItem.status || 'Active'
+            });
+        } else {
+            setFormData({
+                title: '',
+                status: 'Active'
+            });
+        }
+    }, [selectedItem, mode]);
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.name) {
-      newErrors.name = FORM_VALIDATION.name.required;
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  // const handleSave = async () => {
-  //   if (!validateForm()) {
-  //     toast.error('Please fill in all required fields correctly', { id: 'validation-error' });
-  //     return;
-  //   }
-  //   try {
-  //     const itemData = { name: formData.name };
-  //     if (mode === 'edit' && formData.id) {
-  //       await dispatch(updateItem({ ...itemData, id: formData.id }));
-  //     } else {
-  //       await dispatch(saveItem(itemData));
-  //     }
-  //     toast.success(`Field of Study ${mode === 'edit' ? 'updated' : 'created'} successfully`);
-  //     click(false);
-  //   } catch (err) {
-  //     console.error('Error details:', err);
-  //     toast.error(err?.message || 'Failed to save Field of Study');
-  //   }
-  // };
+    const validateForm = () => {
+        const newErrors = {};
+        if (!formData.title) {
+            newErrors.title = FORM_VALIDATION.name.required;
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleSave = async () => {
         if (!validateForm()) {
@@ -79,10 +66,16 @@ function TableSideBar({
         }
 
         try {
-            const itemData = { name: formData.name };
+            const itemData = { 
+                title: formData.title,
+                status: formData.status 
+            };
 
-            if (mode === 'edit' && data?.id) {
-                await dispatch(updateData({ id: data.id, data: itemData })).unwrap();
+            if (mode === 'edit' && formData.id) {
+                await dispatch(updateData({ 
+                    id: formData.id, 
+                    data: itemData 
+                })).unwrap();
                 toast.success(`${title} updated successfully`);
             } else {
                 await dispatch(saveData(itemData)).unwrap();
@@ -90,7 +83,7 @@ function TableSideBar({
             }
             
             dispatch(fetchData());
-            click(false);
+            click();
         } catch (err) {
             toast.error(`Failed to ${mode === 'edit' ? 'update' : 'create'} ${title}`);
         }
@@ -119,14 +112,14 @@ function TableSideBar({
 
                     <div className="flex flex-col gap-4">
                         <Input
-                            id="name"
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            id="title"
+                            value={formData.title}
+                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                             w="full"
                             mdw="full"
                             label={subTitle}
                             placeholder={namePlaceholder}
-                            error={errors.name}
+                            error={errors.title}
                         />
                     </div>
                 </div>

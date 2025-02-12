@@ -4,23 +4,23 @@ import { ArrowDown, ArrowUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useState } from "react"
-import SubscriptionSideBar from "@/components/SubscriptionSideBar"
+// import SubscriptionSideBar from "@/components/SubscriptionSideBar"
 import ConfirmationDialog from "@/components/ConfirmationDialog"
-import { toast } from 'react-toastify'
-import { useDispatch } from 'react-redux'
-import { deleteSubscription } from '@/redux/features/subscriptionSlice'
+// import { toast } from 'react-toastify'
+// import { useDispatch } from 'react-redux'
+// import { deleteSubscription } from '@/redux/features/subscriptionSlice'
 
 
-export const columns = [
+export const createColumns = ({ handleEdit, handleDelete }) => [
     {
-        accessorKey: "title",
+        accessorKey: "name",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Title
+                    Name
                     {column.getIsSorted() === "asc" ? (
                         <ArrowUp className="ml-2 h-4 w-4" />
                     ) : (
@@ -72,16 +72,14 @@ export const columns = [
         cell: ({ row }) => {
             const [isSidebarOpen, setIsSidebarOpen] = useState(false)
             const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-            const subscription = row.original;
-            const dispatch = useDispatch();
+            const item = row.original;
 
-            const handleDelete = () => {
+            const onDelete = () => {
                 setIsConfirmOpen(true);
             };
 
-            const handleConfirmDelete = () => {
-                console.log('Subscription object:', subscription);
-                dispatch(deleteSubscription(subscription.id));
+            const onConfirmDelete = () => {
+                handleDelete(item.id);
                 setIsConfirmOpen(false);
             };
 
@@ -90,7 +88,7 @@ export const columns = [
                     <div className="flex gap-2">
                         <button
                             className="p-1"
-                            onClick={() => setIsSidebarOpen(true)}
+                            onClick={() => handleEdit(item)}
                         >
                             <Image
                                 src="/EditTable.svg"
@@ -101,7 +99,7 @@ export const columns = [
                         </button>
                         <button
                             className="p-1"
-                            onClick={handleDelete}
+                            onClick={onDelete}
                         >
                             <Image
                                 src="/delete.svg"
@@ -112,24 +110,12 @@ export const columns = [
                         </button>
                     </div>
 
-                    <SubscriptionSideBar
-                        isOpen={isSidebarOpen}
-                        click={() => setIsSidebarOpen(false)}
-                        mode="edit"
-                        data={{
-                            id: subscription.id,
-                            name: subscription.title,
-                            price: subscription.price,
-                            status: subscription.status
-                        }}
-                    />
-
                     <ConfirmationDialog
                         isOpen={isConfirmOpen}
                         onClose={() => setIsConfirmOpen(false)}
-                        onConfirm={handleConfirmDelete}
-                        title="Delete Subscription"
-                        message="Are you sure you want to delete this subscription? This action cannot be undone."
+                        onConfirm={onConfirmDelete}
+                        title="Delete Item"
+                        message="Are you sure you want to delete this item? This action cannot be undone."
                     />
                 </>
             )
