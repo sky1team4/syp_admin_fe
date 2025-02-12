@@ -27,12 +27,14 @@ const Sidebar = () => {
 
   const handleTabClick = (tab) => {
     setStaticTab(tab);
-    setCurrentTab(tab); // Update the context with the selected tab
+    // setCurrentTab(tab); // Update the context with the selected tab
     if (tab === "signout") {
       localStorage.removeItem("token"); // Remove the token
       localStorage.setItem("selectedTab", "dashboard"); // Clear selected tab
+      setCurrentTab("dashboard");
     } else {
       localStorage.setItem("selectedTab", tab); // Save the selected tab in localStorage
+      setCurrentTab(tab);
     }
     setIsSidebarOpen(false); // Close sidebar after selecting a tab
   };
