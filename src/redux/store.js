@@ -10,6 +10,7 @@ import fieldofstudyReducer from './features/fieldofstudySlice';
 import subscription_verificationReducer from './features/subscription_verificationSlice';
 import degreeReducer from './features/degreeSlice';
 import specialtyReducer from './features/specialitySlice';
+import interestReducer from './features/interestSlice';
 
 export const store = configureStore({
   reducer: {
@@ -24,5 +25,6 @@ export const store = configureStore({
     subscription_verification: subscription_verificationReducer,
     degree: degreeReducer,
     specialty: specialtyReducer,
+    interest: interestReducer,
   },
 }); 
