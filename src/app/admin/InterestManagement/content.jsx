@@ -121,6 +121,7 @@ function Content() {
         isOpen={isOpen}
         btnText="Add Interest"
         title="Interest"
+        link="/admin/profile-management"
         array={formattedInterests}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
