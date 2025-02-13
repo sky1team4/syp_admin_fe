@@ -98,7 +98,7 @@ function Content() {
       <DisplayTable
         click={() => toggleSidebar('create')}
         isOpen={isOpen}
-        btnText="Add FAQ Category"
+        btnText="Add FAQ"
         title="Q&A Category"
         link="/admin/FAQ"
         array={formattedFaqCategories}
