@@ -1,81 +1,117 @@
 "use client"
 // import React from 'react'
-import React, { useState } from 'react'
-
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchCompanies, saveCompany, updateCompany, deleteCompany } from '../../../redux/features/companyNameSlice'
 import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
+import { toast } from 'react-hot-toast'
 
+function Content() {
+  const dispatch = useDispatch();
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  
+  const { items: companies, isLoading, error } = useSelector((state) => {
+    console.log('Full Redux State:', state);
+    console.log('Company State:', state.companyName);
+    return state.companyName || { items: [], isLoading: false, error: null };
+  });
 
-function content() {
-
-  const data = [
-    { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "👤" },
-    { id: 2, label: "Subscribed User", value: "4,590", bgColor: "bg-red-100", icon: "📊" },
-    { id: 3, label: "Unsubscribed User", value: "3,866", bgColor: "bg-yellow-100", icon: "📄" },
-    { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "🔑" },
-  ];
-
-  // const tableData = [
-  //   {
-  //     title: "Monthly Subscription",
-  //     createdDate: "26/02/2024",
-  //     lastUpdated: "27/02/2024",
-  //   },
-  //   {
-  //     title: "Professional Subscription",
-  //     createdDate: "26/02/2024",
-  //     lastUpdated: "27/02/2024",
-  //   },
-  //   {
-  //     title: "Special Subscription",
-  //     createdDate: "26/02/2024",
-  //     lastUpdated: "27/02/2024",
-  //   },
-  //   {
-  //     title: "Annual Subscription",
-  //     createdDate: "26/02/2024",
-  //     lastUpdated: "27/02/2024",
-  //   },
-  // ];
-
-  const tableData = [
-    {
-      title: "Tech Innovators Inc.",
-      createdDate: "01/01/2023",
-      lastUpdated: "15/01/2023",
-    },
-    {
-      title: "Green Solutions Ltd.",
-      createdDate: "05/02/2023",
-      lastUpdated: "20/02/2023",
-    },
-    {
-      title: "HealthCare Partners",
-      createdDate: "10/03/2023",
-      lastUpdated: "25/03/2023",
-    },
-    {
-      title: "Finance Experts LLC",
-      createdDate: "15/04/2023",
-      lastUpdated: "30/04/2023",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsDataLoaded(false);
+        const response = await dispatch(fetchCompanies()).unwrap();
+        console.log('Fetched Data:', response);
+        setIsDataLoaded(true);
+      } catch (error) {
+        console.error('Error fetching companies:', error);
+        toast.error('Failed to load companies');
+        setIsDataLoaded(true);
+      }
+    };
+    fetchData();
+  }, [dispatch]);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [mode, setMode] = useState('create');
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (mode = 'create') => {
+    if (!isOpen) {
+      setMode(mode);
+    } else {
+      setSelectedItem(null);
+      setMode('create');
+    }
     setIsOpen(!isOpen);
   };
 
+  const handleEdit = (item) => {
+    setSelectedItem({
+      id: item.id,
+      title: item.name,
+      status: item.status
+    });
+    toggleSidebar('edit');
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deleteCompany(id)).unwrap();
+      toast.success('Company deleted successfully');
+    } catch (error) {
+      toast.error('Failed to delete company');
+    }
+  };
+
+  const formattedCompanies = companies ? companies.map(company => ({
+    ...company,
+    createdDate: new Date(company.createDateTime).toLocaleDateString(),
+    lastUpdated: new Date(company.updateDateTime).toLocaleDateString()
+  })) : [];
+
+  if (!isDataLoaded || isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  console.log('Formatted Companies:', formattedCompanies);
+  
+
   return (
-    <>
-      <div className='flex flex-col gap-3 w-full h-full'>
-        {/* <UpperSide title="Degree" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Degree" /> */}
-        <TableSideBar title="Company Name" namePlaceholder='Enter Company name' dis="lorem ipsum has been the industry's standard." subTitle="Company Name" click={toggleSidebar} isOpen={isOpen} />
-        <DisplayTable link="/admin/work-experience" click={toggleSidebar} isOpen={isOpen} btnText="Add Company" title="Company Name" array={tableData} col1_Title="Company Name" col2_Title="Created Date" col3_Title="Last Updated" />
-      </div>
-    </>
-  )
+    <div className='flex flex-col gap-3 w-full h-full'>
+      <TableSideBar
+        isOpen={isOpen}
+        click={toggleSidebar}
+        mode={mode}
+        selectedItem={selectedItem}
+        title="Company Name"
+        dis="Manage company names efficiently."
+        subTitle="Company Name *"
+        namePlaceholder="Enter company name"
+        type="company"
+        fetchData={fetchCompanies}
+        saveData={saveCompany}
+        updateData={updateCompany}
+      />
+
+      <DisplayTable
+        click={() => toggleSidebar('create')}
+        isOpen={isOpen}
+        btnText="Add Company"
+        title="Company Name"
+        link="/admin/work-experience"
+        array={formattedCompanies}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        columnTitles={[
+          { header: "Company Name", accessorKey: "name" },
+          { header: "Created Date", accessorKey: "createdDate" },
+          { header: "Last Updated", accessorKey: "lastUpdated" }
+        ]}
+      />
+    </div>
+  );
 }
 
-export default content
+export default Content; 
