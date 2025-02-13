@@ -12,6 +12,7 @@ import degreeReducer from './features/degreeSlice';
 import specialtyReducer from './features/specialitySlice';
 import interestReducer from './features/interestSlice';
 import skillReducer from './features/skillSlice';
+import employeeReducer from './features/employeeSlice';
 
 export const store = configureStore({
   reducer: {
@@ -28,5 +29,6 @@ export const store = configureStore({
     specialty: specialtyReducer,
     interest: interestReducer,
     skill: skillReducer,
+    employee: employeeReducer,
   },
 }); 
