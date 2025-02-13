@@ -15,6 +15,7 @@ import skillReducer from './features/skillSlice';
 import employeeReducer from './features/employeeSlice';
 import jobTitleReducer from './features/jobTitleSlice';
 import companyReducer from './features/companyNameSlice';
+import subSkillReducer from './features/subSkillSlice';
 
 export const store = configureStore({
   reducer: {
@@ -34,5 +35,6 @@ export const store = configureStore({
     employee: employeeReducer,
     jobTitle: jobTitleReducer,
     companyName: companyReducer,
+    subSkill: subSkillReducer,
   },
 }); 
