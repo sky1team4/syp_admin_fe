@@ -101,7 +101,7 @@ function content() {
           title="Subscription"
           click={toggleSidebar}
           isOpen={isOpen}
-          btnText="Add Subscrition"
+          btnText="Add Subscription"
         />
         <SubscriptionSideBar
           isOpen={isOpen}
