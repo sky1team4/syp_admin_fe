@@ -1,60 +1,117 @@
 "use client"
 // import React from 'react'
-import React, { useState } from 'react'
-
-import UpperSide from '../../../../components/dashbaord_stats'
-import SubscriptionSideBar from '../../../../components/SubscriptionSideBar'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchFaqCategories, saveFaqCategory, updateFaqCategory, deleteFaqCategory } from '../../../../redux/features/faqCateSlice'
+import TableSideBar from '../../../../components/TableSideBar'
 import DisplayTable from '../../../../components/displayTable'
+import { toast } from 'react-hot-toast'
 
+function Content() {
+  const dispatch = useDispatch();
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  
+  const { items: faqCategories, isLoading, error } = useSelector((state) => {
+    console.log('Full Redux State:', state);
+    console.log('FAQ Category State:', state.faqCategory);
+    return state.faqCategory || { items: [], isLoading: false, error: null };
+  });
 
-function content() {
-
-  const data = [
-    { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "👤" },
-    { id: 2, label: "Subscribed User", value: "4,590", bgColor: "bg-red-100", icon: "📊" },
-    { id: 3, label: "Unsubscribed User", value: "3,866", bgColor: "bg-yellow-100", icon: "📄" },
-    { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "🔑" },
-  ];
-
-  const tableData = [
-    {
-      title: "Monthly Subscription",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Professional Subscription",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Special Subscription",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Annual Subscription",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsDataLoaded(false);
+        const response = await dispatch(fetchFaqCategories()).unwrap();
+        console.log('Fetched Data:', response);
+        setIsDataLoaded(true);
+      } catch (error) {
+        console.error('Error fetching FAQ categories:', error);
+        toast.error('Failed to load FAQ categories');
+        setIsDataLoaded(true);
+      }
+    };
+    fetchData();
+  }, [dispatch]);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [mode, setMode] = useState('create');
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (mode = 'create') => {
+    if (!isOpen) {
+      setMode(mode);
+    } else {
+      setSelectedItem(null);
+      setMode('create');
+    }
     setIsOpen(!isOpen);
   };
 
-  return (
-    <>
-      <div className='flex flex-col gap-3 w-full h-full'>
-        {/* <UpperSide title="Degree" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Degree" /> */}
-        <SubscriptionSideBar title="Add Q&A Category" dis="lorem ipsum has been the industry's standard." subTitle="Q&A Category" click={toggleSidebar} isOpen={isOpen} />
-        <DisplayTable link="/admin/FAQ" click={toggleSidebar} isOpen={isOpen} btnText="Add FAQ " title="Q&A Category" array={tableData} col1_Title="Q&A Category" col2_Title="Created Date" col3_Title="Last Updated" />
-      </div>
+  const handleEdit = (item) => {
+    setSelectedItem({
+      id: item.id,
+      title: item.name,
+      status: item.status
+    });
+    toggleSidebar('edit');
+  };
 
-    </>
-  )
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deleteFaqCategory(id)).unwrap();
+      toast.success('FAQ category deleted successfully');
+    } catch (error) {
+      toast.error('Failed to delete FAQ category');
+    }
+  };
+
+  // Format dates for display
+  const formattedFaqCategories = faqCategories ? faqCategories.map(category => ({
+    ...category,
+    createdDate: new Date(category.createDateTime).toLocaleDateString(),
+    lastUpdated: new Date(category.updateDateTime).toLocaleDateString()
+  })) : [];
+
+  if (!isDataLoaded || isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  console.log('Formatted FAQ Categories:', formattedFaqCategories);
+
+  return (
+    <div className='flex flex-col gap-3 w-full h-full'>
+      <TableSideBar
+        isOpen={isOpen}
+        click={toggleSidebar}
+        mode={mode}
+        selectedItem={selectedItem}
+        title="Q&A Category"
+        dis="Manage Q&A categories efficiently."
+        subTitle="Q&A Category *"
+        namePlaceholder="Enter Q&A category"
+        type="faqCategory"
+        fetchData={fetchFaqCategories}
+        saveData={saveFaqCategory}
+        updateData={updateFaqCategory}
+      />
+
+      <DisplayTable
+        click={() => toggleSidebar('create')}
+        isOpen={isOpen}
+        btnText="Add FAQ Category"
+        title="Q&A Category"
+        link="/admin/FAQ"
+        array={formattedFaqCategories}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        columnTitles={[
+          { header: "Q&A Category", accessorKey: "name" },
+          { header: "Created Date", accessorKey: "createdDate" },
+          { header: "Last Updated", accessorKey: "lastUpdated" }
+        ]}
+      />
+    </div>
+  );
 }
 
-export default content
+export default Content;

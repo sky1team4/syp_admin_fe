@@ -1,60 +1,116 @@
 "use client"
 // import React from 'react'
-import React, { useState } from 'react'
-
-// import UpperSide from '../../../components/upperDashbaord'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchEmployees, saveEmployee, updateEmployee, deleteEmployee } from '../../../redux/features/employeeSlice'
 import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
+import { toast } from 'react-hot-toast'
 
+// import UpperSide from '../../../components/upperDashbaord'
 
-function content() {
+function Content() {
+  const dispatch = useDispatch();
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  
+  const { items: employees, isLoading, error } = useSelector((state) => {
+    console.log('Full Redux State:', state);
+    return state.employee || { items: [], isLoading: false, error: null };
+  });
 
-  const data = [
-    { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "👤" },
-    { id: 2, label: "Subscribed User", value: "4,590", bgColor: "bg-red-100", icon: "📊" },
-    { id: 3, label: "Unsubscribed User", value: "3,866", bgColor: "bg-yellow-100", icon: "📄" },
-    { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "🔑" },
-  ];
-
-  const tableData = [
-    {
-      title: "High School Diploma",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Bachelor's Degree",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Master's Degree",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "PhD Program",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsDataLoaded(false);
+        await dispatch(fetchEmployees()).unwrap();
+        setIsDataLoaded(true);
+      } catch (error) {
+        console.error('Error fetching employees:', error);
+        toast.error('Failed to load employees');
+        setIsDataLoaded(true);
+      }
+    };
+    fetchData();
+  }, [dispatch]);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [mode, setMode] = useState('create');
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (mode = 'create') => {
+    if (!isOpen) {
+      setMode(mode);
+    } else {
+      setSelectedItem(null);
+      setMode('create');
+    }
     setIsOpen(!isOpen);
   };
 
-  return (
-    <>
-      <div className='flex flex-col gap-3 w-full h-full'>
-        {/* <UpperSide title="Degree" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Degree" /> */}
-        <TableSideBar title="Employment" namePlaceholder='Enter employment' dis="lorem ipsum has been the industry's standard." subTitle="Employment" click={toggleSidebar} isOpen={isOpen} />
-        <DisplayTable link="/admin/work-experience" click={toggleSidebar} isOpen={isOpen} btnText="Employment" title="Employment Status Management" array={tableData} col1_Title="Employment" col2_Title="Created Date" col3_Title="Last Updated" />
-      </div>
+  const handleEdit = (item) => {
+    setSelectedItem({
+      id: item.id,
+      title: item.name,
+      status: item.status
+    });
+    toggleSidebar('edit');
+  };
 
-    </>
-  )
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deleteEmployee(id)).unwrap();
+      toast.success('Employee status deleted successfully');
+    } catch (error) {
+      toast.error('Failed to delete employee status');
+    }
+  };
+
+  // Format dates for display
+  const formattedEmployees = employees?.map(employee => ({
+    ...employee,
+    createdDate: new Date(employee.createDateTime).toLocaleDateString(),
+    lastUpdated: new Date(employee.updateDateTime).toLocaleDateString()
+  }));
+
+  if (!isDataLoaded || isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className='flex flex-col gap-3 w-full h-full'>
+      {/* <UpperSide title="Degree" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Degree" /> */}
+      <TableSideBar
+        isOpen={isOpen}
+        click={toggleSidebar}
+        mode={mode}
+        selectedItem={selectedItem}
+        title="Employment"
+        dis="Manage employment status records efficiently."
+        subTitle="Employment Status *"
+        namePlaceholder="Enter employment status"
+        type="employee"
+        fetchData={fetchEmployees}
+        saveData={saveEmployee}
+        updateData={updateEmployee}
+      />
+
+      <DisplayTable
+        click={() => toggleSidebar('create')}
+        isOpen={isOpen}
+        btnText="Add Employment"
+        link="/admin/work-experience"
+        title="Employment Status Management"
+        array={formattedEmployees}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        columnTitles={[
+          { header: "Employment", accessorKey: "name" },
+          { header: "Created Date", accessorKey: "createdDate" },
+          { header: "Last Updated", accessorKey: "lastUpdated" }
+        ]}
+      />
+    </div>
+  );
 }
 
-export default content
+export default Content;

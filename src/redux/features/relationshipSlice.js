@@ -73,19 +73,20 @@ export const updateRelationship = createAsyncThunk(
     try {
       const token = getToken();
       
-      // Transform the data to match backend expectations
+      // Transform the data to match backend expectations and include id
       const relationshipData = {
+        id: id,
         name: data.title?.trim(), // Convert title to name
         status: data.status || 'Active'
       };
 
       console.log('Updating relationship:', {
-        url: `${BASE_URL}/relationships/update/${id}`, // Updated endpoint
+        url: `${BASE_URL}/relationships/update`,
         data: relationshipData
       });
 
       const response = await axios.post(
-        `${BASE_URL}/relationships/update/${id}`, // Updated endpoint
+        `${BASE_URL}/relationships/update`,
         relationshipData,
         {
           headers: {
@@ -95,7 +96,7 @@ export const updateRelationship = createAsyncThunk(
         }
       );
 
-      await dispatch(fetchRelationships()); // Refresh data after update
+      await dispatch(fetchRelationships());
       return response.data;
     } catch (error) {
       console.error('Update error:', error.response?.data || error.message);
@@ -108,7 +109,7 @@ export const updateRelationship = createAsyncThunk(
 export const deleteRelationship = createAsyncThunk('relationships/delete', async (id, { dispatch, rejectWithValue }) => {
   try {
     const token = getToken();
-    await axios.post(`${BASE_URL}/relationships/${id}/delete`, {}, {
+    await axios.post(`${BASE_URL}/relationships/delete`, { id }, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

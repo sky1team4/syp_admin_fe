@@ -1,60 +1,120 @@
 "use client"
 // import React from 'react'
-import React, { useState } from 'react'
-
-// import UpperSide from '../../../components/upperDashbaord'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchSubSkills, saveSubSkill, updateSubSkill, deleteSubSkill } from '../../../redux/features/subSkillSlice'
 import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
+import { toast } from 'react-hot-toast'
 
+// import UpperSide from '../../../components/upperDashbaord'
 
-function content() {
+function Content() {
+  const dispatch = useDispatch();
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  
+  const { items: subSkills, isLoading, error } = useSelector((state) => {
+    console.log('Full Redux State:', state);
+    console.log('SubSkill State:', state.subSkill);
+    return state.subSkill || { items: [], isLoading: false, error: null };
+  });
 
-  const data = [
-    { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "👤" },
-    { id: 2, label: "Subscribed User", value: "4,590", bgColor: "bg-red-100", icon: "📊" },
-    { id: 3, label: "Unsubscribed User", value: "3,866", bgColor: "bg-yellow-100", icon: "📄" },
-    { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "🔑" },
-  ];
-
-  const tableData = [
-    {
-      name: "JavaScript",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      name: "Project Management",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      name: "Data Analysis",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      name: "Graphic Design",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsDataLoaded(false);
+        const response = await dispatch(fetchSubSkills()).unwrap();
+        console.log('Fetched Data:', response);
+        setIsDataLoaded(true);
+      } catch (error) {
+        console.error('Error fetching sub skills:', error);
+        toast.error('Failed to load sub skills');
+        setIsDataLoaded(true);
+      }
+    };
+    fetchData();
+  }, [dispatch]);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [mode, setMode] = useState('create');
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (mode = 'create') => {
+    if (!isOpen) {
+      setMode(mode);
+    } else {
+      setSelectedItem(null);
+      setMode('create');
+    }
     setIsOpen(!isOpen);
   };
 
-  return (
-    <>
-      <div className='flex flex-col gap-3 w-full h-full'>
-        {/* <UpperSide title="Degree" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Degree" /> */}
-        <TableSideBar title="Sub Skill" namePlaceholder='Enter Sub Skill' dis="lorem ipsum has been the industry's standard." subTitle="Sub Skill" click={toggleSidebar} isOpen={isOpen} />
-        <DisplayTable link="/admin/profile-management" click={toggleSidebar} isOpen={isOpen} btnText="Add Sub Skill" title="Sub Skill" array={tableData} col1_Title="Sub Skill" col2_Title="Created Date" col3_Title="Last Updated" />
-      </div>
-    </>
+  const handleEdit = (item) => {
+    setSelectedItem({
+      id: item.id,
+      title: item.name,
+      status: item.status
+    });
+    toggleSidebar('edit');
+  };
 
-  )
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deleteSubSkill(id)).unwrap();
+      toast.success('Sub skill deleted successfully');
+    } catch (error) {
+      toast.error('Failed to delete sub skill');
+    }
+  };
+
+  // Format dates for display
+  const formattedSubSkills = subSkills ? subSkills.map(subSkill => ({
+    ...subSkill,
+    createdDate: new Date(subSkill.createDateTime).toLocaleDateString(),
+    lastUpdated: new Date(subSkill.updateDateTime).toLocaleDateString()
+  })) : [];
+
+  if (!isDataLoaded || isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  console.log('Formatted Sub Skills:', formattedSubSkills);
+
+  return (
+    <div className='flex flex-col gap-3 w-full h-full'>
+      {/* <UpperSide title="Degree" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Degree" /> */}
+      <TableSideBar
+        isOpen={isOpen}
+        click={toggleSidebar}
+        mode={mode}
+        selectedItem={selectedItem}
+        title="Sub Skill"
+        dis="Manage sub skills efficiently."
+        subTitle="Sub Skill *"
+        namePlaceholder="Enter sub skill"
+        type="subSkill"
+        fetchData={fetchSubSkills}
+        saveData={saveSubSkill}
+        updateData={updateSubSkill}
+      />
+
+      <DisplayTable
+        click={() => toggleSidebar('create')}
+        isOpen={isOpen}
+        btnText="Add Sub Skill"
+        title="Sub Skill"
+        link="/admin/profile-management"
+        array={formattedSubSkills}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        columnTitles={[
+          { header: "Sub Skill", accessorKey: "name" },
+          { header: "Created Date", accessorKey: "createdDate" },
+          { header: "Last Updated", accessorKey: "lastUpdated" }
+        ]}
+      />
+    </div>
+  );
 }
 
-export default content
+export default Content

@@ -1,59 +1,118 @@
 "use client"
 // import React from 'react'
-import React, { useState } from 'react'
-
-// import UpperSide from '../../../components/upperDashbaord'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchRssFeeds, saveRssFeed, updateRssFeed, deleteRssFeed } from '../../../redux/features/rssFeedSlice'
 import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
+import { toast } from 'react-hot-toast'
 
+// import UpperSide from '../../../components/upperDashbaord'
 
-function content() {
+function Content() {
+  const dispatch = useDispatch();
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  
+  const { items: rssFeeds, isLoading, error } = useSelector((state) => {
+    console.log('Full Redux State:', state);
+    console.log('RSS Feed State:', state.rssFeed);
+    return state.rssFeed || { items: [], isLoading: false, error: null };
+  });
 
-  const data = [
-    { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "👤" },
-    { id: 2, label: "Subscribed User", value: "4,590", bgColor: "bg-red-100", icon: "📊" },
-    { id: 3, label: "Unsubscribed User", value: "3,866", bgColor: "bg-yellow-100", icon: "📄" },
-    { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: "🔑" },
-  ];
-
-  const tableData = [
-    {
-      title: "Technology",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Health",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Finance",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-    {
-      title: "Entertainment",
-      createdDate: "26/02/2024",
-      lastUpdated: "27/02/2024",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsDataLoaded(false);
+        const response = await dispatch(fetchRssFeeds()).unwrap();
+        console.log('Fetched Data:', response);
+        setIsDataLoaded(true);
+      } catch (error) {
+        console.error('Error fetching RSS feeds:', error);
+        toast.error('Failed to load RSS feeds');
+        setIsDataLoaded(true);
+      }
+    };
+    fetchData();
+  }, [dispatch]);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [mode, setMode] = useState('create');
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (mode = 'create') => {
+    if (!isOpen) {
+      setMode(mode);
+    } else {
+      setSelectedItem(null);
+      setMode('create');
+    }
     setIsOpen(!isOpen);
   };
 
+  const handleEdit = (item) => {
+    setSelectedItem({
+      id: item.id,
+      title: item.name,
+      status: item.status
+    });
+    toggleSidebar('edit');
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deleteRssFeed(id)).unwrap();
+      toast.success('RSS feed deleted successfully');
+    } catch (error) {
+      toast.error('Failed to delete RSS feed');
+    }
+  };
+
+  // Format dates for display
+  const formattedRssFeeds = rssFeeds ? rssFeeds.map(rssFeed => ({
+    ...rssFeed,
+    createdDate: new Date(rssFeed.createDateTime).toLocaleDateString(),
+    lastUpdated: new Date(rssFeed.updateDateTime).toLocaleDateString()
+  })) : [];
+
+  if (!isDataLoaded || isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  console.log('Formatted RSS Feeds:', formattedRssFeeds);
+
   return (
-    <>
-      <div className='flex flex-col gap-3 w-full h-full'>
-        {/* <UpperSide title="Degree" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Degree" /> */}
-        <TableSideBar title="RSS Feed Category" namePlaceholder='Enter RSS feed category' dis="lorem ipsum has been the industry's standard." subTitle="RSS Feed Category" click={toggleSidebar} isOpen={isOpen} />
-        <DisplayTable click={toggleSidebar} isOpen={isOpen} btnText="Add RSS Feed" title="RSS Feed Category" array={tableData} col1_Title="RSS Feed Category" col2_Title="Created Date" col3_Title="Last Updated" />
-      </div>
-    </>
+    <div className='flex flex-col gap-3 w-full h-full'>
+      {/* <UpperSide title="Degree" data={data} click={toggleSidebar} isOpen={isOpen} btnText="Add Degree" /> */}
+      <TableSideBar
+        isOpen={isOpen}
+        click={toggleSidebar}
+        mode={mode}
+        selectedItem={selectedItem}
+        title="RSS Feed Category"
+        dis="Manage RSS feed categories efficiently."
+        subTitle="RSS Feed Category *"
+        namePlaceholder="Enter RSS feed category"
+        type="rssFeed"
+        fetchData={fetchRssFeeds}
+        saveData={saveRssFeed}
+        updateData={updateRssFeed}
+      />
+      <DisplayTable
+        click={() => toggleSidebar('create')}
+        isOpen={isOpen}
+        btnText="Add RSS Feed"
+        title="RSS Feed Category"
+        array={formattedRssFeeds}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        columnTitles={[
+          { header: "RSS Feed Category", accessorKey: "name" },
+          { header: "Created Date", accessorKey: "createdDate" },
+          { header: "Last Updated", accessorKey: "lastUpdated" }
+        ]}
+      />
+    </div>
   )
 }
 
-export default content
+export default Content
