@@ -68,8 +68,8 @@ function Content() {
   // Format dates for display
   const formattedFaqCategories = faqCategories ? faqCategories.map(category => ({
     ...category,
-    createdDate: new Date(category.createDateTime).toLocaleDateString(),
-    lastUpdated: new Date(category.updateDateTime).toLocaleDateString()
+    createdDate: new Date(category.createDate).toLocaleDateString(),
+    lastUpdated: new Date(category.updateDate).toLocaleDateString()
   })) : [];
 
   if (!isDataLoaded || isLoading) {
@@ -99,7 +99,7 @@ function Content() {
         click={() => toggleSidebar('create')}
         isOpen={isOpen}
         btnText="Add FAQ"
-        title="Q&A Category"
+        title="FAQ Category"
         link="/admin/FAQ"
         array={formattedFaqCategories}
         handleEdit={handleEdit}
