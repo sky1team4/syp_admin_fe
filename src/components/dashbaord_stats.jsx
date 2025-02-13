@@ -33,7 +33,8 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
         <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
         {btnText && (
           <button
-            className={`text-sm bg-[${theme.color}] text-white px-2 py-2 rounded-md`}
+            className={`text-sm text-white px-2 py-2 rounded-md`}
+            style={{ backgroundColor: theme.color }}
             onClick={click}
           >
             {btnText}
