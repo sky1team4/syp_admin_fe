@@ -16,6 +16,7 @@ import employeeReducer from './features/employeeSlice';
 import jobTitleReducer from './features/jobTitleSlice';
 import companyReducer from './features/companyNameSlice';
 import subSkillReducer from './features/subSkillSlice';
+import rssFeedReducer from './features/rssFeedSlice';
 
 export const store = configureStore({
   reducer: {
@@ -36,5 +37,6 @@ export const store = configureStore({
     jobTitle: jobTitleReducer,
     companyName: companyReducer,
     subSkill: subSkillReducer,
+    rssFeed: rssFeedReducer,
   },
 }); 
