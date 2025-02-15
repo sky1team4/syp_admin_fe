@@ -68,8 +68,8 @@ function Content() {
   // Format dates for display
   const formattedSkills = skills?.map(skill => ({
     ...skill,
-    createdDate: new Date(skill.createDateTime).toLocaleDateString(),
-    lastUpdated: new Date(skill.updateDateTime).toLocaleDateString()
+    createdDate: new Date(skill.createDate).toLocaleDateString(),
+    lastUpdated: new Date(skill.updateDate).toLocaleDateString()
   }));
 
   if (!isDataLoaded || isLoading) {

@@ -48,7 +48,7 @@ function TableSideBar({
                 status: 'Active'
             });
         }
-    }, [selectedItem, mode]);
+    }, [selectedItem, mode, isOpen]);
 
     const validateForm = () => {
         const newErrors = {};
