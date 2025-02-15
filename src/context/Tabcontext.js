@@ -25,7 +25,7 @@ export const TabProvider = ({ children }) => {
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
-      localStorage.setItem('selectedTab', currentTab);
+      localStorage.setItem('selectedTab', currentTab === 'logout' ? 'dashboard' : currentTab);
     }
   }, [currentTab]);
 

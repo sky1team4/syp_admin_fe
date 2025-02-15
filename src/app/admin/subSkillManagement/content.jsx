@@ -70,8 +70,8 @@ function Content() {
   // Format dates for display
   const formattedSubSkills = subSkills ? subSkills.map(subSkill => ({
     ...subSkill,
-    createdDate: new Date(subSkill.createDateTime).toLocaleDateString(),
-    lastUpdated: new Date(subSkill.updateDateTime).toLocaleDateString()
+    createdDate: new Date(subSkill.createDate).toLocaleDateString(),
+    lastUpdated: new Date(subSkill.updateDate).toLocaleDateString()
   })) : [];
 
   if (!isDataLoaded || isLoading) {
