@@ -66,7 +66,7 @@ const StripePaymentIntegration = () => {
   };
 
   return (
-    <div className="w-full max-w-[32rem] md:max-w-[40rem] xl:max-w-[60rem] 2xl:max-w-[80rem] h-auto p-4 md:p-4 bg-white rounded-lg shadow-lg">
+    <div className="w-full max-w-[32rem] md:max-w-[60rem] xl:max-w-[70rem] 2xl:max-w-[150rem] h-auto p-4 md:p-4 bg-white rounded-lg shadow-lg">
       <div className="flex gap-3 items-center md:justify-between md:w-[70%]">
         <a href="/admin/payment" className="mb-2 cursor-pointer">
           <Image
@@ -118,7 +118,8 @@ const StripePaymentIntegration = () => {
 
         {/* Submit Button */}
         <button type="submit"
-          className={`w-full bg-[${theme.color}] text-white py-2 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50`}
+          style={{ backgroundColor: theme.color }}
+          className={`w-full text-white py-2 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50`}
           disabled={isLoading}>
           {isLoading ? "Saving..." : "Save Changes"}
         </button>

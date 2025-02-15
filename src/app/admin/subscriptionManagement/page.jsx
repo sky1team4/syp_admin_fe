@@ -5,7 +5,7 @@ import Content from './content'
 function page() {
     return (
         <div className='w-full overflow-x-hidden'>
-            <div className='container'>
+            <div className=''>
                 <Content />
             </div>
         </div>

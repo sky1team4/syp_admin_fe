@@ -5,10 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { saveSubscription, fetchSubscriptions, deleteSubscription, updateSubscription } from '../../../redux/features/subscriptionSlice'
 import { toast } from 'react-hot-toast'
 
-import UpperSide from '../../../components/dashbaord_stats'
+import UpperSide from '../../../components/subscription_stats'
 import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
 import DisplayTable from '../../../components/displayTable'
-
 
 function content() {
   const dispatch = useDispatch();

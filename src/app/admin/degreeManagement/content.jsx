@@ -2,7 +2,7 @@
 // import React from 'react'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchDegrees, saveDegree, updateDegree, deleteDegree } from '../../../redux/features/degreeSlice'
+import { fetchDegrees, saveDegree, updateDegree, deleteDegree } from '../../../redux/features/degreeSLice'
 import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
 import { toast } from 'react-hot-toast'

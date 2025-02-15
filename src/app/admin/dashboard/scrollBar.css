@@ -18,12 +18,18 @@
     /* right: -50px; */
     width: 20rem;
     height: 38rem;
-    transition: transform 0.3s ease-in-out;  /* Change from right to transform */
+    transition: transform 0.1s ease-in-out;  /* Changed duration from 0.3s to 0.1s */
   }
   
 
   .slide-in {
-    transform: translateX(-140px);  /* Use transform instead of right */
+    transform: translateX(-160px);  /* Use transform instead of right */
+  }
+
+  @media (min-width: 768px) { /* Adjust the breakpoint as needed */
+    .slide-in {
+      transform: translateX(-140px);  /* Use transform instead of right for large screens */
+    }
   }
   
   .slide-out {

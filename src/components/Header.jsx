@@ -32,7 +32,7 @@ const DashboardTopBar = () => {
   }, [isNotificationOpen]);
 
   return (
-    <div className={`fixed top-0 w-full lg:pr-80 flex items-center justify-between px-8 py-4 bg-white flex-col md:flex-row ${isNotificationOpen ? 'backdrop-blur-md z-10' : ''}`}>
+    <div className={`fixed top-0 w-full lg:pr-80 flex items-center justify-between px-8  py-4 bg-white flex-col md:flex-row ${isNotificationOpen ? 'backdrop-blur-md z-10' : ''}`}>
       {/* Left Section: Dashboard Title and Search Bar */}
       <div className="flex md:items-center lg:items-center">
 
