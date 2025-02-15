@@ -1,71 +1,203 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// Example async function to fetch degree data (replace with your actual data fetching logic)
-export const fetchDegrees = createAsyncThunk('degrees/findAll', async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/degrees/findAll`, {
-    method: 'POST',
-  });
-  console.log(response.status);
+// Fetch all degrees
+export const fetchDegrees = createAsyncThunk(
+  'degrees/findAll',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/degrees/findAll`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
 
-  return response.json();
-});
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch degrees');
+      }
 
-// New async functions for create, update, and delete
-export const createDegree = createAsyncThunk('degrees/create', async (degree) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/degrees/create`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(degree),
-  });
-  return response.json();
-});
+      const data = await response.json();
+      console.log('API Response:', data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Network error occurred');
+    }
+  }
+);
 
-export const updateDegree = createAsyncThunk('degrees/update', async ({ id, degree }) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/degrees/update/${id}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(degree),
-  });
-  return response.json();
-});
+export const saveDegree = createAsyncThunk(
+    'degrees/save',
+    async (data, { dispatch, rejectWithValue }) => {
+      try {
+        const token = localStorage.getItem('token');
+        const degreeData = {
+          name: data.title?.trim(),
+          status: data.status || 'Active',
+          educationId: data.educationId || 1
+        };
+  
+        // Debug log
+        console.log('Sending degree data:', degreeData);
+  
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/degrees/create`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(degreeData),
+        });
+  
+        // Get the error message in case of failure
+        const responseData = await response.json();
+        
+        if (!response.ok) {
+          console.log('Error response:', responseData);
+          throw new Error(responseData.message || 'Failed to create degree');
+        }
+  
+        await dispatch(fetchDegrees());
+        return responseData;
+      } catch (error) {
+        console.log('Error:', error);
+        return rejectWithValue(error.message || 'Network error occurred');
+      }
+    }
+  );
 
-export const deleteDegree = createAsyncThunk('degrees/delete', async (id) => {
-  await fetch(`${process.env.NEXT_PUBLIC_API_URL}/degrees/delete/${id}`, {
-    method: 'POST',
-  });
-  return id; // Return the id of the deleted degree
-});
+// Update degree
+export const updateDegree = createAsyncThunk(
+  'degrees/update',
+  async ({ id, data }, { dispatch, rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const degreeData = {
+        id: id,
+        name: data.title?.trim(),
+        status: data.status || 'Active',
+        educationId: data.educationId || 1
+      };
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/degrees/update`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(degreeData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update degree');
+      }
+
+      await dispatch(fetchDegrees());
+      return await response.json();
+    } catch (error) {
+      return rejectWithValue(error.message || 'Network error occurred');
+    }
+  }
+);
+
+// Delete degree
+export const deleteDegree = createAsyncThunk(
+  'degrees/delete',
+  async (id, { dispatch, rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/degrees/delete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ id })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to delete degree');
+      }
+
+      await dispatch(fetchDegrees());
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Network error occurred');
+    }
+  }
+);
 
 const degreeSlice = createSlice({
-  name: 'degrees',
-  initialState: [],
+  name: 'degree',
+  initialState: {
+    items: [],
+    isLoading: false,
+    error: null,
+  },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchDegrees.fulfilled, (state, action) => {
-        return action.payload; // Set the state to the fetched degrees
+      .addCase(fetchDegrees.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
       })
-      .addCase(createDegree.fulfilled, (state, action) => {
-        state.push(action.payload); // Add the new degree to the state
+      .addCase(fetchDegrees.fulfilled, (state, action) => {
+        console.log('Setting state with:', action.payload);
+        state.isLoading = false;
+        state.items = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchDegrees.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.items = [];
+      })
+      // Save cases
+      .addCase(saveDegree.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(saveDegree.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.items.push(action.payload);
+      })
+      .addCase(saveDegree.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      // Update cases
+      .addCase(updateDegree.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
       })
       .addCase(updateDegree.fulfilled, (state, action) => {
-        const index = state.findIndex(degree => degree.id === action.payload.id);
+        state.isLoading = false;
+        const index = state.items.findIndex(item => item.id === action.payload.id);
         if (index !== -1) {
-          state[index] = action.payload; // Update the degree in the state
+          state.items[index] = action.payload;
         }
       })
+      .addCase(updateDegree.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      // Delete cases
+      .addCase(deleteDegree.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
       .addCase(deleteDegree.fulfilled, (state, action) => {
-        return state.filter(degree => degree.id !== action.payload); // Remove the deleted degree from the state
+        state.isLoading = false;
+        state.items = state.items.filter(item => item.id !== action.payload);
+      })
+      .addCase(deleteDegree.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });
 
-// Export the async actions
-export { fetchDegrees, createDegree, updateDegree, deleteDegree };
-
-// Export the reducer to be used in the store
 export default degreeSlice.reducer;
