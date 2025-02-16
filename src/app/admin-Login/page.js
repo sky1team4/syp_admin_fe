@@ -77,9 +77,9 @@ export default function Login() {
 
         <div className="w-full h-full px-2 md:px-20 flex gap-10 justify-center items-center">
           <div className="flex flex-col justify-center items-center w-full h-full md:w-1/2 p-8 bg-[#F5F5F5] text-black">
-            <div className="w-[20rem] xs:w-[20rem] sm:w-[30rem] py-8 px-6 scale-100 bg-white rounded-lg transition-all duration-300 ease-in-out">
-              <h1 className="text-3xl font-bold text-center">Sign In</h1>
-              <form onSubmit={handleSubmit}>
+            <div className="xs:w-[16rem] sm:w-[20rem] md:w-[30rem] py-12 px-8 scale-100 bg-white rounded-lg transition-all duration-300 ease-in-out">
+              <h1 className="text-3xl font-bold text-center mb-8">Sign In</h1>
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="mb-3 sm:mb-6">
                   <label className="block text-md font-medium mb-3" htmlFor="email">Email</label>
                   <input

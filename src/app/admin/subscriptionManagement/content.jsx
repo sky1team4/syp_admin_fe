@@ -7,7 +7,7 @@ import { toast } from 'react-hot-toast'
 
 import UpperSide from '../../../components/subscription_stats'
 import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
-import DisplayTable from '../../../components/displayTable'
+import DisplayTable from '../../../components/subdisplayTable.jsx'
 
 function content() {
   const dispatch = useDispatch();
