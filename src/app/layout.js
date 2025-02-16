@@ -55,7 +55,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body>
+      <body className='bg-[#F5F5F5]'>
         <Toaster position="top-right" />
         <Provider store={store}>
           {children}

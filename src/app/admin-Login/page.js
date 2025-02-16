@@ -69,14 +69,14 @@ export default function Login() {
       <ToastContainer />
       <div className="flex flex-col w-full h-screen bg-[#F5F5F5] text-white lg:overflow-hidden">
         <nav className="bg-white text-black px-6 py-4 z-40">
-          <div className="mx-auto flex items-center justify-between">
+          <div className="flex items-center justify-between">
             <a href="#" className="text-xl font-bold">SYP</a>
           </div>
         </nav>
 
-        <div className="w-full h-full px-0 md:px-20 flex gap-10 justify-center items-center">
+        <div className="w-full h-full px-2 md:px-20 flex gap-10 justify-center items-center">
           <div className="flex flex-col justify-center items-center w-full h-full md:w-1/2 p-8 bg-[#F5F5F5] text-black">
-            <div className="w-[22rem] sm:w-[30rem] py-8 px-6 scale-100 bg-white rounded-lg transition-all duration-300 ease-in-out">
+            <div className="w-[20rem] xs:w-[20rem] sm:w-[30rem] py-8 px-6 scale-100 bg-white rounded-lg transition-all duration-300 ease-in-out">
               <h1 className="text-3xl font-bold text-center">Sign In</h1>
               <form onSubmit={handleSubmit}>
                 <div className="mb-3 sm:mb-6">
@@ -120,7 +120,11 @@ export default function Login() {
                     </button>
                   </div>
                   <label className="flex items-center text-sm mt-5 mb-5">
-                    <input type="checkbox" id="rememberMe" className="mr-2" />
+                    <input 
+                      type="checkbox" 
+                      id="rememberMe" 
+                      className="form-checkbox h-4 w-4 text-purple-600 border-gray-300 rounded mr-2 accent-purple-600 cursor-pointer"
+                    />
                     Remember Me
                   </label>
                 </div>
