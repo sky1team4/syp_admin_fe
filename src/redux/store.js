@@ -41,4 +41,4 @@ export const store = configureStore({
     rssFeed: rssFeedReducer,
     faqCategory: faqCategoryReducer,
   },
-}); 
+});

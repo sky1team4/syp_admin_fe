@@ -24,25 +24,28 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
     const { isLoading } = useSelector((state) => state.subscription);
     
     const [formData, setFormData] = useState({
-        name: '',
+        // name: '',
         price: '',
-        status: 'ACTIVE'
+        status: 'ACTIVE',
+        billingPeriod: 'MONTHLY'
     });
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
         if (mode === 'edit' && data) {
             setFormData({
-                name: data.name || data.title || '',
+                // name: data.name || data.title || '',
                 price: data.price?.toString() || '',
                 status: data.status || 'ACTIVE',
+                billingPeriod: data.billingPeriod || 'MONTHLY',
                 id: data.id
             });
         } else {
             setFormData({
                 name: '',
                 price: '',
-                status: 'ACTIVE'
+                status: 'ACTIVE',
+                billingPeriod: 'MONTHLY'
             });
         }
     }, [mode, data]);
@@ -74,7 +77,8 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
             const subscriptionData = {
                 name: formData.name,
                 status: formData.status,
-                price: parseFloat(formData.price)
+                price: parseFloat(formData.price),
+                billingPeriod: formData.billingPeriod
             };
 
             if (mode === 'edit' && data?.id) {
@@ -133,7 +137,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
 
                     {/* Subscription Inputs */}
                     <div className="flex flex-col gap-4">
-                        <Input
+                        {/* <Input
                             id="name"
                             value={formData.name}
                             onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -142,7 +146,21 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
                             label="Subscription Name *"
                             placeholder="Enter subscription name"
                             error={errors.name}
-                        />
+                        /> */}
+
+                        <div className="flex items-center gap-2">
+                            <label className="text-sm font-medium text-gray-700">
+                                Subscription duration:
+                            </label>
+                            <select
+                                value={formData.billingPeriod}
+                                onChange={(e) => setFormData({...formData, billingPeriod: e.target.value})}
+                                className="border border-gray-300 rounded-md p-2"
+                            >
+                                <option value="MONTHLY">Monthly</option>
+                                <option value="ANNUAL">Annual</option>
+                            </select>
+                        </div>
                         
                         <Input
                             id="price"
@@ -156,6 +174,8 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
                             step="0.01"
                             error={errors.price}
                         />
+
+                        
 
                         <div className="flex items-center gap-2">
                             <label className="text-sm font-medium text-gray-700">
