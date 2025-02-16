@@ -27,6 +27,7 @@ function content() {
     name: subscription.name,
     price: subscription.price,
     status: subscription.status,
+    billingPeriod: subscription.billingPeriod || 'MONTHLY',
     createdDate: new Date(subscription.createdAt).toLocaleDateString(),
     lastUpdated: new Date(subscription.updatedAt).toLocaleDateString()
   }));
@@ -45,7 +46,8 @@ function content() {
         id: subscription.id,
         name: subscription.name,
         price: subscription.price,
-        status: subscription.status
+        status: subscription.status,
+        billingPeriod: subscription.billingPeriod || 'MONTHLY'
       });
       setMode('edit');
       setIsOpen(true);
@@ -73,7 +75,8 @@ function content() {
           data: {
             name: formData.name?.trim(),
             price: parseFloat(formData.price),
-            status: formData.status || 'Active'
+            status: formData.status || 'ACTIVE',
+            billingPeriod: formData.billingPeriod || 'MONTHLY'
           }
         })).unwrap();
         toast.success('Subscription updated successfully');
@@ -81,7 +84,8 @@ function content() {
         await dispatch(saveSubscription({
           name: formData.name?.trim(),
           price: parseFloat(formData.price),
-          status: formData.status || 'Active'
+          status: formData.status || 'ACTIVE',
+          billingPeriod: formData.billingPeriod || 'MONTHLY'
         })).unwrap();
         toast.success('Subscription created successfully');
       }

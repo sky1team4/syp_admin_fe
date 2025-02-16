@@ -40,7 +40,15 @@ export const saveSubscription = createAsyncThunk(
         throw new Error('No authentication token found');
       }
 
-      console.log('Sending subscription data:', data); // Debug log
+      // Transform the data to match the form structure
+      const subscriptionData = {
+        name: data.name,
+        price: parseFloat(data.price),
+        status: data.status,
+        billingPeriod: data.billingPeriod
+      };
+
+      console.log('Sending subscription data:', subscriptionData);
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions`, {
         method: 'POST',
@@ -48,18 +56,16 @@ export const saveSubscription = createAsyncThunk(
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(subscriptionData),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Server response:', errorData); // Debug log
         throw new Error(errorData.message || 'Failed to save subscription');
       }
 
       return await response.json();
     } catch (error) {
-      console.error('Subscription error:', error); // Debug log
       return rejectWithValue(error.message || 'Network error occurred');
     }
   }
@@ -71,13 +77,22 @@ export const updateSubscription = createAsyncThunk(
   async ({ id, data }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
+      
+      // Transform the data to match the form structure
+      const subscriptionData = {
+        name: data.name,
+        price: parseFloat(data.price),
+        status: data.status,
+        billingPeriod: data.billingPeriod
+      };
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(subscriptionData),
       });
 
       if (!response.ok) {

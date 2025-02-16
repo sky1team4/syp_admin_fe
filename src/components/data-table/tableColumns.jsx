@@ -31,78 +31,6 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
         },
     },
     {
-        accessorKey: "price",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Price
-                    {column.getIsSorted() === "asc" ? (
-                        <ArrowUp className="ml-2 h-4 w-4" />
-                    ) : (
-                        <ArrowDown className="ml-2 h-4 w-4" />
-                    )}
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="font-medium">
-                ${parseFloat(row.original.price).toFixed(2)}
-            </div>
-        ),
-    },
-    {
-        accessorKey: "billingPeriod",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Billing Period
-                    {column.getIsSorted() === "asc" ? (
-                        <ArrowUp className="ml-2 h-4 w-4" />
-                    ) : (
-                        <ArrowDown className="ml-2 h-4 w-4" />
-                    )}
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="capitalize">
-                {row.original.billingPeriod?.toLowerCase()}
-            </div>
-        ),
-    },
-    {
-        accessorKey: "status",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Status
-                    {column.getIsSorted() === "asc" ? (
-                        <ArrowUp className="ml-2 h-4 w-4" />
-                    ) : (
-                        <ArrowDown className="ml-2 h-4 w-4" />
-                    )}
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className={`px-3 py-1 rounded-full text-sm w-fit
-                ${row.original.status === 'ACTIVE' 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-red-100 text-red-800'}`}>
-                {row.original.status?.toLowerCase()}
-            </div>
-        ),
-    },
-    {
         accessorKey: "createdDate",
         header: ({ column }) => {
             return (
@@ -119,11 +47,6 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 </Button>
             )
         },
-        cell: ({ row }) => (
-            <div className="font-medium">
-                {row.original.createdDate}
-            </div>
-        ),
     },
     {
         accessorKey: "lastUpdated",
@@ -142,16 +65,12 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 </Button>
             )
         },
-        cell: ({ row }) => (
-            <div className="font-medium whitespace-nowrap">
-                {row.original.lastUpdated}
-            </div>
-        ),
     },
     {
         id: "actions",
         header: "Actions",
         cell: ({ row }) => {
+            const [isSidebarOpen, setIsSidebarOpen] = useState(false)
             const [isConfirmOpen, setIsConfirmOpen] = useState(false)
             const item = row.original;
 

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -19,55 +19,17 @@ import {
 import Button from "../cui/button";
 import Image from "next/image";
 
-export function SubscriptionTable({ columns = defaultColumns, data = [], title, btnText, click, isOpen, backBTN, link }) {
+export function SubscriptionTable({ columns, data = [], title, btnText, click, isOpen, backBTN, link }) {
   const [sorting, setSorting] = useState([]);
-
-  // Default columns configuration
-  const defaultColumns = [
-    {
-      accessorKey: "name",
-      header: "Name",
-      cell: ({ row }) => <div className="font-medium">{row.original.name}</div>,
-    },
-    {
-      accessorKey: "price",
-      header: "Price",
-      cell: ({ row }) => (
-        <div className="font-medium">
-          ${parseFloat(row.original.price).toFixed(2)}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "billingPeriod",
-      header: "Billing Period",
-      cell: ({ row }) => (
-        <div className="capitalize">
-          {row.original.billingPeriod.toLowerCase()}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "status",
-      header: "Status",
-      cell: ({ row }) => (
-        <div className={`px-3 py-1 rounded-full text-sm w-fit
-          ${row.original.status === 'ACTIVE' 
-            ? 'bg-green-100 text-green-800' 
-            : 'bg-red-100 text-red-800'}`}>
-          {row.original.status.toLowerCase()}
-        </div>
-      ),
-    },
-    // Add any action columns you need here
-  ];
 
   // Ensure data is an array before passing it to react-table
   const validatedData = Array.isArray(data) ? data : [];
 
+  // console.log("Table Data:", validatedData);
+
   const table = useReactTable({
     data: validatedData,
-    columns: columns || defaultColumns,
+    columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),

@@ -1,5 +1,5 @@
-import { createColumns } from "../components/data-table/subscriptionColumns"
-import { SubscriptionTable } from "../components/data-table/subscriptionTable"
+import { createColumns } from "./data-table/subscriptionColumns"
+import { SubscriptionTable } from "./data-table/subscriptionTable"
 
 const TableComponent = ({ 
   title, 
