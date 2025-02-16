@@ -6,6 +6,7 @@ import { loginUser } from "../../redux/features/authSlice";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Link from "next/link";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -93,7 +94,9 @@ export default function Login() {
                 <div className="mb-3 sm:mb-8">
                   <div className="flex items-center justify-between mb-2">
                     <label className="block text-md font-medium mb-3" htmlFor="password">Password</label>
-                    <a href="#" className="text-sm text-purple-600 hover:underline">Forgot Password?</a>
+                    <Link href="/forget-password" className="text-sm text-purple-600 hover:underline">
+                      Forgot Password?
+                    </Link>
                   </div>
                   <div className="relative">
                     <input
