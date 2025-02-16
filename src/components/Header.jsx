@@ -70,16 +70,19 @@ const DashboardTopBar = () => {
 
         {/* Notifications */}
         <div className="relative cursor-pointer" ref={notificationRef}>
-          <Image
-            alt="bellicon"
-            src="/bellicon.png"
-            width={30}
-            height={30}
-            onClick={toggleNotifications}
-          />
-          <span className="absolute top-0 right-0 w-4 h-4 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
-            1
-          </span>
+          <div onClick={toggleNotifications} className="transition-transform duration-200 hover:scale-110">
+            <Image
+              alt="bellicon"
+              src="/bellicon.png"
+              width={30}
+              height={30}
+              // onClick={toggleNotifications}
+              // className="transition-transform duration-200 hover:scale-110"
+            />
+            <span className=" hover:scale-110 absolute top-0 right-0 w-4 h-4 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
+              1
+            </span>
+          </div>
 
           {/* Single Notifications component */}
           <div className="absolute">
@@ -88,7 +91,7 @@ const DashboardTopBar = () => {
         </div>
 
         {/* Profile Section */}
-        <div className="flex items-center space-x-2 cursor-pointer">
+        <div className="flex items-center space-x-2">
 
           <Image alt="profile" src="/profile.png" width={40} height={40} />
 
