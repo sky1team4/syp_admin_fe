@@ -40,12 +40,11 @@ export const saveSubscription = createAsyncThunk(
         throw new Error('No authentication token found');
       }
 
-      // Transform the data to match the form structure
       const subscriptionData = {
         name: data.name,
         price: parseFloat(data.price),
         status: data.status,
-        billingPeriod: data.billingPeriod
+        billingPeriod: data.billingPeriod.toUpperCase()
       };
 
       console.log('Sending subscription data:', subscriptionData);
@@ -61,11 +60,15 @@ export const saveSubscription = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('API Error Response:', errorData);
         throw new Error(errorData.message || 'Failed to save subscription');
       }
 
-      return await response.json();
+      const result = await response.json();
+      console.log('API Success Response:', result);
+      return result;
     } catch (error) {
+      console.error('Subscription Error:', error);
       return rejectWithValue(error.message || 'Network error occurred');
     }
   }
@@ -77,14 +80,18 @@ export const updateSubscription = createAsyncThunk(
   async ({ id, data }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      
-      // Transform the data to match the form structure
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
       const subscriptionData = {
         name: data.name,
         price: parseFloat(data.price),
         status: data.status,
-        billingPeriod: data.billingPeriod
+        billingPeriod: data.billingPeriod.toUpperCase()
       };
+
+      console.log('Updating subscription data:', subscriptionData);
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions/${id}`, {
         method: 'PATCH',
@@ -100,8 +107,8 @@ export const updateSubscription = createAsyncThunk(
         throw new Error(errorData.message || 'Failed to update subscription');
       }
 
-      const updatedSubscription = await response.json();
-      return updatedSubscription;
+      const result = await response.json();
+      return result;
     } catch (error) {
       return rejectWithValue(error.message || 'Network error occurred');
     }
@@ -111,9 +118,15 @@ export const updateSubscription = createAsyncThunk(
 // Add delete subscription thunk
 export const deleteSubscription = createAsyncThunk(
   'subscription/delete',
-  async (id, { rejectWithValue, dispatch }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      console.log('Deleting subscription with ID:', id);
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions/${id}`, {
         method: 'DELETE',
         headers: {
@@ -124,12 +137,13 @@ export const deleteSubscription = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('Delete error response:', errorData);
         throw new Error(errorData.message || 'Failed to delete subscription');
       }
 
-      dispatch(fetchSubscriptions());
       return id;
     } catch (error) {
+      console.error('Delete error:', error);
       return rejectWithValue(error.message || 'Network error occurred');
     }
   }
@@ -201,12 +215,9 @@ const subscriptionSlice = createSlice({
       })
       .addCase(deleteSubscription.fulfilled, (state, action) => {
         state.isLoading = false;
-        // Ensure the server confirms deletion before removing from state
-        if (action.payload) {
-          state.subscriptions = state.subscriptions.filter(
-            subscription => subscription.id !== action.payload
-          );
-        }
+        state.subscriptions = state.subscriptions.filter(
+          subscription => subscription.id !== action.payload
+        );
       })
       .addCase(deleteSubscription.rejected, (state, action) => {
         state.isLoading = false;

@@ -47,7 +47,7 @@ function content() {
         name: subscription.name,
         price: subscription.price,
         status: subscription.status,
-        billingPeriod: subscription.billingPeriod || 'MONTHLY'
+        billingPeriod: subscription.billingPeriod
       });
       setMode('edit');
       setIsOpen(true);
@@ -59,40 +59,46 @@ function content() {
 
   const handleDelete = async (id) => {
     try {
-      await dispatch(deleteSubscription(id)).unwrap();
-      toast.success('Subscription deleted successfully');
-      dispatch(fetchSubscriptions());
+      console.log('Attempting to delete subscription:', id); // Add debug log
+      
+      const result = await dispatch(deleteSubscription(id)).unwrap();
+      
+      if (result) {
+        toast.success('Subscription deleted successfully');
+        // Optionally refresh the list
+        dispatch(fetchSubscriptions());
+      }
     } catch (err) {
+      console.error('Delete handler error:', err); // Add debug log
       toast.error(err?.message || 'Failed to delete subscription');
     }
   };
 
   const handleSubmitSubscription = async (formData) => {
     try {
+      const subscriptionData = {
+        name: formData.name?.trim(),
+        price: parseFloat(formData.price),
+        status: formData.status,
+        billingPeriod: formData.billingPeriod.toUpperCase()
+      };
+
+      console.log('Submitting subscription data:', subscriptionData);
+
       if (mode === 'edit' && selectedSubscription?.id) {
         await dispatch(updateSubscription({
           id: selectedSubscription.id,
-          data: {
-            name: formData.name?.trim(),
-            price: parseFloat(formData.price),
-            status: formData.status || 'ACTIVE',
-            billingPeriod: formData.billingPeriod || 'MONTHLY'
-          }
+          data: subscriptionData
         })).unwrap();
         toast.success('Subscription updated successfully');
       } else {
-        await dispatch(saveSubscription({
-          name: formData.name?.trim(),
-          price: parseFloat(formData.price),
-          status: formData.status || 'ACTIVE',
-          billingPeriod: formData.billingPeriod || 'MONTHLY'
-        })).unwrap();
+        await dispatch(saveSubscription(subscriptionData)).unwrap();
         toast.success('Subscription created successfully');
       }
       dispatch(fetchSubscriptions());
       toggleSidebar();
     } catch (err) {
-      console.error('Failed to save subscription:', err);
+      console.error('Submission error:', err);
       toast.error(err?.message || `Failed to ${mode === 'edit' ? 'update' : 'create'} subscription`);
     }
   };

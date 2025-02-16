@@ -19,7 +19,7 @@ const FORM_VALIDATION = {
   }
 };
 
-function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
+function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSubmit }) {
     const dispatch = useDispatch();
     const { isLoading } = useSelector((state) => state.subscription);
     
@@ -32,23 +32,15 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        if (mode === 'edit' && data) {
+        if (data) {
             setFormData({
-                name: data.name || data.title || '',
-                price: data.price?.toString() || '',
+                name: data.name || '',
+                price: data.price || '',
                 status: data.status || 'ACTIVE',
-                billingPeriod: data.billingPeriod || 'MONTHLY',
-                id: data.id
-            });
-        } else {
-            setFormData({
-                name: '',
-                price: '',
-                status: 'ACTIVE',
-                billingPeriod: 'MONTHLY'
+                billingPeriod: data.billingPeriod || 'MONTHLY'
             });
         }
-    }, [mode, data]);
+    }, [data]);
 
     const validateForm = () => {
         const newErrors = {};
@@ -67,35 +59,23 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSave = async () => {
-        if (!validateForm()) {
-            toast.error('Please fill in all required fields correctly', { id: 'validation-error' });
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        // Validate form data
+        if (!formData.name || !formData.price || !formData.billingPeriod) {
+            toast.error('Please fill in all required fields');
             return;
         }
 
-        try {
-            const subscriptionData = {
-                name: formData.name,
-                status: formData.status,
-                price: parseFloat(formData.price),
-                billingPeriod: formData.billingPeriod
-            };
+        // Log the form data before submission
+        console.log('Submitting form data:', formData);
 
-            if (mode === 'edit' && data?.id) {
-                await dispatch(updateSubscription({
-                    id: data.id,
-                    data: subscriptionData
-                })).unwrap();
-                toast.success('Subscription updated successfully');
-            } else {
-                await dispatch(saveSubscription(subscriptionData)).unwrap();
-                toast.success('Subscription created successfully');
-            }
-            
-            click(false); // Close sidebar
-            dispatch(fetchSubscriptions()); // Refresh the list
-        } catch (err) {
-            toast.error(err?.message || `Failed to ${mode === 'edit' ? 'update' : 'create'} subscription`);
+        try {
+            await onSubmit(formData);
+        } catch (error) {
+            console.error('Form submission error:', error);
+            toast.error(error.message || 'Failed to submit form');
         }
     };
 
@@ -162,14 +142,12 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
                             error={errors.price}
                         />
 
-                        <div className="flex items-center gap-2">
-                            <label className="text-sm font-medium text-gray-700">
-                                Subscription duration:
-                            </label>
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700">Billing Period</label>
                             <select
                                 value={formData.billingPeriod}
                                 onChange={(e) => setFormData({...formData, billingPeriod: e.target.value})}
-                                className="border border-gray-300 rounded-md p-2"
+                                className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-purple-500 focus:outline-none focus:ring-purple-500 sm:text-sm"
                             >
                                 <option value="MONTHLY">Monthly</option>
                                 <option value="ANNUAL">Annual</option>
@@ -195,7 +173,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
                 {/* Footer */}
                 <div className="absolute bottom-0 left-0 w-full p-4">
                     <button
-                        onClick={handleSave}
+                        onClick={handleSubmit}
                         disabled={isLoading}
                         className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 disabled:opacity-50"
                     >

@@ -19,6 +19,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="w-full justify-start px-2"
                 >
                     Name
                     {column.getIsSorted() === "asc" ? (
@@ -29,6 +30,11 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 </Button>
             )
         },
+        cell: ({ row }) => (
+            <div className="font-medium pl-2">
+                {row.original.name}
+            </div>
+        ),
     },
     {
         accessorKey: "price",
@@ -37,6 +43,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="w-full justify-center px-2"
                 >
                     Price
                     {column.getIsSorted() === "asc" ? (
@@ -48,7 +55,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
             )
         },
         cell: ({ row }) => (
-            <div className="font-medium">
+            <div className="text-center">
                 ${parseFloat(row.original.price).toFixed(2)}
             </div>
         ),
@@ -60,6 +67,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="w-full justify-center px-2"
                 >
                     Billing Period
                     {column.getIsSorted() === "asc" ? (
@@ -71,8 +79,8 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
             )
         },
         cell: ({ row }) => (
-            <div className="capitalize">
-                {row.original.billingPeriod?.toLowerCase()}
+            <div className="capitalize text-center">
+                {row.original.billingPeriod?.toLowerCase() === 'yearly' ? 'Yearly' : 'Monthly'}
             </div>
         ),
     },
@@ -83,6 +91,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="w-full justify-center px-2"
                 >
                     Status
                     {column.getIsSorted() === "asc" ? (
@@ -94,11 +103,13 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
             )
         },
         cell: ({ row }) => (
-            <div className={`px-3 py-1 rounded-full text-sm w-fit
-                ${row.original.status === 'ACTIVE' 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-red-100 text-red-800'}`}>
-                {row.original.status?.toLowerCase()}
+            <div className="flex justify-center">
+                <div className={`px-2 py-1 rounded-full text-sm w-fit
+                    ${row.original.status === 'ACTIVE' 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-red-100 text-red-800'}`}>
+                    {row.original.status?.toLowerCase()}
+                </div>
             </div>
         ),
     },
@@ -109,6 +120,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="w-full justify-center px-2"
                 >
                     Created Date
                     {column.getIsSorted() === "asc" ? (
@@ -120,7 +132,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
             )
         },
         cell: ({ row }) => (
-            <div className="font-medium">
+            <div className="text-center">
                 {row.original.createdDate}
             </div>
         ),
@@ -132,6 +144,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="w-full justify-center px-2"
                 >
                     Last Updated
                     {column.getIsSorted() === "asc" ? (
@@ -143,14 +156,14 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
             )
         },
         cell: ({ row }) => (
-            <div className="font-medium whitespace-nowrap">
+            <div className="text-center whitespace-nowrap">
                 {row.original.lastUpdated}
             </div>
         ),
     },
     {
         id: "actions",
-        header: "Actions",
+        header: () => <div className="text-center px-2">Actions</div>,
         cell: ({ row }) => {
             const [isConfirmOpen, setIsConfirmOpen] = useState(false)
             const item = row.original;
@@ -166,26 +179,26 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
 
             return (
                 <>
-                    <div className="flex gap-2">
+                    <div className="flex justify-center gap-1">
                         <button
-                            className="p-1"
+                            className="p-0.5"
                             onClick={() => handleEdit(item)}
                         >
                             <Image
                                 src="/EditTable.svg"
-                                width={20}
-                                height={20}
+                                width={18}
+                                height={18}
                                 alt="Edit"
                             />
                         </button>
                         <button
-                            className="p-1"
+                            className="p-0.5"
                             onClick={onDelete}
                         >
                             <Image
                                 src="/delete.svg"
-                                width={20}
-                                height={20}
+                                width={18}
+                                height={18}
                                 alt="Delete"
                             />
                         </button>
