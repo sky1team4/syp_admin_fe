@@ -15,6 +15,9 @@ const FORM_VALIDATION = {
     pattern: {
       value: /^\d+(\.\d{1,2})?$/,
       message: 'Please enter a valid price'
+    },
+    min: {
+      message: 'Price must be greater than 0'
     }
   }
 };
@@ -49,7 +52,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
     const validateForm = () => {
         const newErrors = {};
         
-        if (!formData.name) {
+        if (!formData.name?.trim()) {
             newErrors.name = FORM_VALIDATION.name.required;
         }
         
@@ -57,6 +60,8 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
             newErrors.price = FORM_VALIDATION.price.required;
         } else if (!FORM_VALIDATION.price.pattern.value.test(formData.price)) {
             newErrors.price = FORM_VALIDATION.price.pattern.message;
+        } else if (parseFloat(formData.price) <= 0) {
+            newErrors.price = FORM_VALIDATION.price.min.message;
         }
 
         setErrors(newErrors);
@@ -66,14 +71,21 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Validate form data
-        if (!formData.name || !formData.price || !formData.billingPeriod) {
-            toast.error('Please fill in all required fields');
+        // First validate the form
+        if (!validateForm()) {
             return;
         }
 
+        // Log form data for debugging
+        console.log('Form Data:', formData);
+
         try {
-            await onSubmit(formData);
+            await onSubmit({
+                ...formData,
+                name: formData.name?.trim(),
+                price: parseFloat(formData.price)
+            });
+            
             // Reset form after successful submission
             if (mode === 'create') {
                 setFormData(initialFormState);
@@ -132,20 +144,28 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
                             label="Subscription Name *"
                             placeholder="Enter subscription name"
                             error={errors.name}
+                            required
                         />
 
                         
                         <Input
                             id="price"
                             value={formData.price}
-                            onChange={(e) => setFormData({...formData, price: e.target.value})}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '' || parseFloat(value) > 0) {
+                                    setFormData({...formData, price: value});
+                                }
+                            }}
                             w="full"
                             mdw="full"
                             label="Price *"
                             placeholder="Enter price"
                             type="number"
                             step="0.01"
+                            min="0.01"
                             error={errors.price}
+                            required
                         />
 
                         <div className="mb-4">
