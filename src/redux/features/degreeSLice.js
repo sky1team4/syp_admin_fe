@@ -130,7 +130,7 @@ export const deleteDegree = createAsyncThunk(
   }
 );
 
-const degreeSLice = createSlice({
+const degreeSlice = createSlice({
   name: 'degree',
   initialState: {
     items: [],
@@ -200,4 +200,4 @@ const degreeSLice = createSlice({
   },
 });
 
-export default degreeSLice.reducer;
+export default degreeSlice.reducer;
