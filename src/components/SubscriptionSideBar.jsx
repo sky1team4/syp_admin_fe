@@ -23,12 +23,14 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
     const dispatch = useDispatch();
     const { isLoading } = useSelector((state) => state.subscription);
     
-    const [formData, setFormData] = useState({
+    const initialFormState = {
         name: '',
         price: '',
         status: 'ACTIVE',
-        billingPeriod: 'MONTHLY'
-    });
+        billingPeriod: ''
+    };
+    
+    const [formData, setFormData] = useState(initialFormState);
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
@@ -37,10 +39,12 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
                 name: data.name || '',
                 price: data.price || '',
                 status: data.status || 'ACTIVE',
-                billingPeriod: data.billingPeriod || 'MONTHLY'
+                billingPeriod: data.billingPeriod
             });
+        } else {
+            setFormData(initialFormState); // Reset form when no data is provided
         }
-    }, [data]);
+    }, [data, isOpen]); // Add isOpen to dependencies
 
     const validateForm = () => {
         const newErrors = {};
@@ -68,11 +72,13 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
             return;
         }
 
-        // Log the form data before submission
-        console.log('Submitting form data:', formData);
-
         try {
             await onSubmit(formData);
+            // Reset form after successful submission
+            if (mode === 'create') {
+                setFormData(initialFormState);
+                setErrors({});
+            }
         } catch (error) {
             console.error('Form submission error:', error);
             toast.error(error.message || 'Failed to submit form');

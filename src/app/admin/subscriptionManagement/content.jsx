@@ -20,17 +20,19 @@ function content() {
     dispatch(fetchSubscriptions());
   }, [dispatch]);
 
-  // Transform subscriptions data to match table format
-  const tableData = subscriptions.map(subscription => ({
-    id: subscription.id,
-    title: subscription.name,
-    name: subscription.name,
-    price: subscription.price,
-    status: subscription.status,
-    billingPeriod: subscription.billingPeriod || 'MONTHLY',
-    createdDate: new Date(subscription.createdAt).toLocaleDateString(),
-    lastUpdated: new Date(subscription.updatedAt).toLocaleDateString()
-  }));
+  // Transform subscriptions data to match table format and filter out deleted items
+  const tableData = subscriptions
+    .filter(subscription => !subscription.deletedAt) // Filter out deleted items
+    .map(subscription => ({
+      id: subscription.id,
+      title: subscription.name,
+      name: subscription.name,
+      price: subscription.price,
+      status: subscription.status,
+      billingPeriod: subscription.billingPeriod || 'MONTHLY',
+      createdDate: new Date(subscription.createdAt).toLocaleDateString(),
+      lastUpdated: new Date(subscription.updatedAt).toLocaleDateString()
+    }));
 
   const toggleSidebar = () => {
     if (!isOpen) {
@@ -40,21 +42,16 @@ function content() {
     setIsOpen(!isOpen);
   };
 
-  const handleEdit = async (subscription) => {
-    try {
-      setSelectedSubscription({
-        id: subscription.id,
-        name: subscription.name,
-        price: subscription.price,
-        status: subscription.status,
-        billingPeriod: subscription.billingPeriod
-      });
-      setMode('edit');
-      setIsOpen(true);
-    } catch (err) {
-      console.error('Error in handleEdit:', err);
-      toast.error('Failed to prepare subscription for editing');
-    }
+  const handleEdit = (subscription) => {
+    setSelectedSubscription({
+      id: subscription.id,
+      name: subscription.name,
+      price: subscription.price,
+      status: subscription.status,
+      billingPeriod: subscription.billingPeriod === 'YEARLY' ? 'ANNUAL' : subscription.billingPeriod
+    });
+    setMode('edit');
+    setIsOpen(true);
   };
 
   const handleDelete = async (id) => {
@@ -76,22 +73,30 @@ function content() {
 
   const handleSubmitSubscription = async (formData) => {
     try {
-      const subscriptionData = {
-        name: formData.name?.trim(),
-        price: parseFloat(formData.price),
-        status: formData.status,
-        billingPeriod: formData.billingPeriod.toUpperCase()
-      };
-
-      console.log('Submitting subscription data:', subscriptionData);
-
       if (mode === 'edit' && selectedSubscription?.id) {
+        console.log('Updating subscription with data:', formData); // Debug log
+        
         await dispatch(updateSubscription({
           id: selectedSubscription.id,
-          data: subscriptionData
+          data: {
+            name: formData.name?.trim(),
+            price: parseFloat(formData.price),
+            status: formData.status,
+            billingPeriod: formData.billingPeriod // This should be 'ANNUAL' or 'MONTHLY'
+          }
         })).unwrap();
+        
         toast.success('Subscription updated successfully');
       } else {
+        const subscriptionData = {
+          name: formData.name?.trim(),
+          price: parseFloat(formData.price),
+          status: formData.status,
+          billingPeriod: formData.billingPeriod
+        };
+
+        console.log('Submitting subscription data:', subscriptionData);
+
         await dispatch(saveSubscription(subscriptionData)).unwrap();
         toast.success('Subscription created successfully');
       }

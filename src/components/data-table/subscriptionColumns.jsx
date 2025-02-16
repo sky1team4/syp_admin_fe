@@ -80,7 +80,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
         },
         cell: ({ row }) => (
             <div className="capitalize text-center">
-                {row.original.billingPeriod?.toLowerCase() === 'yearly' ? 'Yearly' : 'Monthly'}
+                {row.original.billingPeriod?.toLowerCase()}
             </div>
         ),
     },

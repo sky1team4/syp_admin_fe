@@ -7,9 +7,11 @@ export const fetchSubscriptions = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Mzc2NDE3NzEsImV4cCI6MTczNzY0NTM3MX0.aTaYNl0SvCRpYB98yjgPTcrITeTGtKlyQMHZ_VXHUbM";
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions`, {
-        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -22,14 +24,21 @@ export const fetchSubscriptions = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log(data);
-      
-      return data;
+      return data.map(subscription => ({
+        ...subscription,
+        billingPeriod: subscription.billingPeriod === 'YEARLY' ? 'ANNUAL' : subscription.billingPeriod
+      }));
     } catch (error) {
       return rejectWithValue(error.message || 'Network error occurred');
     }
   }
 );
+
+// Helper function to convert billing period
+const convertBillingPeriod = (period) => {
+  if (!period) return 'MONTHLY';
+  return period === 'ANNUAL' ? 'YEARLY' : period.toUpperCase();
+};
 
 export const saveSubscription = createAsyncThunk(
   'subscription/save',
@@ -43,8 +52,8 @@ export const saveSubscription = createAsyncThunk(
       const subscriptionData = {
         name: data.name,
         price: parseFloat(data.price),
-        status: data.status,
-        billingPeriod: data.billingPeriod.toUpperCase()
+        status: data.status.toUpperCase(),
+        billingPeriod: convertBillingPeriod(data.billingPeriod)
       };
 
       console.log('Sending subscription data:', subscriptionData);
@@ -87,8 +96,8 @@ export const updateSubscription = createAsyncThunk(
       const subscriptionData = {
         name: data.name,
         price: parseFloat(data.price),
-        status: data.status,
-        billingPeriod: data.billingPeriod.toUpperCase()
+        status: data.status.toUpperCase(),
+        billingPeriod: convertBillingPeriod(data.billingPeriod)
       };
 
       console.log('Updating subscription data:', subscriptionData);
@@ -104,12 +113,20 @@ export const updateSubscription = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('Update Error Response:', errorData);
         throw new Error(errorData.message || 'Failed to update subscription');
       }
 
       const result = await response.json();
-      return result;
+      console.log('Update Success Response:', result);
+      
+      // Convert YEARLY back to ANNUAL for frontend display
+      return {
+        ...result,
+        billingPeriod: result.billingPeriod === 'YEARLY' ? 'ANNUAL' : result.billingPeriod
+      };
     } catch (error) {
+      console.error('Update Error:', error);
       return rejectWithValue(error.message || 'Network error occurred');
     }
   }
@@ -125,8 +142,6 @@ export const deleteSubscription = createAsyncThunk(
         throw new Error('No authentication token found');
       }
 
-      console.log('Deleting subscription with ID:', id);
-
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions/${id}`, {
         method: 'DELETE',
         headers: {
@@ -137,13 +152,11 @@ export const deleteSubscription = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Delete error response:', errorData);
         throw new Error(errorData.message || 'Failed to delete subscription');
       }
 
       return id;
     } catch (error) {
-      console.error('Delete error:', error);
       return rejectWithValue(error.message || 'Network error occurred');
     }
   }
@@ -215,9 +228,12 @@ const subscriptionSlice = createSlice({
       })
       .addCase(deleteSubscription.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.subscriptions = state.subscriptions.filter(
-          subscription => subscription.id !== action.payload
-        );
+        // Ensure the server confirms deletion before removing from state
+        if (action.payload) {
+          state.subscriptions = state.subscriptions.filter(
+            subscription => subscription.id !== action.payload
+          );
+        }
       })
       .addCase(deleteSubscription.rejected, (state, action) => {
         state.isLoading = false;
