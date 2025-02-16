@@ -18,6 +18,7 @@ import companyReducer from './features/companyNameSlice';
 import subSkillReducer from './features/subSkillSlice';
 import rssFeedReducer from './features/rssFeedSlice';
 import faqCategoryReducer from './features/faqCateSlice';
+import userReducer from './features/userSlice';
 
 export const store = configureStore({
   reducer: {
@@ -40,5 +41,6 @@ export const store = configureStore({
     subSkill: subSkillReducer,
     rssFeed: rssFeedReducer,
     faqCategory: faqCategoryReducer,
+    users: userReducer,
   },
 }); 

@@ -22,7 +22,7 @@ export const fetchSubscriptions = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       
       return data;
     } catch (error) {
@@ -40,7 +40,7 @@ export const saveSubscription = createAsyncThunk(
         throw new Error('No authentication token found');
       }
 
-      console.log('Sending subscription data:', data); // Debug log
+      // console.log('Sending subscription data:', data); // Debug log
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions`, {
         method: 'POST',
@@ -59,7 +59,7 @@ export const saveSubscription = createAsyncThunk(
 
       return await response.json();
     } catch (error) {
-      console.error('Subscription error:', error); // Debug log
+      // console.error('Subscription error:', error); // Debug log
       return rejectWithValue(error.message || 'Network error occurred');
     }
   }
