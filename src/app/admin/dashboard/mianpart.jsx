@@ -10,7 +10,7 @@ export default function DashboardPage() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.subscription_verification.data); 
   // const data = useSelector((state) => state.auth.users);
-  console.log(data);
+  // console.log(data);
 
   useEffect(() => {
     dispatch(fetchSubscriptionVerification()); 

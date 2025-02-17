@@ -8,7 +8,7 @@ const Table = React.forwardRef(({ className, ...props }, ref) => (
       ref={ref}
       className={cn("w-full caption-bottom text-sm", className)}
       {...props} />
-      {console.log(props)}
+      {/* {console.log(props)} */}
   </div>
 ))
 Table.displayName = "Table"

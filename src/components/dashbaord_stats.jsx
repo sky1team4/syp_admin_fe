@@ -1,24 +1,26 @@
 // Today'sSummary.jsx
 "use client"
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from 'react-redux'; // Import hooks from react-redux
-import { fetchSubscriptionVerification } from '../redux/features/subscription_verificationSlice'; // Import the action
+import { useDispatch, useSelector } from 'react-redux'; 
+import { fetchAllUsers } from '../redux/features/authSlice';
 import Image from "next/image";
 import theme from "../app/theme";
 
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const TodaysSummary = ({ btnText, title, click, isOpen }) => {
+
   const dispatch = useDispatch(); // Initialize dispatch
-  const { data } = useSelector((state) => state.subscription_verification); // Get data from the Redux store
+  const { users = [] } = useSelector((state) => state.auth); // Access users from the state
+  console.log(users);
 
   useEffect(() => {
-    dispatch(fetchSubscriptionVerification()); // Dispatch the action to fetch data
+    dispatch(fetchAllUsers());
   }, [dispatch]);
 
-  // Calculate totals from incoming data
-  const totalUsers = data.length; // Assuming each entry in data represents a user
-  const subscribedUsers = data.filter(user => user.subscription_status === "verified").length;
-  const unsubscribedUsers = data.filter(user => user.subscription_status === "pending").length;
+  const totalUsers = users.length; // Get total users
+  console.log(totalUsers);
+  const subscribedUsers = users.length; // Assuming all users are subscribed for now
+  console.log(subscribedUsers);
+  const unsubscribedUsers = 0;
 
   const info = [
     { id: 1, label: "Total user", value: totalUsers.toString(), bgColor: "bg-purple-100", icon: '/totalusers.svg' },

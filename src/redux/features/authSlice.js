@@ -54,7 +54,7 @@ export const loginUser = createAsyncThunk(
 );
 
 export const fetchAllUsers = createAsyncThunk(
-  'users/fetchAll',
+  'users/getAll',
   async () => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/getAll`, {
@@ -64,7 +64,7 @@ export const fetchAllUsers = createAsyncThunk(
           'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include token for authorization
         },
       });
-      console.log(response);
+      console.log(response.status);
       
       if (!response.ok) {
         const errorData = await response.json();
@@ -72,6 +72,7 @@ export const fetchAllUsers = createAsyncThunk(
       }
 
       const data = await response.json();
+      console.log("data auth users", data);
       return data;
     } catch (error) {
       console.error('Fetch users error:', error);
@@ -88,6 +89,7 @@ const authSlice = createSlice({
     role: null,
     loading: false,
     error: null,
+    users: [],
   },
   reducers: {
     logout: (state) => {
@@ -112,6 +114,18 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || 'Login failed';
+      })
+      .addCase(fetchAllUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(fetchAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || 'Fetch users failed';
       });
   },
 });

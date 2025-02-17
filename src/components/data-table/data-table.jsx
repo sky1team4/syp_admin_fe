@@ -36,7 +36,7 @@ export function DataTable({ columns, data }) {
   // const [openVerificationRow, setOpenVerificationRow] = useState(null); // Track the open row for the verification popup
 
   // Add console.log to debug columns
-  console.log("Original columns:", columns);
+  // console.log("Original columns:", columns);
 
   const getVisibleColumns = () => {
     if (activeTab === "Verification Requests") {
