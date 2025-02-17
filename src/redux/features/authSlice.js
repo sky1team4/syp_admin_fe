@@ -1,10 +1,31 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// const API_URL = process.env.BASE_URL;
-// const API_URL = "https://localhost:3000";
-// const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-//       console.log('NEXT_PUBLIC_API_URL:', apiUrl); // Debugging line
+export const register = createAsyncThunk( 'users/register',
+  async (credentials) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Register failed');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Register error:', error);
+      throw error;
+    }
+  }
+     
+  
+);
+
 export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials) => {
@@ -27,6 +48,33 @@ export const loginUser = createAsyncThunk(
       return data;
     } catch (error) {
       console.error('Login error:', error);
+      throw error;
+    }
+  }
+);
+
+export const fetchAllUsers = createAsyncThunk(
+  'users/fetchAll',
+  async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/getAll`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include token for authorization
+        },
+      });
+      console.log(response);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Fetch users failed');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Fetch users error:', error);
       throw error;
     }
   }

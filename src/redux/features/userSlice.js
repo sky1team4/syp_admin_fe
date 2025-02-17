@@ -2,18 +2,21 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 // Async thunk to fetch user data
 export const fetchUsers = createAsyncThunk('users/register', async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/register`,{
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify(userData),
   });
-  console.log(response.json());
+
+  console.log(response.data);
   return response.json();
 });
 
+// Async thunk to create a new user
 export const createUser = createAsyncThunk('users/create', async (userData) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
