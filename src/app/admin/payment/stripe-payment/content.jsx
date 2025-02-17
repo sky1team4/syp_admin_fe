@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { toast, Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveStripeConfig } from '../../../../redux/features/stripeSlice';
+import { saveStripeConfig, fetchStripeConfig } from '../../../../redux/features/stripeSlice';
 
 // UI Components
 import Input from '../../../../components/cui/input';
@@ -40,9 +40,40 @@ const FORM_VALIDATION = {
 };
 
 const StripePaymentIntegration = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm();
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.stripe);
+  const { isLoading, config } = useSelector((state) => state.stripe);
+
+  useEffect(() => {
+    console.log('Fetching config...');
+    dispatch(fetchStripeConfig());
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log('Config received:', config);
+    if (config && Array.isArray(config) && config.length > 0) {
+      // Get the first (and only) config object
+      const configData = config[0];
+      
+      setValue('publishableKey', configData.publish_key || '');
+      setValue('secretKey', configData.secret_key || '');
+      setValue('webhookSigningSecret', configData.webhook_signing_secret || '');
+      setValue('webhookUrl', configData.webhook_url || '');
+      setValue('defaultCurrency', configData.default_currency || '');
+      setValue('allowedCurrencies', configData.allowed_currency?.split(',') || []);
+      setValue('testMode', configData.text_mode === 'test');
+
+      console.log('Form values set:', {
+        publishableKey: watch('publishableKey'),
+        secretKey: watch('secretKey'),
+        webhookSigningSecret: watch('webhookSigningSecret'),
+        webhookUrl: watch('webhookUrl'),
+        defaultCurrency: watch('defaultCurrency'),
+        allowedCurrencies: watch('allowedCurrencies'),
+        testMode: watch('testMode')
+      });
+    }
+  }, [config, setValue, watch]);
 
   const onSubmit = async (data) => {
     try {
@@ -57,6 +88,11 @@ const StripePaymentIntegration = () => {
           : data.allowedCurrencies,
         text_mode: data.testMode ? 'test' : 'live'
       };
+
+      // If we have an existing config, include its ID
+      if (config && Array.isArray(config) && config.length > 0) {
+        transformedData.id = config[0].id;
+      }
 
       await dispatch(saveStripeConfig(transformedData)).unwrap();
       toast.success('Stripe configuration saved successfully');
@@ -86,10 +122,12 @@ const StripePaymentIntegration = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input id="publishableKey" {...register('publishableKey', FORM_VALIDATION.publishableKey)}
             label="Publishable Key *" placeholder="Enter your Publishable Key"
-            error={errors.publishableKey?.message} />
+            error={errors.publishableKey?.message}
+            value={watch('publishableKey')} />
           <Input id="secretKey" {...register('secretKey', FORM_VALIDATION.secretKey)}
             label="Secret Key *" placeholder="Enter your Secret Key"
-            error={errors.secretKey?.message} />
+            error={errors.secretKey?.message}
+            value={watch('secretKey')} />
         </div>
 
         {/* Webhook Section */}
