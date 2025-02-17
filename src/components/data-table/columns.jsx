@@ -114,7 +114,7 @@ export const columns = [
     //     ),
     // },
     {
-        accessorKey: "subscription",
+        accessorKey: "subscription_type",
         header: ({ column }) => {
             return (
                 <Button
