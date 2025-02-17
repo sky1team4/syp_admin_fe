@@ -113,27 +113,27 @@ export const columns = [
     //         {console.log(row.original.name)}</div>
     //     ),
     // },
-    // {
-    //     accessorKey: "subscription",
-    //     header: ({ column }) => {
-    //         return (
-    //             <Button
-    //                 variant="ghost"
-    //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //             >
-    //                 Subscription
-    //                 {column.getIsSorted() === "asc" ? (
-    //                     <ArrowUp className="ml-2 h-4 w-4" />
-    //                 ) : (
-    //                     <ArrowDown className="ml-2 h-4 w-4" />
-    //                 )}
-    //             </Button>
-    //         )
-    //     },
-    //     cell: ({ row }) => (
-    //         <div className="text-sm font-medium">{row.original.subscription}</div>
-    //     ),
-    // },
+    {
+        accessorKey: "subscription",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Subscription
+                    {column.getIsSorted() === "asc" ? (
+                        <ArrowUp className="ml-2 h-4 w-4" />
+                    ) : (
+                        <ArrowDown className="ml-2 h-4 w-4" />
+                    )}
+                </Button>
+            )
+        },
+        cell: ({ row }) => (
+            <div className="text-sm font-medium">{row.original.subscription}</div>
+        ),
+    },
     {
         id: "actions",
         header: "Actions",

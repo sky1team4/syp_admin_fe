@@ -152,7 +152,14 @@ export function DataTable({ columns, data }) {
                         >
                           {cell.getValue() ? cell.getValue().toString() : "N/A"}
                         </span>
-                      ) : (
+                      ) : cell.column.id === "subscription_type" ? (
+                        <span
+                          className={"px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-500"
+                          }
+                        >
+                          {cell.getValue() ? cell.getValue().toString() : "N/A"}
+                        </span>
+                      ) :(
                         flexRender(cell.column.columnDef.cell, cell.getContext())
                       )}
                     </TableCell>
