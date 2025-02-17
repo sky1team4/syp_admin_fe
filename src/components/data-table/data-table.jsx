@@ -35,6 +35,20 @@ export function DataTable({ columns, data }) {
   const [activeTab, setActiveTab] = useState("Users");
   const [openVerificationRow, setOpenVerificationRow] = useState(null); // Track the open row for the verification popup
 
+  // Add console.log to debug columns
+  console.log("Original columns:", columns);
+
+  const getVisibleColumns = () => {
+    if (activeTab === "Verification Requests") {
+      return columns.filter(column => {
+        const columnId = column.id || column.accessorKey;
+        // Only hide the subscription_type column
+        return columnId !== 'subscription_type';
+      });
+    }
+    return columns;
+  };
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     if (tab === "Users") {
@@ -45,8 +59,8 @@ export function DataTable({ columns, data }) {
   };
 
   const table = useReactTable({
-    data: data,
-    columns,
+    data,
+    columns: getVisibleColumns(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -120,50 +134,51 @@ export function DataTable({ columns, data }) {
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {cell.column.id === "user_name" ? (
-                        <div className="flex items-center space-x-3">
-                          <Image
-                            src={cell.getValue()?.image || "/dash.png"}
-                            alt="Profile"
-                            width={32}
-                            height={32}
-                            className="rounded-lg"
-                          />
-                          <div>
-                            <p className="text-sm font-medium">
-                              {cell.getValue() || "Unknown"}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {/* {cell.getValue()?.email || "No Email"} */}
-                            </p>
+                  {row.getVisibleCells()
+                    .map((cell) => (
+                      <TableCell key={cell.id}>
+                        {cell.column.id === "user_name" ? (
+                          <div className="flex items-center space-x-3">
+                            <Image
+                              src={cell.getValue()?.image || "/dash.png"}
+                              alt="Profile"
+                              width={32}
+                              height={32}
+                              className="rounded-lg"
+                            />
+                            <div>
+                              <p className="text-sm font-medium">
+                                {cell.getValue() || "Unknown"}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {/* {cell.getValue()?.email || "No Email"} */}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      ) : cell.column.id === "phone_number" ? (
-                        <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-500">
-                          {cell.getValue() || "N/A"}
-                        </span>
-                      ) : cell.column.id === "subscription_status" ? (
-                        <span
-                          className={`text-sm font-medium  ${
-                            cell.getValue() === "verified" ? "bg-green-100 text-green-600 rounded-full px-2 py-1" : "bg-yellow-100 text-yellow-600 rounded-full px-2 py-1"
-                          }`}
-                        >
-                          {cell.getValue() ? cell.getValue().toString() : "N/A"}
-                        </span>
-                      ) : cell.column.id === "subscription_type" ? (
-                        <span
-                          className={"px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-500"
-                          }
-                        >
-                          {cell.getValue() ? cell.getValue().toString() : "N/A"}
-                        </span>
-                      ) :(
-                        flexRender(cell.column.columnDef.cell, cell.getContext())
-                      )}
-                    </TableCell>
-                  ))}
+                        ) : cell.column.id === "phone_number" ? (
+                          <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-500">
+                            {cell.getValue() || "N/A"}
+                          </span>
+                        ) : cell.column.id === "subscription_status" ? (
+                          <span
+                            className={`text-sm font-medium  ${
+                              cell.getValue() === "verified" ? "bg-green-100 text-green-600 rounded-full px-2 py-1" : "bg-yellow-100 text-yellow-600 rounded-full px-2 py-1"
+                            }`}
+                          >
+                            {cell.getValue() ? cell.getValue().toString() : "N/A"}
+                          </span>
+                        ) : cell.column.id === "subscription_type" ? (
+                          <span
+                            className={"px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-500"
+                            }
+                          >
+                            {cell.getValue() ? cell.getValue().toString() : "N/A"}
+                          </span>
+                        ) :(
+                          flexRender(cell.column.columnDef.cell, cell.getContext())
+                        )}
+                      </TableCell>
+                    ))}
                 </TableRow>
               ))
             ) : (
