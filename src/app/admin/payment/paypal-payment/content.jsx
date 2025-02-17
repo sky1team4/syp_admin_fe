@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from 'next/image';
 import { useForm } from "react-hook-form";
 import { toast, Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { savePaypalConfig } from "../../../../redux/features/paypalSlice";
+import { savePaypalConfig, fetchPaypalConfig } from "../../../../redux/features/paypalSlice";
 
 
 // UI Components
@@ -23,9 +23,39 @@ const FORM_VALIDATION = {
 };
 
 const PaypalPaymentIntegration = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm();
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.paypal);
+  const { isLoading, config } = useSelector((state) => state.paypal);
+
+  // Fetch config when component mounts
+  useEffect(() => {
+    dispatch(fetchPaypalConfig());
+  }, [dispatch]);
+
+  // Set form values when config is loaded
+  useEffect(() => {
+    if (config && Array.isArray(config) && config.length > 0) {
+      const configData = config[0];
+      
+      setValue('clientId', configData.client_id || '');
+      setValue('clientSecret', configData.client_secret || '');
+      setValue('webhookId', configData.webhook_id || '');
+      setValue('environment', configData.environment || '');
+      setValue('defaultCurrency', configData.default_currency || '');
+      setValue('merchantAccountId', configData.merchant_acc_id || '');
+      setValue('enablePaypal', configData.paypal_payment === 'enabled');
+
+      console.log('PayPal form values set:', {
+        clientId: watch('clientId'),
+        clientSecret: watch('clientSecret'),
+        webhookId: watch('webhookId'),
+        environment: watch('environment'),
+        defaultCurrency: watch('defaultCurrency'),
+        merchantAccountId: watch('merchantAccountId'),
+        enablePaypal: watch('enablePaypal')
+      });
+    }
+  }, [config, setValue, watch]);
 
   const onSubmit = async (data) => {
     try {
@@ -38,6 +68,11 @@ const PaypalPaymentIntegration = () => {
         merchant_acc_id: data.merchantAccountId || "",
         paypal_payment: data.enablePaypal ? "enabled" : "disabled"
       };
+
+      // Include ID if we have existing config
+      if (config && Array.isArray(config) && config.length > 0) {
+        transformedData.id = config[0].id;
+      }
       
       await dispatch(savePaypalConfig(transformedData)).unwrap();
       toast.success("PayPal configuration saved successfully");
@@ -103,7 +138,8 @@ const PaypalPaymentIntegration = () => {
 
         {/* Submit Button */}
         <button type="submit"
-          className={`w-full bg-[${theme.color}] text-white py-2 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50`}
+          style={{ backgroundColor: theme.color }}
+          className={`w-full text-white py-2 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50`}
           disabled={isLoading}>
           {isLoading ? "Saving..." : "Save Changes"}
         </button>
