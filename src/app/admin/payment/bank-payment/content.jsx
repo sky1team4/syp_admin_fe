@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { toast, Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveBankConfig } from '../../../../redux/features/bankSlice';
+import { saveBankConfig, fetchBankConfig } from '../../../../redux/features/bankSlice';
 
 // UI Components
 import Input from '../../../../components/cui/input'
@@ -38,9 +38,41 @@ const FORM_VALIDATION = {
 };
 
 const BankPaymentIntegration = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm();
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.bank);
+  const { isLoading, config } = useSelector((state) => state.bank);
+
+  // Fetch config when component mounts
+  useEffect(() => {
+    dispatch(fetchBankConfig());
+  }, [dispatch]);
+
+  // Set form values when config is loaded
+  useEffect(() => {
+    if (config && Array.isArray(config) && config.length > 0) {
+      const configData = config[0];
+      
+      setValue('accHolderName', configData.acc_holder_name || '');
+      setValue('bankAccNo', configData.bank_acc_no || '');
+      setValue('ibanNo', configData.iban_no || '');
+      setValue('swiftCode', configData.swift_code || '');
+      setValue('bankName', configData.bank_name || '');
+      setValue('allowTransactionType', configData.allow_transaction_type || '');
+      setValue('bankAddress', configData.bank_address || '');
+      setValue('enableBankPayment', configData.direct_bank_payment === 'enabled');
+
+      console.log('Bank form values set:', {
+        accHolderName: watch('accHolderName'),
+        bankAccNo: watch('bankAccNo'),
+        ibanNo: watch('ibanNo'),
+        swiftCode: watch('swiftCode'),
+        bankName: watch('bankName'),
+        allowTransactionType: watch('allowTransactionType'),
+        bankAddress: watch('bankAddress'),
+        enableBankPayment: watch('enableBankPayment')
+      });
+    }
+  }, [config, setValue, watch]);
 
   const onSubmit = async (data) => {
     try {
@@ -72,7 +104,6 @@ const BankPaymentIntegration = () => {
         <a href="/admin/payment" className="mb-2 cursor-pointer">
           <Image
             src="/backArrow.svg" 
-
             alt="Illustration"
             width={8}  
             height={8}
@@ -82,7 +113,6 @@ const BankPaymentIntegration = () => {
       </div>
       <p className="text-gray-500 mb-4 text-center">Configure your Bank account settings below.</p>
       <Toaster position="top-right" />
-
 
       <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
         {/* Account Info Section */}
@@ -163,6 +193,7 @@ const BankPaymentIntegration = () => {
 
         {/* Submit Button */}
         <button 
+          style={{ backgroundColor: theme.color }}
           type="submit"
           className={`w-full bg-[${theme.color}] text-white py-2 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50`}
           disabled={isLoading}

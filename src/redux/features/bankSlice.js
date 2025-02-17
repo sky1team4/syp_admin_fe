@@ -1,6 +1,32 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+export const fetchBankConfig = createAsyncThunk(
+  'bank/fetchConfig',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bank`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return rejectWithValue(errorData.message || 'Failed to fetch configuration');
+      }
+
+      const data = await response.json();
+      console.log('API Response:', data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Network error occurred');
+    }
+  }
+);
+
 export const saveBankConfig = createAsyncThunk(
   'bank/saveConfig',
   async (data, { rejectWithValue }) => {
@@ -41,6 +67,18 @@ const bankSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchBankConfig.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchBankConfig.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.config = action.payload;
+      })
+      .addCase(fetchBankConfig.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
       .addCase(saveBankConfig.pending, (state) => {
         state.isLoading = true;
         state.error = null;
