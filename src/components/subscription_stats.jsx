@@ -12,7 +12,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
   const loading = useSelector(state => state.users.loading); // Add loading state
   const error = useSelector(state => state.users.error); // Add error state
   
-  console.log(data);
+  // console.log(data);
 
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
   const totalUsers = data.length;
   const unsubscribedUsers = data.length;
   const annualSubscription=data.length;
-console.log(freeUsers);
+// console.log(freeUsers);
 
   const info = [
     { id: 2, label: "Subscribed User", value: subscribedUsers.toString(), bgColor: "bg-red-100", icon: '/subscribeuser.svg' },

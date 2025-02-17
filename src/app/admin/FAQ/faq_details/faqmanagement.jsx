@@ -1,6 +1,7 @@
 // FAQManagement.jsx
 import React from "react";
 import FAQCard from "./FAQcards";
+import { Button } from "@/components/cui/button";
 
 const FAQManagement = () => {
   const faqs = [
@@ -19,7 +20,7 @@ const FAQManagement = () => {
     <div className="max-w-4xl mx-auto py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-gray-800">FAQ Q/A </h1>
-        <Button text="Add FAQ Q/A" click={() => console.log('Add FAQ Q/A clicked')} w="10rem" />
+        <Button text="Add FAQ Q/A" click={() => console.log('Add FAQ Q/A clicked')} w="10rem" h="3rem" color="purple" fontSize="1rem" />
       </div>
       <div className="space-y-4">
         {faqs.map((faq) => (

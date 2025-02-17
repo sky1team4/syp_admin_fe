@@ -149,7 +149,8 @@ export const deleteSubscription = createAsyncThunk(
           'Authorization': `Bearer ${token}`,
         },
       });
-
+      console.log(response);
+      console.log(response.status);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to delete subscription');

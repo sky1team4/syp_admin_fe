@@ -67,6 +67,7 @@ function content() {
       }
     } catch (err) {
       console.error('Delete handler error:', err); // Add debug log
+      console.error('Error details:', err?.response?.data || err); // Log additional error details
       toast.error(err?.message || 'Failed to delete subscription');
     }
   };
