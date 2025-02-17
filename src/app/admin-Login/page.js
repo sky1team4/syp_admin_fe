@@ -6,6 +6,7 @@ import { loginUser } from "../../redux/features/authSlice";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Link from "next/link";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -69,16 +70,16 @@ export default function Login() {
       <ToastContainer />
       <div className="flex flex-col w-full h-screen bg-[#F5F5F5] text-white lg:overflow-hidden">
         <nav className="bg-white text-black px-6 py-4 z-40">
-          <div className="mx-auto flex items-center justify-between">
+          <div className="flex items-center justify-between">
             <a href="#" className="text-xl font-bold">SYP</a>
           </div>
         </nav>
 
-        <div className="w-full h-full px-0 md:px-20 flex gap-10 justify-center items-center">
+        <div className="w-full h-full px-2 md:px-20 flex gap-10 justify-center items-center">
           <div className="flex flex-col justify-center items-center w-full h-full md:w-1/2 p-8 bg-[#F5F5F5] text-black">
-            <div className="w-[22rem] sm:w-[30rem] py-8 px-6 scale-100 bg-white rounded-lg transition-all duration-300 ease-in-out">
-              <h1 className="text-3xl font-bold text-center">Sign In</h1>
-              <form onSubmit={handleSubmit}>
+            <div className="xs:w-[16rem] sm:w-[20rem] md:w-[30rem] py-12 px-8 scale-100 bg-white rounded-lg transition-all duration-300 ease-in-out">
+              <h1 className="text-3xl font-bold text-center mb-8">Sign In</h1>
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="mb-3 sm:mb-6">
                   <label className="block text-md font-medium mb-3" htmlFor="email">Email</label>
                   <input
@@ -93,7 +94,9 @@ export default function Login() {
                 <div className="mb-3 sm:mb-8">
                   <div className="flex items-center justify-between mb-2">
                     <label className="block text-md font-medium mb-3" htmlFor="password">Password</label>
-                    <a href="#" className="text-sm text-purple-600 hover:underline">Forgot Password?</a>
+                    <Link href="/forget-password" className="text-sm text-purple-600 hover:underline">
+                      Forgot Password?
+                    </Link>
                   </div>
                   <div className="relative">
                     <input
@@ -120,7 +123,11 @@ export default function Login() {
                     </button>
                   </div>
                   <label className="flex items-center text-sm mt-5 mb-5">
-                    <input type="checkbox" id="rememberMe" className="mr-2" />
+                    <input 
+                      type="checkbox" 
+                      id="rememberMe" 
+                      className="form-checkbox h-4 w-4 text-purple-600 border-gray-300 rounded mr-2 accent-purple-600 cursor-pointer"
+                    />
                     Remember Me
                   </label>
                 </div>

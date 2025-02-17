@@ -6,7 +6,7 @@ export const fetchDegrees = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/degrees/findAll`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/degrees/findAll`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

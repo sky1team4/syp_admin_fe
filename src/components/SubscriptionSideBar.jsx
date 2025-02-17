@@ -15,42 +15,44 @@ const FORM_VALIDATION = {
     pattern: {
       value: /^\d+(\.\d{1,2})?$/,
       message: 'Please enter a valid price'
+    },
+    min: {
+      message: 'Price must be greater than 0'
     }
   }
 };
 
-function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
+function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSubmit }) {
     const dispatch = useDispatch();
     const { isLoading } = useSelector((state) => state.subscription);
     
-    const [formData, setFormData] = useState({
+    const initialFormState = {
         name: '',
         price: '',
-        status: 'ACTIVE'
-    });
+        status: 'ACTIVE',
+        billingPeriod: ''
+    };
+    
+    const [formData, setFormData] = useState(initialFormState);
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        if (mode === 'edit' && data) {
+        if (data) {
             setFormData({
-                name: data.name || data.title || '',
-                price: data.price?.toString() || '',
+                name: data.name || '',
+                price: data.price || '',
                 status: data.status || 'ACTIVE',
-                id: data.id
+                billingPeriod: data.billingPeriod
             });
         } else {
-            setFormData({
-                name: '',
-                price: '',
-                status: 'ACTIVE'
-            });
+            setFormData(initialFormState); // Reset form when no data is provided
         }
-    }, [mode, data]);
+    }, [data, isOpen]); // Add isOpen to dependencies
 
     const validateForm = () => {
         const newErrors = {};
         
-        if (!formData.name) {
+        if (!formData.name?.trim()) {
             newErrors.name = FORM_VALIDATION.name.required;
         }
         
@@ -58,40 +60,40 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
             newErrors.price = FORM_VALIDATION.price.required;
         } else if (!FORM_VALIDATION.price.pattern.value.test(formData.price)) {
             newErrors.price = FORM_VALIDATION.price.pattern.message;
+        } else if (parseFloat(formData.price) <= 0) {
+            newErrors.price = FORM_VALIDATION.price.min.message;
         }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSave = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        // First validate the form
         if (!validateForm()) {
-            toast.error('Please fill in all required fields correctly', { id: 'validation-error' });
             return;
         }
 
-        try {
-            const subscriptionData = {
-                name: formData.name,
-                status: formData.status,
-                price: parseFloat(formData.price)
-            };
+        // Log form data for debugging
+        console.log('Form Data:', formData);
 
-            if (mode === 'edit' && data?.id) {
-                await dispatch(updateSubscription({
-                    id: data.id,
-                    data: subscriptionData
-                })).unwrap();
-                toast.success('Subscription updated successfully');
-            } else {
-                await dispatch(saveSubscription(subscriptionData)).unwrap();
-                toast.success('Subscription created successfully');
-            }
+        try {
+            await onSubmit({
+                ...formData,
+                name: formData.name?.trim(),
+                price: parseFloat(formData.price)
+            });
             
-            click(false); // Close sidebar
-            dispatch(fetchSubscriptions()); // Refresh the list
-        } catch (err) {
-            toast.error(err?.message || `Failed to ${mode === 'edit' ? 'update' : 'create'} subscription`);
+            // Reset form after successful submission
+            if (mode === 'create') {
+                setFormData(initialFormState);
+                setErrors({});
+            }
+        } catch (error) {
+            console.error('Form submission error:', error);
+            toast.error(error.message || 'Failed to submit form');
         }
     };
 
@@ -133,7 +135,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
 
                     {/* Subscription Inputs */}
                     <div className="flex flex-col gap-4">
-                        <Input
+                        <Input  
                             id="name"
                             value={formData.name}
                             onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -142,20 +144,41 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
                             label="Subscription Name *"
                             placeholder="Enter subscription name"
                             error={errors.name}
+                            required
                         />
+
                         
                         <Input
                             id="price"
                             value={formData.price}
-                            onChange={(e) => setFormData({...formData, price: e.target.value})}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '' || parseFloat(value) > 0) {
+                                    setFormData({...formData, price: value});
+                                }
+                            }}
                             w="full"
                             mdw="full"
                             label="Price *"
                             placeholder="Enter price"
                             type="number"
                             step="0.01"
+                            min="0.01"
                             error={errors.price}
+                            required
                         />
+
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700">Billing Period</label>
+                            <select
+                                value={formData.billingPeriod}
+                                onChange={(e) => setFormData({...formData, billingPeriod: e.target.value})}
+                                className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-purple-500 focus:outline-none focus:ring-purple-500 sm:text-sm"
+                            >
+                                <option value="MONTHLY">Monthly</option>
+                                <option value="ANNUAL">Annual</option>
+                            </select>
+                        </div>
 
                         <div className="flex items-center gap-2">
                             <label className="text-sm font-medium text-gray-700">
@@ -176,7 +199,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null }) {
                 {/* Footer */}
                 <div className="absolute bottom-0 left-0 w-full p-4">
                     <button
-                        onClick={handleSave}
+                        onClick={handleSubmit}
                         disabled={isLoading}
                         className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 disabled:opacity-50"
                     >

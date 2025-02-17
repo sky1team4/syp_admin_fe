@@ -2,7 +2,7 @@
 // import React from 'react'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchDegrees, saveDegree, updateDegree, deleteDegree } from '../../../redux/features/degreeSLice'
+import { fetchDegrees, saveDegree, updateDegree, deleteDegree } from '../../../redux/features/degreeSlice.js'
 import TableSideBar from '../../../components/TableSideBar'
 import DisplayTable from '../../../components/displayTable'
 import { toast } from 'react-hot-toast'
@@ -13,7 +13,7 @@ import { toast } from 'react-hot-toast'
 function Content() {
   const dispatch = useDispatch();
   const [isDataLoaded, setIsDataLoaded] = useState(false);
-  
+
   const { items: degrees, isLoading, error } = useSelector((state) => state.degree || { items: [], isLoading: false, error: null });
   console.log('Degrees for table:', degrees);
 
@@ -23,13 +23,13 @@ function Content() {
         setIsDataLoaded(false);
         const result = await dispatch(fetchDegrees()).unwrap();
         console.log('Fetch result:', result);
-        
+
         // Update the Redux state directly if needed
         dispatch({
           type: 'degree/setDegrees',
           payload: result
         });
-        
+
         setIsDataLoaded(true);
       } catch (error) {
         console.error('Error fetching degrees:', error);
@@ -133,6 +133,7 @@ function Content() {
         isOpen={isOpen}
         btnText="Add Degree"
         title="Degree"
+        link="/admin/education-management"
         array={formattedDegrees}
         handleEdit={handleEdit}
         handleDelete={handleDelete}

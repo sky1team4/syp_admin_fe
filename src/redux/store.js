@@ -8,7 +8,7 @@ import verificationReducer from './features/verificationSlice';
 import relationshipReducer from './features/relationshipSlice';
 import fieldofstudyReducer from './features/fieldofstudySlice';
 import subscription_verificationReducer from './features/subscription_verificationSlice';
-import degreeReducer from './features/degreeSLice';
+import degreeReducer from './features/degreeSlice.js';
 import specialtyReducer from './features/specialitySlice';
 import interestReducer from './features/interestSlice';
 import skillReducer from './features/skillSlice';
@@ -43,4 +43,4 @@ export const store = configureStore({
     faqCategory: faqCategoryReducer,
     users: userReducer,
   },
-}); 
+});

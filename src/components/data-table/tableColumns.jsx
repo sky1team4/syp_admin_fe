@@ -19,7 +19,6 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="w-full justify-start px-2"
                 >
                     Name
                     {column.getIsSorted() === "asc" ? (
@@ -30,88 +29,6 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 </Button>
             )
         },
-        cell: ({ row }) => (
-            <div className="font-medium pl-2">
-                {row.original.name}
-            </div>
-        ),
-    },
-    {
-        accessorKey: "price",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="w-full justify-center px-2"
-                >
-                    Price
-                    {column.getIsSorted() === "asc" ? (
-                        <ArrowUp className="ml-2 h-4 w-4" />
-                    ) : (
-                        <ArrowDown className="ml-2 h-4 w-4" />
-                    )}
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="text-center">
-                ${parseFloat(row.original.price).toFixed(2)}
-            </div>
-        ),
-    },
-    {
-        accessorKey: "billingPeriod",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="w-full justify-center px-2"
-                >
-                    Billing Period
-                    {column.getIsSorted() === "asc" ? (
-                        <ArrowUp className="ml-2 h-4 w-4" />
-                    ) : (
-                        <ArrowDown className="ml-2 h-4 w-4" />
-                    )}
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="capitalize text-center">
-                {row.original.billingPeriod?.toLowerCase()}
-            </div>
-        ),
-    },
-    {
-        accessorKey: "status",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="w-full justify-center px-2"
-                >
-                    Status
-                    {column.getIsSorted() === "asc" ? (
-                        <ArrowUp className="ml-2 h-4 w-4" />
-                    ) : (
-                        <ArrowDown className="ml-2 h-4 w-4" />
-                    )}
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="flex justify-center">
-                <div className={`px-2 py-1 rounded-full text-sm w-fit
-                    ${row.original.status === 'ACTIVE' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-red-100 text-red-800'}`}>
-                    {row.original.status?.toLowerCase()}
-                </div>
-            </div>
-        ),
     },
     {
         accessorKey: "createdDate",
@@ -120,7 +37,6 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="w-full justify-center px-2"
                 >
                     Created Date
                     {column.getIsSorted() === "asc" ? (
@@ -131,11 +47,6 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 </Button>
             )
         },
-        cell: ({ row }) => (
-            <div className="text-center">
-                {row.original.createdDate}
-            </div>
-        ),
     },
     {
         accessorKey: "lastUpdated",
@@ -144,7 +55,6 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="w-full justify-center px-2"
                 >
                     Last Updated
                     {column.getIsSorted() === "asc" ? (
@@ -155,16 +65,12 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 </Button>
             )
         },
-        cell: ({ row }) => (
-            <div className="text-center whitespace-nowrap">
-                {row.original.lastUpdated}
-            </div>
-        ),
     },
     {
         id: "actions",
-        header: () => <div className="text-center px-2">Actions</div>,
+        header: "Actions",
         cell: ({ row }) => {
+            const [isSidebarOpen, setIsSidebarOpen] = useState(false)
             const [isConfirmOpen, setIsConfirmOpen] = useState(false)
             const item = row.original;
 
@@ -179,26 +85,26 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
 
             return (
                 <>
-                    <div className="flex justify-center gap-1">
+                    <div className="flex gap-2">
                         <button
-                            className="p-0.5"
+                            className="p-1"
                             onClick={() => handleEdit(item)}
                         >
                             <Image
                                 src="/EditTable.svg"
-                                width={18}
-                                height={18}
+                                width={20}
+                                height={20}
                                 alt="Edit"
                             />
                         </button>
                         <button
-                            className="p-0.5"
+                            className="p-1"
                             onClick={onDelete}
                         >
                             <Image
                                 src="/delete.svg"
-                                width={18}
-                                height={18}
+                                width={20}
+                                height={20}
                                 alt="Delete"
                             />
                         </button>
