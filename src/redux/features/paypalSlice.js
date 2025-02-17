@@ -27,6 +27,31 @@ export const savePaypalConfig = createAsyncThunk(
   }
 );
 
+export const fetchPaypalConfig = createAsyncThunk(
+  'paypal/fetchConfig',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/paypal`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return rejectWithValue(errorData.message || 'Failed to fetch configuration');
+      }
+
+      const data = await response.json();
+      console.log('API Response:', data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Network error occurred');
+    }
+  }
+);
+
 const paypalSlice = createSlice({
   name: 'paypal',
   initialState: {
@@ -41,12 +66,25 @@ const paypalSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchPaypalConfig.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchPaypalConfig.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.config = action.payload;
+      })
+      .addCase(fetchPaypalConfig.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
       .addCase(savePaypalConfig.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(savePaypalConfig.fulfilled, (state) => {
+      .addCase(savePaypalConfig.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.config = action.payload;
       })
       .addCase(savePaypalConfig.rejected, (state, action) => {
         state.isLoading = false;
