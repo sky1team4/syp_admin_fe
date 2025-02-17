@@ -1,6 +1,8 @@
 "use client"
 
 import { ArrowDown, ArrowUp, MoreHorizontal } from "lucide-react"
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -148,13 +150,24 @@ export const columns = [
                             <Button
                                 variant="ghost"
                                 className="h-8 w-8 p-0"
-                                onClick={() => setIsOpen(true)}
+                                onClick={() => {
+                                    if (user.subscription_status === "pending") {
+                                        setIsOpen(true);
+                                    }
+                                }}
                             >
-                                <MoreHorizontal className="h-4 w-4" />
+                                {user.subscription_status === "verified" ? (
+                                    <Image src="/verifiedcrosss.svg" alt="close" width={20} height={20} onClick={() => toast.success("User banned")} />
+                                ) : (
+                                    <Image src="/unverified.svg" alt="close" width={20} height={20} />
+                                )}
+                                
                             </Button>
                         </DropdownMenuTrigger>
                     </DropdownMenu>
                     <VerificationRequest isOpen={isOpen} setIsOpen={setIsOpen} />
+                    {/* // cross button for veried user */}
+                    
                 </>
             );
         },

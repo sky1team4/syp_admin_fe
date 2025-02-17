@@ -102,13 +102,13 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
       <div className="bg-white rounded-lg h-screen shadow-lg w-full max-w-xl p-6 relative transform transition-transform duration-500">
         {/* Close Button */}
         <button
-          className="absolute top-4 right-4 bg-gray-500 px-1 rounded-full text-white hover:text-gray-600"
+          className="absolute top-4 right-4 bg-gray-500 rounded-full"
           onClick={() => {
             setIsOpen(false);
             setDocuments(initialDocuments);
           }}
         >
-          ✕
+          <Image src="/FAQ/cross.png" alt="close" width={20} height={20} />
         </button>
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
           Verification Request

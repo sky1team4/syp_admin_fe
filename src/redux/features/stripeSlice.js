@@ -97,4 +97,4 @@ const stripeSlice = createSlice({
 });
 
 export const { clearError } = stripeSlice.actions;
-export default stripeSlice.reducer; 
+export default stripeSlice.reducer;

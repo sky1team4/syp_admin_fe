@@ -44,7 +44,7 @@ const Notifications = ({ isVisible }) => {
   return (
     <div>
       <div
-        className={`notification-panel ${isVisible ? "slide-in" : "slide-out"} relative h-[38rem] p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto custom-scrollbar`}
+        className={`notification-panel ${isVisible ? "slide-in" : "slide-out"} relative z-90 h-[38rem] p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto custom-scrollbar`}
       >
         {/* Header */}
         <div className="flex justify-between items-center flex-wrap mb-4">
@@ -60,7 +60,7 @@ const Notifications = ({ isVisible }) => {
         </div>
 
         {/* Tabs */}
-        <div className="flex space-x-2 mb-4 overflow-x-auto z-50">
+        <div className="flex space-x-2 mb-4 overflow-x-auto z-90">
           {["All", "Unread", "Archived"].map((tab) => (
             <button
               key={tab}

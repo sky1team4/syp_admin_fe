@@ -26,14 +26,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, MoreVertical } from "lucide-react";
-import VerificationRequest from "@/app/admin/dashboard/verificationrequest";
+// import VerificationRequest from "@/app/admin/dashboard/verificationrequest";
 
 export function DataTable({ columns, data }) {
   // console.log(data);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [activeTab, setActiveTab] = useState("Users");
-  const [openVerificationRow, setOpenVerificationRow] = useState(null); // Track the open row for the verification popup
+  // const [openVerificationRow, setOpenVerificationRow] = useState(null); // Track the open row for the verification popup
 
   // Add console.log to debug columns
   console.log("Original columns:", columns);
@@ -174,11 +174,22 @@ export function DataTable({ columns, data }) {
                           >
                             {cell.getValue() ? cell.getValue().toString() : "N/A"}
                           </span>
-                        ) :(
+                        ) : 
+                        cell.column.id === "action" && row.original.subscription_status === "pending" ? (
+                          <Image
+                            src="/unverified.svg"
+                            alt="Unverified"
+                            width={20}
+                            height={20}
+                            className="rounded-lg"
+                          />
+                        ) : (
                           flexRender(cell.column.columnDef.cell, cell.getContext())
+                        
                         )}
                       </TableCell>
                     ))}
+                  {/* Action Column */}
                 </TableRow>
               ))
             ) : (

@@ -86,7 +86,9 @@ const StripePaymentIntegration = () => {
         allowed_currency: Array.isArray(data.allowedCurrencies) 
           ? data.allowedCurrencies.join(',')
           : data.allowedCurrencies,
-        text_mode: data.testMode ? 'test' : 'live'
+        text_mode: data.testMode ? 'test' : 'live',
+        amount: data.amount || 5000,
+        currency: data.defaultCurrency || 'USD',
       };
 
       // If we have an existing config, include its ID
@@ -97,6 +99,7 @@ const StripePaymentIntegration = () => {
       await dispatch(saveStripeConfig(transformedData)).unwrap();
       toast.success('Stripe configuration saved successfully');
     } catch (err) {
+      console.error('Error saving Stripe configuration:', err);
       toast.error(err?.message || 'Failed to save Stripe configuration');
     }
   };
