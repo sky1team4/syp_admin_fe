@@ -27,7 +27,7 @@ export const saveStripeConfig = createAsyncThunk(
   }
 );
 
-const stripeSlice = createSlice({
+const stripeSlice = ({
   name: 'stripe',
   initialState: {
     isLoading: false,
