@@ -4,7 +4,9 @@ import { ArrowDown, ArrowUp, MoreHorizontal } from "lucide-react"
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "@/components/ui/button"
+import { BannedUsers } from "@/redux/features/authSlice";
 import { Checkbox } from "@/components/ui/checkbox"
+import { useDispatch, useSelector } from "react-redux";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -19,7 +21,7 @@ import Image from "next/image"
 
 export const columns = [
     {
-        accessorKey: "user_name",
+        accessorKey: "name",
         header: ({ column }) => {
             return (
                 <Button
@@ -46,7 +48,7 @@ export const columns = [
                 />
                 <div>
                     <div className="font-medium">{row.original.name}</div>
-                    {/* <div className="text-sm text-gray-500">{row.original.email}</div> */}
+                    <div className="text-sm text-gray-500">{row.original.email}</div>
                 </div>
             </div>
         ),
@@ -142,6 +144,7 @@ export const columns = [
         cell: ({ row }) => {
             const user = row.original;
             const [isOpen, setIsOpen] = useState(false);
+            const dispatch = useDispatch();
 
             return (
                 <>
@@ -150,11 +153,7 @@ export const columns = [
                             <Button
                                 variant="ghost"
                                 className="h-8 w-8 p-0"
-                                onClick={() => {
-                                    if (user.status === "active") {
-                                        setIsOpen(false);
-                                    }
-                                }}
+                                
                             >
                                 {user.status === "active" ? (
                                     <Image 
@@ -162,21 +161,29 @@ export const columns = [
                                         alt="close" 
                                         width={20} 
                                         height={20} 
-                                        onClick={() => {
-                                            toast.success("User banned");
-                                            const updatedUser = { ...user, status: "inactive" };
-                                        }} 
+                                        onClick={async () => {
+                                            if (user.status === "active") {
+                                                try {
+                                                    const result = await dispatch(BannedUsers({ id: user.id }));
+                                                    if (BannedUsers.fulfilled.match(result)) {
+                                                        toast.success("User status changed to inactive");
+                                                    } else {
+                                                        toast.error("Failed to change user status");
+                                                    }
+                                                } catch (error) {
+                                                    console.error("Error updating user status:", error);
+                                                    toast.error("Failed to change user status");
+                                                }
+                                            }
+                                        }}
                                     />
                                 ) : (
                                     <Image src="/unverified.svg" alt="close" width={20} height={20} />
                                 )}
-                                
                             </Button>
                         </DropdownMenuTrigger>
                     </DropdownMenu>
                     <VerificationRequest isOpen={isOpen} setIsOpen={setIsOpen} />
-                    {/* // cross button for veried user */}
-                    
                 </>
             );
         },

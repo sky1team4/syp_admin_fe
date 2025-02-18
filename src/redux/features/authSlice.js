@@ -100,12 +100,37 @@ export const fetchAllUsers = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log("data auth users", data);
+      // console.log("data auth users", data);
       return data;
     } catch (error) {
       console.error('Fetch users error:', error);
       throw error;
     }
+  }
+);
+
+export const BannedUsers = createAsyncThunk(
+  'users/getBanned',
+  async ({ id, updateUserStatusDto }) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/update-status/${id}`, 
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include token for authorization
+        },
+        body: JSON.stringify(updateUserStatusDto), // Include the DTO in the request body
+      }
+    );
+
+    // Ensure the response is checked and parsed correctly
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to update user status');
+    }
+
+    const data = await response.json(); // Parse the response as JSON
+    return data; // Return the parsed data
   }
 );
 
@@ -182,6 +207,21 @@ const authSlice = createSlice({
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Logout failed';
+      })
+      .addCase(BannedUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(BannedUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        const userIndex = state.users.findIndex(user => user.id === action.payload.id);
+        console.log("userIndex found ==> ", userIndex);
+        if (userIndex !== -1) {
+          state.users[userIndex].status = 'inactive';
+        }
+      })
+      .addCase(BannedUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });
