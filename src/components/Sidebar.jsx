@@ -4,10 +4,15 @@ import Image from "next/image";
 import themes from "../app/theme.js";
 import { TabContext } from '../context/Tabcontext'; // Adjust the path as necessary
 import theme from "../app/theme.js";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../redux/features/authSlice";
+import { useRouter } from "next/navigation";
 
 // console.log(color.color);
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const { setCurrentTab } = useContext(TabContext);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [staticTab, setStaticTab] = useState("dashboard"); // Default selected tab
@@ -25,10 +30,29 @@ const Sidebar = () => {
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const handleTabClick = (tab) => {
+  const handleTabClick = async (tab) => {
+
     setStaticTab(tab);
     // setCurrentTab(tab); // Update the context with the selected tab
     if (tab === "signout") {
+      try {
+        const response = await dispatch(logoutUser()).unwrap();
+        console.log("Logout response:", response);
+  
+        if (response) {
+          console.log(response);
+          router.push("/admin-Login");
+        } else {
+          setError("Logout failed - please try again");
+        }
+      } catch (err) {
+        console.error("Logout error:", err);
+        if (err.message.includes("SSL_PROTOCOL_ERROR")) {
+          toast.error("Connection error - please check the server is running and using the correct protocol");
+        } else {
+          toast.error(err?.message || "An error occurred during logout");
+        }
+      }
       localStorage.removeItem("token"); // Remove the token
       localStorage.setItem("selectedTab", "dashboard"); // Clear selected tab
       setCurrentTab("dashboard");

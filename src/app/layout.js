@@ -7,7 +7,7 @@ import { metadata } from './layout-metadata';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Toaster } from 'react-hot-toast';
-
+import Cookies from 'js-cookie';
 const executeCommand = async () => {
   const response = await fetch("/api/execute-command");
   const data = await response.json();
@@ -38,6 +38,8 @@ export default function RootLayout({ children }) {
       
       if (isExpired) {
         localStorage.removeItem('token');
+         // Remove authToken cookie
+        Cookies.remove("authToken", { path: "/" });
         router.push('/admin-Login');
       }
     } catch (error) {
