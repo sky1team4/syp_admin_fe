@@ -74,17 +74,14 @@ export function DataTable({ columns, data }) {
   });
 
   return (
-     
-      // console.log(data),
-    
-    <div className="w-full">
+    <div className="w-full main-content">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800">
           Users Information
         </h2>
-        <button className="bg-gray-100 rounded-full">
+        {/* <button className="bg-gray-100 rounded-full">
           <Image alt="more" src="/More.svg" width={45} height={45} />
-        </button>
+        </button> */}
       </div>
       {/* Tabs */}
       <div className="flex items-center justify-start mb-4 w-fit border border-purple-600 rounded-lg overflow-hidden">
@@ -140,7 +137,7 @@ export function DataTable({ columns, data }) {
                         {cell.column.id === "user_name" ? (
                           <div className="flex items-center space-x-3">
                             <Image
-                              src={row.original.profile_picture || "/dash.png"}
+                              src={cell.getValue()?.image || "/dash.png"}
                               alt="Profile"
                               width={32}
                               height={32}
@@ -148,16 +145,16 @@ export function DataTable({ columns, data }) {
                             />
                             <div>
                               <p className="text-sm font-medium">
-                                {row.original.name || row.original.username || "Unknown"}
+                                {cell.getValue() || "Unknown"}
                               </p>
                               <p className="text-xs text-gray-500">
-                                {row.original.email || "No Email"}
+                                {/* {cell.getValue()?.email || "No Email"} */}
                               </p>
                             </div>
                           </div>
                         ) : cell.column.id === "phone_number" ? (
                           <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-500">
-                            {row.original.phone_number || "N/A"}
+                            {cell.getValue() || "N/A"}
                           </span>
                         ) : cell.column.id === "subscription_status" ? (
                           <span

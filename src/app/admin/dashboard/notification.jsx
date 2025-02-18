@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import "./scrollBar.css";
+import { createPortal } from "react-dom";
 
 const Notifications = ({ isVisible }) => {
   const initialNotifications = Array(10).fill({
@@ -41,14 +42,22 @@ const Notifications = ({ isVisible }) => {
     setNotifications(updatedNotifications);
   };
 
-  return (
-    <div>
+  return createPortal(
+    <div 
+      className="fixed top-16 right-4" 
+      style={{ 
+        zIndex: 99999,
+        position: 'fixed',
+        isolation: 'isolate'
+      }}
+    >
       <div
-        className={`notification-panel ${isVisible ? "slide-in" : "slide-out"} relative z-90 h-[38rem] p-2 sm:p-6 bg-white shadow-md rounded-lg 2xl:w-[20rem] overflow-x-auto custom-scrollbar`}
+        className={`notification-panel ${
+          isVisible ? "slide-in" : "slide-out"
+        } bg-white shadow-2xl rounded-lg 2xl:w-[20rem] h-[38rem] p-2 sm:p-6 flex flex-col`}
       >
         {/* Header */}
         <div className="flex justify-between items-center flex-wrap mb-4">
-
           <h2 className="text-lg font-semibold text-gray-800">Notifications</h2>
           <button
             className="gap-2 text-sm text-purple-600 hover:underline flex items-center"
@@ -60,7 +69,7 @@ const Notifications = ({ isVisible }) => {
         </div>
 
         {/* Tabs */}
-        <div className="flex space-x-2 mb-4 overflow-x-auto z-90">
+        <div className="flex space-x-2 mb-4 z-90">
           {["All", "Unread", "Archived"].map((tab) => (
             <button
               key={tab}
@@ -75,42 +84,45 @@ const Notifications = ({ isVisible }) => {
           ))}
         </div>
 
-        {/* Notifications List */}
-        <ul className="space-y-4 ">
-          {filteredNotifications.length > 0 ? (
-            filteredNotifications.map((notification, index) => (
-              <li
-                key={index}
-                className={` flex items-start sm:items-center space-x-4 p-2 border-b last:border-none ${!notification.isRead ? "" : ""
-                  }`}
-              >
-                <img
-                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
-                  src={notification.avatar}
-                  alt={notification.name}
-                />
-
-                <div className="2xl:flex-1 flex flex-col w-full">  
-                  <p className="text-sm font-medium text-gray-800">
-                    {notification.name}{" "}
-                    <span className="font-normal">{notification.message}</span>
-                  </p>
-                  <p className="text-xs text-gray-500">{notification.time}</p>
-                </div>
-                {/* <button
-                  className="text-xs text-blue-500 hover:underline"
-                  onClick={() => toggleArchive(index)}
+        {/* Notifications List - Now with scroll */}
+        <div className="overflow-y-auto custom-scrollbar flex-1">
+          <ul className="space-y-4">
+            {filteredNotifications.length > 0 ? (
+              filteredNotifications.map((notification, index) => (
+                <li
+                  key={index}
+                  className={` flex items-start sm:items-center space-x-4 p-2 border-b last:border-none ${!notification.isRead ? "" : ""
+                    }`}
                 >
-                  {notification.isArchived ? "Unarchive" : "Archive"}
-                </button> */}
-              </li>
-            ))
-          ) : (
-            <li className="text-center text-gray-500">No notifications to display.</li>
-          )}
-        </ul>
+                  <img
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
+                    src={notification.avatar}
+                    alt={notification.name}
+                  />
+
+                  <div className="2xl:flex-1 flex flex-col w-full">  
+                    <p className="text-sm font-medium text-gray-800">
+                      {notification.name}{" "}
+                      <span className="font-normal">{notification.message}</span>
+                    </p>
+                    <p className="text-xs text-gray-500">{notification.time}</p>
+                  </div>
+                  {/* <button
+                    className="text-xs text-blue-500 hover:underline"
+                    onClick={() => toggleArchive(index)}
+                  >
+                    {notification.isArchived ? "Unarchive" : "Archive"}
+                  </button> */}
+                </li>
+              ))
+            ) : (
+              <li className="text-center text-gray-500">No notifications to display.</li>
+            )}
+          </ul>
+        </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

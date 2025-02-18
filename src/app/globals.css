@@ -77,3 +77,15 @@
     --radius: 0.5rem
   }
 }
+
+/* Add this to your global CSS */
+.portal-layer {
+  position: relative;
+  z-index: 99999;
+  isolation: isolate;
+}
+
+.main-content {
+  position: relative;
+  z-index: 1;
+}

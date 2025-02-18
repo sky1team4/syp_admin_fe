@@ -15,9 +15,9 @@
   .notification-panel {
     position: fixed;
     top: 80px;
-    /* right: -50px; */
+    right: -140px;
     width: 20rem;
-    height: 38rem;
+    height: 100vh;
     transition: transform 0.1s ease-in-out;  /* Changed duration from 0.3s to 0.1s */
   }
   
@@ -33,5 +33,5 @@
   }
   
   .slide-out {
-    transform: translateX(200px);  /* Use transform instead of right */
+    transform: translateX(500px);  /* Use transform instead of right */
   }
