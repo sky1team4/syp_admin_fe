@@ -166,10 +166,9 @@ export function DataTable({ columns, data }) {
                           </span>
                         ) : cell.column.id === "subscription_id" ? (
                           <span
-                            className={"px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-500"
-                            }
+                            className={`px-2 py-1 text-xs rounded-full ${cell.getValue() > 0 ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-500"}`}
                           >
-                            {cell.getValue() ? cell.getValue().toString() : "Free Subscription"}
+                            {cell.getValue() > 0 ? "Subscribed" : "Free Subscription"}
                           </span>
                         ) : (
                           flexRender(cell.column.columnDef.cell, cell.getContext())

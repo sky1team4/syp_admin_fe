@@ -11,6 +11,7 @@ export const register = createAsyncThunk( 'users/register',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(credentials),
+        
       });
       if (!response.ok) {
         const errorData = await response.json();
@@ -31,6 +32,7 @@ export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials) => {
     try {
+      console.log("credentials", process.env.NEXT_PUBLIC_API_URL);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
         // const response = await fetch(`${API_URL}/users/login`, {
         method: 'POST',
@@ -92,14 +94,14 @@ export const fetchAllUsers = createAsyncThunk(
           'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include token for authorization
         },
       });
-      console.log(response.data);
       
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Fetch users failed');
       }
-
+      
       const data = await response.json();
+      console.log("response.data", data);
       // console.log("data auth users", data);
       return data;
     } catch (error) {
@@ -112,6 +114,8 @@ export const fetchAllUsers = createAsyncThunk(
 export const BannedUsers = createAsyncThunk(
   'users/getBanned',
   async ({ id, updateUserStatusDto }) => {
+    console.log("id", id);
+    console.log("updateUserStatusDto", updateUserStatusDto);
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/update-status/${id}`, 
       {
         method: 'POST',

@@ -40,7 +40,17 @@ const FORM_VALIDATION = {
 };
 
 const StripePaymentIntegration = () => {
-  const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm();
+  const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm({
+    defaultValues: {
+      publishableKey: '',
+      secretKey: '',
+      webhookSigningSecret: '',
+      webhookUrl: '',
+      defaultCurrency: '',
+      allowedCurrencies: [],
+      testMode: false,
+    }
+  });
   const dispatch = useDispatch();
   const { isLoading, config } = useSelector((state) => state.stripe);
 
@@ -52,7 +62,6 @@ const StripePaymentIntegration = () => {
   useEffect(() => {
     console.log('Config received:', config);
     if (config && Array.isArray(config) && config.length > 0) {
-      // Get the first (and only) config object
       const configData = config[0];
       
       setValue('publishableKey', configData.publish_key || '');
@@ -62,18 +71,8 @@ const StripePaymentIntegration = () => {
       setValue('defaultCurrency', configData.default_currency || '');
       setValue('allowedCurrencies', configData.allowed_currency?.split(',') || []);
       setValue('testMode', configData.text_mode === 'test');
-
-      console.log('Form values set:', {
-        publishableKey: watch('publishableKey'),
-        secretKey: watch('secretKey'),
-        webhookSigningSecret: watch('webhookSigningSecret'),
-        webhookUrl: watch('webhookUrl'),
-        defaultCurrency: watch('defaultCurrency'),
-        allowedCurrencies: watch('allowedCurrencies'),
-        testMode: watch('testMode')
-      });
     }
-  }, [config, setValue, watch]);
+  }, [config, setValue]);
 
   const onSubmit = async (data) => {
     try {
@@ -125,12 +124,10 @@ const StripePaymentIntegration = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input id="publishableKey" {...register('publishableKey', FORM_VALIDATION.publishableKey)}
             label="Publishable Key *" placeholder="Enter your Publishable Key"
-            error={errors.publishableKey?.message}
-            value={watch('publishableKey')} />
+            error={errors.publishableKey?.message} />
           <Input id="secretKey" {...register('secretKey', FORM_VALIDATION.secretKey)}
             label="Secret Key *" placeholder="Enter your Secret Key"
-            error={errors.secretKey?.message}
-            value={watch('secretKey')} />
+            error={errors.secretKey?.message} />
         </div>
 
         {/* Webhook Section */}

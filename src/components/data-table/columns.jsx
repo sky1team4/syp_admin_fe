@@ -164,7 +164,8 @@ export const columns = [
                                         onClick={async () => {
                                             if (user.status === "active") {
                                                 try {
-                                                    const result = await dispatch(BannedUsers({ id: user.id }));
+                                                    console.log("user.id", user);
+                                                    const result = await dispatch(BannedUsers({ id: user.id, updateUserStatusDto: { status: "inactive" } }));
                                                     if (BannedUsers.fulfilled.match(result)) {
                                                         toast.success("User status changed to inactive");
                                                     } else {
@@ -178,7 +179,23 @@ export const columns = [
                                         }}
                                     />
                                 ) : (
-                                    <Image src="/unverified.svg" alt="close" width={20} height={20} />
+                                    <Image src="/unverified.svg" alt="close" width={20} height={20}
+                                        onClick={async () => {
+                                            if (user.status === "inactive") {       
+                                                try {
+                                                    const result = await dispatch(BannedUsers({ id: user.id, updateUserStatusDto: { status: "active" } }));
+                                                    if (BannedUsers.fulfilled.match(result)) {
+                                                        toast.success("User status changed to active");
+                                                    } else {
+                                                        toast.error("Failed to change user status");
+                                                    }
+                                                } catch (error) {
+                                                    console.error("Error updating user status:", error);
+                                                    toast.error("Failed to change user status");
+                                                }
+                                            }
+                                        }}
+                                    />
                                 )}
                             </Button>
                         </DropdownMenuTrigger>
