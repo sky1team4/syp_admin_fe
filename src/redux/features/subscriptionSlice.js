@@ -17,6 +17,7 @@ export const fetchSubscriptions = createAsyncThunk(
           'Authorization': `Bearer ${token}`,
         },
       });
+      console.log(response.data);
 
       if (!response.ok) {
         const errorData = await response.json();
