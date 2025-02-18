@@ -140,7 +140,7 @@ export function DataTable({ columns, data }) {
                         {cell.column.id === "user_name" ? (
                           <div className="flex items-center space-x-3">
                             <Image
-                              src={cell.getValue()?.image || "/dash.png"}
+                              src={row.original.profile_picture || "/dash.png"}
                               alt="Profile"
                               width={32}
                               height={32}
@@ -148,16 +148,16 @@ export function DataTable({ columns, data }) {
                             />
                             <div>
                               <p className="text-sm font-medium">
-                                {cell.getValue() || "Unknown"}
+                                {row.original.name || row.original.username || "Unknown"}
                               </p>
                               <p className="text-xs text-gray-500">
-                                {/* {cell.getValue()?.email || "No Email"} */}
+                                {row.original.email || "No Email"}
                               </p>
                             </div>
                           </div>
                         ) : cell.column.id === "phone_number" ? (
                           <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-500">
-                            {cell.getValue() || "N/A"}
+                            {row.original.phone_number || "N/A"}
                           </span>
                         ) : cell.column.id === "subscription_status" ? (
                           <span
