@@ -7,31 +7,21 @@ import Image from "next/image";
 import theme from "../app/theme";
 
 const TodaysSummary = ({ btnText, title, click, isOpen }) => {
-  const dispatch = useDispatch();  // Initialize dispatch
-  const data = useSelector(fetchAllUsers); // Get data from the new UserSlice
-  const loading = useSelector(state => state.users.loading); // Add loading state
-  const error = useSelector(state => state.users.error); // Add error state
-  
-  // console.log(data);
 
+  const dispatch = useDispatch(); // Initialize dispatch
+  const { users = [] } = useSelector((state) => state.auth); // Access users from the state
+  console.log(users);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await dispatch(fetchAllUsers()); // Dispatch the action to fetch user data
-      } catch (err) {
-        console.error("Failed to fetch users:", err); // Log any errors
-      }
-    };
-    fetchData();
+    dispatch(fetchAllUsers());
   }, [dispatch]);
 
   // Calculate totals from incoming data
-  const subscribedUsers = data.length;
-  const freeUsers = data.length; // this is the total users for free subscription
-  const totalUsers = data.length;
-  const unsubscribedUsers = data.length;
-  const annualSubscription=data.length;
+  const subscribedUsers = users.length;
+  const freeUsers = users.filter(user => user.subscription_id === null).length; // this is the total users for free subscription
+  const totalUsers = users.length;
+  const unsubscribedUsers = users.filter(user => user.subscription_id !== null).length;
+  const annualSubscription=users.filter(user => user.subscription_id === 1).length;
 // console.log(freeUsers);
 
   const info = [
@@ -40,10 +30,6 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
     { id: 3, label: "Monthly Subscription", value: unsubscribedUsers.toString(), bgColor: "bg-yellow-100", icon: '/unsubscribe.svg' },
     { id: 4, label: "Annual Subscription", value: "5,455", bgColor: "bg-green-100", icon: '/activedomain.svg' },
   ];
-
-  // Add loading and error handling in the return statement
-  if (loading) return <div>Loading...</div>; // Show loading state
-  if (error) return <div>Error fetching data: {error}</div>; // Show error message
 
   return (
     <div className="w-full bg-white shadow-md p-4 md:p-5 rounded-xl">
