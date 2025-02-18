@@ -18,7 +18,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
 
   const totalUsers = users.length; // Get total users
   console.log(totalUsers);
-  const subscribedUsers = users.length; // Assuming all users are subscribed for now
+  const subscribedUsers = users.filter(user => user.subscription_id !== null).length; // Assuming all users are subscribed for now
   console.log(subscribedUsers);
   const unsubscribedUsers = 0;
 

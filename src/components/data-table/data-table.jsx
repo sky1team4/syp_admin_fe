@@ -51,11 +51,11 @@ export function DataTable({ columns, data }) {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-    if (tab === "Users") {
-      setColumnFilters([{ id: "subscription_status", value: "verified" }]);
-    } else {
-      setColumnFilters([{ id: "subscription_status", value: "pending" }]);
-    }
+    // if (tab === "Users") {
+    //   setColumnFilters([{ id: "subscription_status", value: "verified" }]);
+    // } else {
+    //   setColumnFilters([{ id: "subscription_status", value: "pending" }]);
+    // }
   };
 
   const table = useReactTable({
@@ -155,34 +155,25 @@ export function DataTable({ columns, data }) {
                               </p>
                             </div>
                           </div>
-                        ) : cell.column.id === "phone_number" ? (
+                        ) : cell.column.id === "phoneNumber" ? (
                           <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-500">
-                            {row.original.phone_number || "N/A"}
+                            {row.original.phoneNumber || "N/A"}
                           </span>
-                        ) : cell.column.id === "subscription_status" ? (
+                        ) : cell.column.id === "status" ? (
                           <span
                             className={`text-sm font-medium  ${
-                              cell.getValue() === "verified" ? "bg-green-100 text-green-600 rounded-full px-2 py-1" : "bg-yellow-100 text-yellow-600 rounded-full px-2 py-1"
+                              cell.getValue() === "active" ? "bg-green-100 text-green-600 rounded-full px-2 py-1" : "bg-yellow-100 text-yellow-600 rounded-full px-2 py-1"
                             }`}
                           >
                             {cell.getValue() ? cell.getValue().toString() : "N/A"}
                           </span>
-                        ) : cell.column.id === "subscription_type" ? (
+                        ) : cell.column.id === "subscription_id" ? (
                           <span
-                            className={"px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-500"
+                            className={"px-2 py-1 text-xs rounded-full bg-red-100 text-red-500"
                             }
                           >
-                            {cell.getValue() ? cell.getValue().toString() : "N/A"}
+                            {cell.getValue() ? cell.getValue().toString() : "Free Subscription"}
                           </span>
-                        ) : 
-                        cell.column.id === "action" && row.original.subscription_status === "pending" ? (
-                          <Image
-                            src="/unverified.svg"
-                            alt="Unverified"
-                            width={20}
-                            height={20}
-                            className="rounded-lg"
-                          />
                         ) : (
                           flexRender(cell.column.columnDef.cell, cell.getContext())
                         

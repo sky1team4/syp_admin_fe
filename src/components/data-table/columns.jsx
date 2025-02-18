@@ -45,14 +45,14 @@ export const columns = [
                     className="rounded-lg"
                 />
                 <div>
-                    <div className="font-medium">{row.original.user_name}</div>
+                    <div className="font-medium">{row.original.name}</div>
                     {/* <div className="text-sm text-gray-500">{row.original.email}</div> */}
                 </div>
             </div>
         ),
     },
     {
-        accessorKey: "phone_number",
+        accessorKey: "phoneNumber",
         header: ({ column }) => {
             return (
                 <Button
@@ -73,7 +73,7 @@ export const columns = [
         ),
     },
     {
-        accessorKey: "subscription_status",
+        accessorKey: "status",
         header: ({ column }) => {
             return (
                 <Button
@@ -90,7 +90,7 @@ export const columns = [
             )
         },
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("subscription_status")}</div>
+            <div className="capitalize">{row.getValue("status")}</div>
         ),
     },
     // {
@@ -116,7 +116,7 @@ export const columns = [
     //     ),
     // },
     {
-        accessorKey: "subscription_type",
+        accessorKey: "subscription_id",
         header: ({ column }) => {
             return (
                 <Button
@@ -133,7 +133,7 @@ export const columns = [
             )
         },
         cell: ({ row }) => (
-            <div className="text-sm font-medium">{row.original.subscription}</div>
+            <div className="text-sm font-medium">{row.original.subscription_id}</div>
         ),
     },
     {
@@ -151,13 +151,22 @@ export const columns = [
                                 variant="ghost"
                                 className="h-8 w-8 p-0"
                                 onClick={() => {
-                                    if (user.subscription_status === "pending") {
-                                        setIsOpen(true);
+                                    if (user.status === "active") {
+                                        setIsOpen(false);
                                     }
                                 }}
                             >
-                                {user.subscription_status === "verified" ? (
-                                    <Image src="/verifiedcrosss.svg" alt="close" width={20} height={20} onClick={() => toast.success("User banned")} />
+                                {user.status === "active" ? (
+                                    <Image 
+                                        src="/verifiedcrosss.svg" 
+                                        alt="close" 
+                                        width={20} 
+                                        height={20} 
+                                        onClick={() => {
+                                            toast.success("User banned");
+                                            const updatedUser = { ...user, status: "inactive" };
+                                        }} 
+                                    />
                                 ) : (
                                     <Image src="/unverified.svg" alt="close" width={20} height={20} />
                                 )}
