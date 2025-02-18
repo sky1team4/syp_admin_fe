@@ -1,5 +1,5 @@
 // Notifications.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import "./scrollBar.css";
 import { createPortal } from "react-dom";
@@ -41,7 +41,18 @@ const Notifications = ({ isVisible }) => {
     updatedNotifications[index].isArchived = !updatedNotifications[index].isArchived;
     setNotifications(updatedNotifications);
   };
+  if (typeof window === 'undefined') {
+    return null; // Return null during SSR
+  }
+  const [isClient, setIsClient] = useState(false);
 
+  useEffect(() => {
+    setIsClient(true); // Set to true when the component is mounted on the client
+  }, []);
+
+  if (!isClient) {
+    return null; // Return null during SSR
+  }
   return createPortal(
     <div 
       className="fixed top-16 right-4" 
@@ -122,7 +133,7 @@ const Notifications = ({ isVisible }) => {
         </div>
       </div>
     </div>,
-    // document.body
+    document.body
   );
 };
 
