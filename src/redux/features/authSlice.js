@@ -62,6 +62,10 @@ export const logoutUser = createAsyncThunk(
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, {
         method: 'POST',
         credentials: 'include', // Important: ensures cookies are sent
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include token for authorization  
+        },
       });
 
       if (!response.ok) {
