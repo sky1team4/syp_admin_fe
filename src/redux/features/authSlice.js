@@ -92,7 +92,7 @@ export const fetchAllUsers = createAsyncThunk(
           'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include token for authorization
         },
       });
-      console.log(response.status);
+      console.log(response.data);
       
       if (!response.ok) {
         const errorData = await response.json();

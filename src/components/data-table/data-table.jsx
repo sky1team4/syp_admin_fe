@@ -29,7 +29,7 @@ import { ChevronDown, MoreVertical } from "lucide-react";
 // import VerificationRequest from "@/app/admin/dashboard/verificationrequest";
 
 export function DataTable({ columns, data }) {
-  // console.log(data);
+  console.log("data table", data);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [activeTab, setActiveTab] = useState("Users");
@@ -166,7 +166,7 @@ export function DataTable({ columns, data }) {
                           </span>
                         ) : cell.column.id === "subscription_id" ? (
                           <span
-                            className={"px-2 py-1 text-xs rounded-full bg-red-100 text-red-500"
+                            className={"px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-500"
                             }
                           >
                             {cell.getValue() ? cell.getValue().toString() : "Free Subscription"}

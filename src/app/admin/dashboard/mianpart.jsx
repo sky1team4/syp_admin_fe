@@ -1,20 +1,20 @@
 "use client"
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSubscriptionVerification } from "@/redux/features/subscription_verificationSlice"; // Import your action
-// import { fetchAllUsers } from "@/redux/features/authSlice";
+// import { fetchSubscriptionVerification } from "@/redux/features/subscription_verificationSlice"; // Import your action
+import { fetchAllUsers } from "@/redux/features/authSlice";
 import { columns } from "@/components/data-table/columns"
 import { DataTable } from "@/components/data-table/data-table"
 
 export default function DashboardPage() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.subscription_verification.data); 
-  // const data = useSelector((state) => state.auth.users);
-  // console.log(data);
+  // const data = useSelector((state) => state.subscription_verification.data); 
+  const data = useSelector((state) => state.auth.users);
+  console.log("data mainpart", data);
 
   useEffect(() => {
-    dispatch(fetchSubscriptionVerification()); 
-    // dispatch(fetchAllUsers());
+    // dispatch(fetchSubscriptionVerification()); 
+    dispatch(fetchAllUsers());
   }, [dispatch]);
 
   const handleVerification = async (user) => {

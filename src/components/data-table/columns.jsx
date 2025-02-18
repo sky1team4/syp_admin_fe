@@ -69,7 +69,7 @@ export const columns = [
             )
         },
         cell: ({ row }) => (
-            <div className="text-sm font-medium">{row.original.phone_number}</div>
+            <div className="text-sm font-medium">{row.original.phoneNumber}</div>
         ),
     },
     {
