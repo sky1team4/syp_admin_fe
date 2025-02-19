@@ -166,6 +166,35 @@ export const deleteSubscription = createAsyncThunk(
   }
 );
 
+export const fetchMonthlyCount = createAsyncThunk(
+  'subscriptions/fetchMonthlyCount',
+  async (subscriptionId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions/count-monthly/${subscriptionId}`,{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      console.log("response",response.status);
+      console.log("response",response.data);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch monthly count');
+      }
+      const data = await response.json();
+      return data; // Assuming the API returns the count directly
+    } catch (error) {
+      return rejectWithValue(error.message || 'Network error occurred');
+    }
+  }
+);
+
 const subscriptionSlice = createSlice({
   name: 'subscription',
   initialState: {
@@ -242,8 +271,18 @@ const subscriptionSlice = createSlice({
       .addCase(deleteSubscription.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      });
-
+      })
+      .addCase(fetchMonthlyCount.pending, (state) => {
+        state.isLoading = true;
+    })
+    .addCase(fetchMonthlyCount.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.monthlyCount = action.payload; // Set the count
+    })
+    .addCase(fetchMonthlyCount.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message; // Handle error
+    })
   },
 });
 

@@ -15,7 +15,7 @@ const DashboardPage = () => {
       {/* <Sidebar /> */}
       <div className='flex flex-col flex-1 gap-3 w-full'>
         {/* <Header /> */}
-        <Dashbaord_stats title="Today's Summary" />
+        <Dashbaord_stats title="Dashbaord's Summary" />
         <UserTable />
       </div>
       {/* <Notification /> */}

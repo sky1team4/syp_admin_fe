@@ -6,6 +6,7 @@ import { columns } from "@/components/data-table/columns"
 import { DataTable } from "@/components/data-table/data-table"
 
 export default function DashboardPage() {
+  console.log("DashboardPage");
   const dispatch = useDispatch(); 
   const data = useSelector((state) => state.auth.users);
   console.log("data mainpart", data);

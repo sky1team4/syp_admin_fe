@@ -94,14 +94,14 @@ export const fetchAllUsers = createAsyncThunk(
           'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include token for authorization
         },
       });
-      
+      // console.log("response status fetchallusers", response.status);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Fetch users failed');
       }
       
       const data = await response.json();
-      console.log("response.data", data);
+      // console.log("response.data", data);
       // console.log("data auth users", data);
       return data;
     } catch (error) {

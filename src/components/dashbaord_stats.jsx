@@ -10,13 +10,13 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
 
   const dispatch = useDispatch(); // Initialize dispatch
   const { users = [] } = useSelector((state) => state.auth); // Access users from the state
-  console.log(users);
+  console.log(users.data);
 
   useEffect(() => {
     dispatch(fetchAllUsers());
   }, [dispatch]);
 
-  const totalUsers = users.length; // Get total users
+  const totalUsers = users.filter(user => user.role_id === 2).length; // Get total users
   console.log(totalUsers);
   const subscribedUsers = users.filter(user => user.subscription_id !== null).length; // Assuming all users are subscribed for now
   console.log(subscribedUsers);
@@ -26,7 +26,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
     { id: 1, label: "Total user", value: totalUsers.toString(), bgColor: "bg-purple-100", icon: '/totalusers.svg' },
     { id: 2, label: "Subscribed User", value: subscribedUsers.toString(), bgColor: "bg-red-100", icon: '/subscribeuser.svg' },
     { id: 3, label: "Unsubscribed User", value: unsubscribedUsers.toString(), bgColor: "bg-yellow-100", icon: '/unsubscribe.svg' },
-    { id: 4, label: "Active domains", value: "5,455", bgColor: "bg-green-100", icon: '/activedomain.svg' },
+    { id: 4, label: "Active domains", value: 0, bgColor: "bg-green-100", icon: '/activedomain.svg' },
   ];
 
   return (

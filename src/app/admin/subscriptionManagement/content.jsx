@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { saveSubscription, fetchSubscriptions, deleteSubscription, updateSubscription } from '../../../redux/features/subscriptionSlice'
 import { toast } from 'react-hot-toast'
 
-import UpperSide from '../../../components/subscription_stats'
+import Subscription_stats from '../../../components/subscription_stats'
 import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
 import DisplayTable from '../../../components/subdisplayTable.jsx'
 
@@ -112,11 +112,11 @@ function content() {
   return (
     <div className='flex flex-col w-full max-w-full overflow-x-hidden'>
       <div className='flex flex-col gap-3'>
-        <UpperSide
-          title="Subscription"
+        <Subscription_stats
+          title="Subscription Summary"
           click={toggleSidebar}
           isOpen={isOpen}
-          btnText="Add Subscription"
+          // btnText="Add Subscription"
         />
         <SubscriptionSideBar
           isOpen={isOpen}
@@ -126,6 +126,7 @@ function content() {
           onSubmit={handleSubmitSubscription}
         />
         <DisplayTable 
+          btnText="Add Subscription"
           title="Subscription" 
           array={tableData} 
           backBTN="no"
