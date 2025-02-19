@@ -62,6 +62,7 @@ export const saveSubscription = createAsyncThunk(
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions`, {
         method: 'POST',
         headers: {
+
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
@@ -106,6 +107,7 @@ export const updateSubscription = createAsyncThunk(
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions/${id}`, {
         method: 'PATCH',
         headers: {
+
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
