@@ -44,7 +44,7 @@ const Notifications = ({ isVisible }) => {
 
   return createPortal(
     <div 
-      className="fixed top-16 right-4" 
+      className="fixed top-16 right-4 notification-panel" 
       style={{ 
         zIndex: 99999,
         position: 'fixed',
