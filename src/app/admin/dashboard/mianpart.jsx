@@ -20,8 +20,8 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="relative" style={{ zIndex: 1 }}>
-      <div className="w-full py-10 bg-white rounded-xl p-5 shadow-md" style={{ position: 'relative', zIndex: 1 }}>
+    <div className="">
+      <div className="w-full py-10 bg-white rounded-xl p-5 shadow-md">
         <DataTable
           columns={columns}
           data={data}
