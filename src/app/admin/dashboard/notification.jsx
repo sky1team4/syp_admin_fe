@@ -1,5 +1,5 @@
-// Notifications.jsx
-import React, { useState } from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import "./scrollBar.css";
 import { createPortal } from "react-dom";
@@ -16,6 +16,12 @@ const Notifications = ({ isVisible }) => {
 
   const [notifications, setNotifications] = useState(initialNotifications);
   const [filter, setFilter] = useState("All");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
   const handleMarkAsRead = () => {
     const updatedNotifications = notifications.map((notification) => ({
@@ -42,7 +48,7 @@ const Notifications = ({ isVisible }) => {
     setNotifications(updatedNotifications);
   };
 
-  return createPortal(
+  const content = (
     <div 
       className="fixed top-16 right-4 notification-panel" 
       style={{ 
@@ -121,9 +127,16 @@ const Notifications = ({ isVisible }) => {
           </ul>
         </div>
       </div>
-    </div>,
-    document.body
+    </div>
   );
+
+  // Only create portal on client-side
+  if (!mounted) return null;
+  
+  // Check if window is defined (client-side)
+  if (typeof window === 'undefined') return null;
+
+  return createPortal(content, document.body);
 };
 
 export default Notifications;
