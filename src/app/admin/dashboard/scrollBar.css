@@ -19,11 +19,15 @@
     width: 20rem;
     height: 100vh;
     transition: transform 0.1s ease-in-out;  /* Changed duration from 0.3s to 0.1s */
+    pointer-events: none; /* Disable interactions when panel is hidden */
+    visibility: hidden; /* Hide the panel by default */
   }
   
 
   .slide-in {
     transform: translateX(-160px);  /* Use transform instead of right */
+    pointer-events: auto; /* Re-enable interactions when panel is visible */
+    visibility: visible; /* Show the panel when sliding in */
   }
 
   @media (min-width: 768px) { /* Adjust the breakpoint as needed */
@@ -33,5 +37,6 @@
   }
   
   .slide-out {
+    /* display: block; */
     transform: translateX(500px);  /* Use transform instead of right */
   }

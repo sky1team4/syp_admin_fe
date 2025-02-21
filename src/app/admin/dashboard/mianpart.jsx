@@ -33,6 +33,7 @@ export default function DashboardPage() {
   console.log("data mainpart", verificationRequestsData);
 
   return (
+<<<<<<< HEAD
     <div className="relative" style={{ zIndex: 1 }}>
       <div className="w-full py-10 bg-white rounded-xl p-5 shadow-md" style={{ position: 'relative', zIndex: 1 }}>
       <div className="flex items-center justify-between mb-4">
@@ -68,6 +69,10 @@ export default function DashboardPage() {
         </button>
       </div>
       {activeTab === "Users" && (
+=======
+    <div className="">
+      <div className="w-full py-10 bg-white rounded-xl p-5 shadow-md">
+>>>>>>> 8e42d07eec443cc87d52996c0442d6dca1053311
         <DataTable
           columns={columns}
           data={usersData}

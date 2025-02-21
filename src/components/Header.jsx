@@ -14,7 +14,13 @@ const DashboardTopBar = () => {
   };
 
   const handleClickOutside = (event) => {
-    if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+    // Check if the click is inside the notification panel
+    const notificationPanel = document.querySelector('.notification-panel');
+    if (
+      notificationRef.current && 
+      !notificationRef.current.contains(event.target) && 
+      (!notificationPanel || !notificationPanel.contains(event.target))
+    ) {
       setIsNotificationOpen(false);
     }
   };
