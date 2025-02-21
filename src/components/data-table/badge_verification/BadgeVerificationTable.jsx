@@ -19,51 +19,48 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
-// import { ChevronDown, MoreVertical } from "lucide-react";
-// import VerificationRequest from "@/app/admin/dashboard/verificationrequest";
-// import {BadgeVerificationTable} from "@/components/data-table/badge_verification/BadgeVerificationTable";
-// import BadgeVerificationColumns from "@/components/data-table/badge_verification/badgeVerificationColumns";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown, MoreVertical } from "lucide-react";
+import VerificationRequest from "@/app/admin/dashboard/verificationrequest";
 
 export function DataTable({ columns, data }) {
-  console.log("data table", data);
-  const [sorting, setSorting] = useState([]);
-  const [columnFilters, setColumnFilters] = useState([]);
+  // console.log("data table", data);
+  // const [sorting, setSorting] = useState([]);
+  // const [columnFilters, setColumnFilters] = useState([]);
   // const [activeTab, setActiveTab] = useState("Users");
   // const [openVerificationRow, setOpenVerificationRow] = useState(null); // Track the open row for the verification popup
-  // const [showBadgeTable, setShowBadgeTable] = useState(false); // State to manage BadgeVerificationTable visibility
 
   // Add console.log to debug columns
   // console.log("Original columns:", columns);
 
   // const getVisibleColumns = () => {
-  //   // if (activeTab === "Verification Requests") {
-  //   //   return columns.filter(column => {
-  //   //     const columnId = column.id || column.accessorKey;
-  //   //     // Only hide the subscription_type column
-  //   //     return columnId !== 'subscription_type';
-  //   //   });
-  //   // }
+  //   if (activeTab === "Verification Requests") {
+  //     return columns.filter(column => {
+  //       const columnId = column.id || column.accessorKey;
+  //       // Only hide the subscription_type column
+  //       return columnId !== 'subscription_type';
+  //     });
+  //   }
   //   return columns;
   // };
 
   // const handleTabClick = (tab) => {
   //   setActiveTab(tab);
-  //   if (tab === "Verification Requests") {
-  //     setShowBadgeTable(true); // Show BadgeVerificationTable when this tab is clicked
-  //   } else {
-  //     setShowBadgeTable(false); // Hide it for other tabs
-  //   }
+  //   // if (tab === "Users") {
+  //   //   setColumnFilters([{ id: "subscription_status", value: "verified" }]);
+  //   // } else {
+  //   //   setColumnFilters([{ id: "subscription_status", value: "pending" }]);
+  //   // }
   // };
 
   const table = useReactTable({
     data,
-    columns: columns,
+    columns: getVisibleColumns(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -78,6 +75,8 @@ export function DataTable({ columns, data }) {
 
   return (
     <div className="w-full main-content">
+      
+
       {/* Table */}
       <div className="rounded-md border">
         <Table>
@@ -103,7 +102,7 @@ export function DataTable({ columns, data }) {
                 <TableRow key={row.id}>
                   {row.getVisibleCells()
                     .map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell key={cell.id} className="text-center">
                         {cell.column.id === "user_name" ? (
                           <div className="flex items-center space-x-3">
                             <Image
@@ -126,23 +125,18 @@ export function DataTable({ columns, data }) {
                           <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-500">
                             {row.original.phoneNumber || "N/A"}
                           </span>
-                        ) : cell.column.id === "status" ? (
+                        ) : cell.column.id === "badge_status" ? (
                           <span
                             className={`text-sm font-medium  ${
-                              cell.getValue() === "active" ? "bg-green-100 text-green-600 rounded-full px-2 py-1" : "bg-yellow-100 text-yellow-600 rounded-full px-2 py-1"
+                              cell.getValue() === "active" ? "bg-green-100 text-green-600 rounded-full px-2 py-1 ml-12" : 
+                              cell.getValue() === "inactive" ? "bg-red-100 text-red-600 rounded-full px-2 py-1" : 
+                              "bg-gray-100 text-gray-600 rounded-full px-2 py-1" // Default case for other statuses
                             }`}
                           >
                             {cell.getValue() ? cell.getValue().toString() : "N/A"}
                           </span>
-                        ) : cell.column.id === "subscription_id" ? (
-                          <span
-                            className={`px-2 py-1 text-xs rounded-full ${cell.getValue() > 0 ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-500"}`}
-                          >
-                            {cell.getValue() > 0 ? "Subscribed" : "Free Subscription"}
-                          </span>
                         ) : (
                           flexRender(cell.column.columnDef.cell, cell.getContext())
-                        
                         )}
                       </TableCell>
                     ))}
@@ -184,7 +178,6 @@ export function DataTable({ columns, data }) {
           </Button>
         </div>
       </div>
-
     </div>
   );
 }

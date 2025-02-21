@@ -1,36 +1,23 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUsers } from "@/redux/features/authSlice";
-import { badgeVerification } from "@/redux/features/badgeVerificationSlice";
 import { columns } from "@/components/data-table/columns"
-import { BadgeVerificationColumns } from "@/components/data-table/badge_verification/badgeVerificationColumns"
 import { DataTable } from "@/components/data-table/data-table"
 
 export default function DashboardPage() {
   console.log("DashboardPage");
   const dispatch = useDispatch(); 
-  const usersData = useSelector((state) => state.auth.users);
-  const verificationRequestsData = useSelector((state) => state.badgeVerificationList.data);
-  const [activeTab, setActiveTab] = useState("Users");
-  
+  const data = useSelector((state) => state.auth.users);
+  console.log("data mainpart", data);
+
   useEffect(() => {
     dispatch(fetchAllUsers());
-    dispatch(badgeVerification());
   }, [dispatch]);
 
   const handleVerification = async (user) => {
     console.log("Verifying user:", user);
   };
-
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
-
-  
-  // const verificationRequestsData = [];
-  
-  console.log("data mainpart", verificationRequestsData);
 
   return (
     <div className="relative" style={{ zIndex: 1 }}>
@@ -67,20 +54,16 @@ export default function DashboardPage() {
           Verification Requests
         </button>
       </div>
-      {activeTab === "Users" && (
         <DataTable
           columns={columns}
-          data={usersData}
+          data={data}
           onVerify={handleVerification}
         />
-      )}
-      {activeTab === "Verification Requests" && (
         <DataTable
-          columns={BadgeVerificationColumns}
-          data={verificationRequestsData}
+          columns={columns}
+          data={data}
           onVerify={handleVerification}
         />
-      )}
       </div>
     </div>
   );

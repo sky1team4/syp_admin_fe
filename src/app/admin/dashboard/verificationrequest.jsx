@@ -4,8 +4,7 @@ import NIC from '../../../../public/pp.jpg';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitVerificationRequest, resetVerificationState } from '../../../redux/features/verificationSlice';
-import { IndentIncrease } from "lucide-react";
-
+import { ChangeBadgeStatus } from '@/redux/features/badgeVerificationSlice';
 // Image
 
 const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
@@ -189,7 +188,9 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
           </button>
           <button
             className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
-            onClick={handleSubmit}
+            onClick={() => {
+              dispatch(ChangeBadgeStatus(userData.id))
+            }}
           >
             Verify
           </button>

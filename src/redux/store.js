@@ -7,7 +7,7 @@ import subscriptionReducer from './features/subscriptionSlice';
 import verificationReducer from './features/verificationSlice';
 import relationshipReducer from './features/relationshipSlice';
 import fieldofstudyReducer from './features/fieldofstudySlice';
-import subscription_verificationReducer from './features/subscription_verificationSlice';
+import badgeVerificationSlice from './features/badgeVerificationSlice';
 import degreeReducer from './features/degreeSlice';
 import specialtyReducer from './features/specialitySlice';
 import interestReducer from './features/interestSlice';
@@ -30,7 +30,7 @@ export const store = configureStore({
     verification: verificationReducer,
     relationship: relationshipReducer,
     fieldofstudy: fieldofstudyReducer,
-    subscription_verification: subscription_verificationReducer,
+    badgeVerificationList: badgeVerificationSlice,
     degree: degreeReducer,
     specialty: specialtyReducer,
     interest: interestReducer,

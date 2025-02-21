@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux'; // Import hooks from react-redux
 import { fetchAllUsers } from '../redux/features/authSlice'; // Import the action and selector
-import { fetchMonthlyCount } from '../redux/features/subscriptionSlice'; // Import the action and selector
+import { fetchMonthlyCount, fetchAnnualCount } from '../redux/features/subscriptionSlice'; // Import the action and selector
 import Image from "next/image";
 import theme from "../app/theme";
 
@@ -17,25 +17,30 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
   const { monthlyCount = [] } = useSelector((state) => state.subscription); // Access monthlyCount from the state
   console.log(monthlyCount);
 
+  const { annualCount = [] } = useSelector((state) => state.subscription); // Access annualCount from the state
+  console.log(annualCount);
+
   useEffect(() => {
     dispatch(fetchAllUsers());
     dispatch(fetchMonthlyCount());
+    dispatch(fetchAnnualCount());
   }, [dispatch]);
 
   // Calculate totals from incoming data
-  const subscribedUsers = users.length;
   const freeUsers = users.filter(user => user.subscription_id === null).length; // this is the total users for free subscription
   console.log("freeUsers",freeUsers);
   const monthlysubscribedUsers = monthlyCount.length;
   console.log("monthly Users",monthlysubscribedUsers);
-  const annualSubscription=users.filter(user => user.subscription_id === 1).length;
+  const annualSubscription=annualCount.length;
+  console.log("Annual Subscription", annualSubscription);
+  const subscribedUsers = monthlysubscribedUsers + annualSubscription;
 // console.log(freeUsers);
 
   const info = [
     { id: 2, label: "Subscribed User", value: subscribedUsers.toString(), bgColor: "bg-red-100", icon: '/subscribeuser.svg' },
     { id: 1, label: "Free Subscription", value: freeUsers, bgColor: "bg-purple-100", icon: '/totalusers.svg' },
     { id: 3, label: "Monthly Subscription", value: monthlysubscribedUsers, bgColor: "bg-yellow-100", icon: '/unsubscribe.svg' },
-    { id: 4, label: "Annual Subscription", value: 0, bgColor: "bg-green-100", icon: '/activedomain.svg' },
+    { id: 4, label: "Annual Subscription", value: annualSubscription, bgColor: "bg-green-100", icon: '/activedomain.svg' },
   ];
 
   return (

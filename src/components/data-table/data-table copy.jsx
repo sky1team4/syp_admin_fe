@@ -19,14 +19,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
-// import { ChevronDown, MoreVertical } from "lucide-react";
-// import VerificationRequest from "@/app/admin/dashboard/verificationrequest";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown, MoreVertical } from "lucide-react";
+import VerificationRequest from "@/app/admin/dashboard/verificationrequest";
 // import {BadgeVerificationTable} from "@/components/data-table/badge_verification/BadgeVerificationTable";
 // import BadgeVerificationColumns from "@/components/data-table/badge_verification/badgeVerificationColumns";
 
@@ -34,36 +34,36 @@ export function DataTable({ columns, data }) {
   console.log("data table", data);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
-  // const [activeTab, setActiveTab] = useState("Users");
-  // const [openVerificationRow, setOpenVerificationRow] = useState(null); // Track the open row for the verification popup
-  // const [showBadgeTable, setShowBadgeTable] = useState(false); // State to manage BadgeVerificationTable visibility
+  const [activeTab, setActiveTab] = useState("Users");
+  const [openVerificationRow, setOpenVerificationRow] = useState(null); // Track the open row for the verification popup
+  const [showBadgeTable, setShowBadgeTable] = useState(false); // State to manage BadgeVerificationTable visibility
 
   // Add console.log to debug columns
   // console.log("Original columns:", columns);
 
-  // const getVisibleColumns = () => {
-  //   // if (activeTab === "Verification Requests") {
-  //   //   return columns.filter(column => {
-  //   //     const columnId = column.id || column.accessorKey;
-  //   //     // Only hide the subscription_type column
-  //   //     return columnId !== 'subscription_type';
-  //   //   });
-  //   // }
-  //   return columns;
-  // };
+  const getVisibleColumns = () => {
+    if (activeTab === "Verification Requests") {
+      return columns.filter(column => {
+        const columnId = column.id || column.accessorKey;
+        // Only hide the subscription_type column
+        return columnId !== 'subscription_type';
+      });
+    }
+    return columns;
+  };
 
-  // const handleTabClick = (tab) => {
-  //   setActiveTab(tab);
-  //   if (tab === "Verification Requests") {
-  //     setShowBadgeTable(true); // Show BadgeVerificationTable when this tab is clicked
-  //   } else {
-  //     setShowBadgeTable(false); // Hide it for other tabs
-  //   }
-  // };
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (tab === "Verification Requests") {
+      setShowBadgeTable(true); // Show BadgeVerificationTable when this tab is clicked
+    } else {
+      setShowBadgeTable(false); // Hide it for other tabs
+    }
+  };
 
   const table = useReactTable({
     data,
-    columns: columns,
+    columns: getVisibleColumns(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -78,6 +78,39 @@ export function DataTable({ columns, data }) {
 
   return (
     <div className="w-full main-content">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800">
+          Users Information
+        </h2>
+        {/* <button className="bg-gray-100 rounded-full">
+          <Image alt="more" src="/More.svg" width={45} height={45} />
+        </button> */}
+      </div>
+      {/* Tabs */}
+      <div className="flex items-center justify-start mb-4 w-fit border border-purple-600 rounded-lg overflow-hidden">
+        <button
+          className={`px-4 py-2 text-sm md:text-base font-medium transition ${
+            activeTab === "Users"
+              ? "bg-purple-600 text-white"
+              : "bg-white text-purple-600"
+          }`}
+          onClick={() => handleTabClick("Users")}
+        >
+          Users
+        </button>
+
+        <button
+          className={`px-4 py-2 text-sm md:text-base font-medium transition ${
+            activeTab === "Verification Requests"
+              ? "bg-purple-600 text-white"
+              : "bg-white text-purple-600"
+          }`}
+          onClick={() => handleTabClick("Verification Requests")}
+        >
+          Verification Requests
+        </button>
+      </div>
+
       {/* Table */}
       <div className="rounded-md border">
         <Table>
@@ -185,6 +218,8 @@ export function DataTable({ columns, data }) {
         </div>
       </div>
 
+      {/* Conditionally render BadgeVerificationTable */}
+      {showBadgeTable && <BadgeVerificationTable data={data} columns={BadgeVerificationColumns} />} {/* Pass data as needed */}
     </div>
   );
 }
