@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-export const register = createAsyncThunk( 'users/register',
+export const register = createAsyncThunk('users/register',
   async (credentials) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, {
@@ -11,7 +11,7 @@ export const register = createAsyncThunk( 'users/register',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(credentials),
-        
+
       });
       if (!response.ok) {
         const errorData = await response.json();
@@ -24,8 +24,8 @@ export const register = createAsyncThunk( 'users/register',
       throw error;
     }
   }
-     
-  
+
+
 );
 
 export const loginUser = createAsyncThunk(
@@ -99,7 +99,7 @@ export const fetchAllUsers = createAsyncThunk(
         const errorData = await response.json();
         throw new Error(errorData.message || 'Fetch users failed');
       }
-      
+
       const data = await response.json();
       // console.log("response.data", data);
       // console.log("data auth users", data);
@@ -116,7 +116,7 @@ export const BannedUsers = createAsyncThunk(
   async ({ id, updateUserStatusDto }) => {
     console.log("id", id);
     console.log("updateUserStatusDto", updateUserStatusDto);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/update-status/${id}`, 
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/update-status/${id}`,
       {
         method: 'POST',
         headers: {
@@ -154,8 +154,8 @@ const authSlice = createSlice({
       state.token = null;
       state.role = null;
       localStorage.removeItem('token');
-       // Remove authToken cookie
-       Cookies.remove("authToken", { path: "/" });
+      // Remove authToken cookie
+      Cookies.remove("authToken", { path: "/" });
     },
   },
   extraReducers: (builder) => {
@@ -175,7 +175,7 @@ const authSlice = createSlice({
           path: "/",   // Available site-wide
           secure: true, // Ensures HTTPS usage
           sameSite: "Strict",
-      });
+        });
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;

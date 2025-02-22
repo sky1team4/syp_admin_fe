@@ -20,6 +20,7 @@ import rssFeedReducer from './features/rssFeedSlice';
 import faqCategoryReducer from './features/faqCateSlice';
 import userReducer from './features/userSlice';
 import faqQaReducer from './features/faqQaSlice';
+import subscribedUserReducer from './features/subscribedUserSlice';
 
 export const store = configureStore({
   reducer: {
@@ -44,5 +45,6 @@ export const store = configureStore({
     faqCategory: faqCategoryReducer,
     users: userReducer,
     faqQa: faqQaReducer,
+    subscribedUser: subscribedUserReducer,
   },
 });

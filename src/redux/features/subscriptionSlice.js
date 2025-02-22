@@ -166,64 +166,6 @@ export const deleteSubscription = createAsyncThunk(
   }
 );
 
-export const fetchMonthlyCount = createAsyncThunk(
-  'subscriptions/fetchMonthlyCount',
-  async (subscriptionId, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No authentication token found');
-      }
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions/count-monthly/${subscriptionId}`,{
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      console.log("Monthly response status",response.status);
-      console.log("Monthly data response",response.data);
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch monthly count');
-      }
-      const data = await response.json();
-      return data; // Assuming the API returns the count directly
-    } catch (error) {
-      return rejectWithValue(error.message || 'Network error occurred');
-    }
-  }
-);
-
-export const fetchAnnualCount = createAsyncThunk(
-  'subscriptions/fetchAnnualCount',
-  async (subscriptionId, { rejectWithValue }) => {
-  try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions/count-annual/${subscriptionId}`,{
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      console.log("Anual Status Response", response.status)
-      console.log("Annual data Response", response.data)
-      if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const monthlyCounts = await response.json();
-      
-      // Assuming monthlyCounts is an array of monthly subscription counts
-      const annualCount = monthlyCounts.reduce((total, count) => total + count, 0);
-      
-      console.log('Annual Subscription Count:', annualCount);
-      return annualCount;
-  } catch (error) {
-      return rejectWithValue(error.message || 'Network error occurred');
-  }
-}
-);
-
 const subscriptionSlice = createSlice({
   name: 'subscription',
   initialState: {
@@ -301,28 +243,6 @@ const subscriptionSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
-      .addCase(fetchMonthlyCount.pending, (state) => {
-        state.isLoading = true;
-    })
-    .addCase(fetchMonthlyCount.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.monthlyCount = action.payload; // Set the count
-    })
-    .addCase(fetchMonthlyCount.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message; // Handle error
-    })
-    .addCase(fetchAnnualCount.pending, (state) => {
-        state.isLoading = true;
-    })
-    .addCase(fetchAnnualCount.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.annualCount = action.payload; // Set the count
-    })
-    .addCase(fetchAnnualCount.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message; // Handle error
-    })
   },
 });
 

@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
     const token = localStorage.getItem('token');
     
     if (!token) {
-      console.log("checkTokenExpiration = " , false);
+      // console.log("checkTokenExpiration = " , false);
       router.push('/admin-Login');
       return;
     }
@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
         router.push('/admin-Login');
       }
     } catch (error) {
-      console.error('Error checking token:', error);
+      // console.error('Error checking token:', error);
       router.push('/admin-Login');
     }
   };
