@@ -21,8 +21,21 @@ const inter = Inter({
 
 export default function RootLayout({ children }) {
   const router = useRouter();
+  const pathname = router.pathname;
+
+  // List of public routes that don't require authentication
+  const publicRoutes = [
+    '/admin-Login',
+    '/forget-password',
+    '/reset-password'
+  ];
 
   const checkTokenExpiration = () => {
+    // Skip token check for public routes
+    if (publicRoutes.some(route => window.location.pathname.includes(route))) {
+      return;
+    }
+
     const token = localStorage.getItem('token');
     
     if (!token) {
@@ -34,14 +47,17 @@ export default function RootLayout({ children }) {
     try {
       // Decode the JWT token to check expiration
       const payload = JSON.parse(atob(token.split('.')[1]));
-      const isExpired = payload.exp * 1000 < Date.now();
+      const expirationTime = payload.exp * 1000;
+      const currentTime = Date.now();
+      const isExpired = expirationTime < currentTime;
       
       if (isExpired) {
         localStorage.removeItem('token');
-         // Remove authToken cookie
         Cookies.remove("authToken", { path: "/" });
         router.push('/admin-Login');
       }
+      
+      return { isExpired, timeUntilExpiry: expirationTime - currentTime };
     } catch (error) {
       // console.error('Error checking token:', error);
       router.push('/admin-Login');
@@ -49,10 +65,19 @@ export default function RootLayout({ children }) {
   };
 
   useEffect(() => {
-    checkTokenExpiration();
-    // Optional: Set up interval to periodically check token expiration
-    const interval = setInterval(checkTokenExpiration, 60000); // Check every minute
-    return () => clearInterval(interval);
+    const tokenStatus = checkTokenExpiration();
+    
+    if (tokenStatus && !tokenStatus.isExpired) {
+      // Set up check only when token is close to expiring (e.g., 5 minutes before)
+      const checkBeforeExpiry = Math.max(tokenStatus.timeUntilExpiry - 5 * 60 * 1000, 0);
+      const timeout = setTimeout(() => {
+        // Once we're close to expiry, start checking more frequently
+        const interval = setInterval(checkTokenExpiration, 60000);
+        return () => clearInterval(interval);
+      }, checkBeforeExpiry);
+      
+      return () => clearTimeout(timeout);
+    }
   }, []);
 
   return (
