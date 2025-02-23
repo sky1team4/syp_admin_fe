@@ -19,47 +19,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
-// import { ChevronDown, MoreVertical } from "lucide-react";
-// import VerificationRequest from "@/app/admin/dashboard/verificationrequest";
-// import {BadgeVerificationTable} from "@/components/data-table/badge_verification/BadgeVerificationTable";
-// import BadgeVerificationColumns from "@/components/data-table/badge_verification/badgeVerificationColumns";
 
 export function DataTable({ columns, data }) {
   console.log("data table", data);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
-  // const [activeTab, setActiveTab] = useState("Users");
-  // const [openVerificationRow, setOpenVerificationRow] = useState(null); // Track the open row for the verification popup
-  // const [showBadgeTable, setShowBadgeTable] = useState(false); // State to manage BadgeVerificationTable visibility
-
-  // Add console.log to debug columns
-  // console.log("Original columns:", columns);
-
-  // const getVisibleColumns = () => {
-  //   // if (activeTab === "Verification Requests") {
-  //   //   return columns.filter(column => {
-  //   //     const columnId = column.id || column.accessorKey;
-  //   //     // Only hide the subscription_type column
-  //   //     return columnId !== 'subscription_type';
-  //   //   });
-  //   // }
-  //   return columns;
-  // };
-
-  // const handleTabClick = (tab) => {
-  //   setActiveTab(tab);
-  //   if (tab === "Verification Requests") {
-  //     setShowBadgeTable(true); // Show BadgeVerificationTable when this tab is clicked
-  //   } else {
-  //     setShowBadgeTable(false); // Hide it for other tabs
-  //   }
-  // };
 
   const table = useReactTable({
     data,
@@ -134,11 +98,20 @@ export function DataTable({ columns, data }) {
                           >
                             {cell.getValue() ? cell.getValue().toString() : "N/A"}
                           </span>
-                        ) : cell.column.id === "subscription_id" ? (
+                        ) : cell.column.id === "billingPeriod" ? (
                           <span
-                            className={`px-2 py-1 text-xs rounded-full ${cell.getValue() > 0 ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-500"}`}
+                            className={`px-2 py-1 text-xs rounded-full ${
+                              cell.getValue() === "MONTHLY" ? "bg-green-100 text-green-600" :
+                              cell.getValue() === "YEARLY" ? "bg-blue-100 text-blue-600" :
+                              cell.getValue() === null ? "bg-yellow-100 text-yellow-600" :
+                              "bg-gray-100 text-gray-600" // Default case
+                            }`}
                           >
-                            {cell.getValue() > 0 ? "Subscribed" : "Free Subscription"}
+                            {cell.getValue() === "MONTHLY" ? "Monthly Subscription" :
+                             cell.getValue() === "YEARLY" ? "Yearly Subscription" :
+                             cell.getValue() === null ? "Free Member" :
+                             "N/A"
+                            }
                           </span>
                         ) : (
                           flexRender(cell.column.columnDef.cell, cell.getContext())

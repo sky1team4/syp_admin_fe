@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUsers } from "@/redux/features/authSlice";
-import { badgeVerification } from "@/redux/features/badgeVerificationSlice";
+import { GetAllbadgeVerificationRequest } from "@/redux/features/badgeVerificationSlice";
 import { columns } from "@/components/data-table/columns"
 import { BadgeVerificationColumns } from "@/components/data-table/badge_verification/badgeVerificationColumns"
 import { DataTable } from "@/components/data-table/data-table"
@@ -16,7 +16,7 @@ export default function DashboardPage() {
   
   useEffect(() => {
     dispatch(fetchAllUsers());
-    dispatch(badgeVerification());
+    dispatch(GetAllbadgeVerificationRequest());
   }, [dispatch]);
 
   const handleVerification = async (user) => {
@@ -30,7 +30,7 @@ export default function DashboardPage() {
   
   // const verificationRequestsData = [];
   
-  console.log("data mainpart", verificationRequestsData);
+  console.log("Badge Verification Data", verificationRequestsData);
 
   return (
     <div className="relative" style={{ zIndex: 1 }}>

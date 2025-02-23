@@ -7,16 +7,8 @@ import { Button } from "@/components/ui/button"
 import { BannedUsers } from "@/redux/features/authSlice";
 import { Checkbox } from "@/components/ui/checkbox"
 import { useDispatch, useSelector } from "react-redux";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+
 import { useState } from "react"
-import VerificationRequest from "@/app/admin/dashboard/verificationrequest"
 import Image from "next/image"
 
 export const columns = [
@@ -95,30 +87,9 @@ export const columns = [
             <div className="capitalize">{row.getValue("status")}</div>
         ),
     },
-    // {
-    //     accessorKey: "name",
-    //     header: ({ column }) => {
-    //         return (
-    //             <Button
-    //                 variant="ghost"
-    //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //             >
-    //                 Name
-    //                 {column.getIsSorted() === "asc" ? (
-    //                     <ArrowUp className="ml-2 h-4 w-4" />
-    //                 ) : (
-    //                     <ArrowDown className="ml-2 h-4 w-4" />
-    //                 )}
-    //             </Button>
-    //         )
-    //     },
-    //     cell: ({ row }) => (
-    //         <div className="font-medium text-black">{row.original.name}
-    //         {console.log(row.original.name)}</div>
-    //     ),
-    // },
+ 
     {
-        accessorKey: "subscription_id",
+        accessorKey: "billingPeriod",
         header: ({ column }) => {
             return (
                 <Button
@@ -135,7 +106,7 @@ export const columns = [
             )
         },
         cell: ({ row }) => (
-            <div className="text-sm font-medium">{row.original.subscription_id}</div>
+            <div className="text-sm font-medium">{row.original.billingPeriod}</div>
         ),
     },
     {
@@ -195,12 +166,7 @@ export const columns = [
                             />
                         )}
                     </Button>
-                    {/* <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                           
-                        </DropdownMenuTrigger>
-                    </DropdownMenu> */}
-                    {/* <VerificationRequest isOpen={isOpen} setIsOpen={setIsOpen} /> */}
+                    
                 </>
             );
         },

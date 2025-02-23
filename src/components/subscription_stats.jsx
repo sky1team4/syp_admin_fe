@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux'; // Import hooks from react-redux
 import { fetchAllUsers } from '../redux/features/authSlice'; // Import the action and selector
-import { fetchMonthlyCount, fetchAnnualCount } from '../redux/features/subscriptionSlice'; // Import the action and selector
+import { getAllMonthlySubscribedUser, getAllAnnualSubscribedUser } from '../redux/features/subscribedUserSlice'; // Import the action and selector
 import Image from "next/image";
 import theme from "../app/theme";
 
@@ -14,16 +14,16 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
   const { users = [] } = useSelector((state) => state.auth); // Access users from the state
   console.log(users);
 
-  const { monthlyCount = [] } = useSelector((state) => state.subscription); // Access monthlyCount from the state
+  const { monthlyCount = [] } = useSelector((state) => state.subscribedUser); // Access monthlyCount from the state
   console.log(monthlyCount);
 
-  const { annualCount = [] } = useSelector((state) => state.subscription); // Access annualCount from the state
+  const { annualCount = [] } = useSelector((state) => state.subscribedUser); // Access annualCount from the state
   console.log(annualCount);
 
   useEffect(() => {
     dispatch(fetchAllUsers());
-    dispatch(fetchMonthlyCount());
-    dispatch(fetchAnnualCount());
+    dispatch(getAllMonthlySubscribedUser());
+    dispatch(getAllAnnualSubscribedUser());
   }, [dispatch]);
 
   // Calculate totals from incoming data
