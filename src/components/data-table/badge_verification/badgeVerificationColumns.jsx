@@ -70,49 +70,6 @@ export const BadgeVerificationColumns = [
             <div className="text-sm font-medium">{row.original.phone_number}</div>
         ),
     },
-    // {
-    //     accessorKey: "status",
-    //     header: ({ column }) => {
-    //         return (
-    //             <Button
-    //                 variant="ghost"
-    //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //             >
-    //                 Status
-    //                 {column.getIsSorted() === "asc" ? (
-    //                     <ArrowUp className="ml-2 h-4 w-4" />
-    //                 ) : (
-    //                     <ArrowDown className="ml-2 h-4 w-4" />
-    //                 )}
-    //             </Button>
-    //         )
-    //     },
-    //     cell: ({ row }) => (
-    //         <div className="capitalize">{row.getValue("status")}</div>
-    //     ),
-    // },
-    // {
-    //     accessorKey: "name",
-    //     header: ({ column }) => {
-    //         return (
-    //             <Button
-    //                 variant="ghost"
-    //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //             >
-    //                 Name
-    //                 {column.getIsSorted() === "asc" ? (
-    //                     <ArrowUp className="ml-2 h-4 w-4" />
-    //                 ) : (
-    //                     <ArrowDown className="ml-2 h-4 w-4" />
-    //                 )}
-    //             </Button>
-    //         )
-    //     },
-    //     cell: ({ row }) => (
-    //         <div className="font-medium text-black">{row.original.name}
-    //         {console.log(row.original.name)}</div>
-    //     ),
-    // },
     {
         accessorKey: "badge_status",
         header: ({ column }) => {
@@ -155,13 +112,12 @@ export const BadgeVerificationColumns = [
                                 <Image src="/unverified.svg" alt="more" width={20} height={20}
                                 onClick={() => {
                                     setIsOpen(true)
-                                   
                                 }}
                                  />
                             </Button>
                         </DropdownMenuTrigger>
                     </DropdownMenu>
-                    <VerificationRequest isOpen={isOpen} setIsOpen={setIsOpen} />
+                    <VerificationRequest isOpen={isOpen} setIsOpen={setIsOpen} userData={user} />
                 </>
             );
         },
