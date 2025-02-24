@@ -95,7 +95,7 @@ export function DataTable({ columns, data }) {
                           </div>
                         ) : cell.column.id === "phoneNumber" ? (
                           <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-500">
-                            {row.original.phoneNumber || "N/A"}
+                            {row.original.user_phone_number || "N/A"}
                           </span>
                         ) : cell.column.id === "badge_status" ? (
                           <span

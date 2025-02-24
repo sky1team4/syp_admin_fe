@@ -67,7 +67,7 @@ export const BadgeVerificationColumns = [
             )
         },
         cell: ({ row }) => (
-            <div className="text-sm font-medium">{row.original.phone_number}</div>
+            <div className="text-sm font-medium">{row.original.user_phone_number}</div>
         ),
     },
     {
