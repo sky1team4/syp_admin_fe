@@ -36,11 +36,10 @@ export default function RootLayout({ children }) {
       return;
     }
 
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('authToken');
     
     if (!token) {
-      // console.log("checkTokenExpiration = " , false);
-      router.push('/admin-Login');
+      router.replace('/admin-Login');
       return;
     }
 
@@ -52,15 +51,14 @@ export default function RootLayout({ children }) {
       const isExpired = expirationTime < currentTime;
       
       if (isExpired) {
-        localStorage.removeItem('token');
         Cookies.remove("authToken", { path: "/" });
-        router.push('/admin-Login');
+        router.replace('/admin-Login');
       }
       
       return { isExpired, timeUntilExpiry: expirationTime - currentTime };
     } catch (error) {
-      // console.error('Error checking token:', error);
-      router.push('/admin-Login');
+      Cookies.remove("authToken", { path: "/" });
+      router.replace('/admin-Login');
     }
   };
 

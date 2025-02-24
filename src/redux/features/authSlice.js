@@ -60,28 +60,32 @@ export const logoutUser = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
-      // Make sure your NestJS endpoint is set up to clear the cookie
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, {
+      const token = Cookies.get('authToken');
+      
+      const response = await fetch('http://localhost:8080/users/logout', {
         method: 'POST',
-        credentials: 'include', // Important: ensures cookies are sent
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include token for authorization  
-        },
+          'Authorization': `Bearer ${token}`
+        }
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Logout failed');
+        throw new Error('Logout failed');
       }
 
-      return await response.json(); // e.g., { message: "Logged out successfully" }
+      // Remove cookie after successful logout
+      Cookies.remove("authToken", { path: "/" });
+      
+      return await response.json();
     } catch (error) {
-      console.error('Logout error:', error);
+      // Remove cookie even if logout fails
+      Cookies.remove("authToken", { path: "/" });
       return rejectWithValue(error.message);
     }
   }
-)
+);
 
 export const fetchAllUsers = createAsyncThunk(
   'users/getAll',
@@ -147,6 +151,7 @@ const authSlice = createSlice({
     loading: false,
     error: null,
     users: [],
+    isAuthenticated: false,
   },
   reducers: {
     logout: (state) => {
@@ -176,6 +181,7 @@ const authSlice = createSlice({
           secure: true, // Ensures HTTPS usage
           sameSite: "Strict",
         });
+        state.isAuthenticated = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -197,20 +203,18 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(logoutUser.fulfilled, (state, action) => {
-        state.loading = false;
-        // Clear Redux state
+      .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.token = null;
         state.role = null;
-        // Remove from localStorage
-        localStorage.removeItem('token');
-        // Remove authToken cookie
-        Cookies.remove('authToken', { path: '/' });
+        state.isAuthenticated = false;
+        // Reset any other auth-related state
       })
-      .addCase(logoutUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload || 'Logout failed';
+      .addCase(logoutUser.rejected, (state) => {
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
+        // Reset state even if the API call fails
       })
       .addCase(BannedUsers.pending, (state) => {
         state.loading = true;
