@@ -78,10 +78,15 @@ export const logoutUser = createAsyncThunk(
       // Remove cookie after successful logout
       Cookies.remove("authToken", { path: "/" });
       
+      // Force a page refresh
+      window.location.href = '/admin-Login';
+      
       return await response.json();
     } catch (error) {
       // Remove cookie even if logout fails
       Cookies.remove("authToken", { path: "/" });
+      // Force a page refresh even on error
+      window.location.href = '/admin-Login';
       return rejectWithValue(error.message);
     }
   }
@@ -158,10 +163,16 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.role = null;
+      state.loading = false;
+      state.error = null;
+      state.isAuthenticated = false;
       localStorage.removeItem('token');
-      // Remove authToken cookie
       Cookies.remove("authToken", { path: "/" });
     },
+    resetAuthState: (state) => {
+      state.loading = false;
+      state.error = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -172,7 +183,15 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload.access_token;
-        state.role = action.payload.role;
+        
+        // Decode token to get role
+        try {
+          const payload = JSON.parse(atob(action.payload.access_token.split('.')[1]));
+          state.role = payload.role;
+        } catch (error) {
+          console.error('Error decoding token:', error);
+        }
+        
         localStorage.setItem('token', action.payload.access_token);
         // Store token in a secure, HTTP-only cookie
         Cookies.set("authToken", action.payload.access_token, {
@@ -208,12 +227,14 @@ const authSlice = createSlice({
         state.token = null;
         state.role = null;
         state.isAuthenticated = false;
+        state.loading = false;
         // Reset any other auth-related state
       })
       .addCase(logoutUser.rejected, (state) => {
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
+        state.loading = false;
         // Reset state even if the API call fails
       })
       .addCase(BannedUsers.pending, (state) => {
@@ -234,5 +255,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, resetAuthState } = authSlice.actions;
 export default authSlice.reducer; 

@@ -44,11 +44,20 @@ export default function RootLayout({ children }) {
     }
 
     try {
-      // Decode the JWT token to check expiration
+      // Decode the JWT token to check expiration and role
       const payload = JSON.parse(atob(token.split('.')[1]));
       const expirationTime = payload.exp * 1000;
       const currentTime = Date.now();
       const isExpired = expirationTime < currentTime;
+      
+      // Check if user is trying to access admin routes
+      if (window.location.pathname.startsWith('/admin')) {
+        if (payload.role !== 'admin') {
+          Cookies.remove("authToken", { path: "/" });
+          router.replace('/admin-Login');
+          return;
+        }
+      }
       
       if (isExpired) {
         Cookies.remove("authToken", { path: "/" });
@@ -57,6 +66,7 @@ export default function RootLayout({ children }) {
       
       return { isExpired, timeUntilExpiry: expirationTime - currentTime };
     } catch (error) {
+      console.error('Token decode error:', error);
       Cookies.remove("authToken", { path: "/" });
       router.replace('/admin-Login');
     }
