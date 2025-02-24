@@ -36,31 +36,39 @@ export default function RootLayout({ children }) {
       return;
     }
 
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('authToken');
     
     if (!token) {
-      // console.log("checkTokenExpiration = " , false);
-      router.push('/admin-Login');
+      router.replace('/admin-Login');
       return;
     }
 
     try {
-      // Decode the JWT token to check expiration
+      // Decode the JWT token to check expiration and role
       const payload = JSON.parse(atob(token.split('.')[1]));
       const expirationTime = payload.exp * 1000;
       const currentTime = Date.now();
       const isExpired = expirationTime < currentTime;
       
+      // Check if user is trying to access admin routes
+      if (window.location.pathname.startsWith('/admin')) {
+        if (payload.role !== 'admin') {
+          Cookies.remove("authToken", { path: "/" });
+          router.replace('/admin-Login');
+          return;
+        }
+      }
+      
       if (isExpired) {
-        localStorage.removeItem('token');
         Cookies.remove("authToken", { path: "/" });
-        router.push('/admin-Login');
+        router.replace('/admin-Login');
       }
       
       return { isExpired, timeUntilExpiry: expirationTime - currentTime };
     } catch (error) {
-      // console.error('Error checking token:', error);
-      router.push('/admin-Login');
+      console.error('Token decode error:', error);
+      Cookies.remove("authToken", { path: "/" });
+      router.replace('/admin-Login');
     }
   };
 

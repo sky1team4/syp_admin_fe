@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../redux/features/authSlice";
+import { loginUser, logout, resetAuthState } from "../../redux/features/authSlice";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,6 +22,10 @@ export default function Login() {
     email: "",
     password: ""
   });
+
+  useEffect(() => {
+    dispatch(resetAuthState());
+  }, [dispatch]);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -49,9 +53,19 @@ export default function Login() {
       const response = await dispatch(loginUser(formData)).unwrap();
       console.log("Login response:", response);
 
-      if (response) {
-        console.log(response);
-        router.push("/admin/dashboard");
+      if (response && response.access_token) {
+        // Decode the token to check role
+        const token = response.access_token;
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        
+        if (payload.role === 'admin') {
+          router.push("/admin/dashboard");
+        } else {
+          toast.error("Access denied. Admin privileges required.");
+          await dispatch(logout());
+          router.refresh();
+          router.push('/admin-Login');
+        }
       } else {
         setError("Login failed - please try again");
       }

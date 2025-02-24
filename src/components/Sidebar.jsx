@@ -7,6 +7,8 @@ import theme from "../app/theme.js";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../redux/features/authSlice";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+import Cookies from "js-cookie";
 
 // console.log(color.color);
 
@@ -31,36 +33,35 @@ const Sidebar = () => {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   const handleTabClick = async (tab) => {
-
     setStaticTab(tab);
-    // setCurrentTab(tab); // Update the context with the selected tab
     if (tab === "signout") {
       try {
-        const response = await dispatch(logoutUser()).unwrap();
-        console.log("Logout response:", response);
-  
-        if (response) {
-          console.log(response);
-          router.push("/admin-Login");
-        } else {
-          setError("Logout failed - please try again");
-        }
+        // Remove the cookie first
+        Cookies.remove("authToken", { path: "/" });
+        
+        // Dispatch logout action
+        await dispatch(logoutUser()).unwrap();
+        
+        // Reset selected tab
+        localStorage.setItem("selectedTab", "dashboard");
+        setCurrentTab("dashboard");
+        
+        // Redirect to login page
+        router.replace("/admin-Login");
       } catch (err) {
         console.error("Logout error:", err);
-        if (err.message.includes("SSL_PROTOCOL_ERROR")) {
-          toast.error("Connection error - please check the server is running and using the correct protocol");
-        } else {
-          toast.error(err?.message || "An error occurred during logout");
-        }
+        
+        // Still remove cookie and redirect even if API call fails
+        Cookies.remove("authToken", { path: "/" });
+        
+        toast.error("Logged out due to error");
+        router.replace("/admin-Login");
       }
-      localStorage.removeItem("token"); // Remove the token
-      localStorage.setItem("selectedTab", "dashboard"); // Clear selected tab
-      setCurrentTab("dashboard");
     } else {
-      localStorage.setItem("selectedTab", tab); // Save the selected tab in localStorage
+      localStorage.setItem("selectedTab", tab);
       setCurrentTab(tab);
     }
-    setIsSidebarOpen(false); // Close sidebar after selecting a tab
+    setIsSidebarOpen(false);
   };
 
   return (

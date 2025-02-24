@@ -60,28 +60,37 @@ export const logoutUser = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
-      // Make sure your NestJS endpoint is set up to clear the cookie
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, {
+      const token = Cookies.get('authToken');
+      
+      const response = await fetch('http://localhost:8080/users/logout', {
         method: 'POST',
-        credentials: 'include', // Important: ensures cookies are sent
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include token for authorization  
-        },
+          'Authorization': `Bearer ${token}`
+        }
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Logout failed');
+        throw new Error('Logout failed');
       }
 
-      return await response.json(); // e.g., { message: "Logged out successfully" }
+      // Remove cookie after successful logout
+      Cookies.remove("authToken", { path: "/" });
+      
+      // Force a page refresh
+      window.location.href = '/admin-Login';
+      
+      return await response.json();
     } catch (error) {
-      console.error('Logout error:', error);
+      // Remove cookie even if logout fails
+      Cookies.remove("authToken", { path: "/" });
+      // Force a page refresh even on error
+      window.location.href = '/admin-Login';
       return rejectWithValue(error.message);
     }
   }
-)
+);
 
 export const fetchAllUsers = createAsyncThunk(
   'users/getAll',
@@ -147,16 +156,23 @@ const authSlice = createSlice({
     loading: false,
     error: null,
     users: [],
+    isAuthenticated: false,
   },
   reducers: {
     logout: (state) => {
       state.user = null;
       state.token = null;
       state.role = null;
+      state.loading = false;
+      state.error = null;
+      state.isAuthenticated = false;
       localStorage.removeItem('token');
-      // Remove authToken cookie
       Cookies.remove("authToken", { path: "/" });
     },
+    resetAuthState: (state) => {
+      state.loading = false;
+      state.error = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -167,7 +183,15 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload.access_token;
-        state.role = action.payload.role;
+        
+        // Decode token to get role
+        try {
+          const payload = JSON.parse(atob(action.payload.access_token.split('.')[1]));
+          state.role = payload.role;
+        } catch (error) {
+          console.error('Error decoding token:', error);
+        }
+        
         localStorage.setItem('token', action.payload.access_token);
         // Store token in a secure, HTTP-only cookie
         Cookies.set("authToken", action.payload.access_token, {
@@ -176,6 +200,7 @@ const authSlice = createSlice({
           secure: true, // Ensures HTTPS usage
           sameSite: "Strict",
         });
+        state.isAuthenticated = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -197,20 +222,20 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(logoutUser.fulfilled, (state, action) => {
-        state.loading = false;
-        // Clear Redux state
+      .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.token = null;
         state.role = null;
-        // Remove from localStorage
-        localStorage.removeItem('token');
-        // Remove authToken cookie
-        Cookies.remove('authToken', { path: '/' });
-      })
-      .addCase(logoutUser.rejected, (state, action) => {
+        state.isAuthenticated = false;
         state.loading = false;
-        state.error = action.payload || 'Logout failed';
+        // Reset any other auth-related state
+      })
+      .addCase(logoutUser.rejected, (state) => {
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
+        state.loading = false;
+        // Reset state even if the API call fails
       })
       .addCase(BannedUsers.pending, (state) => {
         state.loading = true;
@@ -230,5 +255,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, resetAuthState } = authSlice.actions;
 export default authSlice.reducer; 
