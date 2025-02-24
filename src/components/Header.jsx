@@ -101,32 +101,46 @@ const DashboardTopBar = () => {
         {/* Profile Section */}
         <Link 
           href="/admin/profile"
-          className="flex items-center space-x-2 cursor-pointer transition-transform duration-200 hover:scale-105"
+          className="flex items-center space-x-3 cursor-pointer transition-transform duration-200 hover:scale-105"
         >
-          <div className="w-10 h-10 rounded-full overflow-hidden">
+          <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-purple-100 ring-offset-2 shadow-sm relative">
             {user?.profilePicture ? (
               <Image 
                 src={user.profilePicture}
                 alt={user?.name || 'Profile'} 
-                width={40} 
-                height={40} 
+                fill
+                sizes="(max-width: 768px) 40px, 44px"
                 className="rounded-full object-cover"
+                priority
                 unoptimized={true}
               />
             ) : (
-              <Image 
-                src="/profile.png"
-                alt="Default Profile" 
-                width={40} 
-                height={40} 
-                className="rounded-full object-cover"
-              />
+              <div className="w-full h-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center">
+                {user?.name ? (
+                  <span className="text-lg font-medium text-white">
+                    {user.name.charAt(0).toUpperCase()}
+                  </span>
+                ) : (
+                  <Image 
+                    src="/profile.png"
+                    alt="Default Profile" 
+                    fill
+                    sizes="(max-width: 768px) 40px, 44px"
+                    className="object-cover"
+                    priority
+                  />
+                )}
+              </div>
             )}
           </div>
 
           <div className="text-gray-700">
-            <h4 className="text-sm font-bold">{user?.name || 'User'}</h4>
-            <span className="text-xs capitalize">{role || 'Admin'}</span>
+            <h4 className="text-sm font-semibold tracking-wide">
+              {user?.name || 'User'}
+            </h4>
+            <span className="text-xs text-gray-500 capitalize">
+              {role || 'Admin'}
+            </span>
           </div>
         </Link>
       </div>
