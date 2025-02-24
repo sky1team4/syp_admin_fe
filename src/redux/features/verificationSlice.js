@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export const submitVerificationRequest = createAsyncThunk(
     'verification/submit',
     async ({ userData, documents }, { rejectWithValue }) => {
@@ -34,7 +35,7 @@ export const submitVerificationRequest = createAsyncThunk(
                 console.log(pair[0] + ': ', pair[1]);
             }
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verification-requests`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/badge-verification`, {
                 method: 'POST',
                 body: formData,
                 credentials: 'include',
@@ -43,6 +44,7 @@ export const submitVerificationRequest = createAsyncThunk(
                 }
             });
             console.log(response);
+
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);

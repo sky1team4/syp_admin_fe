@@ -6,8 +6,8 @@ export const GetAllbadgeVerificationRequest = createAsyncThunk(
   'badgeVerificationList/badgeVerification',
   async () => {
     const yourToken = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/Badge-verification`, {
-      method: 'GET',
+    const response = await fetch(`${API_URL}/verification-requests/all`, {
+      method: 'POST',
       headers: {
         'Authorization': `Bearer ${yourToken}`,
         'Content-Type': 'application/json',
@@ -20,21 +20,25 @@ console.log("response badge verification", response)
     }
 
     const data = await response.json();
+    console.log("data badge verification", data)
     return data;
   }
 );
 
 export const ChangeBadgeStatus = createAsyncThunk(
   'badgeVerificationList/ChangeBadgeStatus',
-  async ({ id, badge_status }) => {
+  async ({ id }) => {
+    console.log("id", id);
+    // console.log("badge_status", badge_status);
+    
     const yourToken = localStorage.getItem('token');
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Badge-verification/${id}/status`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verification-requests/${id}/toggle-status`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${yourToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ badge_status }),
+      // body: JSON.stringify(),
     });
     console.log(response.status);
     if (!response.ok) {

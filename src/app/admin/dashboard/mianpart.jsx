@@ -8,7 +8,7 @@ import { BadgeVerificationColumns } from "@/components/data-table/badge_verifica
 import { DataTable } from "@/components/data-table/data-table"
 
 export default function DashboardPage() {
-  console.log("DashboardPage");
+  // console.log("DashboardPage");
   const dispatch = useDispatch(); 
   const usersData = useSelector((state) => state.auth.users);
   const verificationRequestsData = useSelector((state) => state.badgeVerificationList.data);
@@ -20,7 +20,7 @@ export default function DashboardPage() {
   }, [dispatch]);
 
   const handleVerification = async (user) => {
-    console.log("Verifying user:", user);
+    // console.log("Verifying user:", user);
   };
 
   const handleTabClick = (tab) => {
@@ -30,7 +30,7 @@ export default function DashboardPage() {
   
   // const verificationRequestsData = [];
   
-  console.log("Badge Verification Data", verificationRequestsData);
+  // console.log("Badge Verification Data", verificationRequestsData);
 
   return (
     <div className="relative" style={{ zIndex: 1 }}>
