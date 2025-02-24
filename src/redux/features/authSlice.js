@@ -147,16 +147,105 @@ export const BannedUsers = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  'auth/update',
+  async (updateData, { getState }) => {
+    try {
+      const token = Cookies.get('authToken');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/update`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(updateData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Update failed');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Update error:', error);
+      throw error;
+    }
+  }
+);
+
+export const updateProfileImage = createAsyncThunk(
+  'auth/updateProfileImage',
+  async (file, { rejectWithValue }) => {
+    try {
+      const token = Cookies.get('authToken');
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/upload-profile-image`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to upload image');
+      }
+
+      const data = await response.json();
+      console.log('Upload response:', data); // Debug log
+      
+      if (!data.imageUrl) {
+        throw new Error('No image URL in response');
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Profile image upload error:', error);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Function to decode token and get user data
+const getInitialUserState = () => {
+  try {
+    const token = Cookies.get('authToken');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log('Initial token payload:', payload);
+      
+      // Get profile picture from localStorage
+      const profilePicture = localStorage.getItem('userProfilePicture');
+      console.log('Stored profile picture:', profilePicture);
+
+      return {
+        id: payload.sub,
+        name: payload.name,
+        email: payload.email,
+        profilePicture: profilePicture // Use stored profile picture
+      };
+    }
+  } catch (error) {
+    console.error('Error getting initial user state:', error);
+  }
+  return null;
+};
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: null,
-    token: null,
+    user: getInitialUserState(),
+    token: Cookies.get('authToken') || null,
     role: null,
     loading: false,
     error: null,
     users: [],
-    isAuthenticated: false,
+    isAuthenticated: !!Cookies.get('authToken'),
   },
   reducers: {
     logout: (state) => {
@@ -184,23 +273,41 @@ const authSlice = createSlice({
         state.loading = false;
         state.token = action.payload.access_token;
         
-        // Decode token to get role
         try {
           const payload = JSON.parse(atob(action.payload.access_token.split('.')[1]));
+          console.log('Login payload:', payload);
+          
+          // Get profile image from the response or existing storage
+          const profileImage = action.payload.profileImage || localStorage.getItem('userProfilePicture');
+          
           state.role = payload.role;
+          state.user = {
+            id: payload.sub,
+            name: payload.name,
+            email: payload.email,
+            profilePicture: profileImage
+          };
+          
+          // Store the profile image URL if it exists
+          if (profileImage) {
+            localStorage.setItem('userProfilePicture', profileImage);
+          }
+          
+          state.isAuthenticated = true;
+          
+          Cookies.set("authToken", action.payload.access_token, {
+            expires: 1,
+            path: "/",
+            secure: true,
+            sameSite: "Strict",
+          });
+
+          console.log('Updated user state:', state.user); // Debug log
         } catch (error) {
           console.error('Error decoding token:', error);
         }
         
         localStorage.setItem('token', action.payload.access_token);
-        // Store token in a secure, HTTP-only cookie
-        Cookies.set("authToken", action.payload.access_token, {
-          expires: 1, // 1 day expiration
-          path: "/",   // Available site-wide
-          secure: true, // Ensures HTTPS usage
-          sameSite: "Strict",
-        });
-        state.isAuthenticated = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -228,7 +335,8 @@ const authSlice = createSlice({
         state.role = null;
         state.isAuthenticated = false;
         state.loading = false;
-        // Reset any other auth-related state
+        // Clear stored profile picture
+        localStorage.removeItem('userProfilePicture');
       })
       .addCase(logoutUser.rejected, (state) => {
         state.user = null;
@@ -251,6 +359,65 @@ const authSlice = createSlice({
       .addCase(BannedUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        
+        if (action.payload.token) {
+          state.token = action.payload.token;
+          
+          // Update stored token
+          Cookies.set("authToken", action.payload.token, {
+            expires: 1,
+            path: "/",
+            secure: true,
+            sameSite: "Strict",
+          });
+
+          // Update user info while preserving profile picture
+          try {
+            const payload = JSON.parse(atob(action.payload.token.split('.')[1]));
+            const currentProfilePicture = state.user?.profilePicture;
+            
+            state.user = {
+              ...state.user,
+              name: payload.name,
+              email: payload.email,
+              profilePicture: currentProfilePicture // Preserve current profile picture
+            };
+          } catch (error) {
+            console.error('Error decoding updated token:', error);
+          }
+        }
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updateProfileImage.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfileImage.fulfilled, (state, action) => {
+        state.loading = false;
+        console.log('Update profile image response:', action.payload);
+        
+        if (state.user && action.payload.imageUrl) {
+          state.user = {
+            ...state.user,
+            profilePicture: action.payload.imageUrl
+          };
+          // Store in localStorage
+          localStorage.setItem('userProfilePicture', action.payload.imageUrl);
+        }
+      })
+      .addCase(updateProfileImage.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to update profile picture';
       });
   },
 });

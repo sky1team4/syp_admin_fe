@@ -1,55 +1,37 @@
+'use client'
+
 import React, { createContext, useState, useEffect } from 'react';
 
 export const TabContext = createContext();
 
 export const TabProvider = ({ children }) => {
-  // const [currentTab, setCurrentTab] = useState(() => {
-  //   // Check if localStorage is available
-  //   if (typeof window !== 'undefined' && window.localStorage) {
-  //     // Retrieve the selected tab from localStorage or default to "dashboard"
-  //     return localStorage.getItem('selectedTab') || 'dashboard';
-  //   }
-  //   return 'dashboard'; // Default value if localStorage is not available
-  // });
-
-  const [currentTab, setCurrentTab] = useState('dashboard')
+  const [currentTab, setCurrentTab] = useState('dashboard');
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const savedTab = localStorage.getItem('selectedTab');
-      if (savedTab) {
-        setCurrentTab(savedTab);
-      }
+    setMounted(true);
+    // Load saved tab after component mounts
+    const savedTab = localStorage.getItem('selectedTab');
+    if (savedTab) {
+      setCurrentTab(savedTab);
     }
   }, []);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.localStorage) {
+    if (mounted) {
       localStorage.setItem('selectedTab', currentTab === 'logout' ? 'dashboard' : currentTab);
     }
-  }, [currentTab]);
+  }, [currentTab, mounted]);
 
-  // const handleTabChange = (newTab) => {
-  //   if (newTab === 'signout') {
-  //     // Reset to dashboard when signing out
-  //     setCurrentTab('dashboard');
-  //     if (typeof window !== 'undefined' && window.localStorage) {
-  //       localStorage.setItem('selectedTab', 'dashboard');
-  //     }
-  //   } else {
-  //     setCurrentTab(newTab);
-  //     if (typeof window !== 'undefined' && window.localStorage) {
-  //       localStorage.setItem('selectedTab', newTab);
-  //     }
-  //   }
-  // };
+  // Don't render children until after hydration
+  if (!mounted) {
+    return null;
+  }
 
   return (
-    <>
-      <TabContext.Provider value={{ currentTab, setCurrentTab }}>
-        {children}
-      </TabContext.Provider>
-    </>
+    <TabContext.Provider value={{ currentTab, setCurrentTab }}>
+      {children}
+    </TabContext.Provider>
   );
 };
 
