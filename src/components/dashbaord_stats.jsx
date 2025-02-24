@@ -16,7 +16,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
     dispatch(fetchAllUsers());
   }, [dispatch]);
 
-  const totalUsers = users.filter(user => user.role_id === 2).length; // Get total users
+  const totalUsers = users.length; // Get total users
   console.log(totalUsers);
   const subscribedUsers = users.filter(user => user.subscription_id !== null).length; // Assuming all users are subscribed for now
   console.log(subscribedUsers);

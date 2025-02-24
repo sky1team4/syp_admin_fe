@@ -29,34 +29,6 @@ import { ChevronDown, MoreVertical } from "lucide-react";
 import VerificationRequest from "@/app/admin/dashboard/verificationrequest";
 
 export function DataTable({ columns, data }) {
-  // console.log("data table", data);
-  // const [sorting, setSorting] = useState([]);
-  // const [columnFilters, setColumnFilters] = useState([]);
-  // const [activeTab, setActiveTab] = useState("Users");
-  // const [openVerificationRow, setOpenVerificationRow] = useState(null); // Track the open row for the verification popup
-
-  // Add console.log to debug columns
-  // console.log("Original columns:", columns);
-
-  // const getVisibleColumns = () => {
-  //   if (activeTab === "Verification Requests") {
-  //     return columns.filter(column => {
-  //       const columnId = column.id || column.accessorKey;
-  //       // Only hide the subscription_type column
-  //       return columnId !== 'subscription_type';
-  //     });
-  //   }
-  //   return columns;
-  // };
-
-  // const handleTabClick = (tab) => {
-  //   setActiveTab(tab);
-  //   // if (tab === "Users") {
-  //   //   setColumnFilters([{ id: "subscription_status", value: "verified" }]);
-  //   // } else {
-  //   //   setColumnFilters([{ id: "subscription_status", value: "pending" }]);
-  //   // }
-  // };
 
   const table = useReactTable({
     data,
@@ -104,7 +76,7 @@ export function DataTable({ columns, data }) {
                     .map((cell) => (
                       <TableCell key={cell.id} className="text-center">
                         {cell.column.id === "user_name" ? (
-                          <div className="flex items-center space-x-3">
+                          <div className="flex items-center">
                             <Image
                               src={cell.getValue()?.image || "/dash.png"}
                               alt="Profile"
@@ -128,7 +100,7 @@ export function DataTable({ columns, data }) {
                         ) : cell.column.id === "badge_status" ? (
                           <span
                             className={`text-sm font-medium  ${
-                              cell.getValue() === "active" ? "bg-green-100 text-green-600 rounded-full px-2 py-1 ml-12" : 
+                              cell.getValue() === "active" ? "bg-green-100 text-green-600 rounded-full px-2 py-1" : 
                               cell.getValue() === "inactive" ? "bg-red-100 text-red-600 rounded-full px-2 py-1" : 
                               "bg-gray-100 text-gray-600 rounded-full px-2 py-1" // Default case for other statuses
                             }`}
