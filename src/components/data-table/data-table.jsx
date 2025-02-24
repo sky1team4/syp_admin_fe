@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 export function DataTable({ columns, data }) {
-  console.log("data table", data);
+  // console.log("data table", data);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
 

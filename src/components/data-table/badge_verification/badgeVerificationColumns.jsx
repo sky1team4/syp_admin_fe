@@ -103,7 +103,7 @@ export const BadgeVerificationColumns = [
             const user = row.original;
             const [isOpen, setIsOpen] = useState(false);
             const dispatch = useDispatch();
-
+console.log("user", user)
             return (
                 <>
                     <DropdownMenu>
@@ -117,6 +117,8 @@ export const BadgeVerificationColumns = [
                             </Button>
                         </DropdownMenuTrigger>
                     </DropdownMenu>
+
+                
                     <VerificationRequest isOpen={isOpen} setIsOpen={setIsOpen} userData={user} />
                 </>
             );

@@ -10,16 +10,16 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
 
   const dispatch = useDispatch(); // Initialize dispatch
   const { users = [] } = useSelector((state) => state.auth); // Access users from the state
-  console.log(users.data);
+  // console.log(users.data);
 
   useEffect(() => {
     dispatch(fetchAllUsers());
   }, [dispatch]);
 
   const totalUsers = users.length; // Get total users
-  console.log(totalUsers);
+  // console.log(totalUsers);
   const subscribedUsers = users.filter(user => user.subscription_id !== null).length; // Assuming all users are subscribed for now
-  console.log(subscribedUsers);
+  //  console.log(subscribedUsers);
   const unsubscribedUsers = 0;
 
   const info = [

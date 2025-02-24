@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ;
-// const API_BASE_URL = "http://localhost:8080";
-console.log("API_BASE_URL", API_BASE_URL);
 
 export const fetchSubscribedUsers = createAsyncThunk(
     'subscribedUser/fetchSubscribedUsers',
