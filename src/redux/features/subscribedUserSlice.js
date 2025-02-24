@@ -41,21 +41,55 @@ export const deleteSubscribedUser = createAsyncThunk(
     }
 );
 
-export const getAllMonthlySubscribedUser = createAsyncThunk(
-    'subscribedUser/getAllMonthlySubscribedUser',
+export const getAllSubscriptionStats = createAsyncThunk(
+    'subscribedUser/getAllSubscriptionStats',
     async () => {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${API_BASE_URL}/subscribed-users/count/monthly`, {
+        if (!token) {
+            throw new Error('Token is not available');
+        }
+        console.log("Fetching subscription stats with Token", token);
+        
+        const response = await fetch(`${API_BASE_URL}/subscribed-users/subscription-stats`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         });
+
+        if (!response.ok) {
+            const errorData = await response.json(); // Get error details
+            throw new Error(errorData.message || 'Failed to fetch subscription stats');
+        }
+
         const data = await response.json();
-        console.log("Monthly Subscribed Response", data);
-        console.log("Monthly Subscribed Response Status", response.status);
-        return data;
+        console.log("Subscription Stats Response", data);
+        return data; // Return the parsed data
+    }
+);
+
+export const getAllMonthlySubscribedUser = createAsyncThunk(
+    'subscribedUser/getAllMonthlySubscribedUser',
+    async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('Token is not available');
+        }
+        const response = await fetch(`${API_BASE_URL}/subscribed-users/monthly`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to fetch monthly subscribed users');
+        }
+
+        return await response.json();
     }
 );
 
@@ -63,17 +97,23 @@ export const getAllAnnualSubscribedUser = createAsyncThunk(
     'subscribedUser/getAllAnnualSubscribedUser',
     async () => {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${API_BASE_URL}/subscribed-users/count/annual`, {
+        if (!token) {
+            throw new Error('Token is not available');
+        }
+        const response = await fetch(`${API_BASE_URL}/subscribed-users/annual`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         });
-        const data = await response.json();
-        console.log("Annual Subscribed Response", data);
-        console.log("Annual Subscribed Response Status", response.status);
-        return data;
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to fetch annual subscribed users');
+        }
+
+        return await response.json();
     }
 );
 

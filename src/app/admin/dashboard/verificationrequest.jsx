@@ -4,8 +4,7 @@ import NIC from '../../../../public/pp.jpg';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitVerificationRequest, resetVerificationState } from '../../../redux/features/verificationSlice';
-import { ChangeBadgeStatus } from '@/redux/features/badgeVerificationSlice';
-// Image
+import { ChangeBadgeStatus } from '../../../redux/features/badgeVerificationSlice';
 
 const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
   const dispatch = useDispatch();
@@ -59,17 +58,26 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
         return;
       }
 
+      // Ensure userData is defined before accessing its properties
+      if (!userData) {
+        toast.error('User data is not available');
+        return;
+      }
+
       // Pass the correct data structure to match the slice expectations
       const requestData = {
         userData: {
-          id: userData?.id || '',
-          username: userData?.username || '',
-          phone: userData?.phone || ''
+          id: userData.id || '',
+          username: userData.username || '',
+          phone: userData.phone || ''
         },
         documents: documents
       };
+      console.log("VERIFICATION REQUEST DATA", requestData);
 
       await dispatch(submitVerificationRequest(requestData)).unwrap();
+      // Dispatch ChangeBadgeStatus after successful verification request
+      await dispatch(ChangeBadgeStatus(userData.id)); // Ensure userData.id is passed correctly
       toast.success('Verification request submitted successfully');
       setIsOpen(false);
     } catch (error) {
