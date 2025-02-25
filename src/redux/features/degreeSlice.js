@@ -35,7 +35,7 @@ export const saveDegree = createAsyncThunk(
         const degreeData = {
           name: data.title?.trim(),
           status: data.status || 'Active',
-          educationId: data.educationId || 1
+          // educationId: data.educationId || 1
         };
   
         // Debug log
@@ -77,7 +77,7 @@ export const updateDegree = createAsyncThunk(
         id: id,
         name: data.title?.trim(),
         status: data.status || 'Active',
-        educationId: data.educationId || 1
+        // educationId: data.educationId || 1
       };
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/degrees/update`, {

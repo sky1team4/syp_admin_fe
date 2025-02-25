@@ -39,8 +39,10 @@ function TableSideBar({
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        dispatch(fetchSkills());
-    }, [dispatch]);
+        if (type === "subSkill") {
+            dispatch(fetchSkills());
+        }
+    }, [dispatch, type]);
 
     useEffect(() => {
         if (mode === 'edit' && selectedItem) {
@@ -64,7 +66,7 @@ function TableSideBar({
         if (!formData.title) {
             newErrors.title = FORM_VALIDATION.name.required;
         }
-        if (!formData.skillId) {
+        if (type === "subSkill" && !formData.skillId) {
             newErrors.skillId = 'Skill is required';
         }
         setErrors(newErrors);
@@ -124,28 +126,30 @@ function TableSideBar({
                     <p className="text-gray-500 text-sm mb-6">{dis}</p>
 
                     <div className="flex flex-col gap-4">
-                        <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Skill *
-                            </label>
-                            <select
-                                value={formData.skillId}
-                                onChange={(e) => setFormData({ ...formData, skillId: e.target.value })}
-                                className={`w-full p-2 border rounded-md ${
-                                    errors.skillId ? 'border-red-500' : 'border-gray-300'
-                                }`}
-                            >
-                                <option value="">Select a skill</option>
-                                {skills.map((skill) => (
-                                    <option key={skill.id} value={skill.id}>
-                                        {skill.name}
-                                    </option>
-                                ))}
-                            </select>
-                            {errors.skillId && (
-                                <p className="text-red-500 text-xs mt-1">{errors.skillId}</p>
-                            )}
-                        </div>
+                        {type === "subSkill" && (
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Skill *
+                                </label>
+                                <select
+                                    value={formData.skillId}
+                                    onChange={(e) => setFormData({ ...formData, skillId: e.target.value })}
+                                    className={`w-full p-2 border rounded-md ${
+                                        errors.skillId ? 'border-red-500' : 'border-gray-300'
+                                    }`}
+                                >
+                                    <option value="">Select a skill</option>
+                                    {skills.map((skill) => (
+                                        <option key={skill.id} value={skill.id}>
+                                            {skill.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.skillId && (
+                                    <p className="text-red-500 text-xs mt-1">{errors.skillId}</p>
+                                )}
+                            </div>
+                        )}
 
                         <Input
                             id="title"
