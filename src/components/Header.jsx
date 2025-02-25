@@ -115,22 +115,14 @@ const DashboardTopBar = () => {
                 unoptimized={true}
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center">
-                {user?.name ? (
-                  <span className="text-lg font-medium text-white">
-                    {user.name.charAt(0).toUpperCase()}
-                  </span>
-                ) : (
-                  <Image 
-                    src="/profile.png"
-                    alt="Default Profile" 
-                    fill
-                    sizes="(max-width: 768px) 40px, 44px"
-                    className="object-cover"
-                    priority
-                  />
-                )}
-              </div>
+              <Image 
+                src="/profile.png"
+                alt="Default Profile" 
+                fill
+                sizes="(max-width: 768px) 40px, 44px"
+                className="object-cover"
+                priority
+              />
             )}
           </div>
 
