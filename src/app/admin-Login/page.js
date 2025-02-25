@@ -59,6 +59,8 @@ export default function Login() {
         const payload = JSON.parse(atob(token.split('.')[1]));
         
         if (payload.role === 'admin') {
+          // Set the default tab to dashboard before navigation
+          localStorage.setItem('selectedTab', 'dashboard');
           router.push("/admin/dashboard");
         } else {
           toast.error("Access denied. Admin privileges required.");

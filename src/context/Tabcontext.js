@@ -10,10 +10,12 @@ export const TabProvider = ({ children }) => {
 
   useEffect(() => {
     setMounted(true);
-    // Load saved tab after component mounts
-    const savedTab = localStorage.getItem('selectedTab');
-    if (savedTab) {
-      setCurrentTab(savedTab);
+    // Load saved tab after component mounts, defaulting to dashboard
+    const savedTab = localStorage.getItem('selectedTab') || 'dashboard';
+    setCurrentTab(savedTab);
+    // Ensure dashboard is set in localStorage if no tab is saved
+    if (!localStorage.getItem('selectedTab')) {
+      localStorage.setItem('selectedTab', 'dashboard');
     }
   }, []);
 
