@@ -4,9 +4,10 @@ const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export const saveStripeConfig = createAsyncThunk(
   'stripe/saveConfig',
   async (data, { rejectWithValue, getState }) => {
+    console.log('STData:', data);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe/stripe-create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +34,7 @@ export const fetchStripeConfig = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe/stripe-get`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

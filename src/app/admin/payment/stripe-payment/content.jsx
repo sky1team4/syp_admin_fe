@@ -64,31 +64,55 @@ const StripePaymentIntegration = () => {
     if (config && Array.isArray(config) && config.length > 0) {
       const configData = config[0];
       
+      // Log the raw test_mode value
+      console.log('Raw test_mode value from API:', configData.test_mode);
+      
+      // Set form values
       setValue('publishableKey', configData.publish_key || '');
       setValue('secretKey', configData.secret_key || '');
       setValue('webhookSigningSecret', configData.webhook_signing_secret || '');
       setValue('webhookUrl', configData.webhook_url || '');
       setValue('defaultCurrency', configData.default_currency || '');
       setValue('allowedCurrencies', configData.allowed_currency?.split(',') || []);
-      setValue('testMode', configData.text_mode === 'test');
+      
+      // Explicitly convert to boolean and set test mode
+      const isTestMode = configData.test_mode === true;
+      console.log('Setting testMode to:', isTestMode);
+      setValue('testMode', isTestMode);
     }
   }, [config, setValue]);
 
+  // Watch the testMode value
+  const testMode = watch('testMode');
+  
+  useEffect(() => {
+    console.log('Current testMode value:', testMode);
+  }, [testMode]);
+
   const onSubmit = async (data) => {
     try {
+      // Validate that allowedCurrencies is an array and not empty
+      const allowedCurrencies = Array.isArray(data.allowedCurrencies) 
+        ? data.allowedCurrencies 
+        : [data.allowedCurrencies];
+
+      if (!allowedCurrencies.length) {
+        throw new Error('At least one currency must be selected');
+      }
+
       const transformedData = {
         publish_key: data.publishableKey,
         secret_key: data.secretKey,
         webhook_signing_secret: data.webhookSigningSecret,
         webhook_url: data.webhookUrl || '',
         default_currency: data.defaultCurrency,
-        allowed_currency: Array.isArray(data.allowedCurrencies) 
-          ? data.allowedCurrencies.join(',')
-          : data.allowedCurrencies,
-        text_mode: data.testMode ? 'test' : 'live',
+        allowed_currency: allowedCurrencies.join(','),
+        test_mode: data.testMode,
         amount: data.amount || 5000,
-        currency: data.defaultCurrency || 'USD',
+        currency: data.defaultCurrency,
       };
+
+      console.log('Submitting data:', transformedData);
 
       // If we have an existing config, include its ID
       if (config && Array.isArray(config) && config.length > 0) {
@@ -140,18 +164,39 @@ const StripePaymentIntegration = () => {
 
         {/* Currency Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Dropdown id="defaultCurrency" register={register('defaultCurrency', FORM_VALIDATION.defaultCurrency)}
-            label="Default Currency *" array={CURRENCIES} selected="Select Below"
-            error={errors.defaultCurrency?.message} />
-          <Dropdown id="allowedCurrencies" register={register('allowedCurrencies', FORM_VALIDATION.allowedCurrencies)}
-            label="Allowed Currencies *" array={CURRENCIES} selected="Select Below"
-            error={errors.allowedCurrencies?.message} />
+          <Dropdown 
+            id="defaultCurrency" 
+            register={register('defaultCurrency', FORM_VALIDATION.defaultCurrency)}
+            label="Default Currency *" 
+            array={CURRENCIES} 
+            selected="Select Below"
+            error={errors.defaultCurrency?.message} 
+          />
+          <Dropdown 
+            id="allowedCurrencies" 
+            register={register('allowedCurrencies', FORM_VALIDATION.allowedCurrencies)}
+            label="Allowed Currencies *" 
+            array={CURRENCIES} 
+            selected="Select Below"
+            error={errors.allowedCurrencies?.message} 
+            multiple={true}
+          />
         </div>
 
         {/* Test Mode Section */}
         <div className="flex justify-between items-center">
-          <label htmlFor="testMode" className="text-sm font-medium text-gray-700">Enable Test Mode</label>
-          <CustomCheckbox id="testMode" {...register('testMode')} defaultChecked={false} />
+          <label htmlFor="testMode" className="text-sm font-medium text-gray-700">
+            Enable Test Mode
+          </label>
+          <CustomCheckbox 
+            id="testMode" 
+            name="testMode"
+            checked={Boolean(testMode)}
+            onChange={(e) => {
+              console.log('Checkbox onChange event:', e.target.checked);
+              setValue('testMode', e.target.checked);
+            }}
+          />
         </div>
 
         {/* Submit Button */}

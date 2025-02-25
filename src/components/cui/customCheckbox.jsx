@@ -1,15 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const CustomCheckbox = () => {
-  const [checked, setChecked] = useState(false);
+const CustomCheckbox = ({ onChange, checked, ...props }) => {
+  console.log('CustomCheckbox received checked value:', checked);
+
+  const handleChange = (e) => {
+    if (onChange) {
+      onChange({
+        target: {
+          checked: !checked,
+          type: 'checkbox',
+          name: props.name
+        }
+      });
+    }
+  };
 
   return (
     <label className="relative inline-block w-14 h-7 cursor-pointer">
       <input
         type="checkbox"
         className="sr-only"
-        checked={checked}
-        onChange={() => setChecked(!checked)}
+        checked={checked || false}
+        onChange={handleChange}
+        {...props}
       />
       <span
         className={`block w-full h-full rounded-full transition-colors ${
