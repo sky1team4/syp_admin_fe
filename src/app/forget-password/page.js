@@ -100,9 +100,9 @@ const ForgetPassword = () => {
           {message && (
             <div 
               className={`text-sm ${
-                message.toLowerCase().includes('success') || message.toLowerCase().includes('will receive')
-                  ? 'text-green-600 bg-green-50' 
-                  : 'text-red-600 bg-red-50'
+                // message.toLowerCase().includes('success') || message.toLowerCase().includes('will receive')
+                  'text-green-600 bg-green-50' 
+                  
               } text-center p-2 rounded-md`}
             >
               {message}
