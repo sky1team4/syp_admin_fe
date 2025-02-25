@@ -17,7 +17,7 @@ const Sidebar = () => {
   const router = useRouter();
   const { setCurrentTab } = useContext(TabContext);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [staticTab, setStaticTab] = useState("dashboard"); // Default selected tab
+  const [staticTab, setStaticTab] = useState("dashboard");
   const sidebarClass = themes.SideBarTheme;
   const activeSidebarClass = themes.SideBarTheme_Active;
   const sidebarItemClass = "flex items-center p-2 rounded-xl";
@@ -25,39 +25,38 @@ const Sidebar = () => {
   useEffect(() => {
     // Load the selected tab from localStorage on component mount
     const savedTab = localStorage.getItem("selectedTab");
-    const initialTab = savedTab || "dashboard"; // Default to "dashboard" if no tab is saved
-    setStaticTab(initialTab);
-    setCurrentTab(initialTab); // Ensure context is updated with the initial tab
+    const path = window.location.pathname;
+
+    // Only default to dashboard if there's no saved tab AND we're on the dashboard route
+    if (!savedTab && path === '/admin/dashboard') {
+      setStaticTab('dashboard');
+      setCurrentTab('dashboard');
+      localStorage.setItem('selectedTab', 'dashboard');
+    } else if (savedTab) {
+      // Otherwise use the saved tab
+      setStaticTab(savedTab);
+      setCurrentTab(savedTab);
+    }
   }, []);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   const handleTabClick = async (tab) => {
-    setStaticTab(tab);
     if (tab === "signout") {
       try {
-        // Remove the cookie first
         Cookies.remove("authToken", { path: "/" });
-        
-        // Dispatch logout action
         await dispatch(logoutUser()).unwrap();
-        
-        // Reset selected tab
         localStorage.setItem("selectedTab", "dashboard");
         setCurrentTab("dashboard");
-        
-        // Redirect to login page
         router.replace("/admin-Login");
       } catch (err) {
         console.error("Logout error:", err);
-        
-        // Still remove cookie and redirect even if API call fails
         Cookies.remove("authToken", { path: "/" });
-        
         toast.error("Logged out due to error");
         router.replace("/admin-Login");
       }
     } else {
+      setStaticTab(tab);
       localStorage.setItem("selectedTab", tab);
       setCurrentTab(tab);
     }
