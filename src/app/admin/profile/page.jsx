@@ -7,6 +7,9 @@ import toast from 'react-hot-toast'
 import { updateUser, updateProfileImage } from '@/redux/features/authSlice'
 import Cookies from 'js-cookie'
 
+// Get base URL from environment variable
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
+
 export default function ProfilePage() {
   const dispatch = useDispatch();
   const { user, loading } = useSelector((state) => state.auth);
@@ -88,45 +91,52 @@ export default function ProfilePage() {
     
     const promise = toast.promise(
       (async () => {
-        const updateData = {};
-        if (profileData.email !== user.email) updateData.email = profileData.email;
-        if (profileData.name !== user.name) updateData.name = profileData.name;
+        try {
+          const updateData = {};
+          if (profileData.email !== user.email) updateData.email = profileData.email;
+          if (profileData.name !== user.name) updateData.name = profileData.name;
 
-        // Check if there are any changes including image
-        if (Object.keys(updateData).length === 0 && !selectedImage) {
-          throw new Error('No changes to update');
-        }
-
-        // First upload image if there is one
-        if (selectedImage) {
-          const imageResult = await dispatch(updateProfileImage(selectedImage)).unwrap();
-          if (!imageResult.imageUrl) {
-            throw new Error('Failed to upload profile picture');
+          // Check if there are any changes including image
+          if (Object.keys(updateData).length === 0 && !selectedImage) {
+            throw new Error('No changes to update');
           }
-          updateData.profilePicture = imageResult.imageUrl;
+
+          // First upload image if there is one
+          if (selectedImage) {
+            const imageResult = await dispatch(updateProfileImage(selectedImage)).unwrap();
+            if (!imageResult.imageUrl) {
+              throw new Error('Failed to upload profile picture');
+            }
+            // Store the complete URL with BASE_URL
+            updateData.profilePicture = imageResult.imageUrl.startsWith('http') 
+              ? imageResult.imageUrl 
+              : `${BASE_URL}${imageResult.imageUrl}`;
+          }
+
+          // Then update other profile data if any
+          if (Object.keys(updateData).length > 0) {
+            const result = await dispatch(updateUser(updateData)).unwrap();
+          }
+
+          // Update local state with complete URL
+          setProfileData(prev => ({
+            ...prev,
+            ...updateData,
+            picture: updateData.profilePicture || prev.picture
+          }));
+
+          // Clear the selected image
+          setSelectedImage(null);
+
+          // Store the complete URL in localStorage
+          if (updateData.profilePicture) {
+            localStorage.setItem('userProfilePicture', updateData.profilePicture);
+          }
+
+          return `Updated: ${Object.keys(updateData).join(', ')}`;
+        } catch (error) {
+          throw new Error(error.message || 'Failed to update profile');
         }
-
-        // Then update other profile data if any
-        if (Object.keys(updateData).length > 0) {
-          const result = await dispatch(updateUser(updateData)).unwrap();
-        }
-
-        // Update local state
-        setProfileData(prev => ({
-          ...prev,
-          ...updateData,
-          picture: updateData.profilePicture || prev.picture
-        }));
-
-        // Clear the selected image
-        setSelectedImage(null);
-
-        // Store the new profile picture URL if it was updated
-        if (updateData.profilePicture) {
-          localStorage.setItem('userProfilePicture', updateData.profilePicture);
-        }
-
-        return `Updated: ${Object.keys(updateData).join(', ')}`;
       })(),
       {
         loading: 'Updating profile...',
@@ -244,9 +254,14 @@ export default function ProfilePage() {
     const profilePicture = profileData.picture || user?.profilePicture || localStorage.getItem('userProfilePicture');
     
     if (profilePicture) {
+      // Always ensure we have a complete URL
+      const imageUrl = profilePicture.startsWith('http') 
+        ? profilePicture 
+        : `${BASE_URL}${profilePicture}`;
+
       return (
         <Image 
-          src={profilePicture}
+          src={imageUrl}
           alt={user?.name || 'Profile'} 
           width={80} 
           height={80} 

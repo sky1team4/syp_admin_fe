@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import Notifications from "../../src/app/admin/dashboard/notification";
 import { TabContext } from '../context/Tabcontext'; // Adjust the path as necessary
 
+// Get base URL from environment variable
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const DashboardTopBar = () => {
   // 1. All useState declarations
@@ -51,6 +53,29 @@ const DashboardTopBar = () => {
 
   const toggleNotifications = () => {
     setIsNotificationOpen((prev) => !prev);
+  };
+
+  // Helper function to get complete image URL
+  const getCompleteImageUrl = (url) => {
+    if (!url) return null;
+    return url.startsWith('http') ? url : `${BASE_URL}${url}`;
+  };
+
+  // Profile Image Component
+  const ProfileImage = ({ user }) => {
+    const imageUrl = user?.profilePicture ? getCompleteImageUrl(user.profilePicture) : '/profile.png';
+    
+    return (
+      <Image 
+        src={imageUrl}
+        alt={user?.name || 'Profile'} 
+        fill
+        sizes="(max-width: 768px) 40px, 44px"
+        className="rounded-full object-cover"
+        priority
+        unoptimized={true}
+      />
+    );
   };
 
   // Loading state JSX
@@ -104,26 +129,7 @@ const DashboardTopBar = () => {
           className="flex items-center space-x-3 cursor-pointer transition-transform duration-200 hover:scale-105"
         >
           <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-purple-100 ring-offset-2 shadow-sm relative">
-            {user?.profilePicture ? (
-              <Image 
-                src={user.profilePicture}
-                alt={user?.name || 'Profile'} 
-                fill
-                sizes="(max-width: 768px) 40px, 44px"
-                className="rounded-full object-cover"
-                priority
-                unoptimized={true}
-              />
-            ) : (
-              <Image 
-                src="/profile.png"
-                alt="Default Profile" 
-                fill
-                sizes="(max-width: 768px) 40px, 44px"
-                className="object-cover"
-                priority
-              />
-            )}
+            <ProfileImage user={user} />
           </div>
 
           <div className="text-gray-700">
