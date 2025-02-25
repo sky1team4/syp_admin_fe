@@ -4,7 +4,7 @@ import { ArrowDown, ArrowUp, MoreHorizontal } from "lucide-react"
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "@/components/ui/button"
-import { ChangeBadgeStatus } from "../../../redux/features/badgeVerificationSlice"
+import { GetAllbadgeVerificationRequest,ChangeBadgeStatus } from "../../../redux/features/badgeVerificationSlice"
 import { useDispatch, useSelector } from "react-redux";
 import {
     DropdownMenu,
@@ -90,7 +90,7 @@ export const BadgeVerificationColumns = [
         cell: ({ row }) => {
             const status = row.original.badge_status;
             return (
-                <div className={`text-sm font-medium w-14 ${status === 'active' ? 'bg-green-100 text-green-600 p-1 rounded-xl' : 'bg-red-100 text-red-500 p-1 rounded-xl'}`}>
+                <div className={`text-sm font-medium w-14 ${status === 'active' ? 'bg-green-100 text-green-600 p-1 text-center rounded-xl ml-10' : 'bg-red-100 text-red-500 p-1 text-center rounded-xl'}`}>
                     {status}
                 </div>
             );
@@ -103,7 +103,10 @@ export const BadgeVerificationColumns = [
             const user = row.original;
             const [isOpen, setIsOpen] = useState(false);
             const dispatch = useDispatch();
-console.log("user", user)
+            // dispatch(GetAllbadgeVerificationRequest())
+            // const badgeVerificationList = useSelector((state) => state.badgeVerificationList);
+            // console.log("badgeVerificationList", badgeVerificationList)
+                // console.log("user in badgeVerifcationColumns", user)
             return (
                 <>
                     <DropdownMenu>

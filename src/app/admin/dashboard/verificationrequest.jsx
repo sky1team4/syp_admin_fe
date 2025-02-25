@@ -1,15 +1,35 @@
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProfilePic from '../../../../public/pp.jpg';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitVerificationRequest, resetVerificationState } from '../../../redux/features/verificationSlice';
-import { ChangeBadgeStatus } from '../../../redux/features/badgeVerificationSlice';
+import { GetAllbadgeVerificationRequest,ChangeBadgeStatus } from '../../../redux/features/badgeVerificationSlice';
 
 const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
   const dispatch = useDispatch();
   const { loading, error, success } = useSelector((state) => state.verification);
+  // const badgeVerificationList = useSelector((state) => state.badgeVerificationList);
 
+  // Add state for image preview URL
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+
+  // Clean up object URL when component unmounts or when preview changes
+  useEffect(() => {
+    return () => {
+      if (imagePreviewUrl) {
+        URL.revokeObjectURL(imagePreviewUrl);
+      }
+    };
+  }, [imagePreviewUrl]);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreviewUrl(previewUrl);
+    }
+  };
 
   const handleSubmit = async () => {
     console.log("userData", userData.id)
@@ -17,6 +37,7 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
     try {
 
       dispatch(ChangeBadgeStatus({id: userData.id}))
+      // dispatch(GetAllbadgeVerificationRequest())
 
       // Ensure userData is defined before accessing its properties
       if (!userData) {
@@ -46,12 +67,15 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
       {/* Popup */}
 
       <div className="bg-white rounded-lg h-screen shadow-lg w-full max-w-xl p-6 relative transform transition-transform duration-500">
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl font-bold text-purplenote-800">
+            Badge Verification Request
+          </h2>
+            <Image src="/FAQ/cross.png" className="cursor-pointer" alt="close" width={20} height={20} onClick={() => setIsOpen(false)} />
+
+        </div>
         
-          <Image src="/FAQ/cross.png" className="cursor-pointer" alt="close" width={20} height={20} onClick={() => setIsOpen(false)} />
         {/* </button> */}
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          Verification Request
-        </h2>
 
         <div className="flex items-center p-4 bg-purple-100 rounded-lg shadow-sm max-w-md mt-4">
           <Image
@@ -60,9 +84,9 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
             className="w-12 h-12 rounded-full border border-gray-300"
           />
           <div className="ml-4">
-            <h2 className="text-sm font-semibold text-gray-800">{userData?.name}</h2>
+            <h2 className="text-sm font-semibold text-gray-800">{userData?.user_name}</h2>
             <p className="text-xs text-gray-500">{userData?.email}</p>
-            <p className="text-xs text-gray-500">{userData?.phoneNumber}</p>
+            <p className="text-xs text-gray-500">{userData?.user_phone_number}</p>
           </div>
         </div>
 
@@ -73,45 +97,32 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
 
         {/* Document List */}
         <div className="flex space-x-4 justify-center mb-6">
-         
-            <div
-             
-              className="border rounded-lg shadow-sm bg-gray-50 w-40 h-42 p-2 relative"
-            >
-              <label className="block">
-                {userData?.id_card_front_image && 
-                  <Image
-                    src={process.env.NEXT_PUBLIC_API_URL + userData?.id_card_front_image}
-                     alt="id_card_front_image"
-                    width={350}
-                    height={6}
-                    className="rounded-md mb-2 object-cover"
-                  />
-                }
-                 
-               
-              </label>
-            
-            </div>
-            <div
-             
-              className="border rounded-lg shadow-sm bg-gray-50 w-40 h-42 p-2 relative"
-            >
-              <label className="block">
-                {userData?.id_card_back_image && 
-                  <Image
-                    src={process.env.NEXT_PUBLIC_API_URL + userData?.id_card_back_image}
-                    alt="id_card_back_image"
-                    width={350}
-                    height={6}
-                    className="rounded-md mb-2 object-cover"
-                  />
-                }
-                 
-               
-              </label>
-            
-            </div>
+          <div className="border rounded-lg shadow-sm bg-gray-50 w-40 h-42 p-2 relative">
+            <label className="block">
+              {userData?.id_card_front_image && 
+                <Image
+                  src={process.env.NEXT_PUBLIC_API_URL +"/"+ userData.id_card_front_image}
+                  alt="ID Card Front"
+                  width={350}
+                  height={200}
+                  className="rounded-md mb-2 object-cover"
+                />
+              }
+            </label>
+          </div>
+          <div className="border rounded-lg shadow-sm bg-gray-50 w-40 h-42 p-2 relative">
+            <label className="block">
+              {userData?.id_card_back_image && 
+                <Image
+                  src={process.env.NEXT_PUBLIC_API_URL +"/"+ userData.id_card_back_image}
+                  alt="ID Card Back"
+                  width={350}
+                  height={200}
+                  className="rounded-md mb-2 object-cover"
+                />
+              }
+            </label>
+          </div>
         </div>
 
         {/* Actions */}

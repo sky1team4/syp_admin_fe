@@ -63,7 +63,7 @@ const Notifications = ({ isVisible }) => {
         } bg-white shadow-2xl rounded-lg 2xl:w-[20rem] h-[38rem] p-2 sm:p-6 flex flex-col`}
       >
         {/* Header */}
-        <div className="flex justify-between items-center flex-wrap mb-4">
+        <div className="flex justify-between items-center flex-wrap">
           <h2 className="text-lg font-semibold text-gray-800">Notifications</h2>
           <button
             className="gap-2 text-sm text-purple-600 hover:underline flex items-center"
@@ -92,7 +92,7 @@ const Notifications = ({ isVisible }) => {
 
         {/* Notifications List - Now with scroll */}
         <div className="overflow-y-auto custom-scrollbar flex-1">
-          <ul className="space-y-4">
+          <ul className="space-y-4 mb-20">
             {filteredNotifications.length > 0 ? (
               filteredNotifications.map((notification, index) => (
                 <li
