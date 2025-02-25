@@ -75,10 +75,9 @@ const StripePaymentIntegration = () => {
       setValue('defaultCurrency', configData.default_currency || '');
       setValue('allowedCurrencies', configData.allowed_currency?.split(',') || []);
       
-      // Explicitly convert to boolean and set test mode
-      const isTestMode = configData.test_mode === true;
-      console.log('Setting testMode to:', isTestMode);
-      setValue('testMode', isTestMode);
+      // Set test_mode directly as boolean
+      setValue('testMode', Boolean(configData.test_mode));
+      console.log('Setting testMode to:', Boolean(configData.test_mode));
     }
   }, [config, setValue]);
 
@@ -91,23 +90,16 @@ const StripePaymentIntegration = () => {
 
   const onSubmit = async (data) => {
     try {
-      // Validate that allowedCurrencies is an array and not empty
-      const allowedCurrencies = Array.isArray(data.allowedCurrencies) 
-        ? data.allowedCurrencies 
-        : [data.allowedCurrencies];
-
-      if (!allowedCurrencies.length) {
-        throw new Error('At least one currency must be selected');
-      }
-
       const transformedData = {
         publish_key: data.publishableKey,
         secret_key: data.secretKey,
         webhook_signing_secret: data.webhookSigningSecret,
         webhook_url: data.webhookUrl || '',
         default_currency: data.defaultCurrency,
-        allowed_currency: allowedCurrencies.join(','),
-        test_mode: data.testMode,
+        allowed_currency: Array.isArray(data.allowedCurrencies) 
+          ? data.allowedCurrencies.join(',')
+          : data.allowedCurrencies,
+        test_mode: Boolean(data.testMode),  // Send as boolean
         amount: data.amount || 5000,
         currency: data.defaultCurrency,
       };

@@ -23,7 +23,18 @@ const FORM_VALIDATION = {
 };
 
 const PaypalPaymentIntegration = () => {
-  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm();
+  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm({
+    defaultValues: {
+      clientId: '',
+      clientSecret: '',
+      webhookId: '',
+      environment: '',
+      defaultCurrency: '',
+      merchantAccountId: '',
+      enablePaypal: false,
+      testMode: false
+    }
+  });
   const dispatch = useDispatch();
   const { isLoading, config } = useSelector((state) => state.paypal);
 
@@ -32,8 +43,21 @@ const PaypalPaymentIntegration = () => {
     dispatch(fetchPaypalConfig());
   }, [dispatch]);
 
+  // Watch both values
+  const enablePaypal = watch('enablePaypal');
+  const testMode = watch('testMode');
+  
+  useEffect(() => {
+    console.log('Enable PayPal changed:', enablePaypal);
+  }, [enablePaypal]);
+
+  useEffect(() => {
+    console.log('Test mode changed:', testMode);
+  }, [testMode]);
+
   // Set form values when config is loaded
   useEffect(() => {
+    console.log('Config received:', config);
     if (config && Array.isArray(config) && config.length > 0) {
       const configData = config[0];
       
@@ -44,18 +68,9 @@ const PaypalPaymentIntegration = () => {
       setValue('defaultCurrency', configData.default_currency || '');
       setValue('merchantAccountId', configData.merchant_acc_id || '');
       setValue('enablePaypal', configData.paypal_payment === 'enabled');
-
-      console.log('PayPal form values set:', {
-        clientId: watch('clientId'),
-        clientSecret: watch('clientSecret'),
-        webhookId: watch('webhookId'),
-        environment: watch('environment'),
-        defaultCurrency: watch('defaultCurrency'),
-        merchantAccountId: watch('merchantAccountId'),
-        enablePaypal: watch('enablePaypal')
-      });
+      setValue('testMode', Boolean(configData.test_mode));
     }
-  }, [config, setValue, watch]);
+  }, [config, setValue]);
 
   const onSubmit = async (data) => {
     try {
@@ -66,7 +81,8 @@ const PaypalPaymentIntegration = () => {
         environment: data.environment,
         default_currency: data.defaultCurrency,
         merchant_acc_id: data.merchantAccountId || "",
-        paypal_payment: data.enablePaypal ? "enabled" : "disabled"
+        paypal_payment: data.enablePaypal ? "enabled" : "disabled",
+        test_mode: Boolean(data.testMode)
       };
 
       // Include ID if we have existing config
@@ -132,8 +148,34 @@ const PaypalPaymentIntegration = () => {
 
         {/* Enable PayPal Section */}
         <div className="flex justify-between items-center">
-          <label htmlFor="enablePaypal" className="text-sm font-medium text-gray-700">Enable PayPal Payments</label>
-          <CustomCheckbox id="enablePaypal" {...register("enablePaypal")} defaultChecked={false} />
+          <label htmlFor="enablePaypal" className="text-sm font-medium text-gray-700">
+            Enable PayPal Payments
+          </label>
+          <CustomCheckbox 
+            id="enablePaypal" 
+            name="enablePaypal"
+            checked={Boolean(enablePaypal)}
+            onChange={(e) => {
+              console.log('Checkbox changed to:', e.target.checked);
+              setValue('enablePaypal', e.target.checked);
+            }}
+          />
+        </div>
+
+        {/* Test Mode Section */}
+        <div className="flex justify-between items-center">
+          <label htmlFor="testMode" className="text-sm font-medium text-gray-700">
+            Enable Test Mode
+          </label>
+          <CustomCheckbox 
+            id="testMode" 
+            name="testMode"
+            checked={Boolean(testMode)}
+            onChange={(e) => {
+              console.log('Test mode changed to:', e.target.checked);
+              setValue('testMode', e.target.checked);
+            }}
+          />
         </div>
 
         {/* Submit Button */}

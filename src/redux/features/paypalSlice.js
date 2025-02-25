@@ -4,9 +4,11 @@ const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export const savePaypalConfig = createAsyncThunk(
   'paypal/saveConfig',
   async (data, { rejectWithValue }) => {
+    console.log('data', data);
+    
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/paypal`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/paypal/paypal-create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,7 +34,7 @@ export const fetchPaypalConfig = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/paypal`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/paypal/paypal-get`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
