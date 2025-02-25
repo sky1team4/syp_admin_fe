@@ -15,17 +15,17 @@ const CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD', 'INR'];
 
 const FORM_VALIDATION = {
   publishableKey: {
-    required: 'Publishable Key is required',
+    required: 'Publishable Key is required eg.(PK_1234567890)',
     pattern: {
       value: /^pk_/,
-      message: 'Invalid publishable key format'
+      message: 'Invalid publishable key format eg.(PK_1234567890)'
     }
   },
   secretKey: {
-    required: 'Secret Key is required',
+    required: 'Secret Key is required eg.(SK_1234567890)',
     pattern: {
       value: /^sk_/,
-      message: 'Invalid secret key format'
+      message: 'Invalid secret key format eg.(SK_1234567890)'
     }
   },
   webhookSigningSecret: {
