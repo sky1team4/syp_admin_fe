@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import Input from './cui/input';
 import Image from 'next/image';
+import { fetchSkills } from '../redux/features/skillSlice';
 
 const FORM_VALIDATION = {
   name: {
@@ -28,24 +29,32 @@ function TableSideBar({
 }) {
     const dispatch = useDispatch();
     const { isLoading } = useSelector((state) => state[type] || { isLoading: false });
+    const { items: skills } = useSelector((state) => state.skill || { items: [] });
     
     const [formData, setFormData] = useState({
         title: '',
-        status: 'Active'
+        status: 'Active',
+        skillId: ''
     });
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        dispatch(fetchSkills());
+    }, [dispatch]);
 
     useEffect(() => {
         if (mode === 'edit' && selectedItem) {
             setFormData({
                 title: selectedItem.title || '',
                 id: selectedItem.id,
-                status: selectedItem.status || 'Active'
+                status: selectedItem.status || 'Active',
+                skillId: selectedItem.skillId || ''
             });
         } else {
             setFormData({
                 title: '',
-                status: 'Active'
+                status: 'Active',
+                skillId: ''
             });
         }
     }, [selectedItem, mode, isOpen]);
@@ -54,6 +63,9 @@ function TableSideBar({
         const newErrors = {};
         if (!formData.title) {
             newErrors.title = FORM_VALIDATION.name.required;
+        }
+        if (!formData.skillId) {
+            newErrors.skillId = 'Skill is required';
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -68,7 +80,8 @@ function TableSideBar({
         try {
             const itemData = { 
                 title: formData.title,
-                status: formData.status 
+                status: formData.status,
+                skillId: formData.skillId
             };
 
             if (mode === 'edit' && formData.id) {
@@ -111,6 +124,29 @@ function TableSideBar({
                     <p className="text-gray-500 text-sm mb-6">{dis}</p>
 
                     <div className="flex flex-col gap-4">
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Skill *
+                            </label>
+                            <select
+                                value={formData.skillId}
+                                onChange={(e) => setFormData({ ...formData, skillId: e.target.value })}
+                                className={`w-full p-2 border rounded-md ${
+                                    errors.skillId ? 'border-red-500' : 'border-gray-300'
+                                }`}
+                            >
+                                <option value="">Select a skill</option>
+                                {skills.map((skill) => (
+                                    <option key={skill.id} value={skill.id}>
+                                        {skill.name}
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.skillId && (
+                                <p className="text-red-500 text-xs mt-1">{errors.skillId}</p>
+                            )}
+                        </div>
+
                         <Input
                             id="title"
                             value={formData.title}

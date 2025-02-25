@@ -42,7 +42,7 @@ export const saveSubSkill = createAsyncThunk(
       const subSkillData = {
         name: data.title?.trim(),
         status: 'Active',
-        skillId: 1  // Default skillId
+        skillId: parseInt(data.skillId)  // Use the selected skillId
       };
 
       console.log('Sending sub skill data:', subSkillData);
@@ -80,7 +80,7 @@ export const updateSubSkill = createAsyncThunk(
         id: id,
         name: data.title?.trim(),
         status: 'Active',
-        skillId: 1  // Default skillId
+        skillId: parseInt(data.skillId)  // Use the selected skillId
       };
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sub-skills/update`, {
