@@ -38,9 +38,25 @@ const FORM_VALIDATION = {
 };
 
 const BankPaymentIntegration = () => {
-  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm();
+  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm({
+    defaultValues: {
+      accHolderName: '',
+      bankAccNo: '',
+      ibanNo: '',
+      swiftCode: '',
+      bankName: '',
+      allowTransactionType: '',
+      bankAddress: '',
+      enableBankPayment: false,
+      testMode: false
+    }
+  });
   const dispatch = useDispatch();
   const { isLoading, config } = useSelector((state) => state.bank);
+
+  // Watch both values
+  const enableBankPayment = watch('enableBankPayment');
+  const testMode = watch('testMode');
 
   // Fetch config when component mounts
   useEffect(() => {
@@ -60,6 +76,7 @@ const BankPaymentIntegration = () => {
       setValue('allowTransactionType', configData.allow_transaction_type || '');
       setValue('bankAddress', configData.bank_address || '');
       setValue('enableBankPayment', configData.direct_bank_payment === 'enabled');
+      setValue('testMode', Boolean(configData.test_mode));
 
       console.log('Bank form values set:', {
         accHolderName: watch('accHolderName'),
@@ -69,7 +86,8 @@ const BankPaymentIntegration = () => {
         bankName: watch('bankName'),
         allowTransactionType: watch('allowTransactionType'),
         bankAddress: watch('bankAddress'),
-        enableBankPayment: watch('enableBankPayment')
+        enableBankPayment: watch('enableBankPayment'),
+        testMode: watch('testMode')
       });
     }
   }, [config, setValue, watch]);
@@ -84,7 +102,8 @@ const BankPaymentIntegration = () => {
         bank_name: data.bankName,
         allow_transaction_type: data.allowTransactionType,
         bank_address: data.bankAddress,
-        direct_bank_payment: data.enableBankPayment ? 'enabled' : 'disabled'
+        direct_bank_payment: data.enableBankPayment ? 'enabled' : 'disabled',
+        test_mode: Boolean(data.testMode)
       };
 
       await dispatch(saveBankConfig(transformedData)).unwrap();
@@ -187,8 +206,34 @@ const BankPaymentIntegration = () => {
 
         {/* Enable Bank Payment Section */}
         <div className="flex justify-between items-center">
-          <label htmlFor="enableBankPayment" className="text-sm font-medium text-gray-700">Enable Bank Payment</label>
-          <CustomCheckbox id="enableBankPayment" {...register('enableBankPayment')} defaultChecked={false} />
+          <label htmlFor="enableBankPayment" className="text-sm font-medium text-gray-700">
+            Enable Bank Payment
+          </label>
+          <CustomCheckbox 
+            id="enableBankPayment" 
+            name="enableBankPayment"
+            checked={Boolean(enableBankPayment)}
+            onChange={(e) => {
+              console.log('Bank payment changed to:', e.target.checked);
+              setValue('enableBankPayment', e.target.checked);
+            }}
+          />
+        </div>
+
+        {/* Test Mode Section */}
+        <div className="flex justify-between items-center">
+          <label htmlFor="testMode" className="text-sm font-medium text-gray-700">
+            Enable Test Mode
+          </label>
+          <CustomCheckbox 
+            id="testMode" 
+            name="testMode"
+            checked={Boolean(testMode)}
+            onChange={(e) => {
+              console.log('Test mode changed to:', e.target.checked);
+              setValue('testMode', e.target.checked);
+            }}
+          />
         </div>
 
         {/* Submit Button */}
