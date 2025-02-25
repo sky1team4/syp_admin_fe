@@ -81,7 +81,7 @@ const DashboardTopBar = () => {
   // Loading state JSX
   if (!mounted) {
     return (
-      <div className="fixed top-0 w-full lg:pr-80 flex items-center justify-between px-8 py-4 bg-white">
+      <div className="z-50 fixed top-0 w-full lg:pr-80 flex items-center justify-between px-8 py-4 bg-white">
         <div className="animate-pulse flex items-center space-x-2">
           <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
           <div className="space-y-2">
@@ -95,7 +95,7 @@ const DashboardTopBar = () => {
 
   // Main render
   return (
-    <div className={`fixed top-0 w-full lg:pr-80 flex items-center justify-between px-8 py-4 bg-white flex-col md:flex-row ${isNotificationOpen ? 'backdrop-blur-md' : ''}`}>
+    <div className={`fixed z-50 top-0 w-full lg:pr-80 flex items-center justify-between px-8 py-4 bg-white flex-col md:flex-row ${isNotificationOpen ? 'backdrop-blur-md' : ''}`}>
       {/* Left Section */}
       <div className="flex md:items-center lg:items-center">
         <h1 className="hidden lg:block text-sm md:text-2xl font-bold text-gray-800">

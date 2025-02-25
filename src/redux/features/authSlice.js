@@ -62,7 +62,7 @@ export const logoutUser = createAsyncThunk(
     try {
       const token = Cookies.get('authToken');
       
-      const response = await fetch('http://localhost:8080/users/logout', {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/users/logout', {
         method: 'POST',
         credentials: 'include',
         headers: {

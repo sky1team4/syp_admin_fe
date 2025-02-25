@@ -5,7 +5,7 @@ import axios from 'axios';
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -23,7 +23,7 @@ const ForgetPassword = () => {
     setMessage('');
 
     try {
-      const response = await api.post('http://localhost:8080/users/forgot-password', {
+      const response = await api.post(process.env.NEXT_PUBLIC_API_URL + '/users/forgot-password', {
         email: email
       });
 
