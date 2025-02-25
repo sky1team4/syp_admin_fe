@@ -310,11 +310,13 @@ export default function ProfilePage() {
               
               <div className="mb-6">
                 <label className="block mb-2 text-sm font-medium text-gray-700">Profile Picture</label>
-                <div className="flex items-center space-x-4">
-                  <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden">
-                    {renderProfileImage()}
+                <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4">
+                  <div className="flex justify-center w-full sm:w-auto">
+                    <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                      {renderProfileImage()}
+                    </div>
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 w-full sm:w-auto text-center sm:text-left">
                     <input
                       type="file"
                       accept="image/*"
@@ -324,7 +326,7 @@ export default function ProfilePage() {
                     />
                     <label
                       htmlFor="profile-image-input"
-                      className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                      className="w-full sm:w-auto flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors text-sm"
                     >
                       <svg 
                         className="w-5 h-5 mr-2 text-gray-500" 
@@ -341,7 +343,12 @@ export default function ProfilePage() {
                       </svg>
                       Choose new photo
                     </label>
-                    {user?.profilePicture && (
+                    {selectedImage && (
+                      <p className="mt-2 text-sm text-gray-500">
+                        Selected: {selectedImage.name}
+                      </p>
+                    )}
+                    {user?.profilePicture && !selectedImage && (
                       <p className="mt-2 text-sm text-gray-500">
                         Current: {user.profilePicture.split('/').pop()}
                       </p>
@@ -374,7 +381,7 @@ export default function ProfilePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-semibold text-gray-800">Reset Password</h2>
+              <h2 className="text-2xl font-semibold text-gray-800">Change Password</h2>
             </div>
 
             <form onSubmit={handlePasswordChange}>

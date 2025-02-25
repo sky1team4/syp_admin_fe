@@ -58,7 +58,7 @@ export function SubscriptionTable({ columns, data = [], title, btnText, click, i
           
           {/* <div className="flex gap-3 w-full"> */}
             {/* Search Bar - Desktop */}
-            <div className="hidden md:block relative w-full max-w-md mx-4">
+            <div className="hidden md:block w-full max-w-md mx-4">
               <input
                 type="text"
                 value={globalFilter ?? ''}
@@ -73,7 +73,7 @@ export function SubscriptionTable({ columns, data = [], title, btnText, click, i
         </div>
 
         {/* Search Bar - Mobile */}
-        <div className="md:hidden relative w-full">
+        <div className="md:hidden w-full">
           <input
             type="text"
             value={globalFilter ?? ''}
@@ -84,7 +84,7 @@ export function SubscriptionTable({ columns, data = [], title, btnText, click, i
         </div>
       </div>
 
-      <div className="relative overflow-x-auto w-full">
+      <div className="overflow-x-auto w-full">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
