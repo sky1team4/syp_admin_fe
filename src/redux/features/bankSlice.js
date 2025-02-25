@@ -7,7 +7,7 @@ export const fetchBankConfig = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bank`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bank/bank-get`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -32,7 +32,7 @@ export const saveBankConfig = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bank`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bank/bank-create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
