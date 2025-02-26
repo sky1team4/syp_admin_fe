@@ -19,6 +19,7 @@ export const columns = [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
                     User
                     {column.getIsSorted() === "asc" ? (
@@ -52,6 +53,7 @@ export const columns = [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
                     Phone Number
                     {column.getIsSorted() === "asc" ? (
@@ -73,6 +75,7 @@ export const columns = [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
                     Status
                     {column.getIsSorted() === "asc" ? (
@@ -101,6 +104,7 @@ export const columns = [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
                     Subscription
                     {column.getIsSorted() === "asc" ? (

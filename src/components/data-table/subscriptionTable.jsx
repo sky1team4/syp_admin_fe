@@ -96,8 +96,10 @@ export function SubscriptionTable({ columns = defaultColumns, data = [], title, 
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  <TableHead key={header.id} className="text-left">
+                    <div className="flex justify-start">
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    </div>
                   </TableHead>
                 ))}
               </TableRow>
@@ -108,8 +110,10 @@ export function SubscriptionTable({ columns = defaultColumns, data = [], title, 
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} className="hover:bg-gray-100">
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <TableCell key={cell.id} className="text-left">
+                      <div className="flex justify-start">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </div>
                     </TableCell>
                   ))}
                 </TableRow>

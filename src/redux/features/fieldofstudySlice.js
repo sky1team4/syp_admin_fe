@@ -7,7 +7,7 @@ export const fetchFieldOfStudy = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field-of-studies`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field-of-studies/findAll`, {
         method: 'GET',
         headers: {
           // 'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export const saveFieldOfStudy = createAsyncThunk(
         status: data.status || 'Active'
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field-of-studies`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field-of-studies/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -19,7 +19,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="w-full justify-start px-2"
+                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
                     Name
                     {column.getIsSorted() === "asc" ? (
@@ -31,7 +31,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
             )
         },
         cell: ({ row }) => (
-            <div className="font-medium pl-2">
+            <div className="font-medium">
                 {row.original.name}
             </div>
         ),
@@ -43,7 +43,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="w-full justify-center px-2"
+                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
                     Price
                     {column.getIsSorted() === "asc" ? (
@@ -55,7 +55,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
             )
         },
         cell: ({ row }) => (
-            <div className="text-center">
+            <div>
                 ${parseFloat(row.original.price).toFixed(2)}
             </div>
         ),
@@ -67,7 +67,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="w-full justify-center px-2"
+                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
                     Billing Period
                     {column.getIsSorted() === "asc" ? (
@@ -79,7 +79,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
             )
         },
         cell: ({ row }) => (
-            <div className="capitalize text-center">
+            <div className="capitalize">
                 {row.original.billingPeriod?.toLowerCase()}
             </div>
         ),
@@ -91,7 +91,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="w-full justify-center px-2"
+                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
                     Status
                     {column.getIsSorted() === "asc" ? (
@@ -120,7 +120,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="w-full justify-center px-2"
+                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
                     Created Date
                     {column.getIsSorted() === "asc" ? (
@@ -144,7 +144,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="w-full justify-center px-2"
+                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
                     Last Updated
                     {column.getIsSorted() === "asc" ? (
@@ -163,7 +163,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
     },
     {
         id: "actions",
-        header: () => <div className="text-center px-2">Actions</div>,
+        header: () => <div className="text-left">Actions</div>,
         cell: ({ row }) => {
             const [isConfirmOpen, setIsConfirmOpen] = useState(false)
             const item = row.original;

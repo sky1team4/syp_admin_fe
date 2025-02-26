@@ -6,7 +6,7 @@ export const fetchSpecialties = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/specialties`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/specialties/findAll`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -39,7 +39,7 @@ export const saveSpecialty = createAsyncThunk(
         educationId: data.educationId || 1
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/specialties`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/specialties/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -63,11 +63,14 @@ const DashboardTopBar = () => {
 
   // Profile Image Component
   const ProfileImage = ({ user }) => {
-    const imageUrl = user?.profilePicture ? getCompleteImageUrl(user.profilePicture) : '/profile.png';
+    const defaultImage = '/profileImage.png';
+    const imageUrl = user?.profilePicture 
+      ? getCompleteImageUrl(user.profilePicture) 
+      : defaultImage;
     
     return (
       <Image 
-        src={imageUrl}
+        src={imageUrl || defaultImage}  // Fallback to default image if imageUrl is null
         alt={user?.name || 'Profile'} 
         fill
         sizes="(max-width: 768px) 40px, 44px"
@@ -95,7 +98,7 @@ const DashboardTopBar = () => {
 
   // Main render
   return (
-    <div className={`fixed z-50 top-0 w-full lg:pr-80 flex items-center justify-between px-8 py-4 bg-white flex-col md:flex-row ${isNotificationOpen ? 'backdrop-blur-md' : ''}`}>
+    <div className={`fixed z-10 top-0 w-full lg:pr-80 flex items-center justify-between px-8 py-4 bg-white flex-col md:flex-row ${isNotificationOpen ? 'backdrop-blur-md' : ''}`}>
       {/* Left Section */}
       <div className="flex md:items-center lg:items-center">
         <h1 className="hidden lg:block text-sm md:text-2xl font-bold text-gray-800">

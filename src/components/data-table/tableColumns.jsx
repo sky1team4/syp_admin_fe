@@ -19,6 +19,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
                     Name
                     {column.getIsSorted() === "asc" ? (
@@ -37,6 +38,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
                     Created Date
                     {column.getIsSorted() === "asc" ? (
@@ -55,6 +57,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
                     Last Updated
                     {column.getIsSorted() === "asc" ? (

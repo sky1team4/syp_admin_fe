@@ -37,7 +37,7 @@ export const saveInterest = createAsyncThunk(
         name: data.title?.trim(),
         status: 'Active',
         image: "https://example.com/default-interest.jpg",  // Required field with default value
-        profileId: 1  // Required field with default value
+        // profileId: 1  // Required field with default value
       };
 
       console.log('Request Data:', interestData);

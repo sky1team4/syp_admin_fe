@@ -31,7 +31,7 @@ const PaypalPaymentIntegration = () => {
       environment: '',
       defaultCurrency: '',
       merchantAccountId: '',
-      enablePaypal: false,
+      // enablePaypal: false,
       testMode: false
     }
   });
@@ -67,7 +67,7 @@ const PaypalPaymentIntegration = () => {
       setValue('environment', configData.environment || '');
       setValue('defaultCurrency', configData.default_currency || '');
       setValue('merchantAccountId', configData.merchant_acc_id || '');
-      setValue('enablePaypal', configData.paypal_payment === 'enabled');
+      // setValue('enablePaypal', configData.paypal_payment === 'enabled');
       setValue('testMode', Boolean(configData.test_mode));
     }
   }, [config, setValue]);
@@ -81,7 +81,7 @@ const PaypalPaymentIntegration = () => {
         environment: data.environment,
         default_currency: data.defaultCurrency,
         merchant_acc_id: data.merchantAccountId || "",
-        paypal_payment: data.enablePaypal ? "enabled" : "disabled",
+        // paypal_payment: data.enablePaypal ? "enabled" : "disabled",
         test_mode: Boolean(data.testMode)
       };
 
@@ -147,7 +147,7 @@ const PaypalPaymentIntegration = () => {
         </div>
 
         {/* Enable PayPal Section */}
-        <div className="flex justify-between items-center">
+        {/* <div className="flex justify-between items-center">
           <label htmlFor="enablePaypal" className="text-sm font-medium text-gray-700">
             Enable PayPal Payments
           </label>
@@ -160,7 +160,7 @@ const PaypalPaymentIntegration = () => {
               setValue('enablePaypal', e.target.checked);
             }}
           />
-        </div>
+        </div> */}
 
         {/* Test Mode Section */}
         <div className="flex justify-between items-center">
