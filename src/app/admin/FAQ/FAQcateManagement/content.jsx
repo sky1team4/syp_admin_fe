@@ -22,10 +22,10 @@ function Content() {
       try {
         setIsDataLoaded(false);
         const response = await dispatch(fetchFaqCategories()).unwrap();
-        console.log('Fetched Data:', response);
+        // console.log('Fetched Data:', response);
         setIsDataLoaded(true);
       } catch (error) {
-        console.error('Error fetching FAQ categories:', error);
+        // console.error('Error fetching FAQ categories:', error);
         toast.error('Failed to load FAQ categories');
         setIsDataLoaded(true);
       }

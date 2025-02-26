@@ -14,8 +14,8 @@ function Content() {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   
   const { items: rssFeeds, isLoading, error } = useSelector((state) => {
-    console.log('Full Redux State:', state);
-    console.log('RSS Feed State:', state.rssFeed);
+    // console.log('Full Redux State:', state);
+    // console.log('RSS Feed State:', state.rssFeed);
     return state.rssFeed || { items: [], isLoading: false, error: null };
   });
 
@@ -24,10 +24,10 @@ function Content() {
       try {
         setIsDataLoaded(false);
         const response = await dispatch(fetchRssFeeds()).unwrap();
-        console.log('Fetched Data:', response);
+        // console.log('Fetched Data:', response);
         setIsDataLoaded(true);
       } catch (error) {
-        console.error('Error fetching RSS feeds:', error);
+        // console.error('Error fetching RSS feeds:', error);
         toast.error('Failed to load RSS feeds');
         setIsDataLoaded(true);
       }
@@ -70,8 +70,13 @@ function Content() {
   // Format dates for display
   const formattedRssFeeds = rssFeeds ? rssFeeds.map(rssFeed => ({
     ...rssFeed,
-    createdDate: new Date(rssFeed.createDateTime).toLocaleDateString(),
-    lastUpdated: new Date(rssFeed.updateDateTime).toLocaleDateString()
+    createdDate: new Date(rssFeed.createDate).toLocaleDateString(),
+    lastUpdated: new Date(rssFeed.updateDate).toLocaleDateString()
+
+    // createdDate: new Date(skill.createDate).toLocaleDateString(),
+    // lastUpdated: new Date(skill.updateDate).toLocaleDateString()
+  // }));
+
   })) : [];
 
   if (!isDataLoaded || isLoading) {

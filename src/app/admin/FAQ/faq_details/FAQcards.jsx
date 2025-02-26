@@ -22,6 +22,10 @@ const FAQCard = ({ faq, onEdit, onDelete }) => {
   const handleCancelDelete = () => {
     setShowDeleteConfirmation(false);
   };
+  console.log(faq.createDate)
+  console.log(faq.updateDate)
+  const createdDate = new Date(faq.createDate).toLocaleDateString();
+  const lastUpdated = new Date(faq.updateDate).toLocaleDateString();
 
   return (
     <>
@@ -48,8 +52,8 @@ const FAQCard = ({ faq, onEdit, onDelete }) => {
           <div className="text-purple-600 border border-purple-600 px-2 py-1 rounded-md">
             {categoryName}
           </div>
-          <div className="text-purple-600 border border-purple-600 px-2 py-1 rounded-md">Created Date: {faq.createdDate}</div>
-          <div className="text-purple-600 border border-purple-600 px-2 py-1 rounded-md">Updated Date: {faq.updatedDate}</div>
+          <div className="text-purple-600 border border-purple-600 px-2 py-1 rounded-md">Created Date: {createdDate}</div>
+          <div className="text-purple-600 border border-purple-600 px-2 py-1 rounded-md">Updated Date: {lastUpdated}</div>
         </div>
       </div>
 
