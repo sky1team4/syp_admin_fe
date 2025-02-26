@@ -16,7 +16,6 @@ export function middleware(req) {
         return NextResponse.redirect(new URL("/admin/dashboard", req.url));
     }
 
-
     return NextResponse.next();
 }
 
