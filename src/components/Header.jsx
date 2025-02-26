@@ -63,11 +63,14 @@ const DashboardTopBar = () => {
 
   // Profile Image Component
   const ProfileImage = ({ user }) => {
-    const imageUrl = user?.profilePicture ? getCompleteImageUrl(user.profilePicture) : '/profile.png';
+    const defaultImage = '/profileImage.png';
+    const imageUrl = user?.profilePicture 
+      ? getCompleteImageUrl(user.profilePicture) 
+      : defaultImage;
     
     return (
       <Image 
-        src={imageUrl}
+        src={imageUrl || defaultImage}  // Fallback to default image if imageUrl is null
         alt={user?.name || 'Profile'} 
         fill
         sizes="(max-width: 768px) 40px, 44px"
