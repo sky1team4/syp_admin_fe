@@ -1,5 +1,6 @@
 'use client';
-import React, { useState } from 'react';
+
+import React, { useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import axios from 'axios';
@@ -11,7 +12,7 @@ const api = axios.create({
     }
 });
 
-const ResetPassword = () => {
+const ResetPasswordContent = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
@@ -48,14 +49,12 @@ const ResetPassword = () => {
         setIsLoading(true);
         setMessage('');
 
-        // Validate passwords match
         if (newPassword !== confirmPassword) {
             setMessage('Passwords do not match');
             setIsLoading(false);
             return;
         }
 
-        // Validate password strength
         if (newPassword.length < 6) {
             setMessage('Password must be at least 6 characters long');
             setIsLoading(false);
@@ -155,6 +154,14 @@ const ResetPassword = () => {
                 </form>
             </div>
         </div>
+    );
+};
+
+const ResetPassword = () => {
+    return (
+        <Suspense fallback={<p>Loading...</p>}>
+            <ResetPasswordContent />
+        </Suspense>
     );
 };
 
