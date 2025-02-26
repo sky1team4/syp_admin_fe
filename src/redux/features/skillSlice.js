@@ -37,7 +37,7 @@ export const saveSkill = createAsyncThunk(
         name: data.title?.trim(),
         status: 'Active',
         image: "https://example.com/javascript-icon.png",
-        profileId: 1
+        // profileId: 1
       };
 
       console.log('Sending skill data:', skillData);
