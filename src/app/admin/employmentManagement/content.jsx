@@ -97,9 +97,9 @@ function Content() {
       <DisplayTable
         click={() => toggleSidebar('create')}
         isOpen={isOpen}
-        btnText="Add Employment"
+        btnText="Add Employee"
         link="/admin/work-experience"
-        title="Employment Status Management"
+        title="Employment Status"
         array={formattedEmployees}
         handleEdit={handleEdit}
         handleDelete={handleDelete}

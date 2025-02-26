@@ -36,8 +36,8 @@ export const saveEmployee = createAsyncThunk(
       const employeeData = {
         name: data.title?.trim(),
         status: data.status || 'Active',  // Must be one of: "Active", "Inactive", "On Leave"
-        workExpId: 1  // Default workExpId
-      };
+        // workExpId: 1  // Default workExpId
+      };  
 
       console.log('Sending employee data:', employeeData);
 

@@ -36,7 +36,7 @@ export const saveJobTitle = createAsyncThunk(
       const jobTitleData = {
         name: data.title?.trim(),
         status: 'Active',
-        workExpId: 1  // Default workExpId
+        // workExpId: 1  // Default workExpId
       };
 
       console.log('Sending job title data:', jobTitleData);

@@ -44,7 +44,7 @@ export const saveCompany = createAsyncThunk(
       const companyData = {
         name: data.title?.trim(),
         status: 'Active',
-        workExpId: 1  // Default workExpId
+        // workExpId: 1  // Default workExpId
       };
 
       console.log('Sending company data:', companyData);
