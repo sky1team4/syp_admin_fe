@@ -47,7 +47,7 @@ const BankPaymentIntegration = () => {
       bankName: '',
       allowTransactionType: '',
       bankAddress: '',
-      enableBankPayment: false,
+      // enableBankPayment: false,
       testMode: false
     }
   });
@@ -75,7 +75,7 @@ const BankPaymentIntegration = () => {
       setValue('bankName', configData.bank_name || '');
       setValue('allowTransactionType', configData.allow_transaction_type || '');
       setValue('bankAddress', configData.bank_address || '');
-      setValue('enableBankPayment', configData.direct_bank_payment === 'enabled');
+      // setValue('enableBankPayment', configData.direct_bank_payment === 'enabled');
       setValue('testMode', Boolean(configData.test_mode));
 
       console.log('Bank form values set:', {
@@ -86,7 +86,7 @@ const BankPaymentIntegration = () => {
         bankName: watch('bankName'),
         allowTransactionType: watch('allowTransactionType'),
         bankAddress: watch('bankAddress'),
-        enableBankPayment: watch('enableBankPayment'),
+        // enableBankPayment: watch('enableBankPayment'),
         testMode: watch('testMode')
       });
     }
@@ -102,7 +102,7 @@ const BankPaymentIntegration = () => {
         bank_name: data.bankName,
         allow_transaction_type: data.allowTransactionType,
         bank_address: data.bankAddress,
-        direct_bank_payment: data.enableBankPayment ? 'enabled' : 'disabled',
+        // direct_bank_payment: data.enableBankPayment ? 'enabled' : 'disabled',
         test_mode: Boolean(data.testMode)
       };
 
@@ -205,7 +205,7 @@ const BankPaymentIntegration = () => {
         </div>
 
         {/* Enable Bank Payment Section */}
-        <div className="flex justify-between items-center">
+        {/* <div className="flex justify-between items-center">
           <label htmlFor="enableBankPayment" className="text-sm font-medium text-gray-700">
             Enable Bank Payment
           </label>
@@ -218,7 +218,7 @@ const BankPaymentIntegration = () => {
               setValue('enableBankPayment', e.target.checked);
             }}
           />
-        </div>
+        </div> */}
 
         {/* Test Mode Section */}
         <div className="flex justify-between items-center">
