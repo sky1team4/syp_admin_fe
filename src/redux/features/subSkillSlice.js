@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
   items: [],
-  loading: false,
+  isLoading: false,
   error: null,
 };
 
@@ -25,7 +25,7 @@ export const fetchSubSkills = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log('API Response:', data);
+      console.log('Fetched sub skills:', data);
       return data;
     } catch (error) {
       return rejectWithValue(error.message || 'Network error occurred');
@@ -39,10 +39,16 @@ export const saveSubSkill = createAsyncThunk(
   async (data, { dispatch, rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
+      const skillId = parseInt(data.skillId);
+      
+      if (!skillId) {
+        throw new Error('Invalid skill ID');
+      }
+
       const subSkillData = {
         name: data.title?.trim(),
         status: 'Active',
-        skillId: parseInt(data.skillId)  // Use the selected skillId
+        skillId: skillId
       };
 
       console.log('Sending sub skill data:', subSkillData);
@@ -58,7 +64,7 @@ export const saveSubSkill = createAsyncThunk(
 
       const responseData = await response.json();
       if (!response.ok) {
-        throw new Error(responseData.message || 'Failed to create sub skill');
+        throw new Error(responseData.message || `Failed to create sub skill: ${response.statusText}`);
       }
 
       await dispatch(fetchSubSkills());
@@ -76,12 +82,20 @@ export const updateSubSkill = createAsyncThunk(
   async ({ id, data }, { dispatch, rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
+      const skillId = parseInt(data.skillId);
+      
+      if (!skillId) {
+        throw new Error('Invalid skill ID');
+      }
+
       const subSkillData = {
-        id: id,
+        id,
         name: data.title?.trim(),
         status: 'Active',
-        skillId: parseInt(data.skillId)  // Use the selected skillId
+        skillId: skillId
       };
+
+      console.log('Sending update sub skill data:', subSkillData);
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sub-skills/update`, {
         method: 'POST',
@@ -94,12 +108,13 @@ export const updateSubSkill = createAsyncThunk(
 
       const responseData = await response.json();
       if (!response.ok) {
-        throw new Error(responseData.message || 'Failed to update sub skill');
+        throw new Error(responseData.message || `Failed to update sub skill: ${response.statusText}`);
       }
 
       await dispatch(fetchSubSkills());
       return responseData;
     } catch (error) {
+      console.error('Error updating sub skill:', error);
       return rejectWithValue(error.message || 'Network error occurred');
     }
   }
@@ -136,11 +151,7 @@ export const deleteSubSkill = createAsyncThunk(
 
 const subSkillSlice = createSlice({
   name: 'subSkill',
-  initialState: {
-    items: [],
-    isLoading: false,
-    error: null,
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -154,6 +165,42 @@ const subSkillSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchSubSkills.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(saveSubSkill.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(saveSubSkill.fulfilled, (state) => {
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(saveSubSkill.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateSubSkill.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateSubSkill.fulfilled, (state) => {
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(updateSubSkill.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(deleteSubSkill.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteSubSkill.fulfilled, (state) => {
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(deleteSubSkill.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });
