@@ -84,7 +84,13 @@ export const columns = [
             )
         },
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("status")}</div>
+            <span
+                className={`text-sm font-medium ${
+                    row.getValue("status") === "active" ? "bg-green-100 text-green-600 rounded-full px-2 py-1" : "bg-yellow-100 text-yellow-600 rounded-full px-2 py-1"
+                }`}
+            >
+                {row.getValue("status") ? row.getValue("status").toString() : "N/A"}
+            </span>
         ),
     },
  
