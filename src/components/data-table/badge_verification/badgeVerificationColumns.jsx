@@ -67,7 +67,7 @@ export const BadgeVerificationColumns = [
             )
         },
         cell: ({ row }) => (
-            <div className="text-sm font-medium">{row.original.user_phone_number}</div>
+            <div className="text-sm font-medium ml-10">{row.original.user_phone_number}</div>
         ),
     },
     {
@@ -90,7 +90,7 @@ export const BadgeVerificationColumns = [
         cell: ({ row }) => {
             const status = row.original.badge_status;
             return (
-                <div className={`text-sm font-medium w-14 ${status === 'active' ? 'bg-green-100 text-green-600 p-1 text-center rounded-xl ml-10' : 'bg-red-100 text-red-500 p-1 text-center rounded-xl'}`}>
+                <div className={`text-sm font-medium w-14 ${status === 'active' ? 'bg-green-100 text-green-600 p-1 text-center rounded-xl ml-10' : 'bg-red-100 text-red-500 p-1 text-center rounded-xl ml-10'}`}>
                     {status}
                 </div>
             );
