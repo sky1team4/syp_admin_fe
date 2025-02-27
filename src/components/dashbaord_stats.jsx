@@ -13,8 +13,14 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
   const { users = [] } = useSelector((state) => state.auth); // Access users from the state
   console.log("users" , users);
   
+  // const { subscriptionStats = {} } = useSelector((state) => state.subscribedUser);
   const { subscriptionStats = {} } = useSelector((state) => state.subscribedUser);
   const [subscribedUsers, setSubscribedUsers] = useState(0);
+
+  useEffect(() => {
+    dispatch(getSubscriptionStats());
+  }, [dispatch]);
+
 
   useEffect(() => {
     // Update state with API response
