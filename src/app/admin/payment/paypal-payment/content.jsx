@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from 'next/image';
 import { useForm } from "react-hook-form";
 import { toast, Toaster } from "react-hot-toast";
@@ -22,7 +22,66 @@ const FORM_VALIDATION = {
   defaultCurrency: { required: "Default Currency is required" }
 };
 
+const FormSkeleton = () => (
+  <div className="animate-pulse space-y-6">
+    {/* Header Skeleton */}
+    <div className="flex gap-3 items-center md:justify-between md:w-[70%]">
+      <div className="w-8 h-8 bg-gray-200 rounded-md"></div>
+      <div className="h-8 bg-gray-200 rounded-md w-64"></div>
+    </div>
+    
+    {/* Description Skeleton */}
+    <div className="h-4 bg-gray-200 rounded-md w-3/4 mx-auto"></div>
+
+    {/* API Credentials Section Skeleton */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-2">
+        <div className="h-4 bg-gray-200 rounded-md w-1/3"></div>
+        <div className="h-10 bg-gray-200 rounded-md w-full"></div>
+      </div>
+      <div className="space-y-2">
+        <div className="h-4 bg-gray-200 rounded-md w-1/3"></div>
+        <div className="h-10 bg-gray-200 rounded-md w-full"></div>
+      </div>
+    </div>
+
+    {/* Webhook & Environment Section Skeleton */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-2">
+        <div className="h-4 bg-gray-200 rounded-md w-1/3"></div>
+        <div className="h-10 bg-gray-200 rounded-md w-full"></div>
+      </div>
+      <div className="space-y-2">
+        <div className="h-4 bg-gray-200 rounded-md w-1/3"></div>
+        <div className="h-10 bg-gray-200 rounded-md w-full"></div>
+      </div>
+    </div>
+
+    {/* Currency Section Skeleton */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-2">
+        <div className="h-4 bg-gray-200 rounded-md w-1/3"></div>
+        <div className="h-10 bg-gray-200 rounded-md w-full"></div>
+      </div>
+      <div className="space-y-2">
+        <div className="h-4 bg-gray-200 rounded-md w-1/3"></div>
+        <div className="h-10 bg-gray-200 rounded-md w-full"></div>
+      </div>
+    </div>
+
+    {/* Test Mode Skeleton */}
+    <div className="flex justify-between items-center">
+      <div className="h-4 bg-gray-200 rounded-md w-1/4"></div>
+      <div className="h-6 w-6 bg-gray-200 rounded-md"></div>
+    </div>
+
+    {/* Button Skeleton */}
+    <div className="h-10 bg-gray-200 rounded-md w-full"></div>
+  </div>
+);
+
 const PaypalPaymentIntegration = () => {
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm({
     defaultValues: {
       clientId: '',
@@ -72,6 +131,18 @@ const PaypalPaymentIntegration = () => {
     }
   }, [config, setValue]);
 
+  useEffect(() => {
+    // Always show skeleton for at least 1 second
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Show skeleton if either loading or within forced 1-second window
+  const isLoadingState = isLoading || showSkeleton;
+
   const onSubmit = async (data) => {
     try {
       const transformedData = {
@@ -99,93 +170,98 @@ const PaypalPaymentIntegration = () => {
 
   return (
     <div className="w-full max-w-[32rem] md:max-w-[40rem] xl:max-w-[60rem] 2xl:max-w-[80rem] h-auto p-4 md:p-4 bg-white rounded-lg shadow-lg">
-      <div className="flex gap-3 items-center md:justify-between md:w-[70%]">
-        {/* {backBTN == "no" ? null : ( */}
+      {isLoadingState ? (
+        <FormSkeleton />
+      ) : (
+        <>
+          <div className="flex gap-3 items-center md:justify-between md:w-[70%]">
             <a href="/admin/payment" className="mb-2 cursor-pointer">
-                <Image
-                    src="/backArrow.svg"  // path from public folder
-                    alt="Illustration"
-                    width={8}  // required in Next.js
-                    height={8}
-
-                />
+              <Image
+                src="/backArrow.svg"
+                alt="Illustration"
+                width={8}
+                height={8}
+              />
             </a>
-        {/* )} */}
-        <h1 className="text-lg md:text-3xl font-bold mb-3 text-gray-800 text-center">PayPal Payment Integration</h1>
-    </div>
-      <p className="text-gray-500 mb-4 text-center">Configure your PayPal account settings below.</p>
-      <Toaster position="top-right" />
-      
+            <h1 className="text-lg md:text-3xl font-bold mb-3 text-gray-800 text-center">
+              PayPal Payment Integration
+            </h1>
+          </div>
+          <p className="text-gray-500 mb-4 text-center">
+            Configure your PayPal account settings below.
+          </p>
+          <Toaster position="top-right" />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* API Credentials Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Input id="clientId" {...register("clientId", FORM_VALIDATION.clientId)}
+                label="Client ID *" placeholder="Enter your Client ID"
+                error={errors.clientId?.message} />
+              <Input id="clientSecret" {...register("clientSecret", FORM_VALIDATION.clientSecret)}
+                label="Client Secret *" placeholder="Enter your Client Secret"
+                error={errors.clientSecret?.message} />
+            </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* API Credentials Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Input id="clientId" {...register("clientId", FORM_VALIDATION.clientId)}
-            label="Client ID *" placeholder="Enter your Client ID"
-            error={errors.clientId?.message} />
-          <Input id="clientSecret" {...register("clientSecret", FORM_VALIDATION.clientSecret)}
-            label="Client Secret *" placeholder="Enter your Client Secret"
-            error={errors.clientSecret?.message} />
-        </div>
+            {/* Webhook & Environment Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Input id="webhookId" {...register("webhookId", FORM_VALIDATION.webhookId)}
+                label="Webhook ID *" placeholder="Enter your Webhook ID"
+                error={errors.webhookId?.message} />
+              <Dropdown id="environment" register={register("environment", FORM_VALIDATION.environment)}
+                label="Environment *" array={ENVIRONMENTS} selected="Select Below"
+                error={errors.environment?.message} />
+            </div>
 
-        {/* Webhook & Environment Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Input id="webhookId" {...register("webhookId", FORM_VALIDATION.webhookId)}
-            label="Webhook ID *" placeholder="Enter your Webhook ID"
-            error={errors.webhookId?.message} />
-          <Dropdown id="environment" register={register("environment", FORM_VALIDATION.environment)}
-            label="Environment *" array={ENVIRONMENTS} selected="Select Below"
-            error={errors.environment?.message} />
-        </div>
+            {/* Currency Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Input id="merchantAccountId" {...register("merchantAccountId")} label="Merchant Account ID (Optional)" placeholder="Enter Merchant Account ID" />
+              <Dropdown id="defaultCurrency" register={register("defaultCurrency", FORM_VALIDATION.defaultCurrency)}
+                label="Default Currency *" array={CURRENCIES} selected="Select Below"
+                error={errors.defaultCurrency?.message} />
+            </div>
 
-        {/* Currency Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Input id="merchantAccountId" {...register("merchantAccountId")} label="Merchant Account ID (Optional)" placeholder="Enter Merchant Account ID" />
-          <Dropdown id="defaultCurrency" register={register("defaultCurrency", FORM_VALIDATION.defaultCurrency)}
-            label="Default Currency *" array={CURRENCIES} selected="Select Below"
-            error={errors.defaultCurrency?.message} />
-        </div>
+            {/* Enable PayPal Section */}
+            {/* <div className="flex justify-between items-center">
+              <label htmlFor="enablePaypal" className="text-sm font-medium text-gray-700">
+                Enable PayPal Payments
+              </label>
+              <CustomCheckbox 
+                id="enablePaypal" 
+                name="enablePaypal"
+                checked={Boolean(enablePaypal)}
+                onChange={(e) => {
+                  console.log('Checkbox changed to:', e.target.checked);
+                  setValue('enablePaypal', e.target.checked);
+                }}
+              />
+            </div> */}
 
-        {/* Enable PayPal Section */}
-        {/* <div className="flex justify-between items-center">
-          <label htmlFor="enablePaypal" className="text-sm font-medium text-gray-700">
-            Enable PayPal Payments
-          </label>
-          <CustomCheckbox 
-            id="enablePaypal" 
-            name="enablePaypal"
-            checked={Boolean(enablePaypal)}
-            onChange={(e) => {
-              console.log('Checkbox changed to:', e.target.checked);
-              setValue('enablePaypal', e.target.checked);
-            }}
-          />
-        </div> */}
+            {/* Test Mode Section */}
+            <div className="flex justify-between items-center">
+              <label htmlFor="testMode" className="text-sm font-medium text-gray-700">
+                Enable Test Mode
+              </label>
+              <CustomCheckbox 
+                id="testMode" 
+                name="testMode"
+                checked={Boolean(testMode)}
+                onChange={(e) => {
+                  console.log('Test mode changed to:', e.target.checked);
+                  setValue('testMode', e.target.checked);
+                }}
+              />
+            </div>
 
-        {/* Test Mode Section */}
-        <div className="flex justify-between items-center">
-          <label htmlFor="testMode" className="text-sm font-medium text-gray-700">
-            Enable Test Mode
-          </label>
-          <CustomCheckbox 
-            id="testMode" 
-            name="testMode"
-            checked={Boolean(testMode)}
-            onChange={(e) => {
-              console.log('Test mode changed to:', e.target.checked);
-              setValue('testMode', e.target.checked);
-            }}
-          />
-        </div>
-
-        {/* Submit Button */}
-        <button type="submit"
-          style={{ backgroundColor: theme.color }}
-          className={`w-full text-white py-2 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50`}
-          disabled={isLoading}>
-          {isLoading ? "Saving..." : "Save Changes"}
-        </button>
-      </form>
+            {/* Submit Button */}
+            <button type="submit"
+              style={{ backgroundColor: theme.color }}
+              className={`w-full text-white py-2 px-6 rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50`}
+              disabled={isLoading}>
+              {isLoading ? "Saving..." : "Save Changes"}
+            </button>
+          </form>
+        </>
+      )}
     </div>
   );
 };
