@@ -20,9 +20,22 @@ import {
 import Button from "../cui/button";
 import Image from "next/image";
 
-export function SubscriptionTable({ columns, data = [], title, btnText, click, isOpen, backBTN, link }) {
+export function SubscriptionTable({ columns, data = [], title, btnText, click, isOpen, backBTN, link, isLoading }) {
   const [sorting, setSorting] = useState([]);
   const [globalFilter, setGlobalFilter] = useState('');
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  useEffect(() => {
+    // Always show skeleton for at least 1 second
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Show skeleton if either the data is loading OR we're within the forced 1-second window
+  const isLoadingState = isLoading || showSkeleton;
 
   // Ensure data is an array before passing it to react-table
   const validatedData = Array.isArray(data) ? data : [];
@@ -42,6 +55,18 @@ export function SubscriptionTable({ columns, data = [], title, btnText, click, i
     },
     onGlobalFilterChange: setGlobalFilter,
   });
+
+  const TableSkeleton = () => (
+    <div className="animate-pulse mt-4">
+      {/* Header Skeleton */}
+      <div className="h-12 bg-gray-200 rounded-md mb-4"></div>
+      
+      {/* Rows Skeleton - Fixed height for 5 rows */}
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div key={i} className="h-12 bg-gray-200 rounded-md mb-2"></div>
+      ))}
+    </div>
+  );
 
   return (
     <div className="p-4 md:p-6 h-full bg-white shadow-lg rounded-xl w-full">
@@ -84,43 +109,49 @@ export function SubscriptionTable({ columns, data = [], title, btnText, click, i
         </div>
       </div>
 
-      <div className="overflow-x-auto w-full">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="text-left !justify-start">
-                    <div className="text-left flex justify-start">
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </div>
-                  </TableHead>
+      <div className="w-full mt-4">
+        {isLoadingState ? (
+          <TableSkeleton />
+        ) : (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id} className="text-left !justify-start">
+                        <div className="text-left flex justify-start">
+                          {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                        </div>
+                      </TableHead>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.length > 0 ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} className="hover:bg-gray-100">
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-left !justify-start">
-                      <div className="text-left flex justify-start">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </div>
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.length > 0 ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow key={row.id} className="hover:bg-gray-100">
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id} className="text-left !justify-start">
+                          <div className="text-left flex justify-start">
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </div>
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                      No results found.
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        )}
       </div>
     </div>
   );

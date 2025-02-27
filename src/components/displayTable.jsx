@@ -10,7 +10,8 @@ const TableComponent = ({
   backBTN,
   link,
   handleEdit,
-  handleDelete
+  handleDelete,
+  isLoading
 }) => {
   
   const columns = createColumns({ handleEdit, handleDelete });
@@ -25,6 +26,7 @@ const TableComponent = ({
       backBTN={backBTN}
       click={click}
       isOpen={isOpen}
+      isLoading={isLoading}
     />
   );
 }

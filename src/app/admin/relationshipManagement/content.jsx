@@ -82,6 +82,7 @@ function Content() {
           array={relationships}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
+          isLoading={isLoading}
           columnTitles={[
             { header: "Relationship", accessorKey: "name" },
             { header: "Created Date", accessorKey: "createdDate" },
