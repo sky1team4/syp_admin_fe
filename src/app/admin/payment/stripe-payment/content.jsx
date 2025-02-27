@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { toast, Toaster } from 'react-hot-toast';
@@ -39,6 +39,67 @@ const FORM_VALIDATION = {
   }
 };
 
+const StripePaymentSkeleton = () => {
+  return (
+    <div className="w-full max-w-[32rem] md:max-w-[60rem] xl:max-w-[70rem] 2xl:max-w-[150rem] h-auto p-4 md:p-4 bg-white rounded-lg shadow-lg animate-pulse">
+      {/* Header Section */}
+      <div className="flex gap-3 items-center md:justify-between md:w-[70%] mb-8">
+        <div className="w-8 h-8 bg-gray-200 rounded"></div>
+        <div className="h-8 w-64 bg-gray-200 rounded"></div>
+      </div>
+      <div className="w-96 h-4 mx-auto bg-gray-200 rounded mb-8"></div>
+
+      {/* Form Sections */}
+      <div className="space-y-6">
+        {/* API Keys Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <div className="h-4 w-32 bg-gray-200 rounded"></div>
+            <div className="h-12 w-full bg-gray-200 rounded"></div>
+          </div>
+          <div className="space-y-2">
+            <div className="h-4 w-32 bg-gray-200 rounded"></div>
+            <div className="h-12 w-full bg-gray-200 rounded"></div>
+          </div>
+        </div>
+
+        {/* Webhook Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <div className="h-4 w-40 bg-gray-200 rounded"></div>
+            <div className="h-12 w-full bg-gray-200 rounded"></div>
+          </div>
+          <div className="space-y-2">
+            <div className="h-4 w-36 bg-gray-200 rounded"></div>
+            <div className="h-12 w-full bg-gray-200 rounded"></div>
+          </div>
+        </div>
+
+        {/* Currency Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <div className="h-4 w-32 bg-gray-200 rounded"></div>
+            <div className="h-12 w-full bg-gray-200 rounded"></div>
+          </div>
+          <div className="space-y-2">
+            <div className="h-4 w-36 bg-gray-200 rounded"></div>
+            <div className="h-12 w-full bg-gray-200 rounded"></div>
+          </div>
+        </div>
+
+        {/* Test Mode Section */}
+        <div className="flex justify-between items-center">
+          <div className="h-4 w-28 bg-gray-200 rounded"></div>
+          <div className="h-6 w-6 bg-gray-200 rounded"></div>
+        </div>
+
+        {/* Submit Button */}
+        <div className="h-12 w-full bg-gray-200 rounded"></div>
+      </div>
+    </div>
+  );
+};
+
 const StripePaymentIntegration = () => {
   const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm({
     defaultValues: {
@@ -54,9 +115,22 @@ const StripePaymentIntegration = () => {
   const dispatch = useDispatch();
   const { isLoading, config } = useSelector((state) => state.stripe);
 
+  // Add loading state
+  const [isPageLoading, setIsPageLoading] = useState(true);
+
   useEffect(() => {
-    console.log('Fetching config...');
-    dispatch(fetchStripeConfig());
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchStripeConfig());
+        // Add 2 second delay
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        setIsPageLoading(false);
+      } catch (error) {
+        console.error('Error fetching stripe config:', error);
+        setIsPageLoading(false);
+      }
+    };
+    fetchData();
   }, [dispatch]);
 
   useEffect(() => {
@@ -118,6 +192,11 @@ const StripePaymentIntegration = () => {
       toast.error(err?.message || 'Failed to save Stripe configuration');
     }
   };
+
+  // Show skeleton while loading
+  if (isPageLoading) {
+    return <StripePaymentSkeleton />;
+  }
 
   return (
     <div className="w-full max-w-[32rem] md:max-w-[60rem] xl:max-w-[70rem] 2xl:max-w-[150rem] h-auto p-4 md:p-4 bg-white rounded-lg shadow-lg">

@@ -1,25 +1,39 @@
 // Today'sSummary.jsx
 "use client"
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux'; 
 import { fetchAllUsers } from '../redux/features/authSlice';
 import Image from "next/image";
 import theme from "../app/theme";
+import { getSubscriptionStats } from '../redux/features/subscribedUserSlice'; // Import the action and selector
 
 const TodaysSummary = ({ btnText, title, click, isOpen }) => {
 
   const dispatch = useDispatch(); // Initialize dispatch
   const { users = [] } = useSelector((state) => state.auth); // Access users from the state
-  // console.log(users.data);
+  console.log("users" , users);
+  
+  const { subscriptionStats = {} } = useSelector((state) => state.subscribedUser);
+  const [subscribedUsers, setSubscribedUsers] = useState(0);
+
+  useEffect(() => {
+    // Update state with API response
+    if (subscriptionStats) {
+      setSubscribedUsers(subscriptionStats.totalSubscribed || 0);
+      // setFreeUsers(subscriptionStats.freeUsers || 0);
+      // setMonthlySubscribedUsers(subscriptionStats.monthly || 0);
+      // setAnnualSubscription(subscriptionStats.yearly || 0);
+    }
+  }, [subscriptionStats]);
 
   useEffect(() => {
     dispatch(fetchAllUsers());
   }, [dispatch]);
 
   const totalUsers = users.length; // Get total users
-  // console.log(totalUsers);
-  const subscribedUsers = users.filter(user => user.subscription_id !== null).length; // Assuming all users are subscribed for now
-  //  console.log(subscribedUsers);
+  console.log(totalUsers);
+  // const subscribedUsers = users.filter(user => user.subscription_id !== null).length; // Assuming all users are subscribed for now
+  // //  console.log(subscribedUsers);
   const unsubscribedUsers = 0;
 
   const info = [

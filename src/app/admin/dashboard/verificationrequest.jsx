@@ -77,7 +77,7 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
         
         {/* </button> */}
 
-        <div className="flex items-center p-4 bg-purple-100 rounded-lg shadow-sm max-w-md mt-4">
+        <div className="flex  items-center p-4 bg-purple-100 rounded-lg shadow-sm max-w-md mt-4">
           <Image
             src={ProfilePic}
             alt="User Profile"
@@ -85,9 +85,11 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
           />
           <div className="ml-4">
             <h2 className="text-sm font-semibold text-gray-800">{userData?.user_name}</h2>
-            <p className="text-xs text-gray-500">{userData?.email}</p>
+            <p className="text-xs text-gray-500">{userData?.user_email}</p>
             <p className="text-xs text-gray-500">{userData?.user_phone_number}</p>
           </div>
+
+          <div className="ml-10 bg-[#fa8d2128] text-xs p-2 px-5 text-[#FA8F21] rounded-full">{userData?.badge_status}</div>
         </div>
 
         {/* Header */}
