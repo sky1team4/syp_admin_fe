@@ -8,11 +8,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'sypadminapi.azurewebsites.net',
+        hostname: process.env.NEXT_PUBLIC_API_URL,
         pathname: '/uploads/verifications/**', // Ensure proper path matching
       },
     ],
-    domains: ['localhost', 'sypadminapi.azurewebsites.net'], // Allow API hostname
+    domains: ['localhost', process.env.NEXT_PUBLIC_API_URL], // Allow API hostname
   },
 };
 
