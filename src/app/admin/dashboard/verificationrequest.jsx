@@ -32,20 +32,15 @@ const ImageViewer = ({ isOpen, onClose, imageUrl }) => {
   );
 };
 
-const ImageCard = ({ imageUrl, alt, onClick }) => {
+const ImageCard = ({ imageUrl, alt, onClick, side }) => {
   const [fileSize, setFileSize] = useState('');
 
   useEffect(() => {
     if (imageUrl) {
-      // Get image dimensions and calculate approximate size
       const img = new window.Image();
       img.src = imageUrl;
       img.onload = () => {
-        // Calculate approximate size based on dimensions and image type
-        // Assuming JPEG compression - this is a rough estimate
-        const approximateSize = (img.naturalWidth * img.naturalHeight * 0.23); // 0.23 bytes per pixel for JPEG
-        
-        // Convert to appropriate units
+        const approximateSize = (img.naturalWidth * img.naturalHeight * 0.23);
         if (approximateSize < 1024) {
           setFileSize(Math.round(approximateSize) + ' B');
         } else if (approximateSize < 1048576) {
@@ -58,9 +53,9 @@ const ImageCard = ({ imageUrl, alt, onClick }) => {
   }, [imageUrl]);
 
   return (
-    <div className="border rounded-lg shadow-sm bg-gray-50 w-40 p-2 relative cursor-pointer group">
+    <div className="border rounded-lg shadow-sm bg-gray-50 w-48 p-2 relative cursor-pointer group">
       <label className="block">
-        <div className="relative w-full h-[150px]">
+        <div className="relative w-full h-[180px]">
           <Image
             src={imageUrl}
             alt={alt}
@@ -70,8 +65,9 @@ const ImageCard = ({ imageUrl, alt, onClick }) => {
             onClick={onClick}
           />
         </div>
-        <div className="text-xs text-gray-500 mt-2">
-          <p className="font-medium">Size: {fileSize}</p>
+        <div className="text-xs text-gray-500 mt-2 flex justify-between items-center">
+          <span className="font-medium">{side} Side</span>
+          <span className="font-medium">Size: {fileSize}</span>
         </div>
       </label>
     </div>
@@ -79,6 +75,9 @@ const ImageCard = ({ imageUrl, alt, onClick }) => {
 };
 
 const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
+
+  console.log("userData", userData);
+  
   const dispatch = useDispatch();
   const { loading, error, success } = useSelector((state) => state.verification);
   // const badgeVerificationList = useSelector((state) => state.badgeVerificationList);
@@ -160,23 +159,26 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
         
         {/* </button> */}
 
-        <div className="flex  items-center p-4 bg-purple-100 rounded-lg shadow-sm max-w-md mt-4">
-          <div className="relative w-12 h-12">
-            <Image
-              src={ProfilePic}
-              alt="User Profile"
-              fill
-              style={{ objectFit: 'cover' }}
-              className="rounded-full border border-gray-300"
-            />
-          </div>
-          <div className="ml-4">
-            <h2 className="text-sm font-semibold text-gray-800">{userData?.user_name}</h2>
-            <p className="text-xs text-gray-500">{userData?.user_email}</p>
-            <p className="text-xs text-gray-500">{userData?.user_phone_number}</p>
+        <div className="flex justify-between items-center p-4 bg-purple-100 rounded-lg shadow-sm max-w-md mt-4">
+          <div className="flex">
+
+            <div className="relative w-12 h-12">
+              <Image
+                src={ProfilePic}
+                alt="User Profile"
+                fill
+                style={{ objectFit: 'cover' }}
+                className="rounded-full border border-gray-300"
+              />
+            </div>
+            <div className="ml-4">
+              <h2 className="text-sm font-semibold text-gray-800">{userData?.user_name}</h2>
+              <p className="text-xs text-gray-500">{userData?.user_email}</p>
+              <p className="text-xs text-gray-500">{userData?.user_phone_number}</p>
+            </div>
           </div>
 
-          <div className="ml-10 bg-[#fa8d2128] text-xs p-2 px-5 text-[#FA8F21] rounded-full">{userData?.badge_status}</div>
+          <div className="self-center bg-[#fa8d2128] text-xs p-2 px-5 text-[#FA8F21] rounded-full">{userData?.badge_status}</div>
         </div>
 
         {/* Header */}
@@ -185,21 +187,25 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
         </h2>
 
         {/* Document List */}
-        <div className="flex space-x-4 justify-center mb-6">
-          {userData?.id_card_front_image && (
-            <ImageCard
-              imageUrl={process.env.NEXT_PUBLIC_API_URL + "/" + userData.id_card_front_image}
-              alt="ID Card Front"
-              onClick={() => setSelectedImage(process.env.NEXT_PUBLIC_API_URL + "/" + userData.id_card_front_image)}
-            />
-          )}
-          {userData?.id_card_back_image && (
-            <ImageCard
-              imageUrl={process.env.NEXT_PUBLIC_API_URL + "/" + userData.id_card_back_image}
-              alt="ID Card Back"
-              onClick={() => setSelectedImage(process.env.NEXT_PUBLIC_API_URL + "/" + userData.id_card_back_image)}
-            />
-          )}
+        <div className="flex flex-col space-y-4 mb-6">
+          <div className="flex space-x-8 justify-center">
+            {userData?.id_card_front_image && (
+              <ImageCard
+                imageUrl={process.env.NEXT_PUBLIC_API_URL + "/" + userData.id_card_front_image}
+                alt="ID Card Front"
+                onClick={() => setSelectedImage(process.env.NEXT_PUBLIC_API_URL + "/" + userData.id_card_front_image)}
+                side="Front"
+              />
+            )}
+            {userData?.id_card_back_image && (
+              <ImageCard
+                imageUrl={process.env.NEXT_PUBLIC_API_URL + "/" + userData.id_card_back_image}
+                alt="ID Card Back"
+                onClick={() => setSelectedImage(process.env.NEXT_PUBLIC_API_URL + "/" + userData.id_card_back_image)}
+                side="Back"
+              />
+            )}
+          </div>
         </div>
 
         {/* Image Viewer */}
