@@ -5,6 +5,29 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitVerificationRequest, resetVerificationState } from '../../../redux/features/verificationSlice';
 import { GetAllbadgeVerificationRequest,ChangeBadgeStatus } from '../../../redux/features/badgeVerificationSlice';
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+
+const ImageViewer = ({ isOpen, onClose, imageUrl }) => {
+  return (
+    <Lightbox
+      open={isOpen}
+      close={onClose}
+      slides={[{ src: imageUrl }]}
+      plugins={[Zoom, Thumbnails]}
+      carousel={{
+        preload: 1
+      }}
+      zoom={{
+        maxZoomPixelRatio: 3,
+        scrollToZoom: true
+      }}
+    />
+  );
+};
 
 const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
   const dispatch = useDispatch();
@@ -13,6 +36,9 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
 
   // Add state for image preview URL
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+
+  // Add state for image viewer
+  const [selectedImage, setSelectedImage] = useState(null);
 
   // Clean up object URL when component unmounts or when preview changes
   useEffect(() => {
@@ -99,7 +125,7 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
 
         {/* Document List */}
         <div className="flex space-x-4 justify-center mb-6">
-          <div className="border rounded-lg shadow-sm bg-gray-50 w-40 h-42 p-2 relative">
+          <div className="border rounded-lg shadow-sm bg-gray-50 w-40 h-42 p-2 relative cursor-pointer">
             <label className="block">
               {userData?.id_card_front_image && 
                 <Image
@@ -107,12 +133,13 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
                   alt="ID Card Front"
                   width={350}
                   height={200}
-                  className="rounded-md mb-2 object-cover"
+                  className="rounded-md mb-2 object-cover hover:opacity-80 transition-opacity"
+                  onClick={() => setSelectedImage(process.env.NEXT_PUBLIC_API_URL +"/"+ userData.id_card_front_image)}
                 />
               }
             </label>
           </div>
-          <div className="border rounded-lg shadow-sm bg-gray-50 w-40 h-42 p-2 relative">
+          <div className="border rounded-lg shadow-sm bg-gray-50 w-40 h-42 p-2 relative cursor-pointer">
             <label className="block">
               {userData?.id_card_back_image && 
                 <Image
@@ -120,12 +147,20 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
                   alt="ID Card Back"
                   width={350}
                   height={200}
-                  className="rounded-md mb-2 object-cover"
+                  className="rounded-md mb-2 object-cover hover:opacity-80 transition-opacity"
+                  onClick={() => setSelectedImage(process.env.NEXT_PUBLIC_API_URL +"/"+ userData.id_card_back_image)}
                 />
               }
             </label>
           </div>
         </div>
+
+        {/* Image Viewer */}
+        <ImageViewer
+          isOpen={!!selectedImage}
+          onClose={() => setSelectedImage(null)}
+          imageUrl={selectedImage}
+        />
 
         {/* Actions */}
         <div className="flex justify-end space-x-4">
