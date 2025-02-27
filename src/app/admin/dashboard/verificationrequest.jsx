@@ -16,7 +16,10 @@ const ImageViewer = ({ isOpen, onClose, imageUrl }) => {
     <Lightbox
       open={isOpen}
       close={onClose}
-      slides={[{ src: imageUrl }]}
+      slides={[{ 
+        src: imageUrl,
+        crossOrigin: "anonymous"
+      }]}
       plugins={[Zoom, Thumbnails]}
       carousel={{
         preload: 1
@@ -26,6 +29,52 @@ const ImageViewer = ({ isOpen, onClose, imageUrl }) => {
         scrollToZoom: true
       }}
     />
+  );
+};
+
+const ImageCard = ({ imageUrl, alt, onClick }) => {
+  const [fileSize, setFileSize] = useState('');
+
+  useEffect(() => {
+    if (imageUrl) {
+      // Get image dimensions and calculate approximate size
+      const img = new window.Image();
+      img.src = imageUrl;
+      img.onload = () => {
+        // Calculate approximate size based on dimensions and image type
+        // Assuming JPEG compression - this is a rough estimate
+        const approximateSize = (img.naturalWidth * img.naturalHeight * 0.23); // 0.23 bytes per pixel for JPEG
+        
+        // Convert to appropriate units
+        if (approximateSize < 1024) {
+          setFileSize(Math.round(approximateSize) + ' B');
+        } else if (approximateSize < 1048576) {
+          setFileSize(Math.round(approximateSize / 1024) + ' KB');
+        } else {
+          setFileSize((approximateSize / 1048576).toFixed(2) + ' MB');
+        }
+      };
+    }
+  }, [imageUrl]);
+
+  return (
+    <div className="border rounded-lg shadow-sm bg-gray-50 w-40 p-2 relative cursor-pointer group">
+      <label className="block">
+        <div className="relative w-full h-[150px]">
+          <Image
+            src={imageUrl}
+            alt={alt}
+            fill
+            style={{ objectFit: 'cover' }}
+            className="rounded-md hover:opacity-80 transition-opacity"
+            onClick={onClick}
+          />
+        </div>
+        <div className="text-xs text-gray-500 mt-2">
+          <p className="font-medium">Size: {fileSize}</p>
+        </div>
+      </label>
+    </div>
   );
 };
 
@@ -97,18 +146,30 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
           <h2 className="text-xl font-bold text-purplenote-800">
             Badge Verification Request
           </h2>
-            <Image src="/FAQ/cross.png" className="cursor-pointer" alt="close" width={20} height={20} onClick={() => setIsOpen(false)} />
+            <Image 
+              src="/FAQ/cross.png" 
+              className="cursor-pointer" 
+              alt="close" 
+              width={20} 
+              height={20} 
+              style={{ width: 'auto', height: 'auto' }}
+              onClick={() => setIsOpen(false)} 
+            />
 
         </div>
         
         {/* </button> */}
 
         <div className="flex  items-center p-4 bg-purple-100 rounded-lg shadow-sm max-w-md mt-4">
-          <Image
-            src={ProfilePic}
-            alt="User Profile"
-            className="w-12 h-12 rounded-full border border-gray-300"
-          />
+          <div className="relative w-12 h-12">
+            <Image
+              src={ProfilePic}
+              alt="User Profile"
+              fill
+              style={{ objectFit: 'cover' }}
+              className="rounded-full border border-gray-300"
+            />
+          </div>
           <div className="ml-4">
             <h2 className="text-sm font-semibold text-gray-800">{userData?.user_name}</h2>
             <p className="text-xs text-gray-500">{userData?.user_email}</p>
@@ -125,34 +186,20 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
 
         {/* Document List */}
         <div className="flex space-x-4 justify-center mb-6">
-          <div className="border rounded-lg shadow-sm bg-gray-50 w-40 h-42 p-2 relative cursor-pointer">
-            <label className="block">
-              {userData?.id_card_front_image && 
-                <Image
-                  src={process.env.NEXT_PUBLIC_API_URL +"/"+ userData.id_card_front_image}
-                  alt="ID Card Front"
-                  width={350}
-                  height={200}
-                  className="rounded-md mb-2 object-cover hover:opacity-80 transition-opacity"
-                  onClick={() => setSelectedImage(process.env.NEXT_PUBLIC_API_URL +"/"+ userData.id_card_front_image)}
-                />
-              }
-            </label>
-          </div>
-          <div className="border rounded-lg shadow-sm bg-gray-50 w-40 h-42 p-2 relative cursor-pointer">
-            <label className="block">
-              {userData?.id_card_back_image && 
-                <Image
-                  src={process.env.NEXT_PUBLIC_API_URL +"/"+ userData.id_card_back_image}
-                  alt="ID Card Back"
-                  width={350}
-                  height={200}
-                  className="rounded-md mb-2 object-cover hover:opacity-80 transition-opacity"
-                  onClick={() => setSelectedImage(process.env.NEXT_PUBLIC_API_URL +"/"+ userData.id_card_back_image)}
-                />
-              }
-            </label>
-          </div>
+          {userData?.id_card_front_image && (
+            <ImageCard
+              imageUrl={process.env.NEXT_PUBLIC_API_URL + "/" + userData.id_card_front_image}
+              alt="ID Card Front"
+              onClick={() => setSelectedImage(process.env.NEXT_PUBLIC_API_URL + "/" + userData.id_card_front_image)}
+            />
+          )}
+          {userData?.id_card_back_image && (
+            <ImageCard
+              imageUrl={process.env.NEXT_PUBLIC_API_URL + "/" + userData.id_card_back_image}
+              alt="ID Card Back"
+              onClick={() => setSelectedImage(process.env.NEXT_PUBLIC_API_URL + "/" + userData.id_card_back_image)}
+            />
+          )}
         </div>
 
         {/* Image Viewer */}
