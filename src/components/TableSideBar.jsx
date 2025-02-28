@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import Input from './cui/input';
 import Image from 'next/image';
 import { fetchSkills } from '../redux/features/skillSlice';
+import { IoTrashOutline } from "react-icons/io5";
 
 const FORM_VALIDATION = {
   name: {
@@ -32,9 +33,7 @@ function TableSideBar({
     const { items: skills } = useSelector((state) => state.skill || { items: [] });
     
     const [formData, setFormData] = useState({
-        title: '',
-        status: 'Active',
-        skillId: ''
+        items: [{ title: '', status: 'Active', skillId: '' }]
     });
     const [errors, setErrors] = useState({});
 
@@ -47,28 +46,30 @@ function TableSideBar({
     useEffect(() => {
         if (mode === 'edit' && selectedItem) {
             setFormData({
-                title: selectedItem.title || '',
-                id: selectedItem.id,
-                status: selectedItem.status || 'Active',
-                skillId: selectedItem.skillId || ''
+                items: [{
+                    title: selectedItem.title || '',
+                    id: selectedItem.id,
+                    status: selectedItem.status || 'Active',
+                    skillId: selectedItem.skillId || ''
+                }]
             });
         } else {
             setFormData({
-                title: '',
-                status: 'Active',
-                skillId: ''
+                items: [{ title: '', status: 'Active', skillId: '' }]
             });
         }
     }, [selectedItem, mode, isOpen]);
 
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.title) {
-            newErrors.title = FORM_VALIDATION.name.required;
-        }
-        if (type === "subSkill" && !formData.skillId) {
-            newErrors.skillId = 'Skill is required';
-        }
+        formData.items.forEach((item, index) => {
+            if (!item.title) {
+                newErrors[`title_${index}`] = FORM_VALIDATION.name.required;
+            }
+            if (type === "subSkill" && !item.skillId) {
+                newErrors[`skillId_${index}`] = 'Skill is required';
+            }
+        });
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -80,21 +81,18 @@ function TableSideBar({
         }
 
         try {
-            const itemData = { 
-                title: formData.title,
-                status: formData.status,
-                skillId: formData.skillId
-            };
-
-            if (mode === 'edit' && formData.id) {
+            if (mode === 'edit' && formData.items[0].id) {
                 await dispatch(updateData({ 
-                    id: formData.id, 
-                    data: itemData 
+                    id: formData.items[0].id, 
+                    data: formData.items[0] 
                 })).unwrap();
                 toast.success(`${title} updated successfully`);
             } else {
-                await dispatch(saveData(itemData)).unwrap();
-                toast.success(`${title} created successfully`);
+                // Save multiple items
+                for (const item of formData.items) {
+                    await dispatch(saveData(item)).unwrap();
+                }
+                toast.success(`${title}${formData.items.length > 1 ? 's' : ''} created successfully`);
             }
             
             dispatch(fetchData());
@@ -104,67 +102,135 @@ function TableSideBar({
         }
     };
 
+    const addNewItem = () => {
+        setFormData(prev => ({
+            items: [...prev.items, { title: '', status: 'Active', skillId: '' }]
+        }));
+    };
+
+    const removeItem = (index) => {
+        if (formData.items.length > 1) {
+            setFormData(prev => ({
+                items: prev.items.filter((_, i) => i !== index)
+            }));
+            const newErrors = { ...errors };
+            delete newErrors[`title_${index}`];
+            delete newErrors[`skillId_${index}`];
+            setErrors(newErrors);
+        }
+    };
+
+    const updateItemField = (index, field, value) => {
+        setFormData(prev => ({
+            items: prev.items.map((item, i) => 
+                i === index ? { ...item, [field]: value } : item
+            )
+        }));
+    };
+
     return (
         <>
             {isOpen && (
                 <div onClick={() => click()} className="fixed inset-0 bg-black opacity-50 z-40"></div>
             )}
 
-            <div
-                className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform ${
-                    isOpen ? "translate-x-0" : "translate-x-full"
-                } transition-transform duration-300 z-50`}
-            >
-                <div className="p-6">
+            <div className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform ${
+                isOpen ? "translate-x-0" : "translate-x-full"
+            } transition-transform duration-300 z-50 flex flex-col`}>
+                {/* Fixed Header */}
+                <div className="p-6 border-b">
                     <div className="flex justify-between items-center mb-4 text-black">
                         <h2 className="text-xl font-semibold">Add {title}</h2>
                         <button onClick={() => click()} className="text-gray-400 hover:text-gray-600">
                             <Image src="/FAQ/cross.png" alt="close" width={20} height={20} />
                         </button>
                     </div>
+                    <p className="text-gray-500 text-sm">{dis}</p>
+                </div>
 
-                    <p className="text-gray-500 text-sm mb-6">{dis}</p>
-
+                {/* Scrollable Content */}
+                <div className={`flex-1 overflow-y-auto p-6 ${formData.items.length >= 5 ? 'custom-scrollbar' : ''}`}>
                     <div className="flex flex-col gap-4">
-                        {type === "subSkill" && (
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Skill *
-                                </label>
-                                <select
-                                    value={formData.skillId}
-                                    onChange={(e) => setFormData({ ...formData, skillId: e.target.value })}
-                                    className={`w-full p-2 border rounded-md ${
-                                        errors.skillId ? 'border-red-500' : 'border-gray-300'
-                                    }`}
-                                >
-                                    <option value="">Select a skill</option>
-                                    {skills.map((skill) => (
-                                        <option key={skill.id} value={skill.id}>
-                                            {skill.name}
-                                        </option>
-                                    ))}
-                                </select>
-                                {errors.skillId && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.skillId}</p>
+                        {formData.items.map((item, index) => (
+                            <div key={index} className="relative">
+                                {type === "subSkill" && (
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Skill *
+                                        </label>
+                                        <div className="flex items-center gap-2">
+                                            <select
+                                                value={item.skillId}
+                                                onChange={(e) => updateItemField(index, 'skillId', e.target.value)}
+                                                className={`w-full p-2 border rounded-md ${
+                                                    errors[`skillId_${index}`] ? 'border-red-500' : 'border-gray-300'
+                                                }`}
+                                            >
+                                                <option value="">Select a skill</option>
+                                                {skills.map((skill) => (
+                                                    <option key={skill.id} value={skill.id}>
+                                                        {skill.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            {mode === 'create' && formData.items.length > 1 && (
+                                                <div className="flex-shrink-0 h-[38px] flex items-center">
+                                                    <button
+                                                        onClick={() => removeItem(index)}
+                                                        className="p-2 text-red-400 hover:text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
+                                                    >
+                                                        <IoTrashOutline size={20} />
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                        {errors[`skillId_${index}`] && (
+                                            <p className="text-red-500 text-xs mt-1">{errors[`skillId_${index}`]}</p>
+                                        )}
+                                    </div>
                                 )}
-                            </div>
-                        )}
 
-                        <Input
-                            id="title"
-                            value={formData.title}
-                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                            w="full"
-                            mdw="full"
-                            label={subTitle}
-                            placeholder={namePlaceholder}
-                            error={errors.title}
-                        />
+                                <div className="flex gap-2">
+                                    <div className="flex-grow">
+                                        <Input
+                                            id={`title_${index}`}
+                                            value={item.title}
+                                            onChange={(e) => updateItemField(index, 'title', e.target.value)}
+                                            w="full"
+                                            mdw="full"
+                                            label={index === 0 ? subTitle : ''}
+                                            placeholder={namePlaceholder}
+                                            error={errors[`title_${index}`]}
+                                        />
+                                    </div>
+                                    {mode === 'create' && formData.items.length > 1 && (
+                                        <div className="flex-shrink-0 self-end mb-[2px]">
+                                            <button
+                                                onClick={() => removeItem(index)}
+                                                className="h-[42px] w-[42px] flex items-center justify-center text-red-400 hover:text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors border border-red-100"
+                                            >
+                                                <IoTrashOutline size={20} />
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+
+                        {mode === 'create' && (
+                            <button
+                                onClick={addNewItem}
+                                className="flex items-center gap-2 text-purple-600 hover:text-purple-700 mt-2"
+                            >
+                                <span className="text-xl">+</span>
+                                <span>Add New {title}</span>
+                            </button>
+                        )}
                     </div>
                 </div>
 
-                <div className="absolute bottom-0 left-0 w-full p-4">
+                {/* Fixed Footer */}
+                <div className="p-4 border-t bg-white">
                     <button
                         onClick={handleSave}
                         disabled={isLoading}
@@ -177,5 +243,26 @@ function TableSideBar({
         </>
     );
 }
+
+// Add this CSS to your global styles or component
+const styles = `
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E0 transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #CBD5E0;
+    border-radius: 3px;
+}
+`;
 
 export default TableSideBar;
