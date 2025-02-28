@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import ProfilePic from '../../../../public/pp.jpg';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
-import { submitVerificationRequest, resetVerificationState } from '../../../redux/features/verificationSlice';
+// import { submitVerificationRequest, resetVerificationState } from '../../../redux/features/verificationSlice';
 import { GetAllbadgeVerificationRequest,ChangeBadgeStatus } from '../../../redux/features/badgeVerificationSlice';
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
@@ -11,18 +11,27 @@ import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 
-const ImageViewer = ({ isOpen, onClose, imageUrl }) => {
+const ImageViewer = ({ isOpen, onClose, imageUrl, userData }) => {
+  const slides = [
+    { 
+      src: process.env.NEXT_PUBLIC_API_URL + "/" + userData?.id_card_front_image,
+      title: "Front Side"
+    },
+    { 
+      src: process.env.NEXT_PUBLIC_API_URL + "/" + userData?.id_card_back_image,
+      title: "Back Side"
+    }
+  ].filter(slide => slide.src.includes("undefined") === false);
+
   return (
     <Lightbox
       open={isOpen}
       close={onClose}
-      slides={[{ 
-        src: imageUrl,
-        crossOrigin: "anonymous"
-      }]}
+      slides={slides}
       plugins={[Zoom, Thumbnails]}
       carousel={{
-        preload: 1
+        preload: 1,
+        finite: true
       }}
       zoom={{
         maxZoomPixelRatio: 3,
@@ -213,6 +222,7 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
           isOpen={!!selectedImage}
           onClose={() => setSelectedImage(null)}
           imageUrl={selectedImage}
+          userData={userData}
         />
 
         {/* Actions */}
