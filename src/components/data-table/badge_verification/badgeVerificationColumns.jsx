@@ -23,6 +23,7 @@ export const BadgeVerificationColumns = [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="text-left pl-0"
                 >
                     User
                     {column.getIsSorted() === "asc" ? (
@@ -34,7 +35,7 @@ export const BadgeVerificationColumns = [
             )
         },
         cell: ({ row }) => (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 pl-0">
                 <Image
                     src="/dash.png"
                     alt="Profile"
@@ -56,6 +57,7 @@ export const BadgeVerificationColumns = [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="text-left pl-0"
                 >
                     Phone Number
                     {column.getIsSorted() === "asc" ? (
@@ -67,7 +69,7 @@ export const BadgeVerificationColumns = [
             )
         },
         cell: ({ row }) => (
-            <div className="text-sm font-medium ml-10">{row.original.user_phone_number}</div>
+            <div className="text-sm font-medium pl-0">{row.original.user_phone_number}</div>
         ),
     },
     {
@@ -77,6 +79,7 @@ export const BadgeVerificationColumns = [
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="text-left pl-0"
                 >
                     Badge Status
                     {column.getIsSorted() === "asc" ? (
@@ -90,7 +93,7 @@ export const BadgeVerificationColumns = [
         cell: ({ row }) => {
             const status = row.original.badge_status;
             return (
-                <div className={`text-sm font-medium w-14 ${status === 'active' ? 'bg-green-100 text-green-600 p-1 text-center rounded-xl ml-10' : 'bg-red-100 text-red-500 p-1 text-center rounded-xl ml-10'}`}>
+                <div className={`text-sm font-medium w-14 ${status === 'active' ? 'bg-green-100 text-green-600 p-1 text-center rounded-xl' : 'bg-red-100 text-red-500 p-1 text-center rounded-xl'}`}>
                     {status}
                 </div>
             );

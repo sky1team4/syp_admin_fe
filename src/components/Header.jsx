@@ -118,7 +118,7 @@ const DashboardTopBar = () => {
               height={30}
             />
             <span className="hover:scale-110 absolute top-0 right-0 w-4 h-4 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
-              1
+              10
             </span>
           </div>
           <div className="absolute">
