@@ -11,7 +11,7 @@ const DashboardPage = () => {
   
 
   return (
-    <div className='flex flex-col md:flex-row gap-5 w-full '>
+    <div className='flex flex-col md:flex-row gap-5 w-full'>
       {/* <Sidebar /> */}
       <div className='flex flex-col flex-1 gap-3 w-full'>
         {/* <Header /> */}
