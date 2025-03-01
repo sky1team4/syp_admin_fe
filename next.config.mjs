@@ -1,18 +1,17 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false, // Disable Strict Mode
+  reactStrictMode: false, 
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL, // Default value for production
+    NEXT_PUBLIC_API_URL: 'https://sypadminapi.azurewebsites.net', // Ensure it's correct
   },
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: process.env.NEXT_PUBLIC_API_URL,
-        pathname: '/uploads/verifications/**', // Ensure proper path matching
+        hostname: 'sypadminapi.azurewebsites.net', // Hardcoded API hostname
+        pathname: '/uploads/verifications/**',
       },
     ],
-    domains: ['localhost', process.env.NEXT_PUBLIC_API_URL], // Allow API hostname
+    domains: ['sypadminapi.azurewebsites.net'], // Static domain required
   },
 };
 
