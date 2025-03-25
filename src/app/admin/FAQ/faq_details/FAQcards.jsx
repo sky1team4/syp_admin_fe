@@ -37,7 +37,7 @@ const FAQCard = ({ faq, onEdit, onDelete }) => {
               onClick={() => onEdit(faq)}
               className="text-blue-500 hover:text-blue-600 focus:outline-none"
             >
-              <Image src="/editTable.svg" alt="edit" width="20" height="20" className="w-5 h-5" />
+              <Image src="/EditTable.svg" alt="edit" width="20" height="20" className="w-5 h-5" />
             </button>
             <button
               onClick={handleDeleteClick}
