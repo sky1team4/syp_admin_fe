@@ -33,7 +33,7 @@ function TableSideBar({
     const { items: skills } = useSelector((state) => state.skill || { items: [] });
     
     const [formData, setFormData] = useState({
-        skillId: '',
+        skillId: selectedItem?.skillId || '',
         items: [{ title: '', status: 'Active' }]
     });
     const [errors, setErrors] = useState({});
@@ -55,30 +55,40 @@ function TableSideBar({
                 }]
             });
         } else {
-            setFormData({
-                skillId: '',
+            setFormData(prev => ({
+                skillId: prev.skillId || '',
                 items: [{ title: '', status: 'Active' }]
-            });
+            }));
         }
     }, [selectedItem, mode, isOpen]);
 
     const validateForm = () => {
         const newErrors = {};
-        if (type === "subSkill" && !formData.skillId) {
+        console.log('Validating form data:', formData);
+
+        if (type === "subSkill" && (!formData.skillId || formData.skillId === '')) {
+            console.log('Skill validation failed:', formData.skillId);
             newErrors.skillId = 'Skill is required';
         }
+
         formData.items.forEach((item, index) => {
-            if (!item.title) {
+            if (!item.title || item.title.trim() === '') {
                 newErrors[`title_${index}`] = FORM_VALIDATION.name.required;
             }
         });
+
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        if (Object.keys(newErrors).length > 0) {
+            toast.error('Please fill in all required fields correctly');
+            return false;
+        }
+        return true;
     };
 
     const handleSave = async () => {
+        console.log('Attempting to save with formData:', formData); // Debug log
+        
         if (!validateForm()) {
-            toast.error('Please fill in all required fields correctly');
             return;
         }
 
@@ -92,7 +102,13 @@ function TableSideBar({
             } else {
                 // Save multiple items
                 for (const item of formData.items) {
-                    await dispatch(saveData({ ...item, skillId: formData.skillId })).unwrap();
+                    const dataToSave = {
+                        ...item,
+                        skillId: formData.skillId,
+                        title: item.title.trim() // Ensure title is trimmed
+                    };
+                    console.log('Saving item:', dataToSave); // Debug log
+                    await dispatch(saveData(dataToSave)).unwrap();
                 }
                 toast.success(`${title}${formData.items.length > 1 ? 's' : ''} created successfully`);
             }
@@ -100,19 +116,28 @@ function TableSideBar({
             dispatch(fetchData());
             click();
         } catch (err) {
+            console.error('Save error:', err); // Debug log
             toast.error(`Failed to ${mode === 'edit' ? 'update' : 'create'} ${title}`);
         }
     };
 
     const addNewItem = () => {
-        setFormData(prev => ({
-            items: [...prev.items, { title: '', status: 'Active' }]
-        }));
+        setFormData(prevState => {
+            console.log('Adding new item. Current state:', prevState);
+            return {
+                ...prevState,
+                items: [
+                    ...prevState.items,
+                    { title: '', status: 'Active', skillId: prevState.skillId }
+                ]
+            };
+        });
     };
 
     const removeItem = (index) => {
         if (formData.items.length > 1) {
             setFormData(prev => ({
+                ...prev,
                 items: prev.items.filter((_, i) => i !== index)
             }));
             const newErrors = { ...errors };
@@ -123,10 +148,27 @@ function TableSideBar({
 
     const updateItemField = (index, field, value) => {
         setFormData(prev => ({
+            ...prev,
             items: prev.items.map((item, i) => 
                 i === index ? { ...item, [field]: value } : item
             )
         }));
+    };
+
+    const handleSkillChange = (e) => {
+        const newValue = e.target.value;
+        console.log('Selected skillId:', newValue);
+        setFormData(prevState => {
+            console.log('Previous state:', prevState);
+            return {
+                ...prevState,
+                skillId: newValue,
+                items: prevState.items.map(item => ({
+                    ...item,
+                    skillId: newValue
+                }))
+            };
+        });
     };
 
     return (
@@ -159,7 +201,7 @@ function TableSideBar({
                                 </label>
                                 <select
                                     value={formData.skillId}
-                                    onChange={(e) => setFormData(prev => ({ ...prev, skillId: e.target.value }))}
+                                    onChange={handleSkillChange}
                                     className={`w-full h-[42px] px-3 border rounded-md ${
                                         errors.skillId ? 'border-red-500' : 'border-gray-300'
                                     }`}

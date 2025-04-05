@@ -71,9 +71,9 @@ function Content() {
     lastUpdated: new Date(company.updateDateTime).toLocaleDateString()
   })) : [];
 
-  if (!isDataLoaded || isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (!isDataLoaded || isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   console.log('Formatted Companies:', formattedCompanies);
   

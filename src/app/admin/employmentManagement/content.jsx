@@ -72,9 +72,9 @@ function Content() {
     lastUpdated: new Date(employee.updateDateTime).toLocaleDateString()
   }));
 
-  if (!isDataLoaded || isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (!isDataLoaded || isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div className='flex flex-col gap-3 w-full h-full'>

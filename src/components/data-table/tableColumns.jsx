@@ -11,117 +11,144 @@ import ConfirmationDialog from "@/components/ConfirmationDialog"
 // import { deleteSubscription } from '@/redux/features/subscriptionSlice'
 
 
-export const createColumns = ({ handleEdit, handleDelete }) => [
-    {
-        accessorKey: "name",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
-                >
-                    Name
-                    {column.getIsSorted() === "asc" ? (
-                        <ArrowUp className="ml-2 h-4 w-4" />
-                    ) : (
-                        <ArrowDown className="ml-2 h-4 w-4" />
-                    )}
-                </Button>
-            )
+export const createColumns = ({ handleEdit, handleDelete, type }) => {
+    const baseColumns = [
+        {
+            accessorKey: "name",
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
+                    >
+                        Name
+                        {column.getIsSorted() === "asc" ? (
+                            <ArrowUp className="ml-2 h-4 w-4" />
+                        ) : (
+                            <ArrowDown className="ml-2 h-4 w-4" />
+                        )}
+                    </Button>
+                )
+            },
         },
-    },
-    {
-        accessorKey: "createdDate",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
-                >
-                    Created Date
-                    {column.getIsSorted() === "asc" ? (
-                        <ArrowUp className="ml-2 h-4 w-4" />
-                    ) : (
-                        <ArrowDown className="ml-2 h-4 w-4" />
-                    )}
-                </Button>
-            )
+        {
+            accessorKey: "createdDate",
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
+                    >
+                        Created Date
+                        {column.getIsSorted() === "asc" ? (
+                            <ArrowUp className="ml-2 h-4 w-4" />
+                        ) : (
+                            <ArrowDown className="ml-2 h-4 w-4" />
+                        )}
+                    </Button>
+                )
+            },
         },
-    },
-    {
-        accessorKey: "lastUpdated",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
-                >
-                    Last Updated
-                    {column.getIsSorted() === "asc" ? (
-                        <ArrowUp className="ml-2 h-4 w-4" />
-                    ) : (
-                        <ArrowDown className="ml-2 h-4 w-4" />
-                    )}
-                </Button>
-            )
+        {
+            accessorKey: "lastUpdated",
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
+                    >
+                        Last Updated
+                        {column.getIsSorted() === "asc" ? (
+                            <ArrowUp className="ml-2 h-4 w-4" />
+                        ) : (
+                            <ArrowDown className="ml-2 h-4 w-4" />
+                        )}
+                    </Button>
+                )
+            },
         },
-    },
-    {
-        id: "actions",
-        header: "Actions",
-        cell: ({ row }) => {
-            const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-            const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-            const item = row.original;
+        {
+            id: "actions",
+            header: "Actions",
+            cell: ({ row }) => {
+                const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+                const [isConfirmOpen, setIsConfirmOpen] = useState(false)
+                const item = row.original;
 
-            const onDelete = () => {
-                setIsConfirmOpen(true);
-            };
+                const onDelete = () => {
+                    setIsConfirmOpen(true);
+                };
 
-            const onConfirmDelete = () => {
-                handleDelete(item.id);
-                setIsConfirmOpen(false);
-            };
+                const onConfirmDelete = () => {
+                    handleDelete(item.id);
+                    setIsConfirmOpen(false);
+                };
 
-            return (
-                <>
-                    <div className="flex gap-2">
-                        <button
-                            className="p-1"
-                            onClick={() => handleEdit(item)}
-                        >
-                            <Image
-                                src="/EditTable.svg"
-                                width={20}
-                                height={20}
-                                alt="Edit"
-                            />
-                        </button>
-                        <button
-                            className="p-1"
-                            onClick={onDelete}
-                        >
-                            <Image
-                                src="/delete.svg"
-                                width={20}
-                                height={20}
-                                alt="Delete"
-                            />
-                        </button>
-                    </div>
+                return (
+                    <>
+                        <div className="flex gap-2">
+                            <button
+                                className="p-1"
+                                onClick={() => handleEdit(item)}
+                            >
+                                <Image
+                                    src="/EditTable.svg"
+                                    width={20}
+                                    height={20}
+                                    alt="Edit"
+                                />
+                            </button>
+                            <button
+                                className="p-1"
+                                onClick={onDelete}
+                            >
+                                <Image
+                                    src="/delete.svg"
+                                    width={20}
+                                    height={20}
+                                    alt="Delete"
+                                />
+                            </button>
+                        </div>
 
-                    <ConfirmationDialog
-                        isOpen={isConfirmOpen}
-                        onClose={() => setIsConfirmOpen(false)}
-                        onConfirm={onConfirmDelete}
-                        title="Delete Item"
-                        message="Are you sure you want to delete this item? This action cannot be undone."
-                    />
-                </>
-            )
+                        <ConfirmationDialog
+                            isOpen={isConfirmOpen}
+                            onClose={() => setIsConfirmOpen(false)}
+                            onConfirm={onConfirmDelete}
+                            title="Delete Item"
+                            message="Are you sure you want to delete this item? This action cannot be undone."
+                        />
+                    </>
+                )
+            },
         },
-    },
-]
+    ];
+
+    // Insert skill column only for subskill type
+    if (type === 'subSkill') {
+        baseColumns.splice(1, 0, {
+            accessorKey: "skillName",
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
+                    >
+                        Skill
+                        {column.getIsSorted() === "asc" ? (
+                            <ArrowUp className="ml-2 h-4 w-4" />
+                        ) : (
+                            <ArrowDown className="ml-2 h-4 w-4" />
+                        )}
+                    </Button>
+                )
+            },
+        });
+    }
+
+    return baseColumns;
+}

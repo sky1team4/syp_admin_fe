@@ -20,7 +20,7 @@ import {
 import Button from "../cui/button";
 import Image from "next/image";
 
-export function SubscriptionTable({ columns, data = [], title, btnText, click, isOpen, backBTN, link, isLoading }) {
+export function  SubscriptionTable({ columns, data = [], title, btnText, click, isOpen, backBTN, link, isLoading }) {
   const [sorting, setSorting] = useState([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [showSkeleton, setShowSkeleton] = useState(true);

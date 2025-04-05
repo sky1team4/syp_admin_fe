@@ -53,7 +53,8 @@ function Content() {
     setSelectedItem({
       id: item.id,
       title: item.name,
-      status: item.status
+      status: item.status,
+      skillId: item.skillId
     });
     toggleSidebar('edit');
   };
@@ -70,13 +71,14 @@ function Content() {
   // Format dates for display
   const formattedSubSkills = subSkills ? subSkills.map(subSkill => ({
     ...subSkill,
+    skillName: subSkill.skill?.name || 'N/A',
     createdDate: new Date(subSkill.createDate).toLocaleDateString(),
     lastUpdated: new Date(subSkill.updateDate).toLocaleDateString()
   })) : [];
 
-  if (!isDataLoaded || isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (!isDataLoaded || isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   console.log('Formatted Sub Skills:', formattedSubSkills);
 
@@ -107,11 +109,7 @@ function Content() {
         array={formattedSubSkills}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
-        columnTitles={[
-          { header: "Sub Skill", accessorKey: "name" },
-          { header: "Created Date", accessorKey: "createdDate" },
-          { header: "Last Updated", accessorKey: "lastUpdated" }
-        ]}
+        type="subSkill"
       />
     </div>
   );
