@@ -167,6 +167,7 @@ export const updateUser = createAsyncThunk(
       }
 
       const data = await response.json();
+      console.log("data update user", data);
       return data;
     } catch (error) {
       console.error('Update error:', error);

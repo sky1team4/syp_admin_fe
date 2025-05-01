@@ -14,7 +14,7 @@ export default function ProfilePage() {
   const dispatch = useDispatch();
   const { user, loading } = useSelector((state) => state.auth);
   const [mounted, setMounted] = useState(false);
-  
+
   // Initialize state with empty values
   const [profileData, setProfileData] = useState({
     email: '',
@@ -44,9 +44,9 @@ export default function ProfilePage() {
   // Update profile data when user info changes
   useEffect(() => {
     if (mounted && user) {
-      console.log('Setting profile data from user:', user); // Debug log
+      // console.log('Setting profile data from user:', user); // Debug log
       const profilePicture = user.profilePicture || localStorage.getItem('userProfilePicture');
-      
+
       setProfileData({
         email: user.email || '',
         name: user.name || '',
@@ -87,14 +87,16 @@ export default function ProfilePage() {
   };
 
   const handleProfileUpdate = async (e) => {
+    console.log("profileData in prfile picture = = >", profileData.picture);
     e.preventDefault();
-    
+
     const promise = toast.promise(
       (async () => {
         try {
           const updateData = {};
           if (profileData.email !== user.email) updateData.email = profileData.email;
           if (profileData.name !== user.name) updateData.name = profileData.name;
+          if (profileData.picture !== user.profilePicture) updateData.profilePicture = profileData.picture;
 
           // Check if there are any changes including image
           if (Object.keys(updateData).length === 0 && !selectedImage) {
@@ -103,35 +105,42 @@ export default function ProfilePage() {
 
           // First upload image if there is one
           if (selectedImage) {
+            console.log("selectedImage in profile page = = >", selectedImage);
             const imageResult = await dispatch(updateProfileImage(selectedImage)).unwrap();
             if (!imageResult.imageUrl) {
               throw new Error('Failed to upload profile picture');
             }
             // Store the complete URL with BASE_URL
-            updateData.profilePicture = imageResult.imageUrl.startsWith('http') 
-              ? imageResult.imageUrl 
+            const completeImageUrl = imageResult.imageUrl.startsWith('http')
+              ? imageResult.imageUrl
               : `${BASE_URL}${imageResult.imageUrl}`;
+            console.log("completeImageUrl in profile page = = >", completeImageUrl);
+            updateData.profilePicture = completeImageUrl;
+
+            // Update local state immediately with the new image URL
+            setProfileData(prev => ({
+              ...prev,
+              picture: completeImageUrl
+            }));
+
+            // Store in localStorage
+            localStorage.setItem('userProfilePicture', completeImageUrl);
           }
 
           // Then update other profile data if any
           if (Object.keys(updateData).length > 0) {
             const result = await dispatch(updateUser(updateData)).unwrap();
-          }
 
-          // Update local state with complete URL
-          setProfileData(prev => ({
-            ...prev,
-            ...updateData,
-            picture: updateData.profilePicture || prev.picture
-          }));
+            // Update local state with all changes
+            setProfileData(prev => ({
+              ...prev,
+              ...updateData
+            }));
+          }
 
           // Clear the selected image
           setSelectedImage(null);
-
-          // Store the complete URL in localStorage
-          if (updateData.profilePicture) {
-            localStorage.setItem('userProfilePicture', updateData.profilePicture);
-          }
+          setImagePreviewUrl(null);
 
           return `Updated: ${Object.keys(updateData).join(', ')}`;
         } catch (error) {
@@ -148,7 +157,7 @@ export default function ProfilePage() {
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
-    
+
     const promise = toast.promise(
       (async () => {
         try {
@@ -161,7 +170,7 @@ export default function ProfilePage() {
           const verifyPassword = await dispatch(updateUser({
             currentPassword: passwordData.currentPassword
           })).unwrap();
-          
+
           if (!verifyPassword.success) {
             throw new Error('Current password is incorrect');
           }
@@ -208,6 +217,7 @@ export default function ProfilePage() {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    console.log("file in profile page = = >", file);
     if (file) {
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
@@ -224,6 +234,7 @@ export default function ProfilePage() {
       // Store the file and create preview URL
       setSelectedImage(file);
       const previewUrl = URL.createObjectURL(file);
+      console.log("previewUrl in profile page = = >", previewUrl);
       setImagePreviewUrl(previewUrl);
     }
   };
@@ -239,12 +250,13 @@ export default function ProfilePage() {
   // Update the renderProfileImage function to show preview
   const renderProfileImage = () => {
     if (imagePreviewUrl) {
+      console.log("imagePreviewUrl in profile page = = >", imagePreviewUrl);
       return (
-        <Image 
+        <Image
           src={imagePreviewUrl}
-          alt="Profile Preview" 
-          width={80} 
-          height={80} 
+          alt="Profile Preview"
+          width={80}
+          height={80}
           className="rounded-full object-cover w-full h-full"
           unoptimized={true}
         />
@@ -252,19 +264,20 @@ export default function ProfilePage() {
     }
 
     const profilePicture = profileData.picture || user?.profilePicture || localStorage.getItem('userProfilePicture');
-    
-    if (profilePicture) {
-      // Always ensure we have a complete URL
-      const imageUrl = profilePicture.startsWith('http') 
-        ? profilePicture 
-        : `${BASE_URL}${profilePicture}`;
 
+    if (profilePicture) {
+      console.log("profilePicture in profile page = = >", profilePicture);
+      // Always ensure we have a complete URL
+      const imageUrl = profilePicture.startsWith('http')
+        ? profilePicture
+        : `${BASE_URL}${profilePicture}`;
+      console.log("imageUrl in profile page = = >", imageUrl);
       return (
-        <Image 
+        <Image
           src={imageUrl}
-          alt={user?.name || 'Profile'} 
-          width={80} 
-          height={80} 
+          alt={user?.name || 'Profile'}
+          width={80}
+          height={80}
           className="rounded-full object-cover w-full h-full"
           unoptimized={true}
         />
@@ -288,11 +301,11 @@ export default function ProfilePage() {
           <div className="mb-8 bg-white rounded-xl shadow-sm p-8">
             <div className="flex items-center mb-8">
               <div className="p-2 bg-purple-100 rounded-lg mr-4">
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className="h-6 w-6 text-purple-600" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-purple-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -309,7 +322,7 @@ export default function ProfilePage() {
                     type="email"
                     className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
                     value={profileData.email}
-                    onChange={(e) => setProfileData({...profileData, email: e.target.value})}
+                    onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
                   />
                 </div>
                 <div>
@@ -318,11 +331,11 @@ export default function ProfilePage() {
                     type="text"
                     className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
                     value={profileData.name}
-                    onChange={(e) => setProfileData({...profileData, name: e.target.value})}
+                    onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
                   />
                 </div>
               </div>
-              
+
               <div className="mb-6">
                 <label className="block mb-2 text-sm font-medium text-gray-700">Profile Picture</label>
                 <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4">
@@ -343,17 +356,17 @@ export default function ProfilePage() {
                       htmlFor="profile-image-input"
                       className="w-full sm:w-auto flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors text-sm"
                     >
-                      <svg 
-                        className="w-5 h-5 mr-2 text-gray-500" 
-                        fill="none" 
-                        stroke="currentColor" 
+                      <svg
+                        className="w-5 h-5 mr-2 text-gray-500"
+                        fill="none"
+                        stroke="currentColor"
                         viewBox="0 0 24 24"
                       >
-                        <path 
-                          strokeLinecap="round" 
-                          strokeLinejoin="round" 
-                          strokeWidth={2} 
-                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" 
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                         />
                       </svg>
                       Choose new photo
@@ -386,11 +399,11 @@ export default function ProfilePage() {
           <div className="bg-white rounded-xl shadow-sm p-8">
             <div className="flex items-center mb-8">
               <div className="p-2 bg-purple-100 rounded-lg mr-4">
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className="h-6 w-6 text-purple-600" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-purple-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
@@ -409,10 +422,10 @@ export default function ProfilePage() {
                     type={showPasswords.currentPassword ? "text" : "password"}
                     className="w-full p-3 border border-gray-200 rounded-lg pr-10 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
                     value={passwordData.currentPassword}
-                    onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                    onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                   />
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={() => togglePasswordVisibility('currentPassword')}
                     className="absolute right-3 top-10 text-gray-400 hover:text-gray-600 focus:outline-none"
                     aria-label="Toggle password visibility"
@@ -438,10 +451,10 @@ export default function ProfilePage() {
                     type={showPasswords.newPassword ? "text" : "password"}
                     className="w-full p-3 border border-gray-200 rounded-lg pr-10 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
                     value={passwordData.newPassword}
-                    onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                    onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                   />
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={() => togglePasswordVisibility('newPassword')}
                     className="absolute right-3 top-10 text-gray-400 hover:text-gray-600 focus:outline-none"
                     aria-label="Toggle password visibility"
@@ -467,10 +480,10 @@ export default function ProfilePage() {
                     type={showPasswords.confirmPassword ? "text" : "password"}
                     className="w-full p-3 border border-gray-200 rounded-lg pr-10 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
                     value={passwordData.confirmPassword}
-                    onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+                    onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                   />
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={() => togglePasswordVisibility('confirmPassword')}
                     className="absolute right-3 top-10 text-gray-400 hover:text-gray-600 focus:outline-none"
                     aria-label="Toggle password visibility"
@@ -488,7 +501,7 @@ export default function ProfilePage() {
                   </button>
                 </div>
               </div>
-              
+
               <button
                 type="submit"
                 disabled={loading}
