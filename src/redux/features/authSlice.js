@@ -34,7 +34,7 @@ export const loginUser = createAsyncThunk(
     try {
       console.log("credentials", process.env.NEXT_PUBLIC_API_URL);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
-        // const response = await fetch(`${API_URL}/users/login`, {
+        // const response = await fetch(${API_URL}/users/login, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,8 +61,8 @@ export const logoutUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = Cookies.get('authToken');
-      
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/users/logout', {
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -77,10 +77,10 @@ export const logoutUser = createAsyncThunk(
 
       // Remove cookie after successful logout
       Cookies.remove("authToken", { path: "/" });
-      
+
       // Force a page refresh
       window.location.href = '/admin-Login';
-      
+
       return await response.json();
     } catch (error) {
       // Remove cookie even if logout fails
@@ -160,14 +160,13 @@ export const updateUser = createAsyncThunk(
         },
         body: JSON.stringify(updateData),
       });
-
+      console.log("response", response);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Update failed');
       }
 
       const data = await response.json();
-      console.log("data update user", data);
       return data;
     } catch (error) {
       console.error('Update error:', error);
@@ -198,8 +197,8 @@ export const updateProfileImage = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log('Upload response:', data); // Debug log
-      
+      // console.log('Upload response:', data); // Debug log
+
       if (!data.imageUrl) {
         throw new Error('No image URL in response');
       }
@@ -219,7 +218,7 @@ const getInitialUserState = () => {
     if (token) {
       const payload = JSON.parse(atob(token.split('.')[1]));
       console.log('Initial token payload:', payload);
-      
+
       // Get profile picture from localStorage
       const profilePicture = localStorage.getItem('userProfilePicture');
       console.log('Stored profile picture:', profilePicture);
@@ -273,14 +272,14 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload.access_token;
-        
+
         try {
           const payload = JSON.parse(atob(action.payload.access_token.split('.')[1]));
           console.log('Login payload:', payload);
-          
+
           // Get profile image from the response or existing storage
           const profileImage = action.payload.profileImage || localStorage.getItem('userProfilePicture');
-          
+
           state.role = payload.role;
           state.user = {
             id: payload.sub,
@@ -288,14 +287,14 @@ const authSlice = createSlice({
             email: payload.email,
             profilePicture: profileImage
           };
-          
+
           // Store the profile image URL if it exists
           if (profileImage) {
             localStorage.setItem('userProfilePicture', profileImage);
           }
-          
+
           state.isAuthenticated = true;
-          
+
           Cookies.set("authToken", action.payload.access_token, {
             expires: 1,
             path: "/",
@@ -307,7 +306,7 @@ const authSlice = createSlice({
         } catch (error) {
           console.error('Error decoding token:', error);
         }
-        
+
         localStorage.setItem('token', action.payload.access_token);
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -367,10 +366,10 @@ const authSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.loading = false;
-        
+
         if (action.payload.token) {
           state.token = action.payload.token;
-          
+
           // Update stored token
           Cookies.set("authToken", action.payload.token, {
             expires: 1,
@@ -383,7 +382,7 @@ const authSlice = createSlice({
           try {
             const payload = JSON.parse(atob(action.payload.token.split('.')[1]));
             const currentProfilePicture = state.user?.profilePicture;
-            
+
             state.user = {
               ...state.user,
               name: payload.name,
@@ -406,7 +405,7 @@ const authSlice = createSlice({
       .addCase(updateProfileImage.fulfilled, (state, action) => {
         state.loading = false;
         console.log('Update profile image response:', action.payload);
-        
+
         if (state.user && action.payload.imageUrl) {
           state.user = {
             ...state.user,
@@ -424,4 +423,4 @@ const authSlice = createSlice({
 });
 
 export const { logout, resetAuthState } = authSlice.actions;
-export default authSlice.reducer; 
+export default authSlice.reducer;

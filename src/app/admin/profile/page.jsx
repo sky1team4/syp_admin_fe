@@ -44,7 +44,7 @@ export default function ProfilePage() {
   // Update profile data when user info changes
   useEffect(() => {
     if (mounted && user) {
-      // console.log('Setting profile data from user:', user); // Debug log
+      console.log('Setting profile data from user:', user); // Debug log
       const profilePicture = user.profilePicture || localStorage.getItem('userProfilePicture');
 
       setProfileData({
@@ -78,7 +78,7 @@ export default function ProfilePage() {
     }
   }, [user, mounted]);
 
-  // Add validation for password
+  // // Add validation for password
   const validatePassword = (password) => {
     if (password.length < 6) {
       return 'Password must be at least 6 characters long';
@@ -87,7 +87,6 @@ export default function ProfilePage() {
   };
 
   const handleProfileUpdate = async (e) => {
-    console.log("profileData in prfile picture = = >", profileData.picture);
     e.preventDefault();
 
     const promise = toast.promise(
@@ -96,7 +95,6 @@ export default function ProfilePage() {
           const updateData = {};
           if (profileData.email !== user.email) updateData.email = profileData.email;
           if (profileData.name !== user.name) updateData.name = profileData.name;
-          if (profileData.picture !== user.profilePicture) updateData.profilePicture = profileData.picture;
 
           // Check if there are any changes including image
           if (Object.keys(updateData).length === 0 && !selectedImage) {
@@ -105,42 +103,35 @@ export default function ProfilePage() {
 
           // First upload image if there is one
           if (selectedImage) {
-            console.log("selectedImage in profile page = = >", selectedImage);
             const imageResult = await dispatch(updateProfileImage(selectedImage)).unwrap();
             if (!imageResult.imageUrl) {
               throw new Error('Failed to upload profile picture');
             }
             // Store the complete URL with BASE_URL
-            const completeImageUrl = imageResult.imageUrl.startsWith('http')
+            updateData.profilePicture = imageResult.imageUrl.startsWith('http')
               ? imageResult.imageUrl
               : `${BASE_URL}${imageResult.imageUrl}`;
-            console.log("completeImageUrl in profile page = = >", completeImageUrl);
-            updateData.profilePicture = completeImageUrl;
-
-            // Update local state immediately with the new image URL
-            setProfileData(prev => ({
-              ...prev,
-              picture: completeImageUrl
-            }));
-
-            // Store in localStorage
-            localStorage.setItem('userProfilePicture', completeImageUrl);
           }
 
           // Then update other profile data if any
           if (Object.keys(updateData).length > 0) {
             const result = await dispatch(updateUser(updateData)).unwrap();
-
-            // Update local state with all changes
-            setProfileData(prev => ({
-              ...prev,
-              ...updateData
-            }));
           }
+
+          // Update local state with complete URL
+          setProfileData(prev => ({
+            ...prev,
+            ...updateData,
+            picture: updateData.profilePicture || prev.picture
+          }));
 
           // Clear the selected image
           setSelectedImage(null);
-          setImagePreviewUrl(null);
+
+          // Store the complete URL in localStorage
+          if (updateData.profilePicture) {
+            localStorage.setItem('userProfilePicture', updateData.profilePicture);
+          }
 
           return `Updated: ${Object.keys(updateData).join(', ')}`;
         } catch (error) {
@@ -217,7 +208,6 @@ export default function ProfilePage() {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    console.log("file in profile page = = >", file);
     if (file) {
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
@@ -234,7 +224,6 @@ export default function ProfilePage() {
       // Store the file and create preview URL
       setSelectedImage(file);
       const previewUrl = URL.createObjectURL(file);
-      console.log("previewUrl in profile page = = >", previewUrl);
       setImagePreviewUrl(previewUrl);
     }
   };
@@ -250,7 +239,6 @@ export default function ProfilePage() {
   // Update the renderProfileImage function to show preview
   const renderProfileImage = () => {
     if (imagePreviewUrl) {
-      console.log("imagePreviewUrl in profile page = = >", imagePreviewUrl);
       return (
         <Image
           src={imagePreviewUrl}
@@ -266,12 +254,11 @@ export default function ProfilePage() {
     const profilePicture = profileData.picture || user?.profilePicture || localStorage.getItem('userProfilePicture');
 
     if (profilePicture) {
-      console.log("profilePicture in profile page = = >", profilePicture);
       // Always ensure we have a complete URL
       const imageUrl = profilePicture.startsWith('http')
         ? profilePicture
         : `${BASE_URL}${profilePicture}`;
-      console.log("imageUrl in profile page = = >", imageUrl);
+
       return (
         <Image
           src={imageUrl}
