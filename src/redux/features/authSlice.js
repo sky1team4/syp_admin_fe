@@ -175,6 +175,60 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const verifyPassword = createAsyncThunk(
+  'auth/verifyPassword',
+  async (currentPassword, { rejectWithValue }) => {
+    try {
+      const token = Cookies.get('authToken');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/verify-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ password: currentPassword }),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Password verification failed');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Password verification error:', error);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  'auth/resetPassword',
+  async ({newPassword}, { rejectWithValue }) => {
+    const token = Cookies.get('authToken');
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/reset-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ token, newPassword }),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Password reset failed');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Password reset error:', error);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const updateProfileImage = createAsyncThunk(
   'auth/updateProfileImage',
   async (file, { rejectWithValue }) => {
@@ -418,6 +472,17 @@ const authSlice = createSlice({
       .addCase(updateProfileImage.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Failed to update profile picture';
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to reset password';
       });
   },
 });

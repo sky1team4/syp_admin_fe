@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useSelector, useDispatch } from 'react-redux'
 import toast from 'react-hot-toast'
-import { updateUser, updateProfileImage } from '@/redux/features/authSlice'
+import { updateUser, updateProfileImage, verifyPassword, resetPassword } from '@/redux/features/authSlice'
 import Cookies from 'js-cookie'
 
 // Get base URL from environment variable
@@ -158,11 +158,11 @@ export default function ProfilePage() {
           }
 
           // Step 1: Verify current password
-          const verifyPassword = await dispatch(updateUser({
-            currentPassword: passwordData.currentPassword
-          })).unwrap();
+          const verifyPasswordResult = await dispatch(verifyPassword(
+            passwordData.currentPassword
+          )).unwrap();
 
-          if (!verifyPassword.success) {
+          if (!verifyPasswordResult.success) {
             throw new Error('Current password is incorrect');
           }
 
@@ -180,9 +180,9 @@ export default function ProfilePage() {
             throw new Error(passwordError);
           }
 
-          // Update with new password
-          const updateResult = await dispatch(updateUser({
-            currentPassword: passwordData.currentPassword,
+          // Use reset password endpoint instead
+          const resetResult = await dispatch(resetPassword({
+            
             newPassword: passwordData.newPassword
           })).unwrap();
 
