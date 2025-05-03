@@ -85,10 +85,10 @@ function Content() {
         click={toggleSidebar}
         mode={mode}
         selectedItem={selectedItem}
-        title="Q&A Category"
-        dis="Manage Q&A categories efficiently."
-        subTitle="Q&A Category *"
-        namePlaceholder="Enter Q&A category"
+        title="FAQ Category"
+        dis="Manage FAQ categories efficiently."
+        subTitle="FAQ Category *"
+        namePlaceholder="Enter FAQ category"
         type="faqCategory"
         fetchData={fetchFaqCategories}
         saveData={saveFaqCategory}
