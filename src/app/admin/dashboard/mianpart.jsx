@@ -13,6 +13,7 @@ export default function DashboardPage() {
   const usersData = useSelector((state) => state.auth.users);
   const verificationRequestsData = useSelector((state) => state.badgeVerificationList.data);
   const [activeTab, setActiveTab] = useState("Users");
+  const [searchTerm, setSearchTerm] = useState("");
   
   useEffect(() => {
     dispatch(fetchAllUsers());
@@ -27,6 +28,21 @@ export default function DashboardPage() {
     setActiveTab(tab);
   };
 
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+  
+  // Filter data based on search term
+  const filteredData = activeTab === "Users" 
+    ? usersData?.filter(user => 
+        user.email?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.phoneNumber?.toString() || "").toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : verificationRequestsData?.filter(request => 
+        request.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        request.user?.email?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
   
   // const verificationRequestsData = [];
   
@@ -43,41 +59,60 @@ export default function DashboardPage() {
           <Image alt="more" src="/More.svg" width={45} height={45} />
         </button> */}
       </div>
-      {/* Tabs */}
-      <div className="flex items-center justify-start mb-4 w-fit border border-purple-600 rounded-lg overflow-hidden">
-        <button
-          className={`px-4 py-2 text-sm md:text-base font-medium transition ${
-            activeTab === "Users"
-              ? "bg-purple-600 text-white"
-              : "bg-white text-purple-600"
-          }`}
-          onClick={() => handleTabClick("Users")}
-        >
-          Users
-        </button>
+      {/* Tabs and Search */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-start w-fit border border-purple-600 rounded-lg overflow-hidden">
+          <button
+            className={`px-4 py-2 text-sm md:text-base font-medium transition ${
+              activeTab === "Users"
+                ? "bg-purple-600 text-white"
+                : "bg-white text-purple-600"
+            }`}
+            onClick={() => handleTabClick("Users")}
+          >
+            Users
+          </button>
 
-        <button
-          className={`px-4 py-2 text-sm md:text-base font-medium transition ${
-            activeTab === "Verification Requests"
-              ? "bg-purple-600 text-white"
-              : "bg-white text-purple-600"
-          }`}
-          onClick={() => handleTabClick("Verification Requests")}
-        >
-          Verification Requests
-        </button>
+          <button
+            className={`px-4 py-2 text-sm md:text-base font-medium transition ${
+              activeTab === "Verification Requests"
+                ? "bg-purple-600 text-white"
+                : "bg-white text-purple-600"
+            }`}
+            onClick={() => handleTabClick("Verification Requests")}
+          >
+            Verification Requests
+          </button>
+        </div>
+        
+        {/* Search Bar */}
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+          />
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        </div>
       </div>
+      
       {activeTab === "Users" && (
         <DataTable
           columns={columns}
-          data={usersData}
+          data={filteredData || []}
           onVerify={handleVerification}
         />
       )}
       {activeTab === "Verification Requests" && (
         <DataTable
           columns={BadgeVerificationColumns}
-          data={verificationRequestsData}
+          data={filteredData || []}
           onVerify={handleVerification}
         />
       )}
