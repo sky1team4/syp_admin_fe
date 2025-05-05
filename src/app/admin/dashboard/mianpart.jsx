@@ -9,7 +9,7 @@ import { DataTable } from "@/components/data-table/data-table"
 
 export default function DashboardPage() {
   // console.log("DashboardPage");
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   const usersData = useSelector((state) => state.auth.users);
   const verificationRequestsData = useSelector((state) => state.badgeVerificationList.data);
   const [activeTab, setActiveTab] = useState("Users");
@@ -45,7 +45,7 @@ export default function DashboardPage() {
       );
   
   // const verificationRequestsData = [];
-  
+
   // console.log("Badge Verification Data", verificationRequestsData);
 
   return (
