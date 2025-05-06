@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data, globalFilter }) {
   // console.log("data table", data);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
@@ -37,6 +37,7 @@ export function DataTable({ columns, data }) {
     state: {
       sorting,
       columnFilters,
+      globalFilter,
     },
   });
 
@@ -54,9 +55,9 @@ export function DataTable({ columns, data }) {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </div>
                   </TableHead>
                 ))}
@@ -95,25 +96,23 @@ export function DataTable({ columns, data }) {
                             </span>
                           ) : cell.column.id === "status" ? (
                             <span
-                              className={`text-sm font-medium  ${
-                                cell.getValue() === "active" ? "bg-green-100 text-green-600 rounded-full px-2 py-1" : "bg-yellow-100 text-yellow-600 rounded-full px-2 py-1"
-                              }`}
+                              className={`text-sm font-medium  ${cell.getValue() === "active" ? "bg-green-100 text-green-600 rounded-full px-2 py-1" : "bg-yellow-100 text-yellow-600 rounded-full px-2 py-1"
+                                }`}
                             >
                               {cell.getValue() ? cell.getValue().toString() : "N/A"}
                             </span>
                           ) : cell.column.id === "billingPeriod" ? (
                             <span
-                              className={`px-2 py-1 text-xs rounded-full ${
-                                cell.getValue() === "MONTHLY" ? "bg-green-100 text-green-600" :
+                              className={`px-2 py-1 text-xs rounded-full ${cell.getValue() === "MONTHLY" ? "bg-green-100 text-green-600" :
                                 cell.getValue() === "YEARLY" ? "bg-blue-100 text-blue-600" :
-                                cell.getValue() === null ? "bg-yellow-100 text-yellow-600" :
-                                "bg-gray-100 text-gray-600" // Default case
-                              }`}
+                                  cell.getValue() === null ? "bg-yellow-100 text-yellow-600" :
+                                    "bg-gray-100 text-gray-600" // Default case
+                                }`}
                             >
                               {cell.getValue() === "MONTHLY" ? "Monthly Subscription" :
-                               cell.getValue() === "YEARLY" ? "Yearly Subscription" :
-                               cell.getValue() === null ? "Free Member" :
-                               "N/A"
+                                cell.getValue() === "YEARLY" ? "Yearly Subscription" :
+                                  cell.getValue() === null ? "Free Member" :
+                                    "N/A"
                               }
                             </span>
                           ) : (
