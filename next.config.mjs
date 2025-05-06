@@ -1,8 +1,8 @@
 const nextConfig = {
   reactStrictMode: false, 
-  env: {
-    NEXT_PUBLIC_API_URL: 'https://sypadminapi.azurewebsites.net', // Ensure it's correct
-  },
+  // env: {
+  //   NEXT_PUBLIC_API_URL: 'https://sypadminapi.azurewebsites.net', // Ensure it's correct
+  // },
   images: {
     remotePatterns: [
       {
