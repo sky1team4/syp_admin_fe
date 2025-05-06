@@ -15,13 +15,26 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("Users");
   const [searchTerm, setSearchTerm] = useState("");
   
-  useEffect(() => {
+  // Create a function to fetch data
+  const fetchData = () => {
     dispatch(fetchAllUsers());
     dispatch(GetAllbadgeVerificationRequest());
+  };
+
+  // Initial data fetch
+  useEffect(() => {
+    fetchData();
   }, [dispatch]);
 
   const handleVerification = async (user) => {
-    // console.log("Verifying user:", user);
+    try {
+      // Your verification logic here
+      await performVerification(user);
+      // After verification, fetch fresh data
+      fetchData();
+    } catch (error) {
+      console.error("Verification failed:", error);
+    }
   };
 
   const handleTabClick = (tab) => {

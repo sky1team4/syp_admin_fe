@@ -4,7 +4,7 @@ import { ArrowDown, ArrowUp, MoreHorizontal } from "lucide-react"
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "@/components/ui/button"
-import { BannedUsers } from "@/redux/features/authSlice";
+import { BannedUsers, fetchAllUsers } from "@/redux/features/authSlice";
 import { Checkbox } from "@/components/ui/checkbox"
 import { useDispatch, useSelector } from "react-redux";
 
@@ -127,6 +127,25 @@ export const columns = [
             const [isOpen, setIsOpen] = useState(false);
             const dispatch = useDispatch();
 
+            const handleStatusChange = async (newStatus) => {
+                try {
+                    const result = await dispatch(BannedUsers({ 
+                        id: user.id, 
+                        updateUserStatusDto: { status: newStatus } 
+                    }));
+                    
+                    if (BannedUsers.fulfilled.match(result)) {
+                        toast.success(`User status changed to ${newStatus}`);
+                        await dispatch(fetchAllUsers());
+                    } else {
+                        toast.error("Failed to change user status");
+                    }
+                } catch (error) {
+                    console.error("Error updating user status:", error);
+                    toast.error("Failed to change user status");
+                }
+            };
+
             return (
                 <>
                     <Button
@@ -139,44 +158,19 @@ export const columns = [
                                 alt="close"
                                 width={20}
                                 height={20}
-                                onClick={async () => {
-                                    if (user.status === "active") {
-                                        try {
-                                            console.log("user.id", user);
-                                            const result = await dispatch(BannedUsers({ id: user.id, updateUserStatusDto: { status: "inactive" } }));
-                                            if (BannedUsers.fulfilled.match(result)) {
-                                                toast.success("User status changed to inactive");
-                                            } else {
-                                                toast.error("Failed to change user status");
-                                            }
-                                        } catch (error) {
-                                            console.error("Error updating user status:", error);
-                                            toast.error("Failed to change user status");
-                                        }
-                                    }
-                                }}
+                                onClick={() => handleStatusChange("inactive")}
                             />
                         ) : (
-                            <Image src="/unverified.svg" alt="close" width={20} height={20}
-                                onClick={async () => {
-                                    if (user.status === "inactive") {
-                                        try {
-                                            const result = await dispatch(BannedUsers({ id: user.id, updateUserStatusDto: { status: "active" } }));
-                                            if (BannedUsers.fulfilled.match(result)) {
-                                                toast.success("User status changed to active");
-                                            } else {
-                                                toast.error("Failed to change user status");
-                                            }
-                                        } catch (error) {
-                                            console.error("Error updating user status:", error);
-                                            toast.error("Failed to change user status");
-                                        }
-                                    }
-                                }}
+                            <Image 
+                                src="/unverified.svg" 
+                                alt="close" 
+                                width={20} 
+                                height={20}
+                                onClick={() => handleStatusChange("active")}
                             />
                         )}
                     </Button>
-                    
+                    <ToastContainer />
                 </>
             );
         },
