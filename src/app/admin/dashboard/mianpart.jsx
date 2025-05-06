@@ -6,6 +6,7 @@ import { GetAllbadgeVerificationRequest } from "@/redux/features/badgeVerificati
 import { columns } from "@/components/data-table/columns"
 import { BadgeVerificationColumns } from "@/components/data-table/badge_verification/badgeVerificationColumns"
 import { DataTable } from "@/components/data-table/data-table"
+import { ToastContainer } from "react-toastify";
 
 export default function DashboardPage() {
   // console.log("DashboardPage");
@@ -62,7 +63,8 @@ export default function DashboardPage() {
   // console.log("Badge Verification Data", verificationRequestsData);
 
   return (
-    <div >
+    <div>
+      <ToastContainer />
       <div className="w-full py-10 bg-white rounded-xl p-5 shadow-md">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800">

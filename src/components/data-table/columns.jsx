@@ -1,7 +1,7 @@
 "use client"
 
 import { ArrowDown, ArrowUp, MoreHorizontal } from "lucide-react"
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "@/components/ui/button"
 import { BannedUsers, fetchAllUsers } from "@/redux/features/authSlice";
@@ -134,44 +134,67 @@ export const columns = [
                         updateUserStatusDto: { status: newStatus } 
                     }));
                     
-                    if (BannedUsers.fulfilled.match(result)) {
-                        toast.success(`User status changed to ${newStatus}`);
+                    if (result.payload) {
+                        toast.success(`User status changed to ${newStatus}`, {
+                            position: "top-right",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                        });
                         await dispatch(fetchAllUsers());
                     } else {
-                        toast.error("Failed to change user status");
+                        toast.error("Failed to change user status", {
+                            position: "top-right",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                        });
                     }
                 } catch (error) {
                     console.error("Error updating user status:", error);
-                    toast.error("Failed to change user status");
+                    toast.error("Failed to change user status", {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                    });
                 }
             };
 
             return (
-                <>
-                    <Button
-                        variant="ghost"
-                        className="h-8 w-8 p-0"
-                    >
-                        {user.status === "active" ? (
+                <div className="flex items-center justify-center">
+                    {user.status === "active" ? (
+                        <button
+                            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                            onClick={() => handleStatusChange("inactive")}
+                        >
                             <Image
                                 src="/verifiedcrosss.svg"
-                                alt="close"
+                                alt="deactivate"
                                 width={20}
                                 height={20}
-                                onClick={() => handleStatusChange("inactive")}
                             />
-                        ) : (
+                        </button>
+                    ) : (
+                        <button
+                            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                            onClick={() => handleStatusChange("active")}
+                        >
                             <Image 
                                 src="/unverified.svg" 
-                                alt="close" 
+                                alt="activate" 
                                 width={20} 
                                 height={20}
-                                onClick={() => handleStatusChange("active")}
                             />
-                        )}
-                    </Button>
-                    <ToastContainer />
-                </>
+                        </button>
+                    )}
+                </div>
             );
         },
     },
