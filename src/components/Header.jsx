@@ -58,19 +58,24 @@ const DashboardTopBar = () => {
   // Helper function to get complete image URL
   const getCompleteImageUrl = (url) => {
     if (!url) return null;
+    if (url === 'null' || url === '[null]') return null;
     return url.startsWith('http') ? url : `${BASE_URL}${url}`;
   };
 
   // Profile Image Component
   const ProfileImage = ({ user }) => {
     const defaultImage = '/profileImage.png';
-    const imageUrl = user?.profilePicture 
-      ? getCompleteImageUrl(user.profilePicture) 
-      : defaultImage;
+    const profilePic = user?.profilePicture;
+    
+    // Handle null, undefined, or string 'null' cases
+    let imageUrl = defaultImage;
+    if (profilePic && profilePic !== 'null' && profilePic !== '[null]') {
+      imageUrl = getCompleteImageUrl(profilePic) || defaultImage;
+    }
     
     return (
       <Image 
-        src={imageUrl || defaultImage}  // Fallback to default image if imageUrl is null
+        src={imageUrl}  // Use the processed imageUrl that's guaranteed not to be null
         alt={user?.name || 'Profile'} 
         fill
         sizes="(max-width: 768px) 40px, 44px"

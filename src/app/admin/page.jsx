@@ -1,11 +1,11 @@
-// import AdminLayout from './layout';
+import AdminLayout from './layout';
 
-// const AdminPage = () => {
-//     return (
-//         <AdminLayout>
-//             {/* No content here */}
-//         </AdminLayout>
-//     );
-// };
+const AdminPage = () => {
+    return (
+        <AdminLayout>
+            {/* No content here */}
+        </AdminLayout>
+    );
+};
 
-// export default AdminPage;
+export default AdminPage;
