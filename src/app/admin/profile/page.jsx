@@ -253,24 +253,34 @@ export default function ProfilePage() {
 
     const profilePicture = profileData.picture || user?.profilePicture || localStorage.getItem('userProfilePicture');
 
-    if (profilePicture) {
+    if (profilePicture && profilePicture !== 'null' && profilePicture !== '[null]' && profilePicture !== 'undefined') {
       // Always ensure we have a complete URL
       const imageUrl = profilePicture.startsWith('http')
         ? profilePicture
         : `${BASE_URL}${profilePicture}`;
 
-      return (
-        <Image
-          src={imageUrl}
-          alt={user?.name || 'Profile'}
-          width={80}
-          height={80}
-          className="rounded-full object-cover w-full h-full"
-          unoptimized={true}
-        />
-      );
+      // Additional validation to ensure URL is properly formed
+      try {
+        // Check if URL is valid
+        new URL(imageUrl);
+        
+        return (
+          <Image
+            src={imageUrl}
+            alt={user?.name || 'Profile'}
+            width={80}
+            height={80}
+            className="rounded-full object-cover w-full h-full"
+            unoptimized={true}
+          />
+        );
+      } catch (error) {
+        console.error('Invalid image URL:', imageUrl);
+        // If URL is invalid, fall through to default image
+      }
     }
 
+    // Default fallback if no valid image URL
     return (
       <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
