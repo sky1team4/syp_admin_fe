@@ -10,8 +10,12 @@ const nextConfig = {
         hostname: 'sypadminapi.azurewebsites.net', // Hardcoded API hostname
         pathname: '/uploads/verifications/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc',
+      },
     ],
-    domains: ['sypadminapi.azurewebsites.net'], // Static domain required
+    domains: ['sypadminapi.azurewebsites.net', 'i.pravatar.cc'], // Added the pravatar domain
   },
 };
 

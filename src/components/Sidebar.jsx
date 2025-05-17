@@ -37,7 +37,7 @@ const Sidebar = () => {
       setStaticTab(savedTab);
       setCurrentTab(savedTab);
     }
-  }, []);
+  }, [setCurrentTab]);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 

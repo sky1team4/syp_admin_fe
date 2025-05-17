@@ -9,7 +9,7 @@ import Subscription_stats from '../../../components/subscription_stats'
 import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
 import DisplayTable from '../../../components/subdisplayTable.jsx'
 
-function content() {
+function Content() {
   const dispatch = useDispatch();
   const { error, isLoading, subscriptions } = useSelector((state) => state.subscription);
   const [selectedSubscription, setSelectedSubscription] = useState(null);
@@ -143,4 +143,4 @@ function content() {
   )
 }
 
-export default content
+export default Content

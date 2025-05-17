@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import "./scrollBar.css";
 import { createPortal } from "react-dom";
@@ -100,10 +100,12 @@ const Notifications = ({ isVisible }) => {
                   className={` flex items-start sm:items-center space-x-4 p-2 border-b last:border-none ${!notification.isRead ? "" : ""
                     }`}
                 >
-                  <img
+                  <Image
                     className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
                     src={notification.avatar}
                     alt={notification.name}
+                    width={48}
+                    height={48}
                   />
 
                   <div className="2xl:flex-1 flex flex-col w-full">  

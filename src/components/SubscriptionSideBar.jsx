@@ -22,18 +22,19 @@ const FORM_VALIDATION = {
   }
 };
 
+// Option 1: Move outside the component
+const INITIAL_FORM_STATE = {
+    name: '',
+    price: '',
+    status: 'ACTIVE',
+    billingPeriod: ''
+};
+
 function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSubmit }) {
     const dispatch = useDispatch();
     const { isLoading } = useSelector((state) => state.subscription);
     
-    const initialFormState = {
-        name: '',
-        price: '',
-        status: 'ACTIVE',
-        billingPeriod: ''
-    };
-    
-    const [formData, setFormData] = useState(initialFormState);
+    const [formData, setFormData] = useState(INITIAL_FORM_STATE);
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
@@ -45,9 +46,9 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
                 billingPeriod: data.billingPeriod
             });
         } else {
-            setFormData(initialFormState); // Reset form when no data is provided
+            setFormData(INITIAL_FORM_STATE);
         }
-    }, [data, isOpen]); // Add isOpen to dependencies
+    }, [data, isOpen]);
 
     const validateForm = () => {
         const newErrors = {};
@@ -88,7 +89,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
             
             // Reset form after successful submission
             if (mode === 'create') {
-                setFormData(initialFormState);
+                setFormData(INITIAL_FORM_STATE);
                 setErrors({});
             }
         } catch (error) {

@@ -7,7 +7,7 @@ import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
 import DisplayTable from '../../../components/displayTable'
 
 
-function content() {
+function Content() {
 
   const data = [
     { id: 1, label: "Total user", value: "8,456", bgColor: "bg-purple-100", icon: "👤" },
@@ -56,4 +56,4 @@ function content() {
   )
 }
 
-export default content
+export default Content

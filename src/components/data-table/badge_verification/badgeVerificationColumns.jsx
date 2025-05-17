@@ -15,6 +15,34 @@ import { useState } from "react"
 import VerificationRequest from "@/app/admin/dashboard/verificationrequest"
 import Image from "next/image"
 
+function ActionsCell({ row }) {
+    const user = row.original;
+    const [isOpen, setIsOpen] = useState(false);
+    const dispatch = useDispatch();
+    
+    return (
+        <>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                        <Image 
+                            src="/unverified.svg" 
+                            alt="more" 
+                            width={20} 
+                            height={20}
+                            onClick={() => {
+                                setIsOpen(true)
+                            }}
+                        />
+                    </Button>
+                </DropdownMenuTrigger>
+            </DropdownMenu>
+            
+            <VerificationRequest isOpen={isOpen} setIsOpen={setIsOpen} userData={user} />
+        </>
+    );
+}
+
 export const BadgeVerificationColumns = [
     {
         accessorKey: "user_name",
@@ -102,32 +130,6 @@ export const BadgeVerificationColumns = [
     {
         id: "actions",
         header: "Actions",
-        cell: ({ row }) => {
-            const user = row.original;
-            const [isOpen, setIsOpen] = useState(false);
-            const dispatch = useDispatch();
-            // dispatch(GetAllbadgeVerificationRequest())
-            // const badgeVerificationList = useSelector((state) => state.badgeVerificationList);
-            // console.log("badgeVerificationList", badgeVerificationList)
-                // console.log("user in badgeVerifcationColumns", user)
-            return (
-                <>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <Image src="/unverified.svg" alt="more" width={20} height={20}
-                                onClick={() => {
-                                    setIsOpen(true)
-                                }}
-                                 />
-                            </Button>
-                        </DropdownMenuTrigger>
-                    </DropdownMenu>
-
-                
-                    <VerificationRequest isOpen={isOpen} setIsOpen={setIsOpen} userData={user} />
-                </>
-            );
-        },
+        cell: ActionsCell
     },
 ]

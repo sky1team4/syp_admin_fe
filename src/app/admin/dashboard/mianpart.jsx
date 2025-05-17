@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUsers } from "@/redux/features/authSlice";
 import { GetAllbadgeVerificationRequest } from "@/redux/features/badgeVerificationSlice";
@@ -17,15 +17,15 @@ export default function DashboardPage() {
   const [searchTerm, setSearchTerm] = useState("");
   
   // Create a function to fetch data
-  const fetchData = () => {
+  const fetchData = useCallback(() => {
     dispatch(fetchAllUsers());
     dispatch(GetAllbadgeVerificationRequest());
-  };
+  }, [dispatch]);
 
   // Initial data fetch
   useEffect(() => {
     fetchData();
-  }, [dispatch]);
+  }, [fetchData]);
 
   const handleVerification = async (user) => {
     try {

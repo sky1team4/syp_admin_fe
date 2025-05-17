@@ -27,6 +27,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, MoreVertical } from "lucide-react";
 import VerificationRequest from "@/app/admin/dashboard/verificationrequest";
+import { BadgeVerificationTable } from "@/components/data-table/badge_verification/BadgeVerificationTable";
+import { BadgeVerificationColumns } from "@/components/data-table/badge_verification/badgeVerificationColumns";
 // import {BadgeVerificationTable} from "@/components/data-table/badge_verification/BadgeVerificationTable";
 // import BadgeVerificationColumns from "@/components/data-table/badge_verification/badgeVerificationColumns";
 
@@ -219,7 +221,7 @@ export function DataTable({ columns, data }) {
       </div>
 
       {/* Conditionally render BadgeVerificationTable */}
-      {showBadgeTable && <BadgeVerificationTable data={data} columns={BadgeVerificationColumns} />} {/* Pass data as needed */}
+      {showBadgeTable && <BadgeVerificationTable data={data} columns={BadgeVerificationColumns} />}
     </div>
   );
 }

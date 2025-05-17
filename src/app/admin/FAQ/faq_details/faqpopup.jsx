@@ -91,7 +91,7 @@ const FAQPopup = ({ onClose, onSave, editingFAQ }) => {
 
           {/* Subtitle */}
           <p className="text-sm text-gray-500 mb-6">
-            Lorem Ipsum has been the industry's standard.
+            Lorem Ipsum has been the industry&apos;s standard.
           </p>
 
           {/* Category Select */}

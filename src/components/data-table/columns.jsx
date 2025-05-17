@@ -11,6 +11,82 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react"
 import Image from "next/image"
 
+function ActionsCell({ row }) {
+    const user = row.original;
+    const [isOpen, setIsOpen] = useState(false);
+    const dispatch = useDispatch();
+
+    const handleStatusChange = async (newStatus) => {
+        try {
+            const result = await dispatch(BannedUsers({ 
+                id: user.id, 
+                updateUserStatusDto: { status: newStatus } 
+            }));
+            
+            if (result.payload) {
+                toast.success(`User status changed to ${newStatus}`, {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+                await dispatch(fetchAllUsers());
+            } else {
+                toast.error("Failed to change user status", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+            }
+        } catch (error) {
+            console.error("Error updating user status:", error);
+            toast.error("Failed to change user status", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+        }
+    };
+
+    return (
+        <div className="flex items-center justify-center">
+            {user.status === "active" ? (
+                <button
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    onClick={() => handleStatusChange("inactive")}
+                >
+                    <Image
+                        src="/verifiedcrosss.svg"
+                        alt="deactivate"
+                        width={20}
+                        height={20}
+                    />
+                </button>
+            ) : (
+                <button
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    onClick={() => handleStatusChange("active")}
+                >
+                    <Image 
+                        src="/unverified.svg" 
+                        alt="activate" 
+                        width={20} 
+                        height={20}
+                    />
+                </button>
+            )}
+        </div>
+    );
+}
+
 export const columns = [
     {
         accessorKey: "name",
@@ -122,80 +198,6 @@ export const columns = [
     {
         id: "actions",
         header: "Actions",
-        cell: ({ row }) => {
-            const user = row.original;
-            const [isOpen, setIsOpen] = useState(false);
-            const dispatch = useDispatch();
-
-            const handleStatusChange = async (newStatus) => {
-                try {
-                    const result = await dispatch(BannedUsers({ 
-                        id: user.id, 
-                        updateUserStatusDto: { status: newStatus } 
-                    }));
-                    
-                    if (result.payload) {
-                        toast.success(`User status changed to ${newStatus}`, {
-                            position: "top-right",
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                        });
-                        await dispatch(fetchAllUsers());
-                    } else {
-                        toast.error("Failed to change user status", {
-                            position: "top-right",
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                        });
-                    }
-                } catch (error) {
-                    console.error("Error updating user status:", error);
-                    toast.error("Failed to change user status", {
-                        position: "top-right",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                    });
-                }
-            };
-
-            return (
-                <div className="flex items-center justify-center">
-                    {user.status === "active" ? (
-                        <button
-                            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                            onClick={() => handleStatusChange("inactive")}
-                        >
-                            <Image
-                                src="/verifiedcrosss.svg"
-                                alt="deactivate"
-                                width={20}
-                                height={20}
-                            />
-                        </button>
-                    ) : (
-                        <button
-                            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                            onClick={() => handleStatusChange("active")}
-                        >
-                            <Image 
-                                src="/unverified.svg" 
-                                alt="activate" 
-                                width={20} 
-                                height={20}
-                            />
-                        </button>
-                    )}
-                </div>
-            );
-        },
+        cell: ActionsCell
     },
 ]
