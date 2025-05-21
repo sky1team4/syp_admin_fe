@@ -14,10 +14,10 @@
 
   .notification-panel {
     position: fixed;
-    top: 80px;
+    top: 77px;
     right: -140px;
     width: 20rem;
-    height: 100vh;
+    height: 85vh;
     transition: transform 0.1s ease-in-out;  /* Changed duration from 0.3s to 0.1s */
     pointer-events: none; /* Disable interactions when panel is hidden */
     visibility: hidden; /* Hide the panel by default */
