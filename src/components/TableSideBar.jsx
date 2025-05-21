@@ -85,10 +85,40 @@ function TableSideBar({
         return true;
     };
 
+    const validateUniqueNames = () => {
+        // Create a map to store name counts
+        const nameCount = new Map();
+        
+        // Check for empty or whitespace-only names and count occurrences
+        for (const item of formData.items) {
+            const trimmedTitle = item.title.trim();
+            
+            // Count occurrences of each name
+            nameCount.set(trimmedTitle, (nameCount.get(trimmedTitle) || 0) + 1);
+        }
+
+        // Check for duplicates
+        const duplicates = Array.from(nameCount.entries())
+            .filter(([name, count]) => count > 1)
+            .map(([name]) => name);
+
+        if (duplicates.length > 0) {
+            toast.error(`Duplicate names found: ${duplicates.join(', ')}`);
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSave = async () => {
-        console.log('Attempting to save with formData:', formData); // Debug log
+        console.log('Attempting to save with formData:', formData);
         
         if (!validateForm()) {
+            return;
+        }
+
+        // Add unique name validation
+        if (!validateUniqueNames()) {
             return;
         }
 
@@ -105,9 +135,9 @@ function TableSideBar({
                     const dataToSave = {
                         ...item,
                         skillId: formData.skillId,
-                        title: item.title.trim() // Ensure title is trimmed
+                        title: item.title.trim()
                     };
-                    console.log('Saving item:', dataToSave); // Debug log
+                    console.log('Saving item:', dataToSave);
                     await dispatch(saveData(dataToSave)).unwrap();
                 }
                 toast.success(`${title}${formData.items.length > 1 ? 's' : ''} created successfully`);
@@ -116,7 +146,7 @@ function TableSideBar({
             dispatch(fetchData());
             click();
         } catch (err) {
-            console.error('Save error:', err); // Debug log
+            console.error('Save error:', err);
             toast.error(`Failed to ${mode === 'edit' ? 'update' : 'create'} ${title}`);
         }
     };
@@ -258,7 +288,7 @@ function TableSideBar({
                     </div>
                 </div>
 
-                {/* Fixed Footer */}
+                {/* Footer */}
                 <div className="p-4 border-t bg-white">
                     <button
                         onClick={handleSave}
@@ -272,26 +302,5 @@ function TableSideBar({
         </>
     );
 }
-
-// Add this CSS to your global styles or component
-const styles = `
-.custom-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: #CBD5E0 transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #CBD5E0;
-    border-radius: 3px;
-}
-`;
 
 export default TableSideBar;
