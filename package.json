@@ -36,6 +36,7 @@
     "react-toastify": "^11.0.3",
     "redux": "^5.0.1",
     "reselect": "^5.1.1",
+    "socket.io-client": "^4.8.1",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "yet-another-react-lightbox": "^3.23.0"
