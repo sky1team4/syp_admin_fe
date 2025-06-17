@@ -39,6 +39,7 @@ export default function RootLayout({ children }) {
     const token = Cookies.get('authToken');
     
     if (!token) {
+      console.log('📋 No token found, redirecting to login');
       // Reset tab to dashboard when token is missing
       localStorage.setItem('selectedTab', 'dashboard');
       router.replace('/admin-Login');
@@ -51,8 +52,16 @@ export default function RootLayout({ children }) {
       const currentTime = Date.now();
       const isExpired = expirationTime < currentTime;
       
+      console.log('🔍 Token check:', {
+        expired: isExpired,
+        timeRemaining: Math.floor((expirationTime - currentTime) / 1000 / 60), // minutes
+        role: payload.role,
+        userId: payload.sub || payload.userId
+      });
+      
       if (window.location.pathname.startsWith('/admin')) {
         if (payload.role !== 'admin') {
+          console.log('❌ Non-admin user trying to access admin area');
           Cookies.remove("authToken", { path: "/" });
           localStorage.setItem('selectedTab', 'dashboard'); // Reset tab
           router.replace('/admin-Login');
@@ -61,6 +70,7 @@ export default function RootLayout({ children }) {
       }
       
       if (isExpired) {
+        console.log('⏰ Token expired, logging out');
         Cookies.remove("authToken", { path: "/" });
         localStorage.setItem('selectedTab', 'dashboard'); // Reset tab
         router.replace('/admin-Login');
@@ -68,27 +78,27 @@ export default function RootLayout({ children }) {
       
       return { isExpired, timeUntilExpiry: expirationTime - currentTime };
     } catch (error) {
-      console.error('Token decode error:', error);
-      Cookies.remove("authToken", { path: "/" });
-      localStorage.setItem('selectedTab', 'dashboard'); // Reset tab
-      router.replace('/admin-Login');
+      console.error('❌ Token decode error:', error);
+      console.log('Token value:', token?.substring(0, 50) + '...');
+      // Don't logout on decode error if it's just a refresh - wait a moment
+      setTimeout(() => {
+        const retryToken = Cookies.get('authToken');
+        if (!retryToken) {
+          console.log('No token on retry, logging out');
+          Cookies.remove("authToken", { path: "/" });
+          localStorage.setItem('selectedTab', 'dashboard');
+          router.replace('/admin-Login');
+        }
+      }, 1000);
     }
   };
 
   useEffect(() => {
-    const tokenStatus = checkTokenExpiration();
+    // Completely disable automatic token checking to prevent logout issues
+    console.log('🔄 Layout token validation completely disabled');
+    console.log('📋 AuthGuard handles all token validation now');
     
-    if (tokenStatus && !tokenStatus.isExpired) {
-      // Set up check only when token is close to expiring (e.g., 5 minutes before)
-      const checkBeforeExpiry = Math.max(tokenStatus.timeUntilExpiry - 5 * 60 * 1000, 0);
-      const timeout = setTimeout(() => {
-        // Once we're close to expiry, start checking more frequently
-        const interval = setInterval(checkTokenExpiration, 60000);
-        return () => clearInterval(interval);
-      }, checkBeforeExpiry);
-      
-      return () => clearTimeout(timeout);
-    }
+    // No token validation in layout - AuthGuard handles everything
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

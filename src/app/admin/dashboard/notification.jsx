@@ -1,22 +1,16 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import "./scrollBar.css";
 import { createPortal } from "react-dom";
 
-const Notifications = ({ isVisible }) => {
-  const initialNotifications = Array(10).fill({
-    name: "Natalia Khan",
-    message: "Activated her Domain.",
-    time: "25 min ago",
-    avatar: "https://i.pravatar.cc/50", // Corrected avatar URL
-    isRead: false,
-    isArchived: false,
-  });
-
-  const [notifications, setNotifications] = useState(initialNotifications);
+const Notifications = ({ isVisible, notifications: propNotifications, setNotifications: propSetNotifications }) => {
   const [filter, setFilter] = useState("All");
   const [mounted, setMounted] = useState(false);
+
+  // Use notifications passed as props instead of calling the hook again
+  const notifications = propNotifications || [];
+  const setNotifications = propSetNotifications || (() => {});
 
   useEffect(() => {
     setMounted(true);
@@ -24,11 +18,11 @@ const Notifications = ({ isVisible }) => {
   }, []);
 
   const handleMarkAsRead = () => {
-    const updatedNotifications = notifications.map((notification) => ({
+    const updated = notifications.map((notification) => ({
       ...notification,
       isRead: true,
     }));
-    setNotifications(updatedNotifications);
+    setNotifications(updated);
   };
 
   const handleFilterChange = (selectedFilter) => {
@@ -43,18 +37,18 @@ const Notifications = ({ isVisible }) => {
   });
 
   const toggleArchive = (index) => {
-    const updatedNotifications = [...notifications];
-    updatedNotifications[index].isArchived = !updatedNotifications[index].isArchived;
-    setNotifications(updatedNotifications);
+    const updated = [...notifications];
+    updated[index].isArchived = !updated[index].isArchived;
+    setNotifications(updated);
   };
 
   const content = (
-    <div 
-      className="fixed top-16 right-4 notification-panel" 
-      style={{ 
+    <div
+      className="fixed top-16 right-4 notification-panel"
+      style={{
         zIndex: 99999,
-        position: 'fixed',
-        isolation: 'isolate'
+        position: "fixed",
+        isolation: "isolate",
       }}
     >
       <div
@@ -79,10 +73,11 @@ const Notifications = ({ isVisible }) => {
           {["All", "Unread", "Archived"].map((tab) => (
             <button
               key={tab}
-              className={`px-4 py-2 text-sm font-medium rounded-md ${filter === tab
+              className={`px-4 py-2 text-sm font-medium rounded-md ${
+                filter === tab
                   ? "border border-purple-600 text-purple-600"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
+              }`}
               onClick={() => handleFilterChange(tab)}
             >
               {tab}
@@ -90,31 +85,37 @@ const Notifications = ({ isVisible }) => {
           ))}
         </div>
 
-        {/* Notifications List - Now with scroll */}
+        {/* Notifications List */}
         <div className="overflow-y-auto custom-scrollbar flex-1">
           <ul className="space-y-4 mb-20">
             {filteredNotifications.length > 0 ? (
               filteredNotifications.map((notification, index) => (
                 <li
-                  key={index}
-                  className={` flex items-start sm:items-center space-x-4 p-2 border-b last:border-none ${!notification.isRead ? "" : ""
-                    }`}
+                  key={notification.id || index}
+                  className={`flex items-start sm:items-center space-x-4 p-2 border-b last:border-none ${
+                    !notification.isRead ? "bg-blue-50" : ""
+                  }`}
                 >
                   <Image
                     className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
-                    src={notification.avatar}
-                    alt={notification.name}
+                    src={notification.avatar || "/profileImage.png"}
+                    alt={notification.name || "Notification"}
                     width={48}
                     height={48}
                   />
 
-                  <div className="2xl:flex-1 flex flex-col w-full">  
+                  <div className="2xl:flex-1 flex flex-col w-full">
                     <p className="text-sm font-medium text-gray-800">
-                      {notification.name}{" "}
-                      <span className="font-normal">{notification.message}</span>
+                      {notification.name || "System"}{" "}
+                      <span className="font-normal">
+                        {notification.message || notification.text_title}
+                      </span>
                     </p>
-                    <p className="text-xs text-gray-500">{notification.time}</p>
+                    <p className="text-xs text-gray-500">
+                      {notification.time || new Date().toLocaleTimeString()}
+                    </p>
                   </div>
+                  {/* Uncomment to enable archive toggle */}
                   {/* <button
                     className="text-xs text-blue-500 hover:underline"
                     onClick={() => toggleArchive(index)}
@@ -124,7 +125,9 @@ const Notifications = ({ isVisible }) => {
                 </li>
               ))
             ) : (
-              <li className="text-center text-gray-500">No notifications to display.</li>
+              <li className="text-center text-gray-500">
+                No notifications to display.
+              </li>
             )}
           </ul>
         </div>
@@ -132,11 +135,7 @@ const Notifications = ({ isVisible }) => {
     </div>
   );
 
-  // Only create portal on client-side
-  if (!mounted) return null;
-  
-  // Check if window is defined (client-side)
-  if (typeof window === 'undefined') return null;
+  if (!mounted || typeof window === "undefined") return null;
 
   return createPortal(content, document.body);
 };

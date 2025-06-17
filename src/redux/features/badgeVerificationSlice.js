@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import Cookies from 'js-cookie';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const GetAllbadgeVerificationRequest = createAsyncThunk(
   'badgeVerificationList/badgeVerification',
   async () => {
-    const yourToken = localStorage.getItem('token');
+    const yourToken = Cookies.get('authToken');
     const response = await fetch(`${API_URL}/verification-requests/all`, {
       method: 'POST',
       headers: {
@@ -31,7 +32,7 @@ export const ChangeBadgeStatus = createAsyncThunk(
     console.log("id", id);
     // console.log("badge_status", badge_status);
     
-    const yourToken = localStorage.getItem('token');
+    const yourToken = Cookies.get('authToken');
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/verification-requests/${id}/toggle-status`, {
       method: 'PATCH',
       headers: {

@@ -1,14 +1,18 @@
+'use client';
 import React, { useState, useEffect, useRef, useContext } from "react";
 import Image from "next/image";
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import Notifications from "../../src/app/admin/dashboard/notification";
 import { TabContext } from '../context/Tabcontext'; // Adjust the path as necessary
+import { useNotifications, testSocketConnection, testBackendConnection, debugBackendSocketAuth, forcePollingMode, testNotificationAPI, validateToken, refreshToken, startTokenMonitor, extendTokenForTesting, restartTokenMonitorIfNeeded, emergencyRecovery } from '../hooks/useNotifications';
 
 // Get base URL from environment variable
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const DashboardTopBar = () => {
+  console.log('🎨 Header component rendering at:', new Date().toISOString());
+  
   // 1. All useState declarations
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -22,9 +26,66 @@ const DashboardTopBar = () => {
   // 4. Redux selector
   const { user, role } = useSelector((state) => state.auth);
 
+  // 6. All useNotifications hooks
+  const { notifications, setNotifications } = useNotifications();
+  
+  console.log('🎨 Header render - notifications data:');
+  console.log('   - Notifications count:', notifications?.length || 0);
+  console.log('   - Current tab:', currentTab);
+  console.log('   - User:', user?.name);
+  console.log('   - Component mounted:', mounted);
+  
+  // Track when notifications change
+  useEffect(() => {
+    console.log('🔔 Header detected notification change');
+    console.log('   - New notification count:', notifications?.length || 0);
+    console.log('   - Timestamp:', new Date().toISOString());
+    
+    // Check if this notification change affects auth
+    setTimeout(() => {
+      console.log('🔔 Post-notification auth check from Header:');
+      const authStatus = validateToken();
+      console.log('   - Token valid:', authStatus.valid);
+      console.log('   - Auth reason:', authStatus.reason);
+      
+      if (!authStatus.valid) {
+        console.error('🚨 AUTH INVALID AFTER NOTIFICATION CHANGE IN HEADER!');
+        console.error('   - This suggests Header re-render is affecting auth');
+      }
+    }, 50);
+  }, [notifications]);
+
   // 5. All useEffect hooks
   useEffect(() => {
     setMounted(true);
+    
+    // Expose test functions globally for debugging
+    if (typeof window !== 'undefined') {
+      window.testSocketConnection = testSocketConnection;
+      window.testBackendConnection = testBackendConnection;
+      window.debugBackendSocketAuth = debugBackendSocketAuth;
+      window.forcePollingMode = forcePollingMode;
+      window.testNotificationAPI = testNotificationAPI;
+      window.validateToken = validateToken;
+      window.refreshToken = refreshToken;
+      window.startTokenMonitor = startTokenMonitor;
+      window.extendTokenForTesting = extendTokenForTesting;
+      window.restartTokenMonitorIfNeeded = restartTokenMonitorIfNeeded;
+      window.emergencyRecovery = emergencyRecovery;
+      console.log('🧪 Debug functions available:');
+      console.log('  - window.testSocketConnection()');
+      console.log('  - window.testBackendConnection()');
+      console.log('  - window.debugBackendSocketAuth()');
+      console.log('  - window.forcePollingMode()');
+      console.log('  - window.forceStartPolling()');
+      console.log('  - window.testNotificationAPI()  // Test notification endpoint directly');
+      console.log('  - window.validateToken()        // Check token status without logout');
+      console.log('  - window.refreshToken()         // Manually refresh auth token');
+      console.log('  - window.startTokenMonitor()    // Start token expiration monitor');
+      console.log('  - window.extendTokenForTesting() // Extend token by 1 hour (testing only)');
+      console.log('  - window.restartTokenMonitorIfNeeded() // Restart monitor after login');
+      console.log('  - window.emergencyRecovery()     // Check login & restart all systems');
+    }
   }, []);
 
   useEffect(() => {
@@ -60,6 +121,10 @@ const DashboardTopBar = () => {
     if (!url || url === 'null' || url === '[null]' || url === 'undefined') return null;
     return url.startsWith('http') ? url : `${BASE_URL}${url}`;
   };
+
+  // Fixed: Use consistent property name for filtering unread notifications
+  const unreadCount = notifications?.filter((n) => !n.isRead).length || 0;
+  console.log('Unread notifications count:', unreadCount);
 
   // Profile Image Component
   const ProfileImage = ({ user }) => {
@@ -124,12 +189,19 @@ const DashboardTopBar = () => {
               width={30}
               height={30}
             />
-            <span className="hover:scale-110 absolute top-0 right-0 w-4 h-4 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
-              10
-            </span>
+            {unreadCount > 0 && (
+              <span className="hover:scale-110 absolute top-0 right-0 w-4 h-4 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
+                {unreadCount}
+              </span>
+            )}
+
           </div>
           <div className="absolute">
-            <Notifications isVisible={isNotificationOpen} />
+            <Notifications 
+              isVisible={isNotificationOpen} 
+              notifications={notifications} 
+              setNotifications={setNotifications}
+            />
           </div>
         </div>
 

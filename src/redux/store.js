@@ -48,3 +48,8 @@ export const store = configureStore({
     subscribedUser: subscribedUserReducer,
   },
 });
+
+// Make store globally accessible for token refresh
+if (typeof window !== 'undefined') {
+  window.__REDUX_STORE__ = store;
+}

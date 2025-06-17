@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { disconnectSocket } from '@/utils/socket';
+import { restartTokenMonitorIfNeeded } from '@/hooks/useNotifications';
 
 export const register = createAsyncThunk('users/register',
   async (credentials) => {
@@ -62,6 +64,9 @@ export const logoutUser = createAsyncThunk(
     try {
       const token = Cookies.get('authToken');
 
+      // Disconnect socket before logout
+      disconnectSocket();
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, {
         method: 'POST',
         credentials: 'include',
@@ -85,6 +90,8 @@ export const logoutUser = createAsyncThunk(
     } catch (error) {
       // Remove cookie even if logout fails
       Cookies.remove("authToken", { path: "/" });
+      // Disconnect socket even on error
+      disconnectSocket();
       // Force a page refresh even on error
       window.location.href = '/admin-Login';
       return rejectWithValue(error.message);
@@ -100,7 +107,7 @@ export const fetchAllUsers = createAsyncThunk(
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include token for authorization
+          'Authorization': `Bearer ${Cookies.get('authToken')}`, // Include token for authorization
         },
       });
       // console.log("response status fetchallusers", response.status);
@@ -130,7 +137,7 @@ export const BannedUsers = createAsyncThunk(
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include token for authorization
+          'Authorization': `Bearer ${Cookies.get('authToken')}`, // Include token for authorization
         },
         body: JSON.stringify(updateUserStatusDto), // Include the DTO in the request body
       }
@@ -273,6 +280,17 @@ const getInitialUserState = () => {
       const payload = JSON.parse(atob(token.split('.')[1]));
       console.log('Initial token payload:', payload);
 
+      // Check if token is expired (but be more lenient during initialization)
+      const currentTime = Date.now() / 1000;
+      if (payload.exp && payload.exp < currentTime) {
+        console.warn('Token expired during initialization');
+        // Don't immediately remove token - let AuthGuard handle this
+        console.log('⚠️ Expired token found but not removing (AuthGuard will handle)');
+        // Cookies.remove("authToken", { path: "/" });
+        // localStorage.removeItem('token');
+        // return null;
+      }
+
       // Get profile picture from localStorage
       const profilePicture = localStorage.getItem('userProfilePicture');
       console.log('Stored profile picture:', profilePicture);
@@ -286,6 +304,25 @@ const getInitialUserState = () => {
     }
   } catch (error) {
     console.error('Error getting initial user state:', error);
+    // Don't automatically clear invalid tokens during initialization
+    console.log('⚠️ Token decode error during init but not removing (AuthGuard will handle)');
+    // Cookies.remove("authToken", { path: "/" });
+    // localStorage.removeItem('token');
+  }
+  return null;
+};
+
+// Function to get initial role
+const getInitialRole = () => {
+  try {
+    const token = Cookies.get('authToken');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log('Extracting role from token:', payload.role);
+      return payload.role;
+    }
+  } catch (error) {
+    console.error('Error getting initial role:', error);
   }
   return null;
 };
@@ -295,7 +332,7 @@ const authSlice = createSlice({
   initialState: {
     user: getInitialUserState(),
     token: Cookies.get('authToken') || null,
-    role: null,
+    role: getInitialRole(), // Extract role from token
     loading: false,
     error: null,
     users: [],
@@ -311,6 +348,8 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       localStorage.removeItem('token');
       Cookies.remove("authToken", { path: "/" });
+      // Disconnect socket on manual logout
+      disconnectSocket();
     },
     resetAuthState: (state) => {
       state.loading = false;
@@ -362,6 +401,16 @@ const authSlice = createSlice({
         }
 
         localStorage.setItem('token', action.payload.access_token);
+        
+        // Restart token monitor after successful login
+        setTimeout(() => {
+          try {
+            restartTokenMonitorIfNeeded();
+            console.log('🔄 Token monitor restarted after login');
+          } catch (error) {
+            console.warn('Failed to restart token monitor:', error);
+          }
+        }, 1000);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
