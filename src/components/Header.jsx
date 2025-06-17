@@ -185,7 +185,7 @@ const DashboardTopBar = () => {
           <div onClick={toggleNotifications} className="transition-transform duration-200 hover:scale-110">
             <Image
               alt="bellicon"
-              src="/bellicon.png"
+              src="/bell_Icon.png"
               width={30}
               height={30}
             />
