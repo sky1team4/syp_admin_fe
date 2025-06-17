@@ -27,7 +27,7 @@ const DashboardTopBar = () => {
   const { user, role } = useSelector((state) => state.auth);
 
   // 6. All useNotifications hooks
-  const { notifications, setNotifications } = useNotifications();
+  const { notifications, setNotifications, markAsRead, markAllAsRead } = useNotifications();
   
   console.log('🎨 Header render - notifications data:');
   console.log('   - Notifications count:', notifications?.length || 0);
@@ -201,6 +201,8 @@ const DashboardTopBar = () => {
               isVisible={isNotificationOpen} 
               notifications={notifications} 
               setNotifications={setNotifications}
+              markAsRead={markAsRead}
+              markAllAsRead={markAllAsRead}
             />
           </div>
         </div>

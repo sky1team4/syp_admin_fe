@@ -4,25 +4,67 @@ import Image from "next/image";
 import "./scrollBar.css";
 import { createPortal } from "react-dom";
 
-const Notifications = ({ isVisible, notifications: propNotifications, setNotifications: propSetNotifications }) => {
+const Notifications = ({ 
+  isVisible, 
+  notifications: propNotifications, 
+  setNotifications: propSetNotifications,
+  markAsRead: propMarkAsRead,
+  markAllAsRead: propMarkAllAsRead 
+}) => {
   const [filter, setFilter] = useState("All");
   const [mounted, setMounted] = useState(false);
+  const [loadingMarkAll, setLoadingMarkAll] = useState(false);
+  const [loadingIndividual, setLoadingIndividual] = useState({});
 
   // Use notifications passed as props instead of calling the hook again
   const notifications = propNotifications || [];
   const setNotifications = propSetNotifications || (() => {});
+  const markAsRead = propMarkAsRead || (() => {});
+  const markAllAsRead = propMarkAllAsRead || (() => {});
 
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
   }, []);
 
-  const handleMarkAsRead = () => {
-    const updated = notifications.map((notification) => ({
-      ...notification,
-      isRead: true,
-    }));
-    setNotifications(updated);
+  const handleMarkAllAsRead = async () => {
+    if (loadingMarkAll) return;
+    
+    setLoadingMarkAll(true);
+    console.log('🔔 Marking all notifications as read...');
+    
+    try {
+      const success = await markAllAsRead();
+      if (success) {
+        console.log('✅ All notifications marked as read');
+      } else {
+        console.error('❌ Failed to mark all as read');
+      }
+    } catch (error) {
+      console.error('❌ Error marking all as read:', error);
+    } finally {
+      setLoadingMarkAll(false);
+    }
+  };
+
+  const handleMarkAsRead = async (notificationId) => {
+    if (loadingIndividual[notificationId]) return;
+    
+    setLoadingIndividual(prev => ({ ...prev, [notificationId]: true }));
+    console.log('🔔 Marking notification as read:', notificationId);
+    
+    try {
+      const success = await markAsRead(notificationId);
+      if (success) {
+        console.log('✅ Notification marked as read');
+      } else {
+        console.error('❌ Failed to mark notification as read');
+      }
+    } catch (error) {
+      console.error('❌ Error marking notification as read:', error);
+    } finally {
+      setLoadingIndividual(prev => ({ ...prev, [notificationId]: false }));
+    }
   };
 
   const handleFilterChange = (selectedFilter) => {
@@ -42,6 +84,9 @@ const Notifications = ({ isVisible, notifications: propNotifications, setNotific
     setNotifications(updated);
   };
 
+  // Count unread notifications for the mark all button
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+
   const content = (
     <div
       className="fixed top-16 right-4 notification-panel"
@@ -59,13 +104,16 @@ const Notifications = ({ isVisible, notifications: propNotifications, setNotific
         {/* Header */}
         <div className="flex justify-between items-center flex-wrap">
           <h2 className="text-lg font-semibold text-gray-800">Notifications</h2>
-          <button
-            className="gap-2 text-sm text-purple-600 hover:underline flex items-center"
-            onClick={handleMarkAsRead}
-          >
-            <Image src="/doubletick.svg" alt="mark" width={20} height={20} />
-            <p>Mark all as read</p>
-          </button>
+          {unreadCount > 0 && (
+            <button
+              className={`gap-2 text-sm text-purple-600 hover:underline flex items-center ${loadingMarkAll ? 'opacity-50 cursor-not-allowed' : ''}`}
+              onClick={handleMarkAllAsRead}
+              disabled={loadingMarkAll}
+            >
+              <Image src="/doubletick.svg" alt="mark" width={20} height={20} />
+              <p>{loadingMarkAll ? 'Marking...' : `Mark all as read (${unreadCount})`}</p>
+            </button>
+          )}
         </div>
 
         {/* Tabs */}
@@ -81,6 +129,11 @@ const Notifications = ({ isVisible, notifications: propNotifications, setNotific
               onClick={() => handleFilterChange(tab)}
             >
               {tab}
+              {tab === "Unread" && unreadCount > 0 && (
+                <span className="ml-1 bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
+                  {unreadCount}
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -92,30 +145,55 @@ const Notifications = ({ isVisible, notifications: propNotifications, setNotific
               filteredNotifications.map((notification, index) => (
                 <li
                   key={notification.id || index}
-                  className={`flex items-start sm:items-center space-x-4 p-2 border-b last:border-none ${
-                    !notification.isRead ? "bg-blue-50" : ""
+                  className={`flex items-start space-x-4 p-3 border-b last:border-none rounded-lg transition-colors ${
+                    !notification.isRead ? "bg-blue-50 border-blue-200" : "hover:bg-gray-50"
                   }`}
                 >
                   <Image
-                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex-shrink-0"
                     src={notification.avatar || "/profileImage.png"}
                     alt={notification.name || "Notification"}
                     width={48}
                     height={48}
                   />
 
-                  <div className="2xl:flex-1 flex flex-col w-full">
-                    <p className="text-sm font-medium text-gray-800">
-                      {notification.name || "System"}{" "}
-                      <span className="font-normal">
-                        {notification.message || notification.text_title}
-                      </span>
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {notification.time || new Date().toLocaleTimeString()}
-                    </p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-800">
+                          {notification.name || "System"}{" "}
+                          <span className="font-normal">
+                            {notification.message || notification.text_title}
+                          </span>
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {notification.time || new Date().toLocaleTimeString()}
+                        </p>
+                      </div>
+                      
+                      {/* Mark as read button for unread notifications */}
+                      {!notification.isRead && (
+                        <button
+                          className={`ml-2 text-xs text-purple-600 hover:text-purple-800 hover:underline flex-shrink-0 ${
+                            loadingIndividual[notification.id] ? 'opacity-50 cursor-not-allowed' : ''
+                          }`}
+                          onClick={() => handleMarkAsRead(notification.id)}
+                          disabled={loadingIndividual[notification.id]}
+                        >
+                          {loadingIndividual[notification.id] ? '...' : 'Mark read'}
+                        </button>
+                      )}
+                      
+                      {/* Read indicator */}
+                      {notification.isRead && (
+                        <div className="ml-2 flex-shrink-0">
+                          <Image src="/doubletick.svg" alt="read" width={16} height={16} className="opacity-50" />
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  {/* Uncomment to enable archive toggle */}
+
+                  {/* Archive button (if needed) */}
                   {/* <button
                     className="text-xs text-blue-500 hover:underline"
                     onClick={() => toggleArchive(index)}
@@ -125,8 +203,8 @@ const Notifications = ({ isVisible, notifications: propNotifications, setNotific
                 </li>
               ))
             ) : (
-              <li className="text-center text-gray-500">
-                No notifications to display.
+              <li className="text-center text-gray-500 py-8">
+                {filter === "Unread" ? "No unread notifications" : "No notifications to display."}
               </li>
             )}
           </ul>

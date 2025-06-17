@@ -148,6 +148,170 @@ export const testNotificationAPI = async () => {
   }
 };
 
+// Mark notification as read on backend
+export const markNotificationAsRead = async (notificationId) => {
+  try {
+    const token = Cookies.get('authToken');
+    if (!token) {
+      console.error('❌ No token for mark as read');
+      return false;
+    }
+
+    console.log('📝 Marking notification as read:', notificationId);
+    console.log('📝 API endpoint:', `${process.env.NEXT_PUBLIC_API_URL}/notifications/${notificationId}/read`);
+    
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/${notificationId}/read`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ read_status: true }),
+    });
+
+    console.log('📝 Mark as read response status:', response.status);
+
+    if (response.ok) {
+      console.log('✅ Notification marked as read successfully');
+      return true;
+    } else {
+      const errorText = await response.text();
+      console.error('❌ Failed to mark notification as read:', response.status, errorText);
+      return false;
+    }
+  } catch (error) {
+    console.error('❌ Error marking notification as read:', error);
+    return false;
+  }
+};
+
+// Mark all notifications as read on backend
+export const markAllNotificationsAsRead = async () => {
+  try {
+    const token = Cookies.get('authToken');
+    if (!token) {
+      console.error('❌ No token for mark all as read');
+      return false;
+    }
+
+    const decoded = JSON.parse(atob(token.split('.')[1]));
+    const userId = decoded?.sub || decoded?.userId;
+    
+    console.log('📝 Marking all notifications as read for user:', userId);
+    console.log('📝 API endpoint:', `${process.env.NEXT_PUBLIC_API_URL}/notifications/mark-all-read`);
+    console.log('📝 HTTP method: POST');
+    
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/mark-all-read`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      // No body needed - backend should extract user from JWT token
+    });
+
+    console.log('📝 Mark all as read response status:', response.status);
+
+    if (response.ok) {
+      console.log('✅ All notifications marked as read successfully');
+      return true;
+    } else {
+      const errorText = await response.text();
+      console.error('❌ Failed to mark all notifications as read:', response.status, errorText);
+      console.error('💡 Backend might need user info in request body or URL params');
+      return false;
+    }
+  } catch (error) {
+    console.error('❌ Error marking all notifications as read:', error);
+    return false;
+  }
+};
+
+// Test function to debug mark all as read endpoint requirements
+export const debugMarkAllAsReadEndpoint = async () => {
+  const token = Cookies.get('authToken');
+  if (!token) {
+    console.error('❌ No token for debug test');
+    return;
+  }
+
+  const decoded = JSON.parse(atob(token.split('.')[1]));
+  const userId = decoded?.sub || decoded?.userId;
+  
+  console.log('🧪 DEBUGGING MARK ALL AS READ ENDPOINT');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('📋 User info from token:');
+  console.log('   - User ID:', userId);
+  console.log('   - Role:', decoded.role);
+  console.log('   - Email:', decoded.email);
+  
+  const testConfigs = [
+    {
+      name: 'No body (JWT only)',
+      config: {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      }
+    },
+    {
+      name: 'Empty object body',
+      config: {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({})
+      }
+    },
+    {
+      name: 'UserId in body',
+      config: {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: userId })
+      }
+    },
+    {
+      name: 'recipient_id in body',
+      config: {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ recipient_id: parseInt(userId) })
+      }
+    }
+  ];
+
+  for (const test of testConfigs) {
+    console.log(`\n🧪 Testing: ${test.name}`);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/mark-all-read`, test.config);
+      console.log(`   - Status: ${response.status}`);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.log(`   - Error: ${errorText}`);
+      } else {
+        console.log(`   - ✅ SUCCESS with ${test.name}!`);
+        break; // Stop on first success
+      }
+    } catch (error) {
+      console.log(`   - Network error: ${error.message}`);
+    }
+  }
+  
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+};
+
 // Comprehensive auth debugging function
 export const debugAuthStatus = () => {
   console.log('🔍 COMPREHENSIVE AUTH DEBUG');
@@ -708,6 +872,27 @@ export function useNotifications() {
                         // Listen for different notification event names that backend might use
                         const notificationEvents = ['notification', 'newNotification', 'user_notification', 'userNotification'];
                         
+                        // Listen for notification read status updates
+                        const readStatusEvents = ['notification_read', 'notificationRead', 'notification_marked_read'];
+                        
+                        readStatusEvents.forEach(eventName => {
+                            socket.on(eventName, (data: any) => {
+                                console.log(`📖 Notification read status update via '${eventName}':`, data);
+                                
+                                const notificationId = data.id || data.notificationId;
+                                if (notificationId) {
+                                    setNotifications(prev => 
+                                        prev.map(notification => 
+                                            notification.id === notificationId
+                                                ? { ...notification, isRead: true, read_status: true }
+                                                : notification
+                                        )
+                                    );
+                                    console.log('📖 Updated read status for notification:', notificationId);
+                                }
+                            });
+                        });
+                        
                         notificationEvents.forEach(eventName => {
                             socket.on(eventName, (data: any) => {
                                 console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
@@ -873,6 +1058,9 @@ export function useNotifications() {
       (window as any).validateAuthToken = validateToken;
       (window as any).debugAuthStatus = debugAuthStatus;
       (window as any).testNotificationAuthBehavior = testNotificationAuthBehavior;
+      (window as any).markNotificationAsRead = markNotificationAsRead;
+      (window as any).markAllNotificationsAsRead = markAllNotificationsAsRead;
+      (window as any).debugMarkAllAsReadEndpoint = debugMarkAllAsReadEndpoint;
       (window as any).getSocketStatus = () => {
         const socket = getSocket();
         return {
@@ -891,6 +1079,9 @@ export function useNotifications() {
       console.log('   - window.validateAuthToken() - Check token status');
       console.log('   - window.debugAuthStatus() - Full auth debug');
       console.log('   - window.testNotificationAuthBehavior() - Test notification vs auth behavior');
+      console.log('   - window.markNotificationAsRead(id) - Mark single notification as read');
+      console.log('   - window.markAllNotificationsAsRead() - Mark all notifications as read');
+      console.log('   - window.debugMarkAllAsReadEndpoint() - Debug mark all endpoint requirements');
       console.log('   - window.getSocketStatus() - Get socket info');
     }
 
@@ -902,6 +1093,9 @@ export function useNotifications() {
         socket.off('newNotification');
         socket.off('user_notification');
         socket.off('userNotification');
+        socket.off('notification_read');
+        socket.off('notificationRead');
+        socket.off('notification_marked_read');
         socket.off('authenticated');
         socket.off('unauthorized');
         // Don't disconnect the socket here as it might be used elsewhere
@@ -925,5 +1119,71 @@ export function useNotifications() {
     };
   }, []); // Empty dependency array - only run once
 
-  return { notifications, setNotifications };
+  // Mark individual notification as read
+  const markAsRead = async (notificationId) => {
+    try {
+      // Update local state immediately for better UX
+      setNotifications(prev => 
+        prev.map(notification => 
+          notification.id === notificationId 
+            ? { ...notification, isRead: true, read_status: true }
+            : notification
+        )
+      );
+
+      // Update backend
+      const success = await markNotificationAsRead(notificationId);
+      if (!success) {
+        console.warn('⚠️ Failed to update backend, reverting local change');
+        // Revert local change if backend update failed
+        setNotifications(prev => 
+          prev.map(notification => 
+            notification.id === notificationId 
+              ? { ...notification, isRead: false, read_status: false }
+              : notification
+          )
+        );
+      }
+
+      return success;
+    } catch (error) {
+      console.error('❌ Error in markAsRead:', error);
+      return false;
+    }
+  };
+
+  // Mark all notifications as read
+  const markAllAsRead = async () => {
+    try {
+      // Update local state immediately for better UX
+      const previousNotifications = [...notifications];
+      setNotifications(prev => 
+        prev.map(notification => ({
+          ...notification,
+          isRead: true,
+          read_status: true
+        }))
+      );
+
+      // Update backend
+      const success = await markAllNotificationsAsRead();
+      if (!success) {
+        console.warn('⚠️ Failed to update backend, reverting local changes');
+        // Revert local changes if backend update failed
+        setNotifications(previousNotifications);
+      }
+
+      return success;
+    } catch (error) {
+      console.error('❌ Error in markAllAsRead:', error);
+      return false;
+    }
+  };
+
+  return { 
+    notifications, 
+    setNotifications, 
+    markAsRead, 
+    markAllAsRead 
+  };
 }
