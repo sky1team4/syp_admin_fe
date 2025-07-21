@@ -75,10 +75,10 @@ export default function DashboardPage() {
         </button> */}
       </div>
       {/* Tabs and Search */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center justify-start w-fit border border-purple-600 rounded-lg overflow-hidden">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-4 gap-4">
+        <div className="flex items-center justify-start w-full lg:w-fit border border-purple-600 rounded-lg overflow-hidden">
           <button
-            className={`px-4 py-2 text-sm md:text-base font-medium transition ${
+            className={`flex-1 lg:flex-none px-3 lg:px-4 py-2 text-xs sm:text-sm md:text-base font-medium transition whitespace-nowrap ${
               activeTab === "Users"
                 ? "bg-purple-600 text-white"
                 : "bg-white text-purple-600"
@@ -89,7 +89,7 @@ export default function DashboardPage() {
           </button>
 
           <button
-            className={`px-4 py-2 text-sm md:text-base font-medium transition ${
+            className={`flex-1 lg:flex-none px-3 lg:px-4 py-2 text-xs sm:text-sm md:text-base font-medium transition whitespace-nowrap ${
               activeTab === "Verification Requests"
                 ? "bg-purple-600 text-white"
                 : "bg-white text-purple-600"
@@ -101,13 +101,13 @@ export default function DashboardPage() {
         </div>
         
         {/* Search Bar */}
-        <div className="relative">
+        <div className="relative w-full lg:w-auto">
           <input
             type="text"
             placeholder="Search..."
             value={searchTerm}
             onChange={handleSearch}
-            className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+            className="w-full lg:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
           />
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
