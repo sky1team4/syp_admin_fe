@@ -87,7 +87,7 @@ export function SubscriptionTable({ columns = defaultColumns, data = [], title, 
           )}
           <h2 className="text-lg md:text-xl font-semibold text-gray-900">{title}</h2>
         </div>
-        {btnText && <Button click={click} isOpen={isOpen} h="10" text={btnText} className="text-sm md:text-base lg:text-lg xl:text-xl" />}
+        {btnText && <Button click={click} isOpen={isOpen} h="10" text={btnText} smallText="ADD" className="text-sm md:text-base lg:text-lg xl:text-xl" />}
       </div>
 
       <div className="relative overflow-x-auto w-full">
