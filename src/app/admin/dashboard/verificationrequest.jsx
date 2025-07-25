@@ -135,6 +135,9 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
     }
   };
 
+  // Check if the verification is already active/verified
+  const isVerified = userData?.badge_status === 'verified' || userData?.badge_status === 'active';
+
 
   return (
     <div
@@ -153,7 +156,7 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
       <div className="bg-white rounded-lg h-screen shadow-lg w-full max-w-xl p-6 relative transform transition-transform duration-500">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-bold text-purplenote-800">
-            Badge Verification Request
+            {isVerified ? 'Badge Verification Details' : 'Badge Verification Request'}
           </h2>
             <Image 
               src="/FAQ/cross.png" 
@@ -188,7 +191,13 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
             </div>
           </div>
 
-          <div className="self-center bg-[#fa8d2128] text-xs p-2 px-5 text-[#FA8F21] rounded-full">{userData?.badge_status}</div>
+          <div className={`self-center text-xs p-2 px-5 rounded-full ${
+            isVerified 
+              ? 'bg-green-100 text-green-600' 
+              : 'bg-[#fa8d2128] text-[#FA8F21]'
+          }`}>
+            {userData?.badge_status}
+          </div>
         </div>
 
         {/* Header */}
@@ -230,17 +239,19 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
         <div className="flex justify-end space-x-4">
           <button
             className="px-4 py-2 text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50"
-            onClick={() => {setIsOpen(false)
-              setDocuments(initialDocuments);}
-            }
+            onClick={() => setIsOpen(false)}
           >
             Cancel
           </button>
           <button
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            className={`px-4 py-2 rounded-lg ${
+              isVerified 
+                ? 'bg-red-600 text-white hover:bg-red-700' 
+                : 'bg-purple-600 text-white hover:bg-purple-700'
+            }`}
             onClick={handleSubmit}
           >
-            Verify
+            {isVerified ? 'Undo Verify' : 'Verify'}
           </button>
         </div>
       </div>
