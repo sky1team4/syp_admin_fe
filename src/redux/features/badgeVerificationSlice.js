@@ -22,6 +22,8 @@ console.log("response badge verification", response)
 
     const data = await response.json();
     console.log("data badge verification", data)
+    console.log("data type:", typeof data)
+    console.log("data isArray:", Array.isArray(data))
     return data;
   }
 );
@@ -66,7 +68,10 @@ const badgeVerificationSlice = createSlice({
       })
       .addCase(GetAllbadgeVerificationRequest.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        // Ensure we're setting an array, even if the API returns a different structure
+        state.data = Array.isArray(action.payload) ? action.payload : 
+                    (action.payload?.data && Array.isArray(action.payload.data)) ? action.payload.data : 
+                    (action.payload?.verificationRequests && Array.isArray(action.payload.verificationRequests)) ? action.payload.verificationRequests : [];
       })
       .addCase(GetAllbadgeVerificationRequest.rejected, (state, action) => {
         state.loading = false;
@@ -76,7 +81,9 @@ const badgeVerificationSlice = createSlice({
       })
       .addCase(ChangeBadgeStatus.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        // Don't overwrite the data array with the response from status change
+        // The status change response might not be the full list
+        console.log("ChangeBadgeStatus response:", action.payload);
       }).addCase(ChangeBadgeStatus.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;

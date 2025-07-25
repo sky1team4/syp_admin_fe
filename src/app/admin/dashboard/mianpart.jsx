@@ -16,6 +16,11 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("Users");
   const [searchTerm, setSearchTerm] = useState("");
   
+  // Debug logging - uncomment if needed for troubleshooting
+  // console.log("verificationRequestsData:", verificationRequestsData);
+  // console.log("verificationRequestsData type:", typeof verificationRequestsData);
+  // console.log("verificationRequestsData isArray:", Array.isArray(verificationRequestsData));
+  
   // Create a function to fetch data
   const fetchData = useCallback(() => {
     dispatch(fetchAllUsers());
@@ -48,15 +53,15 @@ export default function DashboardPage() {
   
   // Filter data based on search term
   const filteredData = activeTab === "Users" 
-    ? usersData?.filter(user => 
+    ? (Array.isArray(usersData) ? usersData.filter(user => 
         user.email?.toLowerCase().includes(searchTerm.toLowerCase()) || 
         user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (user.phoneNumber?.toString() || "").toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : verificationRequestsData?.filter(request => 
+      ) : [])
+    : (Array.isArray(verificationRequestsData) ? verificationRequestsData.filter(request => 
         request.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         request.user?.email?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      ) : []);
   
   // const verificationRequestsData = [];
 

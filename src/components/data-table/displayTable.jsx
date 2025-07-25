@@ -93,7 +93,7 @@ export function  SubscriptionTable({ columns, data = [], title, btnText, click, 
               />
             </div>
             
-            {btnText && <Button click={click} isOpen={isOpen} h="10" text={btnText} className="text-sm md:text-base lg:text-lg xl:text-xl" />}
+            {btnText && <Button click={click} isOpen={isOpen} h="10" text={btnText} smallText={"ADD"} className="text-sm md:text-base lg:text-lg xl:text-xl" />}
           {/* </div> */}
         </div>
 

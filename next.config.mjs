@@ -15,8 +15,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'i.pravatar.cc',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8080',
+        pathname: '/uploads/verifications/**',
+      },
     ],
-    domains: ['sypadminapi.azurewebsites.net', 'i.pravatar.cc'], // Added the pravatar domain
+    domains: ['sypadminapi.azurewebsites.net', 'i.pravatar.cc', 'localhost'], // Added localhost domain
   },
 };
 

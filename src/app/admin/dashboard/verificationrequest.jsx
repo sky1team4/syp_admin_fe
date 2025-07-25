@@ -119,8 +119,9 @@ const VerificationRequest = ({ isOpen, setIsOpen, userData }) => {
     // console.log("documents", documents);
     try {
 
-      dispatch(ChangeBadgeStatus({id: userData.id}))
-      // dispatch(GetAllbadgeVerificationRequest())
+      await dispatch(ChangeBadgeStatus({id: userData.id}))
+      // Refresh the verification requests data after status change
+      dispatch(GetAllbadgeVerificationRequest())
 
       // Ensure userData is defined before accessing its properties
       if (!userData) {
