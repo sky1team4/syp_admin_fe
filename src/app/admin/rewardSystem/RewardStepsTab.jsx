@@ -403,7 +403,7 @@ const RewardStepsTab = () => {
                             {!formData.isActive && (
                                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
                                     <p className="text-sm text-yellow-800">
-                                        <strong>Note:</strong> Inactive steps will still display their data but won't be available for users to complete. You can reactivate them anytime.
+                                        <strong>Note:</strong> Inactive steps will still display their data but won&apos;t be available for users to complete. You can reactivate them anytime.
                                     </p>
                                 </div>
                             )}
