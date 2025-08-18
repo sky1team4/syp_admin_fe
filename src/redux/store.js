@@ -21,6 +21,7 @@ import faqCategoryReducer from './features/faqCateSlice';
 import userReducer from './features/userSlice';
 import faqQaReducer from './features/faqQaSlice';
 import subscribedUserReducer from './features/subscribedUserSlice';
+import rewardSystemReducer from './features/rewardSystemSlice';
 
 export const store = configureStore({
   reducer: {
@@ -46,6 +47,7 @@ export const store = configureStore({
     users: userReducer,
     faqQa: faqQaReducer,
     subscribedUser: subscribedUserReducer,
+    rewardSystem: rewardSystemReducer,
   },
 });
 

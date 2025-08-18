@@ -79,7 +79,7 @@ const Sidebar = () => {
           onClick={toggleSidebar}
           className={`lg:hidden text-white p-2 rounded-md m-2 ml-3 h-10 fixed top-4 z-40`}
           style={{ backgroundColor: theme.color }}
-          >
+        >
           <Image
             src="/dashbaord_siedebar_icon/menu.png"
             width={25}
@@ -91,9 +91,9 @@ const Sidebar = () => {
         {/* Sidebar */}
         <div
           className={`z-40 fixed top-0 left-0 h-screen text-white ${isSidebarOpen ? "sm:w-[70%] md:w-[50%] lg:w-72 translate-x-0" : "lg:w-72 -translate-x-full"
-          } flex flex-col gap-5 items-center py-6 px-4 transform  lg:translate-x-0 transition-transform duration-300`}
+            } flex flex-col gap-5 items-center py-6 px-4 transform  lg:translate-x-0 transition-transform duration-300`}
           style={{ backgroundColor: theme.color }}
-          >
+        >
           <div className="text-4xl font-bold self-start ml-4"> SYP</div>
           {/* Close Button */}
           {/* <button
@@ -130,15 +130,15 @@ const Sidebar = () => {
                 <span className="ml-2 font-medium">Dashboard</span>
               </div>
             </Link>
-            
+
             <Link
               href="/admin/subscriptionManagement"
               onClick={() => handleTabClick("subscription")}
             >
               <div
                 className={`${sidebarItemClass} ${staticTab === "subscription"
-                    ? "bg-white text-purple-600"
-                    : sidebarClass
+                  ? "bg-white text-purple-600"
+                  : sidebarClass
                   }`}
               >
                 <Image
@@ -158,8 +158,8 @@ const Sidebar = () => {
             <Link href="/admin/companyPage" onClick={() => handleTabClick("companies")}>
               <div
                 className={`${sidebarItemClass} ${staticTab === "companies"
-                    ? "bg-white text-purple-600"
-                    : sidebarClass
+                  ? "bg-white text-purple-600"
+                  : sidebarClass
                   }`}
               >
                 <Image
@@ -180,8 +180,8 @@ const Sidebar = () => {
             <Link href="/admin/payment" onClick={() => handleTabClick("payment")}>
               <div
                 className={`${sidebarItemClass} ${staticTab === "payment"
-                    ? "bg-white  text-purple-600"
-                    : sidebarClass
+                  ? "bg-white  text-purple-600"
+                  : sidebarClass
                   }`}
               >
                 <Image
@@ -197,11 +197,32 @@ const Sidebar = () => {
                 <span className="ml-2 font-medium">Payment Integration</span>
               </div>
             </Link>
+
+            <Link href="/admin/rewardSystem" onClick={() => handleTabClick("rewardSystem")}>
+              <div
+                className={`${sidebarItemClass} ${staticTab === "rewardSystem"
+                  ? "bg-white text-purple-600"
+                  : sidebarClass
+                  }`}
+              >
+                <Image
+                  src={
+                    staticTab === "rewardSystem"
+                      ? "/dashbaord_siedebar_icon/rewardIcon_active.svg"
+                      : "/dashbaord_siedebar_icon/rewardIcon.svg"
+                  }
+                  width={30}
+                  height={30}
+                  alt="Reward System icon"
+                />
+                <span className="ml-2 font-medium">Reward System</span>
+              </div>
+            </Link>
             <Link href="/admin/setting" onClick={() => handleTabClick("setting")}>
               <div
                 className={`${sidebarItemClass} ${staticTab === "setting"
-                    ? "bg-white text-purple-600"
-                    : sidebarClass
+                  ? "bg-white text-purple-600"
+                  : sidebarClass
                   }`}
               >
                 <Image
