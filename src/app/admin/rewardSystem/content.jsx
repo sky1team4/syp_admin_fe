@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchRewardSteps, fetchCoinConversionRate } from '../../../redux/features/rewardSystemSlice'
+import { fetchRewardSteps, fetchCoinConversionRate, fetchPaymentMethods } from '../../../redux/features/rewardSystemSlice'
 import { toast } from 'react-hot-toast'
+import PaymentMethodsTab from './PaymentMethodsTab'
 import RewardStepsTab from './RewardStepsTab'
 import CoinConversionTab from './CoinConversionTab'
 
 function Content() {
     const dispatch = useDispatch();
     const { error, isLoading } = useSelector((state) => state.rewardSystem);
-    const [activeTab, setActiveTab] = useState('steps');
+    const [activeTab, setActiveTab] = useState('payment');
 
     useEffect(() => {
         dispatch(fetchRewardSteps());
         dispatch(fetchCoinConversionRate());
+        dispatch(fetchPaymentMethods());
     }, [dispatch]);
 
     useEffect(() => {
@@ -22,6 +24,7 @@ function Content() {
     }, [error]);
 
     const tabs = [
+        { id: 'payment', label: 'Payment Methods', icon: '💳' },
         { id: 'steps', label: 'Reward Steps', icon: '🎯' },
         { id: 'conversion', label: 'Coin Conversion', icon: '💰' }
     ];
@@ -57,6 +60,7 @@ function Content() {
 
                     {/* Tab Content */}
                     <div className="p-6">
+                        {activeTab === 'payment' && <PaymentMethodsTab />}
                         {activeTab === 'steps' && <RewardStepsTab />}
                         {activeTab === 'conversion' && <CoinConversionTab />}
                     </div>

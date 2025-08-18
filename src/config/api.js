@@ -8,6 +8,8 @@ export const API_CONFIG = {
         // Reward System
         REWARD_STEPS: '/api/reward-system/steps',
         REWARD_STEP_BY_ID: (id) => `/api/reward-system/steps/${id}`,
+        PAYMENT_METHODS: '/reward-system/payment-methods',
+        PAYMENT_METHOD_BY_ID: (id) => `/reward-system/payment-methods/${id}`,
         CONVERSION_RATE: '/api/reward-system/conversion-rate',
 
         // Add other endpoints here as needed

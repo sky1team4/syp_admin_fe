@@ -136,8 +136,66 @@ export const updateCoinConversionRate = createAsyncThunk(
     }
 );
 
+// Payment Methods
+export const fetchPaymentMethods = createAsyncThunk(
+    'rewardSystem/fetchPaymentMethods',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await apiCall(API_CONFIG.ENDPOINTS.PAYMENT_METHODS);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(handleApiError(error));
+        }
+    }
+);
+
+export const savePaymentMethod = createAsyncThunk(
+    'rewardSystem/savePaymentMethod',
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiCall(API_CONFIG.ENDPOINTS.PAYMENT_METHODS, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(handleApiError(error));
+        }
+    }
+);
+
+export const updatePaymentMethod = createAsyncThunk(
+    'rewardSystem/updatePaymentMethod',
+    async ({ id, data }, { rejectWithValue }) => {
+        try {
+            const response = await apiCall(API_CONFIG.ENDPOINTS.PAYMENT_METHOD_BY_ID(id), {
+                method: 'PUT',
+                body: JSON.stringify(data)
+            });
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(handleApiError(error));
+        }
+    }
+);
+
+export const deletePaymentMethod = createAsyncThunk(
+    'rewardSystem/deletePaymentMethod',
+    async (id, { rejectWithValue }) => {
+        try {
+            await apiCall(API_CONFIG.ENDPOINTS.PAYMENT_METHOD_BY_ID(id), {
+                method: 'DELETE'
+            });
+            return id;
+        } catch (error) {
+            return rejectWithValue(handleApiError(error));
+        }
+    }
+);
+
 const initialState = {
     rewardSteps: [],
+    paymentMethods: [],
     conversionRate: {
         coinsPerDollar: 100,
         isActive: true
@@ -243,6 +301,61 @@ const rewardSystemSlice = createSlice({
                 state.conversionRate = action.payload;
             })
             .addCase(updateCoinConversionRate.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            // Fetch payment methods
+            .addCase(fetchPaymentMethods.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(fetchPaymentMethods.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.paymentMethods = action.payload;
+            })
+            .addCase(fetchPaymentMethods.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            // Save payment method
+            .addCase(savePaymentMethod.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(savePaymentMethod.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.paymentMethods.push(action.payload);
+            })
+            .addCase(savePaymentMethod.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            // Update payment method
+            .addCase(updatePaymentMethod.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(updatePaymentMethod.fulfilled, (state, action) => {
+                state.isLoading = false;
+                const index = state.paymentMethods.findIndex(method => method.id === action.payload.id);
+                if (index !== -1) {
+                    state.paymentMethods[index] = action.payload;
+                }
+            })
+            .addCase(updatePaymentMethod.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            // Delete payment method
+            .addCase(deletePaymentMethod.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(deletePaymentMethod.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.paymentMethods = state.paymentMethods.filter(method => method.id !== action.payload);
+            })
+            .addCase(deletePaymentMethod.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             });
