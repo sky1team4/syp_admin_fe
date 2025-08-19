@@ -35,7 +35,7 @@ export const loginUser = createAsyncThunk(
   async (credentials) => {
     try {
       console.log("credentials", "http://localhost:8080");
-      const response = await fetch(`http://localhost:8080/users/login`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
         // const response = await fetch(${API_URL}/users/login, {
         method: 'POST',
         headers: {
