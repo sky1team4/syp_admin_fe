@@ -52,7 +52,7 @@ const RewardStepsTab = () => {
             const nextOrder = (rewardSteps || []).length + 1;
             setFormData({
                 title: 'Complete Profile Setup',
-                description: 'Fill out your complete profile information including bio, profile picture, and contact details to earn rewards.',
+                description: 'Fill Complete profile bio, profile picture, and contact details to earn rewards.',
                 coinsReward: '100',
                 dollarValue: '10.00',
                 order: nextOrder.toString(),
@@ -223,11 +223,11 @@ const RewardStepsTab = () => {
             {/* Steps Grid */}
             {!isLoading && !isRefreshing && (
                 <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
                         {sortedSteps.map((step, index) => (
                             <div
                                 key={step.id || `step-${index}`}
-                                className={`bg-white rounded-lg border-2 p-6 transition-all duration-200 h-full flex flex-col min-h-[280px] ${step?.isActive
+                                className={`bg-white rounded-lg border-2 p-6 transition-all duration-200 h-full flex flex-col min-h-[280px] hover:shadow-lg ${step?.isActive
                                     ? 'border-green-200 hover:border-green-300 shadow-sm'
                                     : 'border-gray-200 hover:border-gray-300 shadow-sm opacity-75'
                                     }`}
@@ -265,17 +265,23 @@ const RewardStepsTab = () => {
                                     </div>
                                 </div>
 
-                                <h3 className={`font-semibold mb-2 line-clamp-1 ${step?.isActive ? 'text-gray-900' : 'text-gray-600'
+                                <h3 className={`font-semibold mb-2 truncate ${step?.isActive ? 'text-gray-900' : 'text-gray-600'
                                     }`}>
                                     {step.title || 'Untitled Step'}
                                 </h3>
-                                <p className={`text-sm mb-4 line-clamp-3 flex-grow ${step?.isActive ? 'text-gray-600' : 'text-gray-500'
-                                    }`}>
+                                <p className={`text-sm mb-4 flex-grow ${step?.isActive ? 'text-gray-600' : 'text-gray-500'
+                                    }`} style={{
+                                        display: '-webkit-box',
+                                        WebkitLineClamp: 3,
+                                        WebkitBoxOrient: 'vertical',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis'
+                                    }}>
                                     {step.description || 'No description available'}
                                 </p>
 
-                                {/* Spacer to push rewards to bottom */}
-                                <div className="flex-grow"></div>
+                                                                 {/* Spacer to push rewards to bottom */}
+                                 <div className="flex-grow min-h-[20px]"></div>
 
                                 <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
                                     <div className="text-center flex-1">
