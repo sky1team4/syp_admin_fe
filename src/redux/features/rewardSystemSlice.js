@@ -224,7 +224,7 @@ const rewardSystemSlice = createSlice({
             })
             .addCase(fetchRewardSteps.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.rewardSteps = action.payload;
+                state.rewardSteps = action.payload || [];
             })
             .addCase(fetchRewardSteps.rejected, (state, action) => {
                 state.isLoading = false;
@@ -237,7 +237,9 @@ const rewardSystemSlice = createSlice({
             })
             .addCase(saveRewardStep.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.rewardSteps.push(action.payload);
+                if (action.payload) {
+                    state.rewardSteps.push(action.payload);
+                }
             })
             .addCase(saveRewardStep.rejected, (state, action) => {
                 state.isLoading = false;
@@ -285,7 +287,7 @@ const rewardSystemSlice = createSlice({
             })
             .addCase(fetchCoinConversionRate.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.conversionRate = action.payload;
+                state.conversionRate = action.payload || { coinsPerDollar: 100, isActive: true };
             })
             .addCase(fetchCoinConversionRate.rejected, (state, action) => {
                 state.isLoading = false;
@@ -311,7 +313,7 @@ const rewardSystemSlice = createSlice({
             })
             .addCase(fetchPaymentMethods.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.paymentMethods = action.payload;
+                state.paymentMethods = action.payload || [];
             })
             .addCase(fetchPaymentMethods.rejected, (state, action) => {
                 state.isLoading = false;
@@ -324,7 +326,9 @@ const rewardSystemSlice = createSlice({
             })
             .addCase(savePaymentMethod.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.paymentMethods.push(action.payload);
+                if (action.payload) {
+                    state.paymentMethods.push(action.payload);
+                }
             })
             .addCase(savePaymentMethod.rejected, (state, action) => {
                 state.isLoading = false;

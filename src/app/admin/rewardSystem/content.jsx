@@ -8,7 +8,7 @@ import CoinConversionTab from './CoinConversionTab'
 
 function Content() {
     const dispatch = useDispatch();
-    const { error, isLoading } = useSelector((state) => state.rewardSystem);
+    const { error, isLoading, rewardSteps, paymentMethods, conversionRate } = useSelector((state) => state.rewardSystem);
     const [activeTab, setActiveTab] = useState('payment');
 
     useEffect(() => {

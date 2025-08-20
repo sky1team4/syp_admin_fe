@@ -15,7 +15,7 @@ const CoinConversionTab = () => {
 
     // Update form data when conversion rate changes
     useEffect(() => {
-        if (conversionRate) {
+        if (conversionRate && conversionRate.coinsPerDollar !== undefined) {
             setFormData({
                 coinsPerDollar: conversionRate.coinsPerDollar.toString(),
                 isActive: conversionRate.isActive
@@ -45,8 +45,8 @@ const CoinConversionTab = () => {
 
     const handleCancel = () => {
         setFormData({
-            coinsPerDollar: conversionRate.coinsPerDollar.toString(),
-            isActive: conversionRate.isActive
+            coinsPerDollar: (conversionRate?.coinsPerDollar || 100).toString(),
+            isActive: conversionRate?.isActive ?? true
         });
         setIsEditing(false);
     };
@@ -82,9 +82,9 @@ const CoinConversionTab = () => {
                     <div className="space-y-6">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
-                                <div className={`w-3 h-3 rounded-full ${conversionRate.isActive ? 'bg-green-500' : 'bg-gray-400'}`}></div>
-                                <span className={`text-sm font-medium ${conversionRate.isActive ? 'text-green-700' : 'text-gray-500'}`}>
-                                    {conversionRate.isActive ? 'Active' : 'Inactive'}
+                                <div className={`w-3 h-3 rounded-full ${conversionRate?.isActive ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                                <span className={`text-sm font-medium ${conversionRate?.isActive ? 'text-green-700' : 'text-gray-500'}`}>
+                                    {conversionRate?.isActive ? 'Active' : 'Inactive'}
                                 </span>
                             </div>
                         </div>
@@ -95,7 +95,7 @@ const CoinConversionTab = () => {
                                     <Coins className="w-8 h-8 text-purple-600" />
                                 </div>
                                 <div className="text-3xl font-bold text-purple-600 mb-2">
-                                    {conversionRate.coinsPerDollar}
+                                    {conversionRate?.coinsPerDollar || 100}
                                 </div>
                                 <div className="text-sm text-gray-600">Coins per Dollar</div>
                             </div>
@@ -105,7 +105,7 @@ const CoinConversionTab = () => {
                                     <DollarSign className="w-8 h-8 text-green-600" />
                                 </div>
                                 <div className="text-3xl font-bold text-green-600 mb-2">
-                                    ${(1 / conversionRate.coinsPerDollar).toFixed(4)}
+                                    ${(1 / (conversionRate?.coinsPerDollar || 100)).toFixed(4)}
                                 </div>
                                 <div className="text-sm text-gray-600">Dollar per Coin</div>
                             </div>
@@ -116,15 +116,15 @@ const CoinConversionTab = () => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                                 <div className="text-center">
                                     <div className="font-medium">100 Coins</div>
-                                    <div className="text-gray-600">= ${(100 / conversionRate.coinsPerDollar).toFixed(2)}</div>
+                                    <div className="text-gray-600">= ${(100 / (conversionRate?.coinsPerDollar || 100)).toFixed(2)}</div>
                                 </div>
                                 <div className="text-center">
                                     <div className="font-medium">500 Coins</div>
-                                    <div className="text-gray-600">= ${(500 / conversionRate.coinsPerDollar).toFixed(2)}</div>
+                                    <div className="text-gray-600">= ${(500 / (conversionRate?.coinsPerDollar || 100)).toFixed(2)}</div>
                                 </div>
                                 <div className="text-center">
                                     <div className="font-medium">1000 Coins</div>
-                                    <div className="text-gray-600">= ${(1000 / conversionRate.coinsPerDollar).toFixed(2)}</div>
+                                    <div className="text-gray-600">= ${(1000 / (conversionRate?.coinsPerDollar || 100)).toFixed(2)}</div>
                                 </div>
                             </div>
                         </div>

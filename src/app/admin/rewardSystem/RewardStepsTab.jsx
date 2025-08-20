@@ -6,7 +6,10 @@ import { Plus, Edit, Trash2 } from 'lucide-react'
 
 const RewardStepsTab = () => {
     const dispatch = useDispatch();
-    const { rewardSteps, isLoading } = useSelector((state) => state.rewardSystem);
+    const { rewardSteps, isLoading } = useSelector((state) => ({
+        rewardSteps: state.rewardSystem?.rewardSteps || [],
+        isLoading: state.rewardSystem?.isLoading || false
+    }));
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingStep, setEditingStep] = useState(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
@@ -25,6 +28,7 @@ const RewardStepsTab = () => {
         try {
             await dispatch(fetchRewardSteps()).unwrap();
         } catch (error) {
+            console.error('Refresh error:', error);
             toast.error('Failed to refresh data');
         } finally {
             setIsRefreshing(false);
@@ -32,20 +36,20 @@ const RewardStepsTab = () => {
     };
 
     const handleOpenModal = (step = null) => {
-        if (step) {
+        if (step && step.id) {
             setEditingStep(step);
             setFormData({
                 title: step.title || '',
                 description: step.description || '',
                 coinsReward: (step.coinsReward || 0).toString(),
                 dollarValue: (step.dollarValue || 0).toString(),
-                order: (step.order || 1).toString(),
+                order: (step.stepOrder || step.order || 1).toString(), // Handle both field names
                 isActive: step.isActive !== undefined ? step.isActive : true
             });
         } else {
             setEditingStep(null);
             // Show dummy data for new step
-            const nextOrder = rewardSteps.length + 1;
+            const nextOrder = (rewardSteps || []).length + 1;
             setFormData({
                 title: 'Complete Profile Setup',
                 description: 'Fill out your complete profile information including bio, profile picture, and contact details to earn rewards.',
@@ -73,6 +77,8 @@ const RewardStepsTab = () => {
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
+        if (!name) return;
+        
         setFormData(prev => ({
             ...prev,
             [name]: type === 'checkbox' ? checked : value
@@ -82,15 +88,31 @@ const RewardStepsTab = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Validate form data
+        if (!formData.title || !formData.description || !formData.coinsReward || !formData.dollarValue || !formData.order) {
+            toast.error('Please fill in all required fields');
+            return;
+        }
+
         try {
+            // Transform form data to match API expectations
+            const apiData = {
+                title: formData.title,
+                description: formData.description,
+                coinsReward: parseInt(formData.coinsReward) || 0,
+                dollarValue: parseFloat(formData.dollarValue) || 0,
+                stepOrder: parseInt(formData.order) || 1,  // Convert 'order' to 'stepOrder'
+                isActive: formData.isActive
+            };
+
             if (editingStep) {
-                await dispatch(updateRewardStep({ id: editingStep.id, data: formData })).unwrap();
+                await dispatch(updateRewardStep({ id: editingStep.id, data: apiData })).unwrap();
                 toast.success('Reward step updated successfully - other steps redistributed automatically');
 
                 // Refresh data from database after update
                 await refreshData();
             } else {
-                await dispatch(saveRewardStep(formData)).unwrap();
+                await dispatch(saveRewardStep(apiData)).unwrap();
                 toast.success('Reward step created successfully');
 
                 // Refresh data from database after create
@@ -98,11 +120,17 @@ const RewardStepsTab = () => {
             }
             handleCloseModal();
         } catch (error) {
+            console.error('Submit error:', error);
             toast.error(error || 'Failed to save reward step');
         }
     };
 
     const handleDelete = async (id) => {
+        if (!id) {
+            toast.error('Invalid reward step ID');
+            return;
+        }
+        
         try {
             await dispatch(deleteRewardStep(id)).unwrap();
             toast.success('Reward step deleted successfully');
@@ -110,11 +138,16 @@ const RewardStepsTab = () => {
             // Refresh data from database after delete
             await refreshData();
         } catch (error) {
+            console.error('Delete error:', error);
             toast.error(error || 'Failed to delete reward step');
         }
     };
 
-    const sortedSteps = [...rewardSteps].sort((a, b) => a.order - b.order);
+    const sortedSteps = [...(rewardSteps || [])].sort((a, b) => {
+        const orderA = a.stepOrder || a.order || 0;
+        const orderB = b.stepOrder || b.order || 0;
+        return orderA - orderB;
+    });
 
     return (
         <div>
@@ -127,7 +160,7 @@ const RewardStepsTab = () => {
                     </p>
                 </div>
                 <button
-                    onClick={() => handleOpenModal()}
+                    onClick={() => handleOpenModal(null)}
                     className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 flex items-center space-x-2"
                 >
                     <Plus size={16} />
@@ -140,13 +173,13 @@ const RewardStepsTab = () => {
                 <div className="flex justify-between items-center">
                     <div className="text-center">
                         <div className="text-2xl font-bold text-purple-600">
-                            {rewardSteps.reduce((sum, step) => sum + (parseInt(step.coinsReward) || 0), 0)}
+                            {(rewardSteps || []).reduce((sum, step) => sum + (parseInt(step.coinsReward) || 0), 0)}
                         </div>
                         <div className="text-sm text-gray-600">Total Coins</div>
                     </div>
                     <div className="text-center">
                         <div className="text-2xl font-bold text-green-600">
-                            ${rewardSteps.reduce((sum, step) => sum + (parseFloat(step.dollarValue) || 0), 0).toFixed(2)}
+                            ${(rewardSteps || []).reduce((sum, step) => sum + (parseFloat(step.dollarValue) || 0), 0).toFixed(2)}
                         </div>
                         <div className="text-sm text-gray-600">Total Dollars</div>
                     </div>
@@ -162,13 +195,13 @@ const RewardStepsTab = () => {
                         <div className="flex items-center space-x-2">
                             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                             <span className="text-gray-600">
-                                {rewardSteps.filter(step => step.isActive).length} Active
+                                {(rewardSteps || []).filter(step => step.isActive).length} Active
                             </span>
                         </div>
                         <div className="flex items-center space-x-2">
                             <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
                             <span className="text-gray-600">
-                                {rewardSteps.filter(step => !step.isActive).length} Inactive
+                                {(rewardSteps || []).filter(step => !step.isActive).length} Inactive
                             </span>
                         </div>
                     </div>
@@ -190,11 +223,11 @@ const RewardStepsTab = () => {
             {/* Steps Grid */}
             {!isLoading && !isRefreshing && (
                 <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {sortedSteps.map((step, index) => (
                             <div
                                 key={step.id || `step-${index}`}
-                                className={`bg-white rounded-lg border-2 p-6 transition-all duration-200 ${step.isActive
+                                className={`bg-white rounded-lg border-2 p-6 transition-all duration-200 h-full flex flex-col min-h-[280px] ${step?.isActive
                                     ? 'border-green-200 hover:border-green-300 shadow-sm'
                                     : 'border-gray-200 hover:border-gray-300 shadow-sm opacity-75'
                                     }`}
@@ -203,27 +236,27 @@ const RewardStepsTab = () => {
                                     <div className="flex items-center space-x-2">
                                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold ${step.isActive ? 'bg-green-500' : 'bg-gray-400'
                                             }`}>
-                                            {step.order}
+                                            {step.stepOrder || step.order || index + 1}
                                         </div>
-                                        <span className={`text-sm px-2 py-1 rounded-full ${step.isActive
+                                        <span className={`text-sm px-2 py-1 rounded-full ${step?.isActive
                                             ? 'bg-green-100 text-green-800'
                                             : 'bg-gray-100 text-gray-600'
                                             }`}>
-                                            {step.isActive ? 'Active' : 'Inactive'}
+                                            {step?.isActive ? 'Active' : 'Inactive'}
                                         </span>
                                     </div>
                                     <div className="flex space-x-2">
                                         <button
-                                            onClick={() => handleOpenModal(step)}
-                                            className={`p-1 hover:text-blue-600 transition-colors ${step.isActive ? 'text-gray-400' : 'text-gray-300'
+                                            onClick={() => step && step.id && handleOpenModal(step)}
+                                            className={`p-1 hover:text-blue-600 transition-colors ${step?.isActive ? 'text-gray-400' : 'text-gray-300'
                                                 }`}
                                             title="Edit"
                                         >
                                             <Edit size={16} />
                                         </button>
                                         <button
-                                            onClick={() => handleDelete(step.id)}
-                                            className={`p-1 hover:text-red-600 transition-colors ${step.isActive ? 'text-gray-400' : 'text-gray-300'
+                                            onClick={() => step?.id && handleDelete(step.id)}
+                                            className={`p-1 hover:text-red-600 transition-colors ${step?.isActive ? 'text-gray-400' : 'text-gray-300'
                                                 }`}
                                             title="Delete"
                                         >
@@ -232,32 +265,35 @@ const RewardStepsTab = () => {
                                     </div>
                                 </div>
 
-                                <h3 className={`font-semibold mb-2 ${step.isActive ? 'text-gray-900' : 'text-gray-600'
+                                <h3 className={`font-semibold mb-2 line-clamp-1 ${step?.isActive ? 'text-gray-900' : 'text-gray-600'
                                     }`}>
-                                    {step.title}
+                                    {step.title || 'Untitled Step'}
                                 </h3>
-                                <p className={`text-sm mb-4 line-clamp-2 ${step.isActive ? 'text-gray-600' : 'text-gray-500'
+                                <p className={`text-sm mb-4 line-clamp-3 flex-grow ${step?.isActive ? 'text-gray-600' : 'text-gray-500'
                                     }`}>
-                                    {step.description}
+                                    {step.description || 'No description available'}
                                 </p>
 
-                                <div className="flex justify-between items-center">
-                                    <div className="text-center">
-                                        <div className={`text-lg font-bold ${step.isActive ? 'text-purple-600' : 'text-purple-400'
+                                {/* Spacer to push rewards to bottom */}
+                                <div className="flex-grow"></div>
+
+                                <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
+                                    <div className="text-center flex-1">
+                                        <div className={`text-lg font-bold ${step?.isActive ? 'text-purple-600' : 'text-purple-400'
                                             }`}>
-                                            {step.coinsReward}
+                                            {step.coinsReward || '0'}
                                         </div>
-                                        <div className={`text-xs ${step.isActive ? 'text-gray-500' : 'text-gray-400'
+                                        <div className={`text-xs ${step?.isActive ? 'text-gray-500' : 'text-gray-400'
                                             }`}>
                                             Coins
                                         </div>
                                     </div>
-                                    <div className="text-center">
-                                        <div className={`text-lg font-bold ${step.isActive ? 'text-green-600' : 'text-green-400'
+                                    <div className="text-center flex-1">
+                                        <div className={`text-lg font-bold ${step?.isActive ? 'text-green-600' : 'text-green-400'
                                             }`}>
-                                            ${step.dollarValue}
+                                            ${step.dollarValue || '0.00'}
                                         </div>
-                                        <div className={`text-xs ${step.isActive ? 'text-gray-500' : 'text-gray-400'
+                                        <div className={`text-xs ${step?.isActive ? 'text-gray-500' : 'text-gray-400'
                                             }`}>
                                             Value
                                         </div>
@@ -265,7 +301,7 @@ const RewardStepsTab = () => {
                                 </div>
 
                                 {/* Inactive Notice */}
-                                {!step.isActive && (
+                                {!step?.isActive && (
                                     <div className="mt-4 p-2 bg-gray-50 border border-gray-200 rounded-md">
                                         <p className="text-xs text-gray-500 text-center">
                                             This step is currently inactive but retains its data
@@ -284,7 +320,7 @@ const RewardStepsTab = () => {
                             <h3 className="text-lg font-medium text-gray-900 mb-2">No reward steps yet</h3>
                             <p className="text-gray-600 mb-4">Create your first reward step to get started</p>
                             <button
-                                onClick={() => handleOpenModal()}
+                                onClick={() => handleOpenModal(null)}
                                 className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
                             >
                                 Add First Step

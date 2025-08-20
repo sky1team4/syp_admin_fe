@@ -6,7 +6,10 @@ import { Plus, Edit, Trash2, CreditCard, DollarSign } from 'lucide-react'
 
 const PaymentMethodsTab = () => {
     const dispatch = useDispatch();
-    const { paymentMethods, isLoading } = useSelector((state) => state.rewardSystem);
+    const { paymentMethods, isLoading } = useSelector((state) => ({
+        paymentMethods: state.rewardSystem?.paymentMethods || [],
+        isLoading: state.rewardSystem?.isLoading || false
+    }));
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingMethod, setEditingMethod] = useState(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
@@ -23,6 +26,7 @@ const PaymentMethodsTab = () => {
         try {
             await dispatch(fetchPaymentMethods()).unwrap();
         } catch (error) {
+            console.error('Refresh error:', error);
             toast.error('Failed to refresh data');
         } finally {
             setIsRefreshing(false);
@@ -30,13 +34,13 @@ const PaymentMethodsTab = () => {
     };
 
     const handleOpenModal = (method = null) => {
-        if (method) {
+        if (method && typeof method === 'object' && method.id && method.name && method.description && method.thresholdLimit !== undefined && method.isActive !== undefined) {
             setEditingMethod(method);
             setFormData({
-                name: method.name || '',
-                description: method.description || '',
-                thresholdLimit: (method.thresholdLimit || 0).toString(),
-                isActive: method.isActive !== undefined ? method.isActive : true
+                name: method?.name || '',
+                description: method?.description || '',
+                thresholdLimit: (method?.thresholdLimit || 0).toString(),
+                isActive: method?.isActive !== undefined ? method.isActive : true
             });
         } else {
             setEditingMethod(null);
@@ -64,6 +68,8 @@ const PaymentMethodsTab = () => {
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
+        if (!name) return;
+        
         setFormData(prev => ({
             ...prev,
             [name]: type === 'checkbox' ? checked : value
@@ -73,8 +79,14 @@ const PaymentMethodsTab = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Validate form data
+        if (!formData.name || !formData.description || !formData.thresholdLimit) {
+            toast.error('Please fill in all required fields');
+            return;
+        }
+
         try {
-            if (editingMethod) {
+            if (editingMethod && editingMethod.id) {
                 await dispatch(updatePaymentMethod({ id: editingMethod.id, data: formData })).unwrap();
                 toast.success('Payment method updated successfully');
 
@@ -89,11 +101,17 @@ const PaymentMethodsTab = () => {
             }
             handleCloseModal();
         } catch (error) {
+            console.error('Submit error:', error);
             toast.error(error || 'Failed to save payment method');
         }
     };
 
     const handleDelete = async (id) => {
+        if (!id) {
+            toast.error('Invalid payment method ID');
+            return;
+        }
+        
         try {
             await dispatch(deletePaymentMethod(id)).unwrap();
             toast.success('Payment method deleted successfully');
@@ -105,7 +123,10 @@ const PaymentMethodsTab = () => {
         }
     };
 
-    const sortedMethods = [...paymentMethods].sort((a, b) => a.name.localeCompare(b.name));
+    const sortedMethods = [...(paymentMethods || [])].sort((a, b) => {
+        if (!a?.name || !b?.name) return 0;
+        return a.name.localeCompare(b.name);
+    });
 
     return (
         <div>
@@ -118,7 +139,7 @@ const PaymentMethodsTab = () => {
                     </p>
                 </div>
                 <button
-                    onClick={() => handleOpenModal()}
+                    onClick={() => handleOpenModal(null)}
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center space-x-2"
                 >
                     <Plus size={16} />
@@ -131,19 +152,19 @@ const PaymentMethodsTab = () => {
                 <div className="flex justify-between items-center">
                     <div className="text-center">
                         <div className="text-2xl font-bold text-blue-600">
-                            {paymentMethods.length}
+                            {(paymentMethods || []).length}
                         </div>
                         <div className="text-sm text-gray-600">Total Methods</div>
                     </div>
                     <div className="text-center">
                         <div className="text-2xl font-bold text-green-600">
-                            {paymentMethods.filter(method => method.isActive).length}
+                            {(paymentMethods || []).filter(method => method?.isActive).length}
                         </div>
                         <div className="text-sm text-gray-600">Active Methods</div>
                     </div>
                     <div className="text-center">
                         <div className="text-2xl font-bold text-red-600">
-                            {paymentMethods.filter(method => !method.isActive).length}
+                            {(paymentMethods || []).filter(method => !method?.isActive).length}
                         </div>
                         <div className="text-sm text-gray-600">Banned Methods</div>
                     </div>
@@ -168,36 +189,36 @@ const PaymentMethodsTab = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {sortedMethods.map((method, index) => (
                             <div
-                                key={method.id || `method-${index}`}
-                                className={`bg-white rounded-lg border-2 p-6 transition-all duration-200 ${method.isActive
+                                key={method?.id || `method-${index}`}
+                                className={`bg-white rounded-lg border-2 p-6 transition-all duration-200 ${method?.isActive
                                     ? 'border-blue-200 hover:border-blue-300 shadow-sm'
                                     : 'border-red-200 hover:border-red-300 shadow-sm opacity-75'
                                     }`}
                             >
                                 <div className="flex justify-between items-start mb-4">
                                     <div className="flex items-center space-x-2">
-                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${method.isActive ? 'bg-blue-500' : 'bg-red-500'}`}>
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${method?.isActive ? 'bg-blue-500' : 'bg-red-500'}`}>
                                             <CreditCard size={20} />
                                         </div>
-                                        <span className={`text-sm px-2 py-1 rounded-full ${method.isActive
+                                        <span className={`text-sm px-2 py-1 rounded-full ${method?.isActive
                                             ? 'bg-blue-100 text-blue-800'
                                             : 'bg-red-100 text-red-600'
                                             }`}>
-                                            {method.isActive ? 'Active' : 'Banned'}
+                                            {method?.isActive ? 'Active' : 'Banned'}
                                         </span>
                                     </div>
                                     <div className="flex space-x-2">
                                         <button
-                                            onClick={() => handleOpenModal(method)}
-                                            className={`p-1 hover:text-blue-600 transition-colors ${method.isActive ? 'text-gray-400' : 'text-gray-300'
+                                            onClick={() => method && method.id && method.name && method.description && method.thresholdLimit !== undefined && method.isActive !== undefined && handleOpenModal(method)}
+                                            className={`p-1 hover:text-blue-600 transition-colors ${method?.isActive ? 'text-gray-400' : 'text-gray-300'
                                                 }`}
                                             title="Edit"
                                         >
                                             <Edit size={16} />
                                         </button>
                                         <button
-                                            onClick={() => handleDelete(method.id)}
-                                            className={`p-1 hover:text-red-600 transition-colors ${method.isActive ? 'text-gray-400' : 'text-gray-300'
+                                            onClick={() => method?.id && method?.name && method?.description && method?.thresholdLimit !== undefined && method?.isActive !== undefined && handleDelete(method.id)}
+                                            className={`p-1 hover:text-red-600 transition-colors ${method?.isActive ? 'text-gray-400' : 'text-gray-300'
                                                 }`}
                                             title="Delete"
                                         >
@@ -206,30 +227,30 @@ const PaymentMethodsTab = () => {
                                     </div>
                                 </div>
 
-                                <h3 className={`font-semibold mb-2 ${method.isActive ? 'text-gray-900' : 'text-gray-600'
+                                <h3 className={`font-semibold mb-2 ${method?.isActive ? 'text-gray-900' : 'text-gray-600'
                                     }`}>
-                                    {method.name}
+                                    {method?.name || 'Unnamed Method'}
                                 </h3>
-                                <p className={`text-sm mb-4 line-clamp-2 ${method.isActive ? 'text-gray-600' : 'text-gray-500'
+                                <p className={`text-sm mb-4 line-clamp-2 ${method?.isActive ? 'text-gray-600' : 'text-gray-500'
                                     }`}>
-                                    {method.description}
+                                    {method?.description || 'No description available'}
                                 </p>
 
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center space-x-2">
                                         <DollarSign size={16} className="text-green-500" />
-                                        <span className={`text-sm ${method.isActive ? 'text-gray-600' : 'text-gray-500'}`}>
+                                        <span className={`text-sm ${method?.isActive ? 'text-gray-600' : 'text-gray-500'}`}>
                                             Threshold Limit:
                                         </span>
                                     </div>
-                                    <div className={`text-lg font-bold ${method.isActive ? 'text-green-600' : 'text-green-400'
+                                    <div className={`text-lg font-bold ${method?.isActive ? 'text-green-600' : 'text-green-400'
                                         }`}>
-                                        ${method.thresholdLimit}
+                                        ${method?.thresholdLimit || '0.00'}
                                     </div>
                                 </div>
 
                                 {/* Banned Notice */}
-                                {!method.isActive && (
+                                {!method?.isActive && (
                                     <div className="mt-4 p-2 bg-red-50 border border-red-200 rounded-md">
                                         <p className="text-xs text-red-600 text-center">
                                             This payment method is currently banned and unavailable for use
@@ -248,7 +269,7 @@ const PaymentMethodsTab = () => {
                             <h3 className="text-lg font-medium text-gray-900 mb-2">No payment methods yet</h3>
                             <p className="text-gray-600 mb-4">Create your first payment method to get started</p>
                             <button
-                                onClick={() => handleOpenModal()}
+                                onClick={() => handleOpenModal(null)}
                                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
                             >
                                 Add First Payment Method
