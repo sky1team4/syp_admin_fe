@@ -30,10 +30,10 @@ function Content() {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
+        <div className="min-h-screen bg-gray-50 p-2">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
-                <div className="mb-8">
+                <div className="mb-4">
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">Reward System</h1>
                     <p className="text-gray-600">Manage reward steps and coin-to-dollar conversion rates</p>
                 </div>

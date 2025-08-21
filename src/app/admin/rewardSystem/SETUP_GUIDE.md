@@ -81,7 +81,7 @@ yarn dev
 
 #### 1. CORS Error
 ```
-Access to fetch at 'http://localhost:3001/api/reward-system/steps' from origin 'http://localhost:3000' has been blocked by CORS policy
+Access to fetch at 'http://localhost:8080/api/reward-system/steps' from origin 'http://localhost:3000' has been blocked by CORS policy
 ```
 **Solution:** Configure CORS on your backend to allow your frontend domain.
 

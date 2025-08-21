@@ -129,7 +129,7 @@ Your backend returns a different format - we need to adjust the frontend.
 Try this in your browser console to test your API directly:
 
 ```javascript
-fetch('http://localhost:3001/api/reward-system/steps/1', {
+fetch('http://localhost:8080/api/reward-system/steps/1', {
   method: 'PUT',
   headers: {
     'Content-Type': 'application/json',

@@ -18,6 +18,7 @@ Content-Type: application/json
 
 ### 1.1 Get All Reward Steps
 **GET** `/api/reward-system/steps`
+<!-- **GET** `/api/reward-system/steps` -->
 
 **Response:**
 ```json

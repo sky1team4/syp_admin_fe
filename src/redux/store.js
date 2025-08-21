@@ -22,8 +22,9 @@ import userReducer from './features/userSlice';
 import faqQaReducer from './features/faqQaSlice';
 import subscribedUserReducer from './features/subscribedUserSlice';
 import rewardSystemReducer from './features/rewardSystemSlice';
-
+// nothing to commit
 export const store = configureStore({
+
   reducer: {
     auth: authReducer,
     stripe: stripeReducer,
