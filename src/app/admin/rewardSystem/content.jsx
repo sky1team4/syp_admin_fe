@@ -30,7 +30,7 @@ function Content() {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50 p-2">
+        <div className="min-h-screen bg-gray-50 p-2 rounded-xl">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-4">

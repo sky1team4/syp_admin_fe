@@ -140,18 +140,18 @@ const PaymentMethodsTab = () => {
                 </div>
                 <button
                     onClick={() => handleOpenModal(null)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+                    className="bg-purple-600 text-white px-2 py-2 rounded-lg hover:bg-purple-700 flex items-center space-x-2"
                 >
-                    <Plus size={16} />
-                    <span>Add Payment Method</span>
+                    <Plus size={12} />
+                    <span>Add</span>
                 </button>
             </div>
 
             {/* Summary Stats */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-lg p-4 mb-6">
                 <div className="flex justify-between items-center">
                     <div className="text-center">
-                        <div className="text-2xl font-bold text-blue-600">
+                        <div className="text-2xl font-bold text-purple-600">
                             {(paymentMethods || []).length}
                         </div>
                         <div className="text-sm text-gray-600">Total Methods</div>
@@ -191,7 +191,7 @@ const PaymentMethodsTab = () => {
                             <div
                                 key={method?.id || `method-${index}`}
                                 className={`bg-white rounded-lg border-2 p-6 transition-all duration-200 ${method?.isActive
-                                    ? 'border-blue-200 hover:border-blue-300 shadow-sm'
+                                    ? 'border-purple-200 hover:border-purple-300 shadow-sm'
                                     : 'border-red-200 hover:border-red-300 shadow-sm opacity-75'
                                     }`}
                             >
@@ -201,7 +201,7 @@ const PaymentMethodsTab = () => {
                                             <CreditCard size={20} />
                                         </div>
                                         <span className={`text-sm px-2 py-1 rounded-full ${method?.isActive
-                                            ? 'bg-blue-100 text-blue-800'
+                                            ? 'bg-purple-100 text-purple-800'
                                             : 'bg-red-100 text-red-600'
                                             }`}>
                                             {method?.isActive ? 'Active' : 'Banned'}
@@ -210,7 +210,7 @@ const PaymentMethodsTab = () => {
                                     <div className="flex space-x-2">
                                         <button
                                             onClick={() => method && method.id && method.name && method.description && method.thresholdLimit !== undefined && method.isActive !== undefined && handleOpenModal(method)}
-                                            className={`p-1 hover:text-blue-600 transition-colors ${method?.isActive ? 'text-gray-400' : 'text-gray-300'
+                                            className={`p-1 hover:text-purple-600 transition-colors ${method?.isActive ? 'text-gray-400' : 'text-gray-300'
                                                 }`}
                                             title="Edit"
                                         >
@@ -270,7 +270,7 @@ const PaymentMethodsTab = () => {
                             <p className="text-gray-600 mb-4">Create your first payment method to get started</p>
                             <button
                                 onClick={() => handleOpenModal(null)}
-                                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                                className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
                             >
                                 Add First Payment Method
                             </button>
@@ -330,7 +330,7 @@ const PaymentMethodsTab = () => {
                                     required
                                     min="0.01"
                                     step="0.01"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                                     placeholder="25.00"
                                 />
                                 <p className="text-xs text-gray-500 mt-1">Minimum amount required to checkout</p>
@@ -342,7 +342,7 @@ const PaymentMethodsTab = () => {
                                     name="isActive"
                                     checked={formData.isActive}
                                     onChange={handleInputChange}
-                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                    className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
                                 />
                                 <label className="ml-2 block text-sm text-gray-900">
                                     Active
@@ -369,7 +369,7 @@ const PaymentMethodsTab = () => {
                                 <button
                                     type="submit"
                                     disabled={isLoading}
-                                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                                    className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:opacity-50"
                                 >
                                     {isLoading ? 'Saving...' : (editingMethod ? 'Update' : 'Create')}
                                 </button>
