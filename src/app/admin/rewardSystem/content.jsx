@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchRewardSteps, fetchCoinConversionRate, fetchPaymentMethods } from '../../../redux/features/rewardSystemSlice'
+import { fetchRewardSteps, fetchCoinConversionRate, fetchPaymentMethods, fetchAllCashFlows, fetchCashFlowStats } from '../../../redux/features/rewardSystemSlice'
 import { toast } from 'react-hot-toast'
 import PaymentMethodsTab from './PaymentMethodsTab'
 import RewardStepsTab from './RewardStepsTab'
 import CoinConversionTab from './CoinConversionTab'
+import CashFlowTab from './CashFlowTab'
 
 function Content() {
     const dispatch = useDispatch();
-    const { error, isLoading, rewardSteps, paymentMethods, conversionRate } = useSelector((state) => state.rewardSystem);
+    const { error, loading, rewardSteps, paymentMethods, conversionRate } = useSelector((state) => state.rewardSystem);
     const [activeTab, setActiveTab] = useState('payment');
 
     useEffect(() => {
         dispatch(fetchRewardSteps());
         dispatch(fetchCoinConversionRate());
         dispatch(fetchPaymentMethods());
+        dispatch(fetchAllCashFlows());
+        dispatch(fetchCashFlowStats());
     }, [dispatch]);
 
     useEffect(() => {
@@ -26,7 +29,8 @@ function Content() {
     const tabs = [
         { id: 'payment', label: 'Payment Methods', icon: '💳' },
         { id: 'steps', label: 'Reward Steps', icon: '🎯' },
-        { id: 'conversion', label: 'Coin Conversion', icon: '💰' }
+        { id: 'conversion', label: 'Coin Conversion', icon: '💰' },
+        { id: 'cashflow', label: 'Cash Flow', icon: '📊' }
     ];
 
     return (
@@ -63,11 +67,12 @@ function Content() {
                         {activeTab === 'payment' && <PaymentMethodsTab />}
                         {activeTab === 'steps' && <RewardStepsTab />}
                         {activeTab === 'conversion' && <CoinConversionTab />}
+                        {activeTab === 'cashflow' && <CashFlowTab />}
                     </div>
                 </div>
 
                 {/* Loading State */}
-                {isLoading && (
+                {loading && (
                     <div className="flex justify-center items-center py-8">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
                     </div>

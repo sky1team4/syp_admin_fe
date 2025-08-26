@@ -11,6 +11,14 @@ export const API_CONFIG = {
         PAYMENT_METHODS: '/reward-system/payment-methods',
         PAYMENT_METHOD_BY_ID: (id) => `/reward-system/payment-methods/${id}`,
         CONVERSION_RATE: '/api/reward-system/conversion-rate',
+        
+        // Cash Flow - Payment Requests
+        CASH_FLOW: '/cash-flow',
+        CASH_FLOW_BY_ID: (id) => `/cash-flow/${id}`,
+        CASH_FLOW_STATS: '/cash-flow/stats',
+        UPDATE_CASH_FLOW_STATUS: (id) => `/cash-flow/${id}/status`,
+        ACCEPT_CASH_FLOW: (id) => `/cash-flow/${id}/accept`,
+        REJECT_CASH_FLOW: (id) => `/cash-flow/${id}/reject`,
 
         // Add other endpoints here as needed
     },
