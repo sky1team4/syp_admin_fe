@@ -20,11 +20,11 @@ function Content() {
         dispatch(fetchCashFlowStats());
     }, [dispatch]);
 
-    useEffect(() => {
-        if (error) {
-            toast.error(error);
-        }
-    }, [error]);
+    // useEffect(() => {
+    //     if (error) {
+    //         toast.error(error);
+    //     }
+    // }, [error]);
 
     const tabs = [
         { id: 'payment', label: 'Payment Methods', icon: '💳' },

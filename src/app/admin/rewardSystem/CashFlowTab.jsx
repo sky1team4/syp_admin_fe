@@ -25,11 +25,11 @@ const CashFlowTab = () => {
         dispatch(fetchCashFlowStats());
     }, [dispatch]);
 
-    useEffect(() => {
-        if (error) {
-            toast.error(error);
-        }
-    }, [error]);
+    // useEffect(() => {
+    //     if (error) {
+    //         toast.error(error);
+    //     }
+    // }, [error]);
 
     // Debug: Log current statistics
     useEffect(() => {
