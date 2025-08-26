@@ -147,6 +147,7 @@ const PaymentMethodsTab = () => {
                 </button>
             </div>
 
+
             {/* Summary Stats */}
             <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-lg p-4 mb-6">
                 <div className="flex justify-between items-center">

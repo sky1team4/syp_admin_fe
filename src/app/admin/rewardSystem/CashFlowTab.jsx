@@ -173,6 +173,7 @@ const CashFlowTab = () => {
                 : 'text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100'
         }));
     };
+    
 
     return (
         <div className="space-y-6">
