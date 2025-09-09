@@ -4,11 +4,7 @@ import { ArrowDown, ArrowUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useState } from "react"
-// import SubscriptionSideBar from "@/components/SubscriptionSideBar"
 import ConfirmationDialog from "@/components/ConfirmationDialog"
-// import { toast } from 'react-toastify'
-// import { useDispatch } from 'react-redux'
-// import { deleteSubscription } from '@/redux/features/subscriptionSlice'
 
 // Create a proper React component for the actions cell
 function ActionsCell({ row, handleEdit, handleDelete }) {
@@ -55,14 +51,14 @@ function ActionsCell({ row, handleEdit, handleDelete }) {
                 isOpen={isConfirmOpen}
                 onClose={() => setIsConfirmOpen(false)}
                 onConfirm={onConfirmDelete}
-                title="Delete Item"
-                message="Are you sure you want to delete this item? This action cannot be undone."
+                title="Delete Subscription Type"
+                message="Are you sure you want to delete this subscription type? This action cannot be undone."
             />
         </>
     )
 }
 
-export const createColumns = ({ handleEdit, handleDelete }) => [
+export const createSubscriptionTypeColumns = ({ handleEdit, handleDelete }) => [
     {
         accessorKey: "name",
         header: ({ column }) => {
@@ -88,7 +84,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
         ),
     },
     {
-        accessorKey: "price",
+        accessorKey: "modules",
         header: ({ column }) => {
             return (
                 <Button
@@ -96,7 +92,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
-                    Price
+                    Modules
                     {column.getIsSorted() === "asc" ? (
                         <ArrowUp className="ml-2 h-4 w-4" />
                     ) : (
@@ -106,57 +102,18 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
             )
         },
         cell: ({ row }) => (
-            <div>
-                ${parseFloat(row.original.price).toFixed(2)}
-            </div>
-        ),
-    },
-    {
-        accessorKey: "billingPeriod",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
-                >
-                    Billing Period
-                    {column.getIsSorted() === "asc" ? (
-                        <ArrowUp className="ml-2 h-4 w-4" />
-                    ) : (
-                        <ArrowDown className="ml-2 h-4 w-4" />
-                    )}
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="capitalize">
-                {row.original.billingPeriod?.toLowerCase()}
-            </div>
-        ),
-    },
-    {
-        accessorKey: "subscriptionType",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
-                >
-                    Subscription Type
-                    {column.getIsSorted() === "asc" ? (
-                        <ArrowUp className="ml-2 h-4 w-4" />
-                    ) : (
-                        <ArrowDown className="ml-2 h-4 w-4" />
-                    )}
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="text-center">
-                {row.original.subscriptionType || (
-                    <span className="text-gray-500 text-sm">No type</span>
+            <div className="flex flex-wrap gap-1">
+                {row.original.modules && row.original.modules.length > 0 ? (
+                    row.original.modules.map((module, index) => (
+                        <span
+                            key={index}
+                            className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
+                        >
+                            {module.replace('-', ' ')}
+                        </span>
+                    ))
+                ) : (
+                    <span className="text-gray-500 text-sm">No modules</span>
                 )}
             </div>
         ),

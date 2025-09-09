@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 // import { Toaster } from 'react-hot-toast';
 import { saveSubscription, fetchSubscriptions, updateSubscription } from '../redux/features/subscriptionSlice';
+import { fetchActiveSubscriptionTypes, fetchSubscriptionTypes } from '../redux/features/subscriptionTypesSlice';
 import Input from './cui/input';
 import Image from 'next/image';
 
@@ -19,6 +20,9 @@ const FORM_VALIDATION = {
     min: {
       message: 'Price must be greater than 0'
     }
+  },
+  typeId: {
+    required: 'Subscription type is required'
   }
 };
 
@@ -27,12 +31,19 @@ const INITIAL_FORM_STATE = {
     name: '',
     price: '',
     status: 'ACTIVE',
-    billingPeriod: ''
+    billingPeriod: '',
+    typeId: ''
 };
 
 function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSubmit }) {
     const dispatch = useDispatch();
     const { isLoading } = useSelector((state) => state.subscription);
+    const { activeSubscriptionTypes, subscriptionTypes } = useSelector((state) => state.subscriptionTypes);
+    
+    // Filter subscription types for active ones
+    const availableTypes = subscriptionTypes.filter(type => 
+        type.status === 'ACTIVE' && type.deleteDate === null
+    );
     
     const [formData, setFormData] = useState(INITIAL_FORM_STATE);
     const [errors, setErrors] = useState({});
@@ -43,12 +54,29 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
                 name: data.name || '',
                 price: data.price || '',
                 status: data.status || 'ACTIVE',
-                billingPeriod: data.billingPeriod
+                billingPeriod: data.billingPeriod,
+                typeId: data.typeId || ''
             });
         } else {
             setFormData(INITIAL_FORM_STATE);
         }
     }, [data, isOpen]);
+
+    // Fetch subscription types when sidebar opens
+    useEffect(() => {
+        if (isOpen) {
+            // Always fetch subscription types to ensure we have the latest data
+            dispatch(fetchSubscriptionTypes());
+        }
+    }, [isOpen, dispatch]);
+
+    // Debug subscription types (can be removed in production)
+    useEffect(() => {
+        if (process.env.NODE_ENV === 'development') {
+            console.log('Subscription types loaded:', subscriptionTypes.length);
+            console.log('Available types:', availableTypes.length);
+        }
+    }, [subscriptionTypes, availableTypes]);
 
     const validateForm = () => {
         const newErrors = {};
@@ -63,6 +91,10 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
             newErrors.price = FORM_VALIDATION.price.pattern.message;
         } else if (parseFloat(formData.price) <= 0) {
             newErrors.price = FORM_VALIDATION.price.min.message;
+        }
+
+        if (!formData.typeId) {
+            newErrors.typeId = FORM_VALIDATION.typeId.required;
         }
 
         setErrors(newErrors);
@@ -148,6 +180,56 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
                             required
                         />
 
+                        {/* Subscription Type Selection */}
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700">Subscription Type *</label>
+                            <select
+                                value={formData.typeId}
+                                onChange={(e) => setFormData({...formData, typeId: e.target.value})}
+                                className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-purple-500 focus:outline-none focus:ring-purple-500 sm:text-sm"
+                            >
+                                <option value="">Select Subscription Type</option>
+                                {availableTypes && availableTypes.length > 0 ? (
+                                    availableTypes.map(type => (
+                                        <option key={type.id} value={type.id}>
+                                            {type.name} - {type.modules?.join(', ') || 'No modules'}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option value="" disabled>No subscription types available</option>
+                                )}
+                            </select>
+                            {errors.typeId && (
+                                <p className="mt-1 text-sm text-red-600">{errors.typeId}</p>
+                            )}
+                            {/* Debug info - remove in production */}
+                            {process.env.NODE_ENV === 'development' && (
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Available types: {availableTypes?.length || 0}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Display selected subscription type modules */}
+                        {formData.typeId && (
+                            <div className="mb-4 p-3 bg-gray-50 rounded-md">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Included Modules:
+                                </label>
+                                <div className="flex flex-wrap gap-2">
+                                    {availableTypes
+                                        .find(type => type.id === parseInt(formData.typeId))
+                                        ?.modules?.map((module, index) => (
+                                            <span
+                                                key={index}
+                                                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
+                                            >
+                                                {module.replace('-', ' ')}
+                                            </span>
+                                        )) || <span className="text-gray-500 text-sm">No modules selected</span>}
+                                </div>
+                            </div>
+                        )}
                         
                         <Input
                             id="price"

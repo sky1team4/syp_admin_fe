@@ -25,10 +25,14 @@ export const fetchSubscriptions = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.map(subscription => ({
-        ...subscription,
-        billingPeriod: subscription.billingPeriod === 'YEARLY' ? 'ANNUAL' : subscription.billingPeriod
-      }));
+      console.log('Raw API response for subscriptions:', data);
+      return data.map(subscription => {
+        console.log('Processing subscription in Redux:', subscription);
+        return {
+          ...subscription,
+          billingPeriod: subscription.billingPeriod === 'YEARLY' ? 'ANNUAL' : subscription.billingPeriod
+        };
+      });
     } catch (error) {
       return rejectWithValue(error.message || 'Network error occurred');
     }
@@ -54,7 +58,8 @@ export const saveSubscription = createAsyncThunk(
         name: data.name,
         price: parseFloat(data.price),
         status: data.status.toUpperCase(),
-        billingPeriod: convertBillingPeriod(data.billingPeriod)
+        billingPeriod: convertBillingPeriod(data.billingPeriod),
+        typeId: parseInt(data.typeId) // NEW: Required field for API
       };
 
       console.log('Sending subscription data:', subscriptionData);
@@ -62,7 +67,6 @@ export const saveSubscription = createAsyncThunk(
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions`, {
         method: 'POST',
         headers: {
-
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
@@ -99,7 +103,8 @@ export const updateSubscription = createAsyncThunk(
         name: data.name,
         price: parseFloat(data.price),
         status: data.status.toUpperCase(),
-        billingPeriod: convertBillingPeriod(data.billingPeriod)
+        billingPeriod: convertBillingPeriod(data.billingPeriod),
+        typeId: parseInt(data.typeId) // NEW: Required field for API
       };
 
       console.log('Updating subscription data:', subscriptionData);

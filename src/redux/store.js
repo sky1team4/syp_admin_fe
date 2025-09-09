@@ -4,6 +4,7 @@ import stripeReducer from './features/stripeSlice';
 import paypalReducer from './features/paypalSlice';
 import bankReducer from './features/bankSlice';
 import subscriptionReducer from './features/subscriptionSlice';
+import subscriptionTypesReducer from './features/subscriptionTypesSlice';
 import verificationReducer from './features/verificationSlice';
 import relationshipReducer from './features/relationshipSlice';
 import fieldofstudyReducer from './features/fieldofstudySlice';
@@ -29,6 +30,7 @@ export const store = configureStore({
     paypal: paypalReducer,
     bank: bankReducer,
     subscription: subscriptionReducer,
+    subscriptionTypes: subscriptionTypesReducer,
     verification: verificationReducer,
     relationship: relationshipReducer,
     fieldofstudy: fieldofstudyReducer,
