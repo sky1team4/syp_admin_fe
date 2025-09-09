@@ -11,6 +11,12 @@ export function middleware(req) {
         timestamp: new Date().toISOString()
     });
 
+    // Redirect root path to admin login
+    if (pathname === "/") {
+        console.log("🔄 Root path, redirecting to /admin-Login");
+        return NextResponse.redirect(new URL("/admin-Login", req.url));
+    }
+
     // Allow public routes without token check
     const publicRoutes = ['/admin-Login', '/forget-password', '/reset-password'];
     if (publicRoutes.includes(pathname)) {
@@ -79,6 +85,7 @@ export function middleware(req) {
 export const config = {
     // Only run middleware on specific routes to reduce interference
     matcher: [
+        "/",  // Add root path
         "/admin/:path*", 
         "/admin-Login", 
         "/forget-password",

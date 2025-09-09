@@ -31,10 +31,13 @@ export const register = createAsyncThunk('users/register',
 );
 
 export const loginUser = createAsyncThunk(
+  
   'auth/login',
   async (credentials) => {
     try {
-      console.log("credentials", process.env.NEXT_PUBLIC_API_URL);
+      // console.log("credentials", process.env.NEXT_PUBLIC_API_URL);
+     console.log(" looking for env");
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
         // const response = await fetch(${API_URL}/users/login, {
         method: 'POST',

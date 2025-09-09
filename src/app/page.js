@@ -1,13 +1,21 @@
-import Image from "next/image";
-import Login from './admin-Login/page'
-import Router from "./routes/test";
-import DataTable from '@/components/data-table/data-table'
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to admin login page by default
+    router.push('/admin-Login');
+  }, [router]);
+
   return (
-    <div className="w-screen h-screen bg-gray-50">
-      {/* <Router /> */}
-      {/* <DataTable/> */}
+    <div className="w-screen h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Redirecting to admin login...</p>
+      </div>
     </div>
   );
 }
