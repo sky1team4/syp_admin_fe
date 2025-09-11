@@ -88,7 +88,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
         ),
     },
     {
-        accessorKey: "price",
+        accessorKey: "monthlyPrice",
         header: ({ column }) => {
             return (
                 <Button
@@ -96,7 +96,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
-                    Price
+                    Monthly Price
                     {column.getIsSorted() === "asc" ? (
                         <ArrowUp className="ml-2 h-4 w-4" />
                     ) : (
@@ -106,13 +106,18 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
             )
         },
         cell: ({ row }) => (
-            <div>
-                ${parseFloat(row.original.price).toFixed(2)}
+            <div className="text-center">
+                <div className="font-medium">${parseFloat(row.original.monthlyPrice).toFixed(2)}</div>
+                {row.original.monthlyDiscount > 0 && (
+                    <div className="text-xs text-green-600">
+                        -{row.original.monthlyDiscount}% = ${parseFloat(row.original.monthlyPriceWithDiscount).toFixed(2)}
+                    </div>
+                )}
             </div>
         ),
     },
     {
-        accessorKey: "billingPeriod",
+        accessorKey: "yearlyPrice",
         header: ({ column }) => {
             return (
                 <Button
@@ -120,7 +125,7 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     className="p-0 hover:bg-transparent justify-start font-medium w-full text-left"
                 >
-                    Billing Period
+                    Yearly Price
                     {column.getIsSorted() === "asc" ? (
                         <ArrowUp className="ml-2 h-4 w-4" />
                     ) : (
@@ -130,8 +135,13 @@ export const createColumns = ({ handleEdit, handleDelete }) => [
             )
         },
         cell: ({ row }) => (
-            <div className="capitalize">
-                {row.original.billingPeriod?.toLowerCase()}
+            <div className="text-center">
+                <div className="font-medium">${parseFloat(row.original.yearlyPrice).toFixed(2)}</div>
+                {row.original.yearlyDiscount > 0 && (
+                    <div className="text-xs text-green-600">
+                        -{row.original.yearlyDiscount}% off
+                    </div>
+                )}
             </div>
         ),
     },

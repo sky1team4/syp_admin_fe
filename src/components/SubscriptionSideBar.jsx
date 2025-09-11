@@ -11,14 +11,42 @@ const FORM_VALIDATION = {
   name: {
     required: 'Subscription name is required'
   },
-  price: {
-    required: 'Price is required',
+  monthlyPrice: {
+    required: 'Monthly price is required',
     pattern: {
       value: /^\d+(\.\d{1,2})?$/,
-      message: 'Please enter a valid price'
+      message: 'Please enter a valid monthly price'
     },
     min: {
-      message: 'Price must be greater than 0'
+      message: 'Monthly price must be greater than 0'
+    }
+  },
+  monthlyDiscount: {
+    pattern: {
+      value: /^\d+(\.\d{1,2})?$/,
+      message: 'Please enter a valid discount percentage'
+    },
+    min: {
+      value: 0,
+      message: 'Discount cannot be negative'
+    },
+    max: {
+      value: 100,
+      message: 'Discount cannot exceed 100%'
+    }
+  },
+  yearlyDiscount: {
+    pattern: {
+      value: /^\d+(\.\d{1,2})?$/,
+      message: 'Please enter a valid discount percentage'
+    },
+    min: {
+      value: 0,
+      message: 'Discount cannot be negative'
+    },
+    max: {
+      value: 100,
+      message: 'Discount cannot exceed 100%'
     }
   },
   typeId: {
@@ -29,9 +57,10 @@ const FORM_VALIDATION = {
 // Option 1: Move outside the component
 const INITIAL_FORM_STATE = {
     name: '',
-    price: '',
+    monthlyPrice: '',
+    monthlyDiscount: '0',
+    yearlyDiscount: '0',
     status: 'ACTIVE',
-    billingPeriod: '',
     typeId: ''
 };
 
@@ -52,9 +81,10 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
         if (data) {
             setFormData({
                 name: data.name || '',
-                price: data.price || '',
+                monthlyPrice: data.monthlyPrice || '',
+                monthlyDiscount: data.monthlyDiscount || '0',
+                yearlyDiscount: data.yearlyDiscount || '0',
                 status: data.status || 'ACTIVE',
-                billingPeriod: data.billingPeriod,
                 typeId: data.typeId || ''
             });
         } else {
@@ -70,13 +100,6 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
         }
     }, [isOpen, dispatch]);
 
-    // Debug subscription types (can be removed in production)
-    useEffect(() => {
-        if (process.env.NODE_ENV === 'development') {
-            console.log('Subscription types loaded:', subscriptionTypes.length);
-            console.log('Available types:', availableTypes.length);
-        }
-    }, [subscriptionTypes, availableTypes]);
 
     const validateForm = () => {
         const newErrors = {};
@@ -85,12 +108,28 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
             newErrors.name = FORM_VALIDATION.name.required;
         }
         
-        if (!formData.price) {
-            newErrors.price = FORM_VALIDATION.price.required;
-        } else if (!FORM_VALIDATION.price.pattern.value.test(formData.price)) {
-            newErrors.price = FORM_VALIDATION.price.pattern.message;
-        } else if (parseFloat(formData.price) <= 0) {
-            newErrors.price = FORM_VALIDATION.price.min.message;
+        if (!formData.monthlyPrice) {
+            newErrors.monthlyPrice = FORM_VALIDATION.monthlyPrice.required;
+        } else if (!FORM_VALIDATION.monthlyPrice.pattern.value.test(formData.monthlyPrice)) {
+            newErrors.monthlyPrice = FORM_VALIDATION.monthlyPrice.pattern.message;
+        } else if (parseFloat(formData.monthlyPrice) <= 0) {
+            newErrors.monthlyPrice = FORM_VALIDATION.monthlyPrice.min.message;
+        }
+
+        if (formData.monthlyDiscount && !FORM_VALIDATION.monthlyDiscount.pattern.value.test(formData.monthlyDiscount)) {
+            newErrors.monthlyDiscount = FORM_VALIDATION.monthlyDiscount.pattern.message;
+        } else if (formData.monthlyDiscount && (parseFloat(formData.monthlyDiscount) < 0 || parseFloat(formData.monthlyDiscount) > 100)) {
+            newErrors.monthlyDiscount = parseFloat(formData.monthlyDiscount) < 0 
+                ? FORM_VALIDATION.monthlyDiscount.min.message 
+                : FORM_VALIDATION.monthlyDiscount.max.message;
+        }
+
+        if (formData.yearlyDiscount && !FORM_VALIDATION.yearlyDiscount.pattern.value.test(formData.yearlyDiscount)) {
+            newErrors.yearlyDiscount = FORM_VALIDATION.yearlyDiscount.pattern.message;
+        } else if (formData.yearlyDiscount && (parseFloat(formData.yearlyDiscount) < 0 || parseFloat(formData.yearlyDiscount) > 100)) {
+            newErrors.yearlyDiscount = parseFloat(formData.yearlyDiscount) < 0 
+                ? FORM_VALIDATION.yearlyDiscount.min.message 
+                : FORM_VALIDATION.yearlyDiscount.max.message;
         }
 
         if (!formData.typeId) {
@@ -109,14 +148,14 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
             return;
         }
 
-        // Log form data for debugging
-        console.log('Form Data:', formData);
 
         try {
             await onSubmit({
                 ...formData,
                 name: formData.name?.trim(),
-                price: parseFloat(formData.price)
+                monthlyPrice: parseFloat(formData.monthlyPrice),
+                monthlyDiscount: parseFloat(formData.monthlyDiscount) || 0,
+                yearlyDiscount: parseFloat(formData.yearlyDiscount) || 0
             });
             
             // Reset form after successful submission
@@ -202,12 +241,6 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
                             {errors.typeId && (
                                 <p className="mt-1 text-sm text-red-600">{errors.typeId}</p>
                             )}
-                            {/* Debug info - remove in production */}
-                            {process.env.NODE_ENV === 'development' && (
-                                <p className="text-xs text-gray-500 mt-1">
-                                    Available types: {availableTypes?.length || 0}
-                                </p>
-                            )}
                         </div>
 
                         {/* Display selected subscription type modules */}
@@ -232,36 +265,64 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
                         )}
                         
                         <Input
-                            id="price"
-                            value={formData.price}
+                            id="monthlyPrice"
+                            value={formData.monthlyPrice}
                             onChange={(e) => {
                                 const value = e.target.value;
                                 if (value === '' || parseFloat(value) > 0) {
-                                    setFormData({...formData, price: value});
+                                    setFormData({...formData, monthlyPrice: value});
                                 }
                             }}
                             w="full"
                             mdw="full"
-                            label="Price *"
-                            placeholder="Enter price"
+                            label="Monthly Price *"
+                            placeholder="Enter monthly price"
                             type="number"
                             step="0.01"
                             min="0.01"
-                            error={errors.price}
+                            error={errors.monthlyPrice}
                             required
                         />
 
-                        <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700">Billing Period</label>
-                            <select
-                                value={formData.billingPeriod}
-                                onChange={(e) => setFormData({...formData, billingPeriod: e.target.value})}
-                                className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-purple-500 focus:outline-none focus:ring-purple-500 sm:text-sm"
-                            >
-                                <option value="MONTHLY">Monthly</option>
-                                <option value="ANNUAL">Annual</option>
-                            </select>
-                        </div>
+                        <Input
+                            id="monthlyDiscount"
+                            value={formData.monthlyDiscount}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '' || (parseFloat(value) >= 0 && parseFloat(value) <= 100)) {
+                                    setFormData({...formData, monthlyDiscount: value});
+                                }
+                            }}
+                            w="full"
+                            mdw="full"
+                            label="Monthly Discount (%)"
+                            placeholder="Enter monthly discount percentage"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            max="100"
+                            error={errors.monthlyDiscount}
+                        />
+
+                        <Input
+                            id="yearlyDiscount"
+                            value={formData.yearlyDiscount}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '' || (parseFloat(value) >= 0 && parseFloat(value) <= 100)) {
+                                    setFormData({...formData, yearlyDiscount: value});
+                                }
+                            }}
+                            w="full"
+                            mdw="full"
+                            label="Yearly Discount (%)"
+                            placeholder="Enter yearly discount percentage"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            max="100"
+                            error={errors.yearlyDiscount}
+                        />
 
                         <div className="flex items-center gap-2">
                             <label className="text-sm font-medium text-gray-700">

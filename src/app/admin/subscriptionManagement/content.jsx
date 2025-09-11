@@ -51,19 +51,16 @@ function Content() {
   const subscriptionsTableData = subscriptions
     .filter(subscription => !subscription.deletedAt) // Filter out deleted items
     .map(subscription => {
-      // Debug log to see the actual subscription data
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Processing subscription:', subscription);
-        console.log('Subscription type object:', subscription.subscriptionType);
-      }
-      
       return {
         id: subscription.id,
         title: subscription.name,
         name: subscription.name,
-        price: subscription.price,
+        monthlyPrice: subscription.monthlyPrice,
+        monthlyDiscount: subscription.monthlyDiscount || 0,
+        yearlyDiscount: subscription.yearlyDiscount || 0,
+        yearlyPrice: subscription.yearlyPrice,
+        monthlyPriceWithDiscount: subscription.monthlyPriceWithDiscount,
         status: subscription.status,
-        billingPeriod: subscription.billingPeriod || 'MONTHLY',
         typeId: subscription.typeId || subscription.subscriptionType?.id,
         subscriptionType: subscription.subscriptionType?.name || 'No Type',
         createdDate: new Date(subscription.createdAt).toLocaleDateString(),
@@ -97,9 +94,10 @@ function Content() {
     setSelectedSubscription({
       id: subscription.id,
       name: subscription.name,
-      price: subscription.price,
+      monthlyPrice: subscription.monthlyPrice,
+      monthlyDiscount: subscription.monthlyDiscount || 0,
+      yearlyDiscount: subscription.yearlyDiscount || 0,
       status: subscription.status,
-      billingPeriod: subscription.billingPeriod === 'YEARLY' ? 'ANNUAL' : subscription.billingPeriod,
       typeId: subscription.typeId || subscription.subscriptionType?.id || ''
     });
     setMode('edit');
@@ -108,7 +106,6 @@ function Content() {
 
   const handleDelete = async (id) => {
     try {
-      console.log('Attempting to delete subscription:', id); // Add debug log
       
       const result = await dispatch(deleteSubscription(id)).unwrap();
       
@@ -138,7 +135,6 @@ function Content() {
 
   const handleDeleteSubscriptionType = async (id) => {
     try {
-      console.log('Attempting to delete subscription type:', id);
       
       const result = await dispatch(deleteSubscriptionType(id)).unwrap();
       
@@ -147,8 +143,6 @@ function Content() {
         dispatch(fetchSubscriptionTypes());
       }
     } catch (err) {
-      console.error('Delete handler error:', err);
-      console.error('Error details:', err?.response?.data || err);
       toast.error(err?.message || 'Failed to delete subscription type');
     }
   };
@@ -156,15 +150,15 @@ function Content() {
   const handleSubmitSubscription = async (formData) => {
     try {
       if (mode === 'edit' && selectedSubscription?.id) {
-        console.log('Updating subscription with data:', formData); // Debug log
         
         await dispatch(updateSubscription({
           id: selectedSubscription.id,
           data: {
             name: formData.name?.trim(),
-            price: parseFloat(formData.price),
+            monthlyPrice: parseFloat(formData.monthlyPrice),
+            monthlyDiscount: parseFloat(formData.monthlyDiscount) || 0,
+            yearlyDiscount: parseFloat(formData.yearlyDiscount) || 0,
             status: formData.status,
-            billingPeriod: formData.billingPeriod, // This should be 'ANNUAL' or 'MONTHLY'
             typeId: formData.typeId
           }
         })).unwrap();
@@ -173,13 +167,13 @@ function Content() {
       } else {
         const subscriptionData = {
           name: formData.name?.trim(),
-          price: parseFloat(formData.price),
+          monthlyPrice: parseFloat(formData.monthlyPrice),
+          monthlyDiscount: parseFloat(formData.monthlyDiscount) || 0,
+          yearlyDiscount: parseFloat(formData.yearlyDiscount) || 0,
           status: formData.status,
-          billingPeriod: formData.billingPeriod,
           typeId: formData.typeId
         };
 
-        console.log('Submitting subscription data:', subscriptionData);
 
         await dispatch(saveSubscription(subscriptionData)).unwrap();
         toast.success('Subscription created successfully');

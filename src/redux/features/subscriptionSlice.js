@@ -17,7 +17,6 @@ export const fetchSubscriptions = createAsyncThunk(
           'Authorization': `Bearer ${token}`,
         },
       });
-      console.log(response.data);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -25,24 +24,18 @@ export const fetchSubscriptions = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log('Raw API response for subscriptions:', data);
-      return data.map(subscription => {
-        console.log('Processing subscription in Redux:', subscription);
-        return {
-          ...subscription,
-          billingPeriod: subscription.billingPeriod === 'YEARLY' ? 'ANNUAL' : subscription.billingPeriod
-        };
-      });
+      return data;
     } catch (error) {
       return rejectWithValue(error.message || 'Network error occurred');
     }
   }
 );
 
-// Helper function to convert billing period
-const convertBillingPeriod = (period) => {
-  if (!period) return 'MONTHLY';
-  return period === 'ANNUAL' ? 'YEARLY' : period.toUpperCase();
+// Helper function to calculate yearly price
+const calculateYearlyPrice = (monthlyPrice, yearlyDiscount) => {
+  const yearlyPrice = monthlyPrice * 12;
+  const discountAmount = yearlyPrice * (yearlyDiscount / 100);
+  return yearlyPrice - discountAmount;
 };
 
 export const saveSubscription = createAsyncThunk(
@@ -56,13 +49,13 @@ export const saveSubscription = createAsyncThunk(
 
       const subscriptionData = {
         name: data.name,
-        price: parseFloat(data.price),
+        monthlyPrice: parseFloat(data.monthlyPrice),
+        monthlyDiscount: parseFloat(data.monthlyDiscount) || 0,
+        yearlyDiscount: parseFloat(data.yearlyDiscount) || 0,
         status: data.status.toUpperCase(),
-        billingPeriod: convertBillingPeriod(data.billingPeriod),
-        typeId: parseInt(data.typeId) // NEW: Required field for API
+        typeId: parseInt(data.typeId)
       };
 
-      console.log('Sending subscription data:', subscriptionData);
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions`, {
         method: 'POST',
@@ -75,12 +68,10 @@ export const saveSubscription = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('API Error Response:', errorData);
         throw new Error(errorData.message || 'Failed to save subscription');
       }
 
       const result = await response.json();
-      console.log('API Success Response:', result);
       return result;
     } catch (error) {
       console.error('Subscription Error:', error);
@@ -101,13 +92,13 @@ export const updateSubscription = createAsyncThunk(
 
       const subscriptionData = {
         name: data.name,
-        price: parseFloat(data.price),
+        monthlyPrice: parseFloat(data.monthlyPrice),
+        monthlyDiscount: parseFloat(data.monthlyDiscount) || 0,
+        yearlyDiscount: parseFloat(data.yearlyDiscount) || 0,
         status: data.status.toUpperCase(),
-        billingPeriod: convertBillingPeriod(data.billingPeriod),
-        typeId: parseInt(data.typeId) // NEW: Required field for API
+        typeId: parseInt(data.typeId)
       };
 
-      console.log('Updating subscription data:', subscriptionData);
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscriptions/${id}`, {
         method: 'PATCH',
@@ -121,18 +112,11 @@ export const updateSubscription = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Update Error Response:', errorData);
         throw new Error(errorData.message || 'Failed to update subscription');
       }
 
       const result = await response.json();
-      console.log('Update Success Response:', result);
-      
-      // Convert YEARLY back to ANNUAL for frontend display
-      return {
-        ...result,
-        billingPeriod: result.billingPeriod === 'YEARLY' ? 'ANNUAL' : result.billingPeriod
-      };
+      return result;
     } catch (error) {
       console.error('Update Error:', error);
       return rejectWithValue(error.message || 'Network error occurred');
