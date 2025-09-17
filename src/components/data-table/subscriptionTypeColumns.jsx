@@ -16,13 +16,13 @@ function ModulesCell({ row }) {
         <div className="flex flex-wrap gap-1">
             {moduleIds.length > 0 ? (
                 moduleIds.map((moduleId, index) => {
-                    const module = modules.find(m => m.id === moduleId);
-                    return module ? (
+                    const moduleItem = modules.find(m => m.id === moduleId);
+                    return moduleItem ? (
                         <span
                             key={index}
                             className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
                         >
-                            {module.name}
+                            {moduleItem.name}
                         </span>
                     ) : (
                         <span

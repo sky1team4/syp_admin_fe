@@ -165,14 +165,14 @@ export const createColumns = ({ handleEdit = () => {}, handleDelete = () => {} }
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const module = row.original
+      const moduleItem = row.original
 
       return (
         <div className="flex justify-center">
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => handleEdit(module)}
+            onClick={() => handleEdit(moduleItem)}
             className="h-8 w-8 p-0"
           >
             <Pencil className="h-4 w-4" />

@@ -257,13 +257,13 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
                                     {availableTypes
                                         .find(type => type.id === parseInt(formData.typeId))
                                         ?.modules?.map((moduleId, index) => {
-                                            const module = modules.find(m => m.id === moduleId);
-                                            return module ? (
+                                            const moduleItem = modules.find(m => m.id === moduleId);
+                                            return moduleItem ? (
                                                 <span
                                                     key={index}
                                                     className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
                                                 >
-                                                    {module.name}
+                                                    {moduleItem.name}
                                                 </span>
                                             ) : (
                                                 <span

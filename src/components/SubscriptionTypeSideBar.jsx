@@ -153,20 +153,20 @@ function SubscriptionTypeSideBar({ isOpen, click, mode = 'create', data = null, 
                                 Modules *
                             </label>
                             <div className="max-h-48 overflow-y-auto border border-gray-300 rounded-md p-3">
-                                {modules.filter(module => !module.deletedAt && module.isActive).map((module) => (
-                                    <div key={module.id} className="flex items-center mb-2">
+                                {modules.filter(moduleItem => !moduleItem.deletedAt && moduleItem.isActive).map((moduleItem) => (
+                                    <div key={moduleItem.id} className="flex items-center mb-2">
                                         <input
                                             type="checkbox"
-                                            id={`module-${module.id}`}
-                                            checked={formData.modules.includes(module.id)}
-                                            onChange={() => handleModuleToggle(module.id)}
+                                            id={`module-${moduleItem.id}`}
+                                            checked={formData.modules.includes(moduleItem.id)}
+                                            onChange={() => handleModuleToggle(moduleItem.id)}
                                             className="mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
                                         />
-                                        <label htmlFor={`module-${module.id}`} className="text-sm text-gray-700">
-                                            {module.name}
+                                        <label htmlFor={`module-${moduleItem.id}`} className="text-sm text-gray-700">
+                                            {moduleItem.name}
                                         </label>
                                         <span className="ml-2 text-xs text-gray-500">
-                                            ({module.status?.toUpperCase()})
+                                            ({moduleItem.status?.toUpperCase()})
                                         </span>
                                     </div>
                                 ))}
@@ -184,13 +184,13 @@ function SubscriptionTypeSideBar({ isOpen, click, mode = 'create', data = null, 
                                 </label>
                                 <div className="flex flex-wrap gap-2">
                                     {formData.modules.map((moduleId) => {
-                                        const module = modules.find(m => m.id === moduleId && m.isActive);
-                                        return module ? (
+                                        const moduleItem = modules.find(m => m.id === moduleId && m.isActive);
+                                        return moduleItem ? (
                                             <span
                                                 key={moduleId}
                                                 className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
                                             >
-                                                {module.name}
+                                                {moduleItem.name}
                                                 <button
                                                     type="button"
                                                     onClick={() => handleModuleToggle(moduleId)}
