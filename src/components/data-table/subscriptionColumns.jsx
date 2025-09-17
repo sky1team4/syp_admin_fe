@@ -11,7 +11,7 @@ import ConfirmationDialog from "@/components/ConfirmationDialog"
 // import { deleteSubscription } from '@/redux/features/subscriptionSlice'
 
 // Create a proper React component for the actions cell
-function ActionsCell({ row, handleEdit, handleDelete }) {
+function ActionsCell({ row, handleEdit = () => {}, handleDelete = () => {} }) {
     const [isConfirmOpen, setIsConfirmOpen] = useState(false)
     const item = row.original;
 
@@ -62,7 +62,7 @@ function ActionsCell({ row, handleEdit, handleDelete }) {
     )
 }
 
-export const createColumns = ({ handleEdit, handleDelete }) => [
+export const createColumns = ({ handleEdit = () => {}, handleDelete = () => {} }) => [
     {
         accessorKey: "name",
         header: ({ column }) => {

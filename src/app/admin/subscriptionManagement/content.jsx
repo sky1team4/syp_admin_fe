@@ -9,42 +9,42 @@ import {
   deleteSubscriptionType, 
   updateSubscriptionType 
 } from '../../../redux/features/subscriptionTypesSlice'
+import { 
+  fetchModules, 
+  fetchActiveModules,
+  deleteModule, 
+  updateModule 
+} from '../../../redux/features/modulesSlice'
 import { toast } from 'react-hot-toast'
 
 import Subscription_stats from '../../../components/subscription_stats'
 import SubscriptionTypeStats from '../../../components/subscriptionType_stats'
+import Modules_stats from '../../../components/modules_stats'
 import SubscriptionSideBar from '../../../components/SubscriptionSideBar'
 import SubscriptionTypeSideBar from '../../../components/SubscriptionTypeSideBar'
+import ModuleSideBar from '../../../components/ModuleSideBar'
 import DisplayTable from '../../../components/subdisplayTable.jsx'
 import SubscriptionTypeDisplayTable from '../../../components/subscriptionTypeDisplayTable.jsx'
+import ModuleDisplayTable from '../../../components/moduleDisplayTable.jsx'
 
-// Available modules for subscription types
-const AVAILABLE_MODULES = [
-  'user-management',
-  'analytics', 
-  'reporting',
-  'api-access',
-  'premium-support',
-  'data-export',
-  'custom-branding',
-  'advanced-security',
-  'multi-user-access',
-  'priority-support'
-];
 
 function Content() {
   const dispatch = useDispatch();
   const { error, isLoading, subscriptions } = useSelector((state) => state.subscription);
   const { subscriptionTypes } = useSelector((state) => state.subscriptionTypes);
+  const { modules } = useSelector((state) => state.modules);
   const [selectedSubscription, setSelectedSubscription] = useState(null);
   const [selectedSubscriptionType, setSelectedSubscriptionType] = useState(null);
+  const [selectedModule, setSelectedModule] = useState(null);
   const [mode, setMode] = useState('create');
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('subscriptions'); // 'subscriptions' or 'types'
+  const [activeTab, setActiveTab] = useState('subscriptions'); // 'subscriptions', 'types', or 'modules'
 
   useEffect(() => {
     dispatch(fetchSubscriptions());
     dispatch(fetchSubscriptionTypes());
+    dispatch(fetchModules());
+    dispatch(fetchActiveModules());
   }, [dispatch]);
 
   // Transform subscriptions data to match table format and filter out deleted items
@@ -81,11 +81,26 @@ function Content() {
       lastUpdated: new Date(subscriptionType.updateDate).toLocaleDateString()
     }));
 
+  // Transform modules data to match table format and filter out deleted items
+  const modulesTableData = modules
+    .filter(module => !module.deletedAt) // Filter out deleted items
+    .map(module => ({
+      id: module.id,
+      title: module.name,
+      name: module.name,
+      description: module.description,
+      status: module.status,
+      isActive: module.isActive,
+      createdDate: new Date(module.createdAt).toLocaleDateString(),
+      lastUpdated: new Date(module.updatedAt).toLocaleDateString()
+    }));
+
   const toggleSidebar = () => {
     if (!isOpen) {
       setMode('create');
       setSelectedSubscription(null);
       setSelectedSubscriptionType(null);
+      setSelectedModule(null);
     }
     setIsOpen(!isOpen);
   };
@@ -144,6 +159,55 @@ function Content() {
       }
     } catch (err) {
       toast.error(err?.message || 'Failed to delete subscription type');
+    }
+  };
+
+  // Module handlers
+  const handleEditModule = (module) => {
+    setSelectedModule({
+      id: module.id,
+      name: module.name,
+      description: module.description,
+      status: module.status,
+      isActive: module.isActive
+    });
+    setMode('edit');
+    setIsOpen(true);
+  };
+
+  const handleDeleteModule = async (id) => {
+    try {
+      const result = await dispatch(deleteModule(id)).unwrap();
+      
+      if (result) {
+        toast.success('Module deleted successfully');
+        dispatch(fetchModules());
+      }
+    } catch (err) {
+      toast.error(err?.message || 'Failed to delete module');
+    }
+  };
+
+  const handleSubmitModule = async (formData) => {
+    try {
+      if (mode === 'edit' && selectedModule?.id) {
+        await dispatch(updateModule({
+          id: selectedModule.id,
+          data: {
+            name: formData.name?.trim(),
+            description: formData.description?.trim(),
+            status: formData.status,
+            isActive: formData.isActive
+          }
+        })).unwrap();
+        
+        toast.success('Module updated successfully');
+        dispatch(fetchModules());
+        toggleSidebar();
+      }
+    } catch (err) {
+      console.error('Submission error:', err);
+      toast.error(err?.message || 'Failed to update module');
     }
   };
 
@@ -245,6 +309,16 @@ function Content() {
         >
           Subscription Types
         </button>
+        <button
+          onClick={() => setActiveTab('modules')}
+          className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+            activeTab === 'modules'
+              ? 'border-purple-500 text-purple-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+          }`}
+        >
+          Modules
+        </button>
       </div>
 
       {/* Tab Content */}
@@ -291,7 +365,6 @@ function Content() {
             mode={mode}
             data={selectedSubscriptionType}
             onSubmit={handleSubmitSubscriptionType}
-            availableModules={AVAILABLE_MODULES}
           />
           <SubscriptionTypeDisplayTable 
             btnText="Add Subscription Type"
@@ -302,6 +375,34 @@ function Content() {
             click={toggleSidebar}
             handleEdit={handleEditSubscriptionType}
             handleDelete={handleDeleteSubscriptionType}
+          />
+        </div>
+      )}
+
+      {activeTab === 'modules' && (
+        <div className='flex flex-col gap-3'>
+          <Modules_stats
+            title="Modules Summary"
+          />
+          <ModuleSideBar
+            isOpen={isOpen}
+            click={toggleSidebar}
+            mode={mode}
+            data={selectedModule}
+            onSubmit={handleSubmitModule}
+          />
+          <ModuleDisplayTable 
+            btnText=""
+            title="Modules" 
+            array={modulesTableData} 
+            backBTN="no"
+            col1_Title="Module" 
+            col2_Title="Created Date" 
+            col3_Title="Last Updated" 
+            isOpen={isOpen}
+            click={toggleSidebar}
+            handleEdit={handleEditModule}
+            handleDelete={handleDeleteModule}
           />
         </div>
       )}

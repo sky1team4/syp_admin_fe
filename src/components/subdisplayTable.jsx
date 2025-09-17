@@ -10,10 +10,11 @@ const TableComponent = ({
   backBTN,
   link,
   handleEdit,
-  handleDelete
+  handleDelete,
+  columns: passedColumns
 }) => {
   
-  const columns = createColumns({ handleEdit, handleDelete });
+  const columns = passedColumns || createColumns({ handleEdit, handleDelete });
   
   return (
     <SubscriptionTable

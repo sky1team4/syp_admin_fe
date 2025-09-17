@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 // import { Toaster } from 'react-hot-toast';
 import { saveSubscription, fetchSubscriptions, updateSubscription } from '../redux/features/subscriptionSlice';
 import { fetchActiveSubscriptionTypes, fetchSubscriptionTypes } from '../redux/features/subscriptionTypesSlice';
+import { fetchModules } from '../redux/features/modulesSlice';
 import Input from './cui/input';
 import Image from 'next/image';
 
@@ -68,6 +69,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
     const dispatch = useDispatch();
     const { isLoading } = useSelector((state) => state.subscription);
     const { activeSubscriptionTypes, subscriptionTypes } = useSelector((state) => state.subscriptionTypes);
+    const { modules } = useSelector((state) => state.modules);
     
     // Filter subscription types for active ones
     const availableTypes = subscriptionTypes.filter(type => 
@@ -92,11 +94,13 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
         }
     }, [data, isOpen]);
 
-    // Fetch subscription types when sidebar opens
+    // Fetch subscription types and modules when sidebar opens
     useEffect(() => {
         if (isOpen) {
             // Always fetch subscription types to ensure we have the latest data
             dispatch(fetchSubscriptionTypes());
+            // Fetch modules for displaying module names
+            dispatch(fetchModules());
         }
     }, [isOpen, dispatch]);
 
@@ -252,14 +256,24 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
                                 <div className="flex flex-wrap gap-2">
                                     {availableTypes
                                         .find(type => type.id === parseInt(formData.typeId))
-                                        ?.modules?.map((module, index) => (
-                                            <span
-                                                key={index}
-                                                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
-                                            >
-                                                {module.replace('-', ' ')}
-                                            </span>
-                                        )) || <span className="text-gray-500 text-sm">No modules selected</span>}
+                                        ?.modules?.map((moduleId, index) => {
+                                            const module = modules.find(m => m.id === moduleId);
+                                            return module ? (
+                                                <span
+                                                    key={index}
+                                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
+                                                >
+                                                    {module.name}
+                                                </span>
+                                            ) : (
+                                                <span
+                                                    key={index}
+                                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600"
+                                                >
+                                                    Unknown Module
+                                                </span>
+                                            );
+                                        }) || <span className="text-gray-500 text-sm">No modules selected</span>}
                                 </div>
                             </div>
                         )}

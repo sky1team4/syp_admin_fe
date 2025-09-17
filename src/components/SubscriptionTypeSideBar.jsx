@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
+import { fetchModules } from '../redux/features/modulesSlice';
 import Input from './cui/input';
 import Image from 'next/image';
 
@@ -20,12 +21,18 @@ const INITIAL_FORM_STATE = {
     status: 'ACTIVE'
 };
 
-function SubscriptionTypeSideBar({ isOpen, click, mode = 'create', data = null, onSubmit, availableModules = [] }) {
+function SubscriptionTypeSideBar({ isOpen, click, mode = 'create', data = null, onSubmit }) {
     const dispatch = useDispatch();
     const { isLoading } = useSelector((state) => state.subscriptionTypes);
+    const { modules } = useSelector((state) => state.modules);
     
     const [formData, setFormData] = useState(INITIAL_FORM_STATE);
     const [errors, setErrors] = useState({});
+
+    // Fetch modules when component mounts
+    useEffect(() => {
+        dispatch(fetchModules());
+    }, [dispatch]);
 
     useEffect(() => {
         if (data) {
@@ -54,12 +61,12 @@ function SubscriptionTypeSideBar({ isOpen, click, mode = 'create', data = null, 
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleModuleToggle = (module) => {
+    const handleModuleToggle = (moduleId) => {
         setFormData(prev => ({
             ...prev,
-            modules: prev.modules.includes(module)
-                ? prev.modules.filter(m => m !== module)
-                : [...prev.modules, module]
+            modules: prev.modules.includes(moduleId)
+                ? prev.modules.filter(m => m !== moduleId)
+                : [...prev.modules, moduleId]
         }));
     };
 
@@ -146,18 +153,21 @@ function SubscriptionTypeSideBar({ isOpen, click, mode = 'create', data = null, 
                                 Modules *
                             </label>
                             <div className="max-h-48 overflow-y-auto border border-gray-300 rounded-md p-3">
-                                {availableModules.map((module) => (
-                                    <div key={module} className="flex items-center mb-2">
+                                {modules.filter(module => !module.deletedAt && module.isActive).map((module) => (
+                                    <div key={module.id} className="flex items-center mb-2">
                                         <input
                                             type="checkbox"
-                                            id={module}
-                                            checked={formData.modules.includes(module)}
-                                            onChange={() => handleModuleToggle(module)}
+                                            id={`module-${module.id}`}
+                                            checked={formData.modules.includes(module.id)}
+                                            onChange={() => handleModuleToggle(module.id)}
                                             className="mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
                                         />
-                                        <label htmlFor={module} className="text-sm text-gray-700 capitalize">
-                                            {module.replace('-', ' ')}
+                                        <label htmlFor={`module-${module.id}`} className="text-sm text-gray-700">
+                                            {module.name}
                                         </label>
+                                        <span className="ml-2 text-xs text-gray-500">
+                                            ({module.status?.toUpperCase()})
+                                        </span>
                                     </div>
                                 ))}
                             </div>
@@ -173,21 +183,24 @@ function SubscriptionTypeSideBar({ isOpen, click, mode = 'create', data = null, 
                                     Selected Modules ({formData.modules.length})
                                 </label>
                                 <div className="flex flex-wrap gap-2">
-                                    {formData.modules.map((module) => (
-                                        <span
-                                            key={module}
-                                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
-                                        >
-                                            {module.replace('-', ' ')}
-                                            <button
-                                                type="button"
-                                                onClick={() => handleModuleToggle(module)}
-                                                className="ml-1 inline-flex items-center justify-center w-4 h-4 rounded-full text-purple-400 hover:bg-purple-200 hover:text-purple-500"
+                                    {formData.modules.map((moduleId) => {
+                                        const module = modules.find(m => m.id === moduleId && m.isActive);
+                                        return module ? (
+                                            <span
+                                                key={moduleId}
+                                                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
                                             >
-                                                ×
-                                            </button>
-                                        </span>
-                                    ))}
+                                                {module.name}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleModuleToggle(moduleId)}
+                                                    className="ml-1 inline-flex items-center justify-center w-4 h-4 rounded-full text-purple-400 hover:bg-purple-200 hover:text-purple-500"
+                                                >
+                                                    ×
+                                                </button>
+                                            </span>
+                                        ) : null;
+                                    })}
                                 </div>
                             </div>
                         )}

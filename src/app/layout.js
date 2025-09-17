@@ -1,5 +1,4 @@
 "use client"
-import { Inter } from 'next/font/google';
 import "./globals.css";
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
@@ -13,11 +12,6 @@ const executeCommand = async () => {
   const data = await response.json();
   console.log(data.output);
 };
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-});
 
 export default function RootLayout({ children }) {
   const router = useRouter();
@@ -104,7 +98,12 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className='bg-[#F5F5F5]'>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+      </head>
+      <body className="bg-[#F5F5F5] font-sans">
         <Toaster position="top-right" />
         <Provider store={store}>
           {children}
