@@ -36,9 +36,11 @@ function SubscriptionTypeSideBar({ isOpen, click, mode = 'create', data = null, 
 
     useEffect(() => {
         if (data) {
+            // Extract module IDs from the embedded module objects
+            const moduleIds = data.modules ? data.modules.map(module => module.id) : [];
             setFormData({
                 name: data.name || '',
-                modules: data.modules || [],
+                modules: moduleIds,
                 status: data.status || 'ACTIVE'
             });
         } else {

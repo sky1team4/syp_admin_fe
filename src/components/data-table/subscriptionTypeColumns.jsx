@@ -9,30 +9,19 @@ import ConfirmationDialog from "@/components/ConfirmationDialog"
 
 // Create a proper React component for the modules cell
 function ModulesCell({ row }) {
-    const { modules } = useSelector((state) => state.modules);
-    const moduleIds = row.original.modules || [];
+    const modules = row.original.modules || [];
 
     return (
         <div className="flex flex-wrap gap-1">
-            {moduleIds.length > 0 ? (
-                moduleIds.map((moduleId, index) => {
-                    const moduleItem = modules.find(m => m.id === moduleId);
-                    return moduleItem ? (
-                        <span
-                            key={index}
-                            className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
-                        >
-                            {moduleItem.name}
-                        </span>
-                    ) : (
-                        <span
-                            key={index}
-                            className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600"
-                        >
-                            Unknown Module
-                        </span>
-                    );
-                })
+            {modules.length > 0 ? (
+                modules.map((moduleItem, index) => (
+                    <span
+                        key={index}
+                        className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
+                    >
+                        {moduleItem.name}
+                    </span>
+                ))
             ) : (
                 <span className="text-gray-500 text-sm">No modules</span>
             )}

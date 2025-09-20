@@ -235,7 +235,7 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
                                 {availableTypes && availableTypes.length > 0 ? (
                                     availableTypes.map(type => (
                                         <option key={type.id} value={type.id}>
-                                            {type.name} - {type.modules?.join(', ') || 'No modules'}
+                                            {type.name} - {type.modules?.map(m => m.name).join(', ') || 'No modules'}
                                         </option>
                                     ))
                                 ) : (
@@ -256,24 +256,14 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
                                 <div className="flex flex-wrap gap-2">
                                     {availableTypes
                                         .find(type => type.id === parseInt(formData.typeId))
-                                        ?.modules?.map((moduleId, index) => {
-                                            const moduleItem = modules.find(m => m.id === moduleId);
-                                            return moduleItem ? (
-                                                <span
-                                                    key={index}
-                                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
-                                                >
-                                                    {moduleItem.name}
-                                                </span>
-                                            ) : (
-                                                <span
-                                                    key={index}
-                                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600"
-                                                >
-                                                    Unknown Module
-                                                </span>
-                                            );
-                                        }) || <span className="text-gray-500 text-sm">No modules selected</span>}
+                                        ?.modules?.map((moduleItem, index) => (
+                                            <span
+                                                key={index}
+                                                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
+                                            >
+                                                {moduleItem.name}
+                                            </span>
+                                        )) || <span className="text-gray-500 text-sm">No modules selected</span>}
                                 </div>
                             </div>
                         )}
