@@ -64,7 +64,37 @@ export const fetchActiveModules = createAsyncThunk(
   }
 );
 
-// Note: Create module functionality removed - only edit and delete allowed
+// Create a new module
+export const createModule = createAsyncThunk(
+  'modules/create',
+  async (moduleData, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const response = await fetch(`${API_URL}/modules`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(moduleData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to create module');
+      }
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Network error occurred');
+    }
+  }
+);
 
 // Update a module
 export const updateModule = createAsyncThunk(
@@ -178,7 +208,20 @@ const modulesSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
-      // Create module functionality removed
+      // Create module
+      .addCase(createModule.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(createModule.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.modules.push(action.payload);
+        state.error = null;
+      })
+      .addCase(createModule.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
       // Update module
       .addCase(updateModule.pending, (state) => {
         state.isLoading = true;

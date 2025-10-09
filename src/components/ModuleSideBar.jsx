@@ -26,7 +26,7 @@ const MODULE_STATUSES = [
   { value: 'pro', label: 'Pro' }
 ];
 
-function ModuleSideBar({ isOpen, click, mode = 'edit', data = null, onSubmit }) {
+function ModuleSideBar({ isOpen, click, mode = 'create', data = null, onSubmit }) {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.modules);
   
@@ -34,7 +34,7 @@ function ModuleSideBar({ isOpen, click, mode = 'edit', data = null, onSubmit }) 
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (data) {
+    if (mode === 'edit' && data) {
       setFormData({
         name: data.name || '',
         description: data.description || '',
@@ -44,7 +44,7 @@ function ModuleSideBar({ isOpen, click, mode = 'edit', data = null, onSubmit }) 
     } else {
       setFormData(INITIAL_FORM_STATE);
     }
-  }, [data, isOpen]);
+  }, [data, isOpen, mode]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -101,7 +101,7 @@ function ModuleSideBar({ isOpen, click, mode = 'edit', data = null, onSubmit }) 
           {/* Header */}
           <div className="flex justify-between items-center mb-4 text-black">
             <h2 className="text-xl font-semibold">
-              Edit Module
+              {mode === 'create' ? 'Create Module' : 'Edit Module'}
             </h2>
             <button
               onClick={() => click()}
@@ -113,7 +113,7 @@ function ModuleSideBar({ isOpen, click, mode = 'edit', data = null, onSubmit }) 
 
           {/* Description */}
           <p className="text-gray-500 text-sm mb-6">
-            Update module details
+            {mode === 'create' ? 'Create a new module' : 'Update module details'}
           </p>
 
           {/* Form */}
@@ -185,7 +185,7 @@ function ModuleSideBar({ isOpen, click, mode = 'edit', data = null, onSubmit }) 
                 disabled={isLoading}
                 className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white py-2 px-4 rounded-lg transition-colors"
               >
-                {isLoading ? 'Saving...' : 'Update Module'}
+                {isLoading ? 'Saving...' : (mode === 'create' ? 'Create Module' : 'Update Module')}
               </button>
             </div>
           </form>

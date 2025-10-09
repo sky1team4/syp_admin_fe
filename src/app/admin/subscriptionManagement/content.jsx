@@ -12,6 +12,7 @@ import {
 import { 
   fetchModules, 
   fetchActiveModules,
+  createModule,
   deleteModule, 
   updateModule 
 } from '../../../redux/features/modulesSlice'
@@ -202,12 +203,22 @@ function Content() {
         })).unwrap();
         
         toast.success('Module updated successfully');
-        dispatch(fetchModules());
-        toggleSidebar();
+      } else {
+        const moduleData = {
+          name: formData.name?.trim(),
+          description: formData.description?.trim(),
+          status: formData.status,
+          isActive: formData.isActive
+        };
+
+        await dispatch(createModule(moduleData)).unwrap();
+        toast.success('Module created successfully');
       }
+      dispatch(fetchModules());
+      toggleSidebar();
     } catch (err) {
       console.error('Submission error:', err);
-      toast.error(err?.message || 'Failed to update module');
+      toast.error(err?.message || `Failed to ${mode === 'edit' ? 'update' : 'create'} module`);
     }
   };
 
@@ -383,6 +394,8 @@ function Content() {
         <div className='flex flex-col gap-3'>
           <Modules_stats
             title="Modules Summary"
+            click={toggleSidebar}
+            isOpen={isOpen}
           />
           <ModuleSideBar
             isOpen={isOpen}
@@ -392,7 +405,7 @@ function Content() {
             onSubmit={handleSubmitModule}
           />
           <ModuleDisplayTable 
-            btnText=""
+            btnText="Add Module"
             title="Modules" 
             array={modulesTableData} 
             backBTN="no"
