@@ -188,10 +188,10 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
             <div
                 className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform ${
                     isOpen ? "translate-x-0" : "translate-x-full"
-                } transition-transform duration-300 z-50`}
+                } transition-transform duration-300 z-50 flex flex-col`}
             >
-                <div className="p-6">
-                    {/* Header */}
+                {/* Header - Fixed */}
+                <div className="flex-shrink-0 p-6 pb-4 border-b border-gray-200">
                     <div className="flex justify-between items-center mb-4 text-black">
                         <h2 className="text-xl font-semibold">
                             {mode === 'edit' ? 'Edit Subscription' : 'New Subscription'}
@@ -205,10 +205,13 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
                     </div>
 
                     {/* Description */}
-                    <p className="text-gray-500 text-sm mb-6">
+                    <p className="text-gray-500 text-sm">
                         {mode === 'edit' ? 'Update your subscription details' : 'Create a new subscription'}
                     </p>
+                </div>
 
+                {/* Scrollable Content Area */}
+                <div className="flex-1 overflow-y-auto p-6">
                     {/* Subscription Inputs */}
                     <div className="flex flex-col gap-4">
                         <Input  
@@ -344,8 +347,8 @@ function SubscriptionSideBar({ isOpen, click, mode = 'create', data = null, onSu
                     </div>
                 </div>
 
-                {/* Footer */}
-                <div className="absolute bottom-0 left-0 w-full p-4">
+                {/* Footer - Fixed */}
+                <div className="flex-shrink-0 p-4 border-t border-gray-200 bg-white">
                     <button
                         onClick={handleSubmit}
                         disabled={isLoading}

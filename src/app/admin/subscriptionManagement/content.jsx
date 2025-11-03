@@ -286,9 +286,9 @@ function Content() {
   };
 
   return (
-    <div className='flex flex-col w-full max-w-full overflow-x-hidden'>
+    <div className='flex flex-col w-full h-full max-w-full overflow-hidden'>
       {/* Tab Navigation */}
-      <div className="flex border-b border-gray-200 mb-6">
+      <div className="flex-shrink-0 flex border-b border-gray-200 mb-6">
         <button
           onClick={() => setActiveTab('subscriptions')}
           className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
@@ -322,90 +322,92 @@ function Content() {
       </div>
 
       {/* Tab Content */}
-      {activeTab === 'subscriptions' && (
-        <div className='flex flex-col gap-3'>
-          <Subscription_stats
-            title="Subscriptions Summary"
-            click={toggleSidebar}
-            isOpen={isOpen}
-          />
-          <SubscriptionSideBar
-            isOpen={isOpen}
-            click={toggleSidebar}
-            mode={mode}
-            data={selectedSubscription}
-            onSubmit={handleSubmitSubscription}
-          />
-          <DisplayTable 
-            btnText="Add Subscription"
-            title="Subscriptions" 
-            array={subscriptionsTableData} 
-            backBTN="no"
-            col1_Title="Subscription" 
-            col2_Title="Created Date" 
-            col3_Title="Last Updated" 
-            isOpen={isOpen}
-            click={toggleSidebar}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
-          />
-        </div>
-      )}
+      <div className='flex-1 overflow-y-auto min-h-0'>
+        {activeTab === 'subscriptions' && (
+          <div className='flex flex-col gap-3'>
+            <Subscription_stats
+              title="Subscriptions Summary"
+              click={toggleSidebar}
+              isOpen={isOpen}
+            />
+            <SubscriptionSideBar
+              isOpen={isOpen}
+              click={toggleSidebar}
+              mode={mode}
+              data={selectedSubscription}
+              onSubmit={handleSubmitSubscription}
+            />
+            <DisplayTable 
+              btnText="Add Subscription"
+              title="Subscriptions" 
+              array={subscriptionsTableData} 
+              backBTN="no"
+              col1_Title="Subscription" 
+              col2_Title="Created Date" 
+              col3_Title="Last Updated" 
+              isOpen={isOpen}
+              click={toggleSidebar}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
+            />
+          </div>
+        )}
 
-      {activeTab === 'types' && (
-        <div className='flex flex-col gap-3'>
-          <SubscriptionTypeStats
-            title="Subscription Types Summary"
-            click={toggleSidebar}
-            isOpen={isOpen}
-          />
-          <SubscriptionTypeSideBar
-            isOpen={isOpen}
-            click={toggleSidebar}
-            mode={mode}
-            data={selectedSubscriptionType}
-            onSubmit={handleSubmitSubscriptionType}
-          />
-          <SubscriptionTypeDisplayTable 
-            btnText="Add Subscription Type"
-            title="Subscription Types" 
-            array={subscriptionTypesTableData} 
-            backBTN="no"
-            isOpen={isOpen}
-            click={toggleSidebar}
-            handleEdit={handleEditSubscriptionType}
-            handleDelete={handleDeleteSubscriptionType}
-          />
-        </div>
-      )}
+        {activeTab === 'types' && (
+          <div className='flex flex-col gap-3'>
+            <SubscriptionTypeStats
+              title="Subscription Types Summary"
+              click={toggleSidebar}
+              isOpen={isOpen}
+            />
+            <SubscriptionTypeSideBar
+              isOpen={isOpen}
+              click={toggleSidebar}
+              mode={mode}
+              data={selectedSubscriptionType}
+              onSubmit={handleSubmitSubscriptionType}
+            />
+            <SubscriptionTypeDisplayTable 
+              btnText="Add Subscription Type"
+              title="Subscription Types" 
+              array={subscriptionTypesTableData} 
+              backBTN="no"
+              isOpen={isOpen}
+              click={toggleSidebar}
+              handleEdit={handleEditSubscriptionType}
+              handleDelete={handleDeleteSubscriptionType}
+            />
+          </div>
+        )}
 
-      {activeTab === 'modules' && (
-        <div className='flex flex-col gap-3'>
-          <Modules_stats
-            title="Modules Summary"
-          />
-          <ModuleSideBar
-            isOpen={isOpen}
-            click={toggleSidebar}
-            mode={mode}
-            data={selectedModule}
-            onSubmit={handleSubmitModule}
-          />
-          <ModuleDisplayTable 
-            btnText=""
-            title="Modules" 
-            array={modulesTableData} 
-            backBTN="no"
-            col1_Title="Module" 
-            col2_Title="Created Date" 
-            col3_Title="Last Updated" 
-            isOpen={isOpen}
-            click={toggleSidebar}
-            handleEdit={handleEditModule}
-            handleDelete={handleDeleteModule}
-          />
-        </div>
-      )}
+        {activeTab === 'modules' && (
+          <div className='flex flex-col gap-3'>
+            <Modules_stats
+              title="Modules Summary"
+            />
+            <ModuleSideBar
+              isOpen={isOpen}
+              click={toggleSidebar}
+              mode={mode}
+              data={selectedModule}
+              onSubmit={handleSubmitModule}
+            />
+            <ModuleDisplayTable 
+              btnText=""
+              title="Modules" 
+              array={modulesTableData} 
+              backBTN="no"
+              col1_Title="Module" 
+              col2_Title="Created Date" 
+              col3_Title="Last Updated" 
+              isOpen={isOpen}
+              click={toggleSidebar}
+              handleEdit={handleEditModule}
+              handleDelete={handleDeleteModule}
+            />
+          </div>
+        )}
+      </div>
     </div>
   )
 }
