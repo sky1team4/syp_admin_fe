@@ -16,7 +16,7 @@ const AdminLayout = ({ children }) => {
 
                 <div className="flex flex-col pb-4 min-w-0 overflow-hidden">
                     <Header />
-                    <main className="w-full flex-1 mt-[78px] p-4 bg-white overflow-hidden">
+                    <main className="w-full flex-1 mt-[78px] p-4 bg-white overflow-y-auto">
                         {children}
                     </main>
                 </div>

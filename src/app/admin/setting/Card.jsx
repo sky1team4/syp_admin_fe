@@ -92,7 +92,7 @@ const SettingContentArea = () => {
   ];
 
   return (
-    <div className="h-screen w-full bg-white p-4 rounded-xl">
+    <div className="w-full bg-white p-4 rounded-xl">
       <div className="flex flex-wrap w-full gap-4 items-center justify-center md:justify-start">
         {cards.map((card, index) => (
           <div className="" key={index}>
