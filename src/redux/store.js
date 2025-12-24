@@ -24,6 +24,8 @@ import userReducer from './features/userSlice';
 import faqQaReducer from './features/faqQaSlice';
 import subscribedUserReducer from './features/subscribedUserSlice';
 import rewardSystemReducer from './features/rewardSystemSlice';
+import domainReducer from './features/domainSlice';
+import refundRequestReducer from './features/refundRequestSlice';
 // nothing to commit
 export const store = configureStore({
 
@@ -53,6 +55,8 @@ export const store = configureStore({
     faqQa: faqQaReducer,
     subscribedUser: subscribedUserReducer,
     rewardSystem: rewardSystemReducer,
+    domain: domainReducer,
+    refundRequest: refundRequestReducer,
   },
 });
 

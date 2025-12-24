@@ -6,6 +6,12 @@ import Card from "../../../components/cardmanagement";
 const SettingContentArea = () => {
   const cards = [
     {
+      title: "Domains Management",
+      Icon: "/setting_icon/SpecialtyManagement.png",
+      // Icon: () => <Image src="/setting_icon/SpecialtyManagement.png" width={50} height={50} alt="Specialty Icon" />,
+      link: "/admin/domainManagement",
+    },
+    {
       title: "Relationship Management",
       Icon: "/setting_icon/RelationshipManagement.png",
       // Icon: () => <Image src="/setting_icon/RelationshipManagement.png" width={50} height={50} alt="Relationship Icon" />,

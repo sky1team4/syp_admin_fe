@@ -12,10 +12,11 @@ const TableComponent = ({
   handleEdit,
   handleDelete,
   isLoading,
-  type
+  type,
+  customColumns
 }) => {
   
-  const columns = createColumns({ handleEdit, handleDelete, type });
+  const columns = customColumns || createColumns({ handleEdit, handleDelete, type });
   
   return (
     <SubscriptionTable
