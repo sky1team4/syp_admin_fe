@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Content from './content'
 import RefundRequestsContent from './refundRequestsContent'
 
-function page() {
+function Page() {
     const [activeTab, setActiveTab] = useState('domains');
 
     return (
