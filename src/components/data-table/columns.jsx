@@ -191,9 +191,22 @@ export const columns = [
                 </Button>
             )
         },
-        cell: ({ row }) => (
-            <div className="text-sm font-medium">{row.original.billingPeriod}</div>
-        ),
+        cell: ({ row }) => {
+            const billingPeriod = row.original.billingPeriod?.toLowerCase();
+            let displayText = "N/A";
+            
+            if (billingPeriod === "monthly") {
+                displayText = "Monthly Subscription";
+            } else if (billingPeriod === "yearly") {
+                displayText = "Yearly Subscription";
+            } else if (billingPeriod === "free trial") {
+                displayText = "Free Trial";
+            }
+            
+            return (
+                <div className="text-sm font-medium">{displayText}</div>
+            );
+        },
     },
     {
         id: "actions",
