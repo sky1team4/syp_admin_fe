@@ -67,7 +67,6 @@ function Content() {
       <DisplayTable
         click={toggleSidebar}
         isOpen={isOpen}
-        btnText="Add Domain"
         title="Domain Management"
         link="/admin"
         array={formattedDomains}

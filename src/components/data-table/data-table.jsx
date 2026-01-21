@@ -103,19 +103,29 @@ export function DataTable({ columns, data, globalFilter }) {
                             </span>
                           ) : cell.column.id === "billingPeriod" ? (
                             <span
-                              className={`px-2 py-1 text-xs rounded-full ${
-                                cell.getValue()?.toLowerCase() === "monthly" ? "bg-green-100 text-green-600" :
-                                cell.getValue()?.toLowerCase() === "yearly" ? "bg-blue-100 text-blue-600" :
-                                cell.getValue()?.toLowerCase() === "free trial" ? "bg-yellow-100 text-yellow-600" :
-                                "bg-gray-100 text-gray-600" // Default case
-                              }`}
-                            >
-                              {cell.getValue()?.toLowerCase() === "monthly" ? "Monthly Subscription" :
-                                cell.getValue()?.toLowerCase() === "yearly" ? "Yearly Subscription" :
-                                  cell.getValue()?.toLowerCase() === "free trial" ? "Free Trial" :
-                                    "N/A"
-                              }
-                            </span>
+                            className={`px-2 py-1 text-xs rounded-full ${
+                              cell.getValue()?.toLowerCase() === "monthly"
+                                ? "bg-green-100 text-green-600"
+                                : cell.getValue()?.toLowerCase() === "yearly"
+                                ? "bg-blue-100 text-blue-600"
+                                : cell.getValue()?.toLowerCase() === "free"
+                                ? "bg-yellow-100 text-yellow-600"
+                                : cell.getValue()?.toLowerCase() === "not_subscribed"
+                                ? "bg-gray-100 text-gray-600"
+                                : "bg-gray-100 text-gray-600"
+                            }`}
+                          >
+                            {cell.getValue()?.toLowerCase() === "monthly"
+                              ? "Monthly Subscription"
+                              : cell.getValue()?.toLowerCase() === "yearly"
+                              ? "Yearly Subscription"
+                              : cell.getValue()?.toLowerCase() === "free"
+                              ? "Free Subscription"
+                              : cell.getValue()?.toLowerCase() === "not_subscribed"
+                              ? "Not Subscribed"
+                              : "Not Subscribed"}
+                          </span>
+                          
                           ) : (
                             flexRender(cell.column.columnDef.cell, cell.getContext())
                           )}

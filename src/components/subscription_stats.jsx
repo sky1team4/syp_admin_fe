@@ -1,6 +1,6 @@
 // Today'sSummary.jsx
 "use client"
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux'; // Import hooks from react-redux
 // import { fetchAllUsers } from '../redux/features/authSlice'; // Import the action and selector
 import { getSubscriptionStats } from '../redux/features/subscribedUserSlice'; // Import the action and selector
@@ -11,10 +11,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
 
   const dispatch = useDispatch(); // Initialize dispatch
   const { subscriptionStats = {} } = useSelector((state) => state.subscribedUser); // Access subscriptionStats from the state
-  const [subscribedUsers, setSubscribedUsers] = useState(0);
-  const [freeUsers, setFreeUsers] = useState(0);
-  const [monthlysubscribedUsers, setMonthlySubscribedUsers] = useState(0);
-  const [annualSubscription, setAnnualSubscription] = useState(0);
+
 
   console.log("totalSubscribed", subscriptionStats);
   
@@ -23,21 +20,12 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
     dispatch(getSubscriptionStats());
   }, [dispatch]);
 
-  useEffect(() => {
-    // Update state with API response
-    if (subscriptionStats) {
-      setSubscribedUsers(subscriptionStats.totalSubscribed || 0);
-      setFreeUsers(subscriptionStats.freeUsers || 0);
-      setMonthlySubscribedUsers(subscriptionStats.monthly || 0);
-      setAnnualSubscription(subscriptionStats.yearly || 0);
-    }
-  }, [subscriptionStats]);
 
   const info = [
-    { id: 2, label: "Subscribed User", value: subscribedUsers, bgColor: "bg-red-100", icon: '/subscribeuser.svg' },
-    { id: 1, label: "Free Subscription", value: freeUsers, bgColor: "bg-purple-100", icon: '/totalusers.svg' },
-    { id: 3, label: "Monthly Subscription", value: monthlysubscribedUsers, bgColor: "bg-yellow-100", icon: '/unsubscribe.svg' },
-    { id: 4, label: "Annual Subscription", value: annualSubscription, bgColor: "bg-green-100", icon: '/activedomain.svg' },
+    { id: 2, label: "Subscribed User", value: subscriptionStats?.subscribedUsers, bgColor: "bg-red-100", icon: '/subscribeuser.svg' },
+    { id: 1, label: "Free Subscription", value:  subscriptionStats?.freeUsers, bgColor: "bg-purple-100", icon: '/totalusers.svg' },
+    { id: 3, label: "Monthly Subscription", value:  subscriptionStats?.monthlyUsers, bgColor: "bg-yellow-100", icon: '/unsubscribe.svg' },
+    { id: 4, label: "Annual Subscription", value:  subscriptionStats?.yearlyUsers, bgColor: "bg-green-100", icon: '/activedomain.svg' },
   ];
 
   return (

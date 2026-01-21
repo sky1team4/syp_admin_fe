@@ -1,7 +1,7 @@
 // Today'sSummary.jsx
 "use client"
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from 'react-redux'; 
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllUsers } from '../redux/features/authSlice';
 import Image from "next/image";
 import theme from "../app/theme";
@@ -12,7 +12,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
   const dispatch = useDispatch(); // Initialize dispatch
   const { users = [] } = useSelector((state) => state.auth); // Access users from the state
   // console.log("users" , users);
-  
+
   // const { subscriptionStats = {} } = useSelector((state) => state.subscribedUser);
   const { subscriptionStats = {} } = useSelector((state) => state.subscribedUser);
   const [subscribedUsers, setSubscribedUsers] = useState(0);
@@ -21,6 +21,8 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
     dispatch(getSubscriptionStats());
   }, [dispatch]);
 
+
+  console.log("this is status ==> ", subscriptionStats);
 
   useEffect(() => {
     // Update state with API response
@@ -44,9 +46,9 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
 
   const info = [
     { id: 1, label: "Total user", value: totalUsers.toString(), bgColor: "bg-purple-100", icon: '/totalusers.svg' },
-    { id: 2, label: "Subscribed User", value: subscribedUsers.toString(), bgColor: "bg-red-100", icon: '/subscribeuser.svg' },
-    { id: 3, label: "Unsubscribed User", value: unsubscribedUsers.toString(), bgColor: "bg-yellow-100", icon: '/unsubscribe.svg' },
-    { id: 4, label: "Active domains", value: 0, bgColor: "bg-green-100", icon: '/activedomain.svg' },
+    { id: 2, label: "Subscribed User", value: subscriptionStats?.subscribedUsers?.toString(), bgColor: "bg-red-100", icon: '/subscribeuser.svg' },
+    { id: 3, label: "Unsubscribed User", value: subscriptionStats?.unsubscribedUsers?.toString(), bgColor: "bg-yellow-100", icon: '/unsubscribe.svg' },
+    { id: 4, label: "Active domains", value: subscriptionStats?.activeDomainsCount?.toString(), bgColor: "bg-green-100", icon: '/activedomain.svg' },
   ];
 
   return (
