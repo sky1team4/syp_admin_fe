@@ -21,8 +21,13 @@ const nextConfig = {
         port: '8080',
         pathname: '/uploads/verifications/**',
       },
+      {
+        protocol: 'https',
+        hostname: 's3.eu-north-1.amazonaws.com',
+        pathname: '/syp.bucket/**',
+      },
     ],
-    domains: ['sypadminapi.azurewebsites.net', 'i.pravatar.cc', 'localhost'], // Added localhost domain
+    domains: ['sypadminapi.azurewebsites.net', 'i.pravatar.cc', 'localhost', 's3.eu-north-1.amazonaws.com'], // Added localhost domain
   },
 };
 

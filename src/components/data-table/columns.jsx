@@ -109,7 +109,7 @@ export const columns = [
         cell: ({ row }) => (
             <div className="flex items-center gap-3">
                 <Image
-                    src="/dash.png"
+                    src={row.original.profileImage && row.original.profileImage.startsWith("https://") ? row.original.profileImage : "/dash.png"}
                     alt="Profile"
                     width={32}
                     height={32}

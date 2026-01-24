@@ -75,7 +75,7 @@ export function DataTable({ columns, data, globalFilter }) {
                           {cell.column.id === "user_name" ? (
                             <div className="flex items-center space-x-3">
                               <Image
-                                src={cell.getValue()?.image || "/dash.png"}
+                                src={row.original.profileImage || "/dash.png"}
                                 alt="Profile"
                                 width={32}
                                 height={32}
@@ -83,10 +83,10 @@ export function DataTable({ columns, data, globalFilter }) {
                               />
                               <div>
                                 <p className="text-sm font-medium">
-                                  {cell.getValue() || "Unknown"}
+                                  {row.original.name || cell.getValue() || "Unknown"}
                                 </p>
                                 <p className="text-xs text-gray-500">
-                                  {/* {cell.getValue()?.email || "No Email"} */}
+                                  {row.original.email || ""}
                                 </p>
                               </div>
                             </div>
