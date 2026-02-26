@@ -32,6 +32,10 @@ const Sidebar = () => {
       setStaticTab('dashboard');
       setCurrentTab('dashboard');
       localStorage.setItem('selectedTab', 'dashboard');
+    } else if (path.startsWith('/admin/blog')) {
+      setStaticTab('blog');
+      setCurrentTab('blog');
+      localStorage.setItem('selectedTab', 'blog');
     } else if (savedTab) {
       // Otherwise use the saved tab
       setStaticTab(savedTab);
@@ -218,6 +222,27 @@ const Sidebar = () => {
                 <span className="ml-2 font-medium">Reward System</span>
               </div>
             </Link>
+            <Link href="/admin/blog" onClick={() => handleTabClick("blog")}>
+              <div
+                className={`${sidebarItemClass} ${staticTab === "blog"
+                  ? "bg-white text-purple-600"
+                  : sidebarClass
+                  }`}
+              >
+                <Image
+                  src={
+                    staticTab === "blog"
+                      ? "/dashbaord_siedebar_icon/settingIcon_active.svg"
+                      : "/dashbaord_siedebar_icon/settingIcon.svg"
+                  }
+                  width={30}
+                  height={30}
+                  alt="Blog"
+                />
+                <span className="ml-2 font-medium">Blog</span>
+              </div>
+            </Link>
+
             <Link href="/admin/setting" onClick={() => handleTabClick("setting")}>
               <div
                 className={`${sidebarItemClass} ${staticTab === "setting"

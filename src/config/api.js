@@ -20,8 +20,19 @@ export const API_CONFIG = {
         ACCEPT_CASH_FLOW: (id) => `/cash-flow/${id}/accept`,
         REJECT_CASH_FLOW: (id) => `/cash-flow/${id}/reject`,
 
-        // Add other endpoints here as needed
+        // Blog
+        BLOG_POSTS: '/blog/posts',
+        BLOG_POST_BY_ID: (id) => `/blog/posts/${id}`,
+        BLOG_POST_FEATURED: (id) => `/blog/posts/${id}/featured`,
+        BLOG_CATEGORIES: '/blog/categories',
+        BLOG_CATEGORY_BY_ID: (id) => `/blog/categories/${id}`,
+        BLOG_TAGS: '/blog/tags',
+        BLOG_TAG_BY_ID: (id) => `/blog/tags/${id}`,
+        BLOG_MEDIA_UPLOAD: '/blog/media/upload',
+        BLOG_MEDIA_UPLOADS: '/blog/media/uploads',
+        BLOG_MEDIA_UPLOAD_BY_ID: (id) => `/blog/media/uploads/${id}`,
     },
+
 
     // Request timeout (in milliseconds)
     TIMEOUT: 10000,
@@ -44,6 +55,14 @@ export const getAuthHeaders = () => {
 
     return {
         'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` }),
+    };
+};
+
+// For multipart uploads – do not set Content-Type so browser sets boundary
+export const getAuthHeadersMultipart = () => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    return {
         ...(token && { 'Authorization': `Bearer ${token}` }),
     };
 };
