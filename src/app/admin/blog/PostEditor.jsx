@@ -106,6 +106,10 @@ export default function PostEditor({ postId = null }) {
   };
 
   const saveDraft = useCallback(async () => {
+    if (!categoryId || categoryId === "") {
+      toast.error("Please select a category");
+      return;
+    }
     const payload = {
       title,
       slug: derivedSlug,
@@ -345,11 +349,15 @@ export default function PostEditor({ postId = null }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Category <span className="text-red-500">*</span>
+            </label>
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
-              className="h-9 w-full rounded-md border border-neutral-200 bg-white px-3 text-sm"
+              className={`h-9 w-full rounded-md border px-3 text-sm ${
+                !categoryId ? "border-red-400 bg-red-50/50" : "border-neutral-200 bg-white"
+              }`}
             >
               <option value="">Select category</option>
               {categories.map((c) => (
