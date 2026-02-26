@@ -120,7 +120,7 @@ export function createPostColumns({ onToggleFeatured, onDelete }) {
             asChild
           >
             <a
-              href={`${process.env.NEXT_PUBLIC_APP_URL || (typeof window !== "undefined" ? window.location.origin : "")}/blogs/${row.original.slug}?preview=true`}
+              href={`${process.env.NEXT_PUBLIC_USER_APP_URL || (typeof window !== "undefined" ? window.location.origin : "")}/blogs/${row.original.slug}?preview=true`}
               target="_blank"
               rel="noopener noreferrer"
             >

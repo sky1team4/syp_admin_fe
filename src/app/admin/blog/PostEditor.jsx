@@ -185,7 +185,7 @@ export default function PostEditor({ postId = null }) {
         </Button>
         {postId && derivedSlug && (
           <a
-            href={`${process.env.NEXT_PUBLIC_APP_URL || (typeof window !== "undefined" ? window.location.origin : "")}/blogs/${derivedSlug}?preview=true`}
+            href={`${process.env.NEXT_PUBLIC_USER_APP_URL || (typeof window !== "undefined" ? window.location.origin : "")}/blogs/${derivedSlug}?preview=true`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-purple-600 hover:underline flex items-center gap-1"
