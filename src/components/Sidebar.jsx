@@ -92,13 +92,22 @@ const Sidebar = () => {
           />
         </button>
 
-        {/* Sidebar */}
+        {/* Sidebar */}  
         <div
           className={`z-40 fixed top-0 left-0 h-screen text-white ${isSidebarOpen ? "sm:w-[70%] md:w-[50%] lg:w-72 translate-x-0" : "lg:w-72 -translate-x-full"
-            } flex flex-col gap-5 items-center py-6 px-4 transform  lg:translate-x-0 transition-transform duration-300`}
+            } flex flex-col gap-5 items-start py-6 px-4 transform  lg:translate-x-0 transition-transform duration-300`}
           style={{ backgroundColor: theme.color }}
         >
-          <div className="text-4xl font-bold self-start ml-4"> SYP</div>
+           <Link href="/" className="relative flex items-center">
+              <Image
+                src="/whitelogo.png"
+                alt="SYP Search Logo"
+                width={120}
+                height={40}
+                className="h-10 w-auto object-contain"
+              />
+            </Link>
+          {/* <div className="text-4xl font-bold self-start ml-4"> SYP</div> */}
           {/* Close Button */}
           {/* <button
             onClick={toggleSidebar}

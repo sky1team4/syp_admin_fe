@@ -86,9 +86,15 @@ export default function Login() {
       <ToastContainer />
       <div className="flex flex-col w-full h-screen bg-[#F5F5F5] text-white lg:overflow-hidden">
         <nav className="bg-white text-black px-6 py-4 z-40">
-          <div className="flex items-center justify-between">
-            <a href="#" className="text-xl font-bold">SYP</a>
-          </div>
+        <Link href="/" className="relative flex items-center">
+          <Image
+            src="/logo.png"
+            alt="SYP Search Logo"
+            width={120}
+            height={40}
+            className="h-10 w-auto object-contain"
+          />
+        </Link>
         </nav>
 
         <div className="w-full h-full px-2 md:px-20 flex gap-10 justify-center items-center">
