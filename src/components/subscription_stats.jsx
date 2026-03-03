@@ -27,7 +27,7 @@ const TodaysSummary = ({ btnText, title, click, isOpen }) => {
     { id: 3, label: "Monthly Subscription", value:  subscriptionStats?.monthlyUsers, bgColor: "bg-yellow-100", icon: '/unsubscribe.svg' },
     { id: 4, label: "Annual Subscription", value:  subscriptionStats?.yearlyUsers, bgColor: "bg-green-100", icon: '/activedomain.svg' },
   ];
-
+   
   return (
     <div className="w-full bg-white shadow-md p-4 md:p-5 rounded-xl">
       <div className="w-full flex justify-between items-center mb-4">
