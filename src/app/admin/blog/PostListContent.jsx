@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { fetchPosts, fetchCategories, fetchAuthors, setPostFeatured, deletePost } from "@/lib/blogApi";
+import { fetchPosts, fetchCategories, fetchAuthors, setPostFeatured, setPostCareerTip, deletePost } from "@/lib/blogApi";
 import { createPostColumns } from "./postColumns";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
@@ -72,6 +72,18 @@ export default function PostListContent() {
     }
   };
 
+  const handleToggleCareerTip = async (id, isCareerTip) => {
+    try {
+      await setPostCareerTip(id, isCareerTip);
+      setPosts((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, isCareerTip } : p))
+      );
+      toast.success(isCareerTip ? "Post set as career tip" : "Removed from career tips");
+    } catch {
+      toast.error("Failed to update career tip");
+    }
+  };
+
   const handleDelete = async (id) => {
     try {
       await deletePost(id);
@@ -109,6 +121,7 @@ export default function PostListContent() {
     () =>
       createPostColumns({
         onToggleFeatured: handleToggleFeatured,
+        onToggleCareerTip: handleToggleCareerTip,
         onDelete: (id) => setDeleteId(id),
       }),
     []

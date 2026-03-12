@@ -62,6 +62,7 @@ export async function fetchPosts(params = {}) {
       title: p.title,
       status: p.status,
       featured: !!p.featured,
+      isCareerTip: !!p.isCareerTip,
       category: p.category,
       category_id: p.category_id,
       author: p.author,
@@ -109,6 +110,7 @@ export async function fetchPostById(id) {
       author_id: data.authorId ?? data.author?.id,
       author: data.author,
       media: data.media,
+      isCareerTip: !!data.isCareerTip,
     };
   } catch (err) {
     console.error("fetchPostById", handleApiError(err));
@@ -149,6 +151,7 @@ function buildPostPayload(editorPayload) {
 export async function createPost(payload) {
   try {
     const body = buildPostPayload(payload);
+    body.isCareerTip = !!payload.isCareerTip;
     const { data } = await axios.post(getApiUrl(API_CONFIG.ENDPOINTS.BLOG_POSTS), body, {
       headers: getAuthHeaders(),
       timeout: API_CONFIG.TIMEOUT,
@@ -164,6 +167,7 @@ export async function updatePost(id, payload) {
   try {
     const body = buildPostPayload(payload);
     body.featured = !!payload.featured;
+    body.isCareerTip = !!payload.isCareerTip;
     if (payload.uploadIds && payload.uploadIds.length) body.uploadIds = payload.uploadIds;
     const { data } = await axios.patch(getApiUrl(API_CONFIG.ENDPOINTS.BLOG_POST_BY_ID(id)), body, {
       headers: getAuthHeaders(),
@@ -202,6 +206,37 @@ export async function setPostFeatured(id, featured) {
     return { id: data?.id ?? id, featured: !!featured };
   } catch (err) {
     console.error("setPostFeatured", handleApiError(err));
+    throw err;
+  }
+}
+
+export async function setPostCareerTip(id, isCareerTip) {
+  try {
+    await axios.patch(
+      getApiUrl(API_CONFIG.ENDPOINTS.BLOG_POST_CAREER_TIP(id)),
+      { isCareerTip: !!isCareerTip },
+      {
+        headers: getAuthHeaders(),
+        timeout: API_CONFIG.TIMEOUT,
+      }
+    );
+    return { id, isCareerTip: !!isCareerTip };
+  } catch (err) {
+    console.error("setPostCareerTip", handleApiError(err));
+    throw err;
+  }
+}
+
+// --- Chat / Leads ---
+export async function fetchLeads() {
+  try {
+    const { data } = await axios.get(getApiUrl(API_CONFIG.ENDPOINTS.CHAT_LEADS), {
+      headers: getAuthHeaders(),
+      timeout: API_CONFIG.TIMEOUT,
+    });
+    return Array.isArray(data) ? data : [];
+  } catch (err) {
+    console.error("fetchLeads", handleApiError(err));
     throw err;
   }
 }

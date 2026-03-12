@@ -24,6 +24,7 @@ export const API_CONFIG = {
         BLOG_POSTS: '/blog/posts',
         BLOG_POST_BY_ID: (id) => `/blog/posts/${id}`,
         BLOG_POST_FEATURED: (id) => `/blog/posts/${id}/featured`,
+        BLOG_POST_CAREER_TIP: (id) => `/blog/posts/${id}/career-tip`,
         BLOG_CATEGORIES: '/blog/categories',
         BLOG_CATEGORY_BY_ID: (id) => `/blog/categories/${id}`,
         BLOG_TAGS: '/blog/tags',
@@ -31,6 +32,9 @@ export const API_CONFIG = {
         BLOG_MEDIA_UPLOAD: '/blog/media/upload',
         BLOG_MEDIA_UPLOADS: '/blog/media/uploads',
         BLOG_MEDIA_UPLOAD_BY_ID: (id) => `/blog/media/uploads/${id}`,
+
+        // Chat / Leads
+        CHAT_LEADS: '/chat/leads',
     },
 
 

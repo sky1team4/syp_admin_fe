@@ -5,12 +5,14 @@ import PostListContent from "./PostListContent";
 import CategoriesContent from "./CategoriesContent";
 import TagsContent from "./TagsContent";
 import MediaContent from "./MediaContent";
+import LeadsContent from "./LeadsContent";
 
 const TABS = [
   { id: "posts", label: "Posts" },
   { id: "categories", label: "Categories" },
   { id: "tags", label: "Tags" },
   { id: "media", label: "Media" },
+  { id: "leads", label: "Leads" },
 ];
 
 export default function BlogPage() {
@@ -38,6 +40,7 @@ export default function BlogPage() {
         {activeTab === "categories" && <CategoriesContent />}
         {activeTab === "tags" && <TagsContent />}
         {activeTab === "media" && <MediaContent />}
+        {activeTab === "leads" && <LeadsContent />}
       </div>
     </div>
   );

@@ -41,6 +41,7 @@ export default function PostEditor({ postId = null }) {
   const [tagIds, setTagIds] = useState([]);
   const [status, setStatus] = useState("draft");
   const [featured, setFeatured] = useState(false);
+  const [isCareerTip, setIsCareerTip] = useState(false);
   const [featuredImageUrl, setFeaturedImageUrl] = useState("");
   const [seoTitle, setSeoTitle] = useState("");
   const [seoDescription, setSeoDescription] = useState("");
@@ -86,6 +87,7 @@ export default function PostEditor({ postId = null }) {
           setTagIds((post.tags || []).map((t) => t.id || t));
           setStatus(post.status || "draft");
           setFeatured(!!post.featured);
+          setIsCareerTip(!!post.isCareerTip);
           setFeaturedImageUrl(post.featured_image_url || post.featuredImageUrl || "");
           setSeoTitle(post.seoTitle || post.seo_title || "");
           setSeoDescription(post.seoDescription || post.seo_description || "");
@@ -119,6 +121,7 @@ export default function PostEditor({ postId = null }) {
       tag_ids: tagIds,
       status,
       featured,
+      isCareerTip,
       featured_image_url: featuredImageUrl || null,
       seoTitle,
       seoDescription,
@@ -149,6 +152,7 @@ export default function PostEditor({ postId = null }) {
     tagIds,
     status,
     featured,
+    isCareerTip,
     featuredImageUrl,
     seoTitle,
     seoDescription,
@@ -398,6 +402,19 @@ export default function PostEditor({ postId = null }) {
                 className="rounded border-gray-300"
               />
               <span className="text-sm">Show in Popular Articles</span>
+            </label>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Career Tip</label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isCareerTip}
+                onChange={(e) => setIsCareerTip(e.target.checked)}
+                className="rounded border-gray-300"
+              />
+              <span className="text-sm">Show in Career Tips</span>
             </label>
           </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown, ArrowUp, Eye, Pencil, Star, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowUp, Briefcase, Eye, Pencil, Star, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -20,7 +20,7 @@ const statusBadgeClass = (status) => {
   }
 };
 
-export function createPostColumns({ onToggleFeatured, onDelete }) {
+export function createPostColumns({ onToggleFeatured, onToggleCareerTip, onDelete }) {
   return [
     columnHelper.accessor("title", {
       header: ({ column }) => (
@@ -66,6 +66,22 @@ export function createPostColumns({ onToggleFeatured, onDelete }) {
             title={featured ? "Remove from featured" : "Set as featured"}
           >
             <Star className={`h-4 w-4 ${featured ? "fill-current" : ""}`} />
+          </button>
+        );
+      },
+    }),
+    columnHelper.accessor("isCareerTip", {
+      header: "Career Tip",
+      cell: ({ row }) => {
+        const isCareerTip = row.original.isCareerTip;
+        return (
+          <button
+            type="button"
+            onClick={() => onToggleCareerTip?.(row.original.id, !isCareerTip)}
+            className={`p-1.5 rounded-md transition-colors ${isCareerTip ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-400 hover:bg-gray-200"}`}
+            title={isCareerTip ? "Remove from career tips" : "Set as career tip"}
+          >
+            <Briefcase className={`h-4 w-4 ${isCareerTip ? "fill-current" : ""}`} />
           </button>
         );
       },
